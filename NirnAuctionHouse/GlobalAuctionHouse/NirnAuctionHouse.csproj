@@ -127,9 +127,6 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\SoldItemsSound.mp3" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\SoldItemsSound.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

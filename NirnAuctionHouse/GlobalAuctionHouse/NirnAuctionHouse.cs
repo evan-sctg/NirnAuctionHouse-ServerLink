@@ -106,8 +106,7 @@ namespace GlobalAuctionHouse
             this.TradeListPath = Path.Combine(this.AddonDirectory, "Trades.lua");
             this.BidListPath = Path.Combine(this.AddonDirectory, "Bids.lua");
             this.TrackedBidListPath = Path.Combine(this.AddonDirectory, "Tracked.lua");
-
-            this.CurGameServer = this.GetGameServerFromFile();
+            
             this.GetAPIEndpoint();
 
 
@@ -122,7 +121,7 @@ namespace GlobalAuctionHouse
 
         private void GetAPIEndpoint()
         {
-
+            this.CurGameServer = this.GetGameServerFromFile();
             if (this.CurGameServer==GameServer.NA)
             {
                this.APIEndpoint = new Uri("https://nirnah.com");
@@ -1093,6 +1092,7 @@ namespace GlobalAuctionHouse
 
         private void HandleTimedEvents()
         {
+            
             this.GetAPIEndpoint();
             this.LoadActiveAccount();
             this.UpdateBidList();
