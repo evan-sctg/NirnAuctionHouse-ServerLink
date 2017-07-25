@@ -657,13 +657,7 @@ namespace GlobalAuctionHouse
             get;
             set;
         }
-
-        public int? ID
-        {
-            get;
-            set;
-        }
-
+        
 
         public AuctionBidEntry()
         {
