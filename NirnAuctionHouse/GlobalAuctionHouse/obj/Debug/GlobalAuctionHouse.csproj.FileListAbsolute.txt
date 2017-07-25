@@ -1,0 +1,10 @@
+L:\REPOSITORY\C# Projects\VS Projects\GlobalAuctionHouse\GlobalAuctionHouse\obj\Debug\GlobalAuctionHouse.Form1.resources
+L:\REPOSITORY\C# Projects\VS Projects\GlobalAuctionHouse\GlobalAuctionHouse\obj\Debug\GlobalAuctionHouse.csproj.GenerateResource.Cache
+L:\REPOSITORY\C# Projects\VS Projects\GlobalAuctionHouse\GlobalAuctionHouse\bin\Debug\Lua.dll
+L:\REPOSITORY\C# Projects\VS Projects\GlobalAuctionHouse\GlobalAuctionHouse\bin\Debug\NirnAuctionHouse.exe.config
+L:\REPOSITORY\C# Projects\VS Projects\GlobalAuctionHouse\GlobalAuctionHouse\bin\Debug\NirnAuctionHouse.exe
+L:\REPOSITORY\C# Projects\VS Projects\GlobalAuctionHouse\GlobalAuctionHouse\bin\Debug\NirnAuctionHouse.pdb
+L:\REPOSITORY\C# Projects\VS Projects\GlobalAuctionHouse\GlobalAuctionHouse\obj\Debug\NirnAuctionHouse.Properties.Resources.resources
+L:\REPOSITORY\C# Projects\VS Projects\GlobalAuctionHouse\GlobalAuctionHouse\obj\Debug\NirnAuctionHouse.exe
+L:\REPOSITORY\C# Projects\VS Projects\GlobalAuctionHouse\GlobalAuctionHouse\obj\Debug\NirnAuctionHouse.pdb
+L:\REPOSITORY\C# Projects\VS Projects\GlobalAuctionHouse\GlobalAuctionHouse\obj\Debug\GlobalAuctionHouse.csprojResolveAssemblyReference.cache

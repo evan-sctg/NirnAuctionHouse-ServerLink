@@ -1,33 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using System.Reflection;
 using LuaTableHandlers;
-using System.Timers;
 using System.Web.Script.Serialization;
 using System.Diagnostics;
-
-using System.Globalization;
 using System.Net;
-
-using System.Threading;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
 
 using System.Runtime.InteropServices;
-using Microsoft.Win32;
-using System.Windows.Input;
 using IWshRuntimeLibrary;
 using File=System.IO.File;
+using System.Media;
 
 namespace GlobalAuctionHouse
 {
@@ -37,20 +24,11 @@ namespace GlobalAuctionHouse
         NA,
         EU
     }
-
-    internal struct LASTINPUTINFO
-    {
-        public uint cbSize;
-
-        public uint dwTime;
-    }
+    
 
 
     public partial class Form1 : Form
     {
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-
-        static extern int SetForegroundWindow(IntPtr point);
         
 
         private const int MessageListMaxCount = 100;
@@ -120,11 +98,9 @@ namespace GlobalAuctionHouse
                 }
                
             }
-            ////////////////kill any other proccess thatlaunches/////////////////////
-
-            //disable updater For now
-            // DownloadLatestAssembly();
-            // Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
+            ////////////////kill any other instance of nirn auction house that launches/////////////////////
+            
+             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
 
 
             this.TradeListPath = Path.Combine(this.AddonDirectory, "Trades.lua");
@@ -136,7 +112,7 @@ namespace GlobalAuctionHouse
 
 
 
-
+            this.ModInitiate();
             this.StartWatchingSavedVars();
             
       
@@ -1036,73 +1012,52 @@ namespace GlobalAuctionHouse
             this.StatusText = "Finished Parsing saved vars";
             label1.Text = this.StatusText;
 
-
-            StartNewModInitTimer(1750);
-            StartNewModInitTimer(2000);
-            StartNewModInitTimer(2500);
-            StartNewModInitTimer(3000);
-            StartNewModInitTimer(3500);
-            StartNewModInitTimer(4000);//timer for simple reloads
-            StartNewModInitTimer(5000);//timer for Logging in which takes longer
-            StartNewModInitTimer(6000);//timer for Logging in which takes longer
-            StartNewModInitTimer(7000);//timer for Logging in which takes longer
-            StartNewModInitTimer(8000);//timer for Logging in which takes longer
-            StartNewModInitTimer(9000);//timer for Logging in which takes longer
-            StartNewModInitTimer(10000);//timer for Logging in which takes longer
-            StartNewModInitTimer(12000);//timer for Logging in which takes longer
-            StartNewModInitTimer(15000);//timer for Logging in which takes longer
-            StartNewModInitTimer(17000);//timer for Logging in which takes longer
-            StartNewModInitTimer(20000);//timer for Logging in which takes longer
-            StartNewModInitTimer(25000);//timer for Logging in which takes longer
-            StartNewModInitTimer(35000);//timer for Logging in which takes longer
-            StartNewModInitTimer(45000);//timer for Logging in which takes longer
-            StartNewModInitTimer(65000);//timer for Logging in which takes longer
-            StartNewModInitTimer(85000);//timer for Logging in which takes longer
-            StartNewModInitTimer(105000);//timer for Logging in which takes longer
-            StartNewModInitTimer(110000);//timer for Logging in which takes longer
-            StartNewModInitTimer(120000);//timer for Logging in which takes longer
-            StartNewModInitTimer(140000);//timer for Logging in which takes longer
-            StartNewModInitTimer(160000);//timer for Logging in which takes longer
-            StartNewModInitTimer(180000);//timer for Logging in which takes longer
-            StartNewModInitTimer(200000);//timer for Logging in which takes longer
-            StartNewModInitTimer(225000);//timer for Logging in which takes longer
-            StartNewModInitTimer(250000);//timer for Logging in which takes longer
-            StartNewModInitTimer(275000);//timer for Logging in which takes longer
-            StartNewModInitTimer(300000);//timer for Logging in which takes longer
-            StartNewModInitTimer(325000);//timer for Logging in which takes longer
-            StartNewModInitTimer(350000);//timer for Logging in which takes longer
-            StartNewModInitTimer(375000);//timer for Logging in which takes longer
-            StartNewModInitTimer(400000);//timer for Logging in which takes longer
-            StartNewModInitTimer(425000);//timer for Logging in which takes longer
-            StartNewModInitTimer(450000);//timer for Logging in which takes longer
-            StartNewModInitTimer(475000);//timer for Logging in which takes longer
-            StartNewModInitTimer(500000);//timer for Logging in which takes longer
-            StartNewModInitTimer(525000);//timer for Logging in which takes longer
-            StartNewModInitTimer(550000);//timer for Logging in which takes longer
-            StartNewModInitTimer(575000);//timer for Logging in which takes longer
-            StartNewModInitTimer(600000);//timer for Logging in which takes longer
-            StartNewModInitTimer(625000);//timer for Logging in which takes longer
-            StartNewModInitTimer(650000);//timer for Logging in which takes longer
-            StartNewModInitTimer(675000);//timer for Logging in which takes longer
-            StartNewModInitTimer(700000);//timer for Logging in which takes longer
-            StartNewModInitTimer(725000);//timer for Logging in which takes longer
-            StartNewModInitTimer(750000);//timer for Logging in which takes longer
-            StartNewModInitTimer(775000);//timer for Logging in which takes longer
-            StartNewModInitTimer(800000);//timer for Logging in which takes longer
+            
         }
 
-       
-     
-        public void StartNewModInitTimer(int DoIntime){
-        
-              System.Threading.Timer timer = null;//timer for simple reloads
-        timer = new System.Threading.Timer((obj) =>
-                                        {
-                                            GameSendKeys("{F15}");
-                                        timer.Dispose();
-                                        },
-                                      null, DoIntime, System.Threading.Timeout.Infinite);
+
+        public void ModDeactivate()
+        {
+            try
+            {
+
+                string modInitFile = "ModInitiate.Lua";
+                if (File.Exists(modInitFile)) { File.Delete(modInitFile); }
+                using (StreamWriter streamWriter = new StreamWriter(modInitFile, true))
+                {
+                    streamWriter.WriteLine("function NirnAuctionHouse:CheckServerLinkInitiated()");
+                    streamWriter.WriteLine("");
+                    streamWriter.WriteLine("end");
+                }
             }
+            catch (Exception exception)
+            {
+                this.ToLog("ModInitiate Error");
+                this.ToLog(exception);
+            }
+
+        }
+
+        public void ModInitiate(){
+            try
+            {
+
+                string modInitFile = "ModInitiate.Lua";
+                if (File.Exists(modInitFile)) { File.Delete(modInitFile); }
+                using (StreamWriter streamWriter = new StreamWriter(modInitFile, true))
+                {
+                    streamWriter.WriteLine("function NirnAuctionHouse:CheckServerLinkInitiated()");
+                    streamWriter.WriteLine("NirnAuctionHouse_ServerLink_INITIATED( )");
+                    streamWriter.WriteLine("end");
+                }
+            }
+            catch (Exception exception)
+            {
+                this.ToLog("ModInitiate Error");
+                this.ToLog(exception);
+            }
+
+        }
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -1116,38 +1071,29 @@ namespace GlobalAuctionHouse
 
         private void button4_Click(object sender, EventArgs e)
         {
-           Process.Start(UpdaterPath);
-           Process.GetCurrentProcess().Kill();
-
+            this.ModDeactivate();
+            
         }
 
-      
+
+        private void PlayNewSoldItemsSound()
+        {     
+            SoundPlayer SoldItemsSound = new SoundPlayer(NirnAuctionHouse.Properties.Resources.SoldItemsSound);
+            SoldItemsSound.Play();
+        }
 
 
         private void ReloadGameBids()
         {
-            if (ActiveAccount != "")
-            {
-                this.StatusText = "Reloading Game Bids";
-                label1.Text = this.StatusText;
-                GameSendKeys("{F16}");
-            }
+            this.PlayNewSoldItemsSound();            
         }
 
-        private void ReloadGameTrades()
-        {
-            if (ActiveAccount != "")
-            {
-                this.StatusText = "Reloading Game Trades";
-                label1.Text = this.StatusText;
-                this.GameSendKeys("{ESC}/gah lt{ENTER}");
-            }
-        }
+       
 
 
         private void HandleTimedEvents()
         {
-
+            this.GetAPIEndpoint();
             this.LoadActiveAccount();
             this.UpdateBidList();
             this.UpdateTradeList();
@@ -1173,184 +1119,8 @@ namespace GlobalAuctionHouse
          
                 this.HandleTimedEvents();
         }
-
-        [DllImport("user32.dll")]
-        public static extern IntPtr PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
-        
-
-       
-
-
-
-        [DllImport("user32.dll")]
-        static extern IntPtr GetForegroundWindow();
-
-        [DllImport("user32.dll")]
-        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
-
-        private string GetActiveWindowTitle()
-        {
-            const int nChars = 256;
-            StringBuilder Buff = new StringBuilder(nChars);
-            IntPtr handle = GetForegroundWindow();
-
-            if (GetWindowText(handle, Buff, nChars) > 0)
-            {
-                return Buff.ToString();
-            }
-            return null;
-        }
-
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern uint SendInput(uint nInputs, ref INPUT pInputs, int cbSize);
-
-        [StructLayout(LayoutKind.Sequential)]
-        struct INPUT
-        {
-            public SendInputEventType type;
-            public MouseKeybdhardwareInputUnion mkhi;
-        }
-        [StructLayout(LayoutKind.Explicit)]
-        struct MouseKeybdhardwareInputUnion
-        {
-            [FieldOffset(0)]
-            public MouseInputData mi;
-
-            [FieldOffset(0)]
-            public KEYBDINPUT ki;
-
-            [FieldOffset(0)]
-            public HARDWAREINPUT hi;
-        }
-        [StructLayout(LayoutKind.Sequential)]
-        struct KEYBDINPUT
-        {
-            public ushort wVk;
-            public ushort wScan;
-            public uint dwFlags;
-            public uint time;
-            public IntPtr dwExtraInfo;
-        }
-        [StructLayout(LayoutKind.Sequential)]
-        struct HARDWAREINPUT
-        {
-            public int uMsg;
-            public short wParamL;
-            public short wParamH;
-        }
-        struct MouseInputData
-        {
-            public int dx;
-            public int dy;
-            public uint mouseData;
-            public MouseEventFlags dwFlags;
-            public uint time;
-            public IntPtr dwExtraInfo;
-        }
-        [Flags]
-        enum MouseEventFlags : uint
-        {
-            MOUSEEVENTF_MOVE = 0x0001,
-            MOUSEEVENTF_LEFTDOWN = 0x0002,
-            MOUSEEVENTF_LEFTUP = 0x0004,
-            MOUSEEVENTF_RIGHTDOWN = 0x0008,
-            MOUSEEVENTF_RIGHTUP = 0x0010,
-            MOUSEEVENTF_MIDDLEDOWN = 0x0020,
-            MOUSEEVENTF_MIDDLEUP = 0x0040,
-            MOUSEEVENTF_XDOWN = 0x0080,
-            MOUSEEVENTF_XUP = 0x0100,
-            MOUSEEVENTF_WHEEL = 0x0800,
-            MOUSEEVENTF_VIRTUALDESK = 0x4000,
-            MOUSEEVENTF_ABSOLUTE = 0x8000
-        }
-        enum SendInputEventType : int
-        {
-            InputMouse,
-            InputKeyboard,
-            InputHardware
-        }
-
-        [Flags]
-        public enum KeyFlag
-        {
-            KeyDown = 0x0000,
-            ExtendedKey = 0x0001,
-            KeyUp = 0x0002,
-            UniCode = 0x0004,
-            ScanCode = 0x0008
-        }
         
         
-
-
-
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern uint SendInput(uint numberOfInputs, INPUT[] inputs, int sizeOfInputStructure);
-
-        
-
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr GetMessageExtraInfo();
-
-        private void GameSendKeys(string KeystoSend)
-        {
-
-            try
-            {
-                string activewintitle=GetActiveWindowTitle();
-
-                if(activewintitle== "Elder Scrolls Online" || activewintitle == "Elder Scrolls en ligne" || activewintitle == "Elder Scrolls en linea" || activewintitle == "Oudere Scrolls Online" || activewintitle == "エルダースクロールオンライン" || activewintitle == "エルダースクロールオンライン" || activewintitle == "上古卷轴在线")
-                {
-
-                    System.Windows.Forms.Keys key = System.Windows.Forms.Keys.F16;
-
-                    if (KeystoSend == "{F15}" || KeystoSend == "{f15}")
-                    {
-                        key = System.Windows.Forms.Keys.F15;
-                    }
-
-                    INPUT INPUT1 = new INPUT();
-                    INPUT1.type = SendInputEventType.InputKeyboard;
-                    INPUT1.mkhi.ki.wVk = (ushort)key;
-                    INPUT1.mkhi.ki.dwFlags = (int)KeyFlag.KeyDown;
-                    INPUT1.mkhi.ki.dwExtraInfo = GetMessageExtraInfo();
-
-                    INPUT INPUT2 = new INPUT();
-                    INPUT2.type = SendInputEventType.InputKeyboard;
-                    INPUT2.mkhi.ki.wVk = (ushort)key;
-                    INPUT2.mkhi.ki.dwFlags = (int)KeyFlag.KeyUp;
-                    INPUT2.mkhi.ki.dwExtraInfo = GetMessageExtraInfo();
-
-
-
-                    INPUT[] pInputs = new INPUT[] { INPUT1, INPUT2 };
-
-                    SendInput(2, pInputs, Marshal.SizeOf(INPUT1));
-
-                }
-                else
-                {
-
-                    this.StatusText = "ESO Not Active Win";
-                    label1.Text = this.StatusText;
-
-                }
-                
-
-            }
-            catch (Exception exception)
-            {
-                this.ToLog(exception);
-            }
-        }
-
-
-
-
-
-
-
 
         private void button5_Click(object sender, EventArgs e)
         {
@@ -1489,75 +1259,17 @@ namespace GlobalAuctionHouse
         // Start the timer
         aTimer.Enabled = true;
             aTimer.Start();
-            }
-
-        [DllImport("user32.dll")]
-        static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
-
-        static uint GetLastInputTime()
-        {
-            uint idleTime = 0;
-            LASTINPUTINFO lastInputInfo = new LASTINPUTINFO();
-            lastInputInfo.cbSize = (uint)Marshal.SizeOf(lastInputInfo);
-            lastInputInfo.dwTime = 0;
-
-            uint envTicks = (uint)Environment.TickCount;
-
-            if (GetLastInputInfo(ref lastInputInfo))
-            {
-                uint lastInputTick = lastInputInfo.dwTime;
-
-                idleTime = envTicks - lastInputTick;
-            }
-
-            return ((idleTime > 0) ? (idleTime / 1000) : 0);
         }
 
-        private void button8_Click(object sender, EventArgs e)
-        {
-           uint secsinceInput = GetLastInputTime();
+       
 
-            this.StatusText = "Idle For " + secsinceInput + "Seconds";
-            label1.Text = this.StatusText;
-        }
 
         private void button9_Click(object sender, EventArgs e)
         {
 
             try
-            {
-                //this.StatusText = "Searching For Process";
-                //label1.Text = this.StatusText;
-                Process p = Process.GetProcessesByName("eso64").FirstOrDefault();
-
-                if (p == null)
-                {
-                    p = Process.GetProcessesByName("eso").FirstOrDefault();
-                }
-                if (p == null)
-                {
-                    p = Process.GetProcessesByName("eso32").FirstOrDefault();
-                }
-                if (p != null)
-                {
-
-                    // this.StatusText = "Process Found";
-                    // label1.Text = this.StatusText;
-                    IntPtr h = p.MainWindowHandle; ;//get window handle
-                    SetForegroundWindow(h);//set window to active
-                    StartNewModInitTimer(250);
-                    StartNewModInitTimer(1000);
-                    StartNewModInitTimer(2000);
-
-
-                }
-                else
-                {
-
-                    this.StatusText = "Process Not Found";
-                    label1.Text = this.StatusText;
-
-                }
+            {          
+                    this.ModInitiate();  
             }
             catch (Exception exception)
             {
@@ -1799,8 +1511,20 @@ namespace GlobalAuctionHouse
 
         }
 
-      
 
+
+        private void OnApplicationExit(object sender, EventArgs e)
+        {
+
+            try
+            {
+                this.ModDeactivate();
+            }
+            catch (Exception exception)
+            {
+                this.ToLog(exception);
+            }
+        }
 
 
     }
