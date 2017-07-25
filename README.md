@@ -9,8 +9,10 @@ https://nirnah.com/NirnAuctionHouse(beta).zip
 
 
 ### Upcoming Changes/Features 
-- global auction price history
-- more seller security, buyer history, troll protection
+-- MAC version
+-- movable interface buttons
+-- global auction price history
+-- more seller security, buyer history, troll protection
 
 ### FEATURES 
 Nirn Auction House allows you to trade with anyone across all of Nirn with no listing fees or tax
@@ -69,6 +71,7 @@ Nirn Auction House is global auction system, unlike the guild store you will be 
 
 *No auctioning bound or stolen items!
 *Can't bid on items you cannot afford!
+*call out for the dev that made the serializer(Roman Starkov)
 
 
 ### Install Instructions: 
@@ -160,6 +163,11 @@ A: This is to allow you to post multiple listings at the same time after you are
 Q: After bidding on an Item in the auction a message says it was queued and I can sync now in the auction window, what does this mean?
 
 A: This is to allow you to bid multiple listings at the same time after you are done bidding listings you can click the sync button in the auction window or they will be synced next time you load into a zone, log out, buy an item, or sync the auction data (this is because refreshing is required to communicate with the Server Link (NirnAuctionHouse.exe))
+
+
+Q: Is this compatible with MAC?
+
+A: Not yet, However we have started working on the mac version ... I didn't forget about you
 
 
 Q: How do I support the developer of this addon?
