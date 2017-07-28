@@ -1,0 +1,65 @@
+Changelog
+
+v0.0.13 "beta" @Elo
+ - Buyer Protection (If seller doesnt fulfill trades seller will lose ranking each time, when ranking goes too low account is banned)
+ - Seller Protection (If buyer doesnt pay for trades buyer will lose ranking each time, when ranking goes too low account is banned)
+ - Reduced reload time by half
+ - Fixed bugs with EU server (better response time)
+ - Fixed bug NA server
+
+v0.0.12 "beta" @Elo
+ - EXE Changed How ESO Addon is initiated (more reliable)
+ - EXE Optimizations and improvements 
+ - EXE Added sold items notification sound
+ - Eso Addon Optimizations
+ - Now works with any client English or non-English 
+ - Tested on (windows 7, windows 10)
+
+v0.0.11d "beta" @Elo
+ - bugfix EU server related bug
+
+v0.0.11c "beta" @Elo
+ - bugfix problem finding some items while fulfilling
+
+v0.0.11b "beta" @Elo
+ - bugfix missing Bindings.xml
+
+v0.0.11 "beta" @Elo
+ - EXE server link Code improvements and Optimizations
+ - EXE server link Code New Serializer (better performance and reliability)
+ - Fixed EU Server Bugs - Sorry EU you should now be able to post auctions
+ - Server Side Troll Protection improvements
+ - Item Quality Colors In Auction Window
+ - Cleaned up and made a few improvementsto the LUA code
+ - Implemented first of a series of patches to recognize on English clients
+
+v0.0.10 "beta" @Elo
+ - Experiment to see what we can accomplish
+ - basic auction house bids and buyout functionality
+ - integration to master merchant - tooltips
+ - integration to master merchant - Add Auction House Listings - option in settings
+ - server link eve to communicate with server
+ - cancel listings
+ - added bid type to sold items list (high bidder / buyout)
+ - fulfill order by clicking confirm in sold orders list - will auto cod item to buyer (if item is in your inventory)
+ - server link will now notify addon of new bids and buyouts
+ - server link auto initates ESO addon  to make it clear if your are not talking to the server (if not initiated shows onscreen message)
+ - added server link updater
+ - added updater updater
+ - reduced amount of refreshes needed - posting a auction and bidding on a auction not longer force sync (buyout and cancel listing still do)
+ - added order tracking so you can see what bids you have outstanding 
+ - auto delete your lower bids when you place a new bid on a trade
+ - added checks for stolen and bound items
+ - rebuilt search functionality and interface
+ - reduced ui-refreshes
+ - added paging to listings
+ - added time left on listings
+ - listings with a buyout price will last 7 days - at that time they are removes from the active listings
+ - listings with no buyout price will last 24 hours - at that time they are removes from the active listings
+ - added a limit to how many listings you can post at a time - limit set to 80 for now
+ - changed how char name is determined
+ - auto cleanup old trades 7 days aftr the listing expires
+ - disabled updater 
+ - configurable hotkeys
+ - added ability to Show/Hide auction buttons with hotkey
+ - fixed materials not showing up under crafting

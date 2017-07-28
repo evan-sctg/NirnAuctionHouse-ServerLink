@@ -43,8 +43,11 @@ namespace GlobalAuctionHouse
 
         private DateTime LastSyncTimeBid;
         private DateTime LastSyncTimeFOs;
-        
-        
+        private DateTime LastSyncTimePaidOrder;
+
+
+
+
         private Dictionary<string, AuctionBidEntry> _currentBidsData;
 
         private string ActiveAccount = "";
@@ -480,6 +483,165 @@ namespace GlobalAuctionHouse
 
 
 
+
+
+
+        private void ParseNPostPaidOrders()
+        {
+
+
+            bool oktoSync = false;
+
+            if (LastSyncTimePaidOrder == null)
+            {
+                oktoSync = true;
+            }
+            else
+            {
+                TimeSpan totalTimeTaken = DateTime.Now.Subtract(LastSyncTimePaidOrder);
+                if (totalTimeTaken.TotalMilliseconds > 2000)
+                {
+                    oktoSync = true;
+                }
+
+            }
+
+            if (!oktoSync) { return; }
+
+
+
+
+            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"")
+            {
+                this.StatusText = "Loading Active Account";
+                // label1.Text = this.StatusText;
+                this.LoadActiveAccount();
+            }
+
+
+            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"") { return; }
+
+            //for debugging
+            //this.LastSyncTime = DateTime.Now;
+            //return;
+
+            this.StatusText = "Preparing Upload";
+            label1.Text = this.StatusText;
+            string str = Path.Combine(SavedVariableDirectory, "NirnAuctionHouse.lua");
+            if (!File.Exists(str))
+            {
+                this.ToLog("Auction House Saved File doesnt exist yet: " + str);
+                this.StatusText = "Auction House Trade File doesnt exist yet";
+                label1.Text = this.StatusText;
+                return;
+            }
+
+
+
+            this.StatusText = "Starting PaidOrder Upload";
+            label1.Text = this.StatusText;
+
+
+            try
+            {
+                this.StatusText = "Loading PaidOrders";
+                label1.Text = this.StatusText;
+
+                Dictionary<string, LsonValue> SavedVariableFileData = ReadSavedVariableFile();
+                if (SavedVariableFileData != null)
+                {
+
+                    this.StatusText = "Loaded PaidOrders";
+                    label1.Text = this.StatusText;
+
+                    if (SavedVariableFileData.ContainsKey("NirnAuctionHouseData"))
+                    {
+                        LsonValue item = SavedVariableFileData["NirnAuctionHouseData"]["Default"];
+
+                        LsonValue activeaccountLUAOBJ = item[ActiveAccount];
+
+                        List<AuctionPaidOrdersEntry> tmpAuctionPaidOrderEntries = new List<AuctionPaidOrdersEntry>();
+                        LsonValue items = activeaccountLUAOBJ;
+                        LsonValue POitem = items["$AccountWide"]["data"]["PaidOrders"];
+                        foreach (string key in POitem.Keys)
+                        {
+                            AuctionPaidOrdersEntry tmpAuctionPaidOrderEntry = new AuctionPaidOrdersEntry(POitem[key], ActiveAccount);
+                            if (tmpAuctionPaidOrderEntry.ItemID != null && tmpAuctionPaidOrderEntry.ItemID>0)
+                            {
+                                tmpAuctionPaidOrderEntries.Add(tmpAuctionPaidOrderEntry);
+                            }
+                        }
+
+
+
+
+
+
+                        AuctionPaidOrdersEntry FirstAuctionPaidOrderEntry = tmpAuctionPaidOrderEntries.FirstOrDefault<AuctionPaidOrdersEntry>((AuctionPaidOrdersEntry x) => x.Buyer == ActiveAccount);
+
+
+                        if (FirstAuctionPaidOrderEntry == null)
+                        {
+                            this.StatusText = "No PaidOrders Found for " + ActiveAccount;
+                            label1.Text = this.StatusText;
+                            return;
+                        }
+
+                        this.StatusText = "Loaded PaidOrders for " + ActiveAccount;
+                        label1.Text = this.StatusText;
+
+
+                        if (FirstAuctionPaidOrderEntry != null)
+                        {
+
+                            if (FirstAuctionPaidOrderEntry.ItemID > 0)
+                            {
+                                this.StatusText = "Loaded First PaidOrder for " + ActiveAccount + " [ " + FirstAuctionPaidOrderEntry.ItemID + " ]";
+                                label1.Text = this.StatusText;
+
+                            }
+                            else
+                            {
+                                this.StatusText = "No PaidOrder found for " + ActiveAccount;
+                                label1.Text = this.StatusText;
+                            }
+
+                        }
+                        else
+                        {
+                            this.StatusText = "No PaidOrder found for " + ActiveAccount;
+                            label1.Text = this.StatusText;
+                        }
+
+
+                        this.PostPaidOrders(tmpAuctionPaidOrderEntries);
+
+
+
+
+
+
+                        this.LastSyncTimePaidOrder = DateTime.Now;
+                    }
+                    return;
+                }
+
+            }
+            finally
+            {
+                //done
+            }
+
+
+        }
+
+
+
+
+
+
+
+
         private void ParseNPostBids()
         {
             bool oktoSync = false;
@@ -727,7 +889,38 @@ namespace GlobalAuctionHouse
         }
 
 
+
+
+        private void PostPaidOrders(IEnumerable<AuctionPaidOrdersEntry> tradeModels)
+        {
+            if (tradeModels.Count<AuctionPaidOrdersEntry>() == 0)
+            {
+                return;
+            }
+            this.StatusText = "MsgPostingPaidOrder";
+            label1.Text = this.StatusText;
+            try
+            {
+
+                string str = this.SendPackage(this.APIEndpoint + "/proc/trade/paid", tradeModels.ToList<AuctionPaidOrdersEntry>());
+
+                this.StatusText = "result: " + str;
+                label1.Text = this.StatusText;
+                return;
+
+            }
+            catch (Exception exception)
+            {
+                this.ToLog("PostPaidOrders Error");
+                this.ToLog(exception);
+            }
+            this.StatusText = "Ready";
+            label1.Text = this.StatusText;
+        }
+
         
+
+
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -834,6 +1027,7 @@ namespace GlobalAuctionHouse
                 }
                 catch (Exception exception)
                 {
+                    this.ToLog(this.APIEndpoint + "/proc/mybidlist/" + ActiveAccount);
                     this.ToLog(exception);
                 }
 
@@ -883,15 +1077,15 @@ namespace GlobalAuctionHouse
 
 
 
-            FileSystemWatcher _watcher2 = new FileSystemWatcher();
-            _watcher2.Path = LivePathDirectory;
-            _watcher.NotifyFilter = NotifyFilters.LastWrite;
-            _watcher2.Filter = "UserSettings.txt";
-            // Add event handlers.
-            _watcher2.Changed += new FileSystemEventHandler(this.OnChangedSavedVars);
-            _watcher2.Created += new FileSystemEventHandler(this.OnChangedSavedVars);
-            // Begin watching.
-            _watcher2.EnableRaisingEvents = true;
+            //FileSystemWatcher _watcher2 = new FileSystemWatcher();
+            //_watcher2.Path = LivePathDirectory;
+            //_watcher.NotifyFilter = NotifyFilters.LastWrite;
+            //_watcher2.Filter = "UserSettings.txt";
+            //// Add event handlers.
+            //_watcher2.Changed += new FileSystemEventHandler(this.OnChangedSavedVars);
+            //_watcher2.Created += new FileSystemEventHandler(this.OnChangedSavedVars);
+            //// Begin watching.
+            //_watcher2.EnableRaisingEvents = true;
 
             this.StatusText = "Start Watching Saved Vars";
             label1.Text = this.StatusText;
@@ -939,6 +1133,7 @@ namespace GlobalAuctionHouse
                                     bool DoPostBids = false;
                                     bool ReloadTradeDataTracked = false;
                                     bool DoPostFilledOrders = false;
+                                    bool DoPostPaidOrders = false;
 
                                     try { 
 
@@ -946,11 +1141,12 @@ namespace GlobalAuctionHouse
                                  DoPostListings = (bool)acctdata["PostListings"];
                                      DoPostBids = (bool)acctdata["PostBids"];
                                      ReloadTradeDataTracked = false;
-                                        if (acctdata.ContainsKey("ReloadTradeDataTracked")) { ReloadTradeDataTracked = (bool)acctdata["ReloadTradeDataTracked"]; } 
-                                     DoPostFilledOrders = (bool)acctdata["PostFilledOrders"];
+                                        if (acctdata.ContainsKey("ReloadTradeDataTracked")) { ReloadTradeDataTracked = (bool)acctdata["ReloadTradeDataTracked"]; }
+                                        DoPostFilledOrders = (bool)acctdata["PostFilledOrders"];
+                                        DoPostPaidOrders = (bool)acctdata["PostPaidOrders"];
 
 
-                                }
+                                    }
                                   catch (Exception exception)
                                 {
                                     this.ToLog(exception);
@@ -997,7 +1193,16 @@ namespace GlobalAuctionHouse
 
                                     }
 
-                                    
+
+                                    if (DoPostPaidOrders)
+                                    {
+                                        this.StatusText = "Posting PaidOrders";
+                                        label1.Text = this.StatusText;
+                                        this.ParseNPostPaidOrders();
+
+                                    }
+
+
 
 
 
@@ -1440,6 +1645,12 @@ namespace GlobalAuctionHouse
         }
         
 
+        public string SendPackage(string Endpoint, List<AuctionPaidOrdersEntry> Package)
+        {
+            JavaScriptSerializer jsonSerialiser = new JavaScriptSerializer();
+            string jsonPackage = jsonSerialiser.Serialize(Package);
+            return SendPackage(Endpoint, jsonPackage);
+        }
         public string SendPackage(string Endpoint, List<AuctionFilledOrderEntry> Package)
         {
             JavaScriptSerializer jsonSerialiser = new JavaScriptSerializer();

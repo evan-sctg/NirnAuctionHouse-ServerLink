@@ -1,0 +1,3 @@
+function NirnAuctionHouse:CheckServerLinkInitiated()
+
+end

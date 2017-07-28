@@ -602,6 +602,9 @@ namespace GlobalAuctionHouse
 
 
 
+    
+
+
 
 
 
@@ -657,7 +660,7 @@ namespace GlobalAuctionHouse
             get;
             set;
         }
-        
+
 
         public AuctionBidEntry()
         {
@@ -677,6 +680,96 @@ namespace GlobalAuctionHouse
             this.ItemLink = (string)luaObject["ItemLink"];
             this.stackCount = (int)luaObject["stackCount"];
             this.Price = (int)luaObject["Price"];
+        }
+
+
+    }
+
+
+
+
+
+    [DataContract]
+    public class AuctionPaidOrdersEntry
+    {
+        
+
+        [DataMember(EmitDefaultValue = false)]
+        public int? ItemID
+        {
+            get;
+            set;
+        }
+        [DataMember]
+        public string Seller
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public string Buyer
+        {
+            get;
+            set;
+        }
+        
+
+        [DataMember]
+        public int codAmount
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public int Price
+        {
+            get;
+            set;
+        }
+
+
+        [DataMember]
+        public int stackCount
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public int itemQuality
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public string mailId
+        {
+            get;
+            set;
+        }
+
+
+        public AuctionPaidOrdersEntry()
+        {
+        }
+
+        public AuctionPaidOrdersEntry(LsonValue luaObject, string CharName)
+        {
+            
+
+            this.Buyer = CharName;
+            this.Seller = (string)luaObject["Seller"];
+            this.mailId = (string)luaObject["mailId"];
+            int i;
+            if (!int.TryParse((string)luaObject["ItemID"], out i)) i = 0;
+            this.ItemID = i;
+            this.stackCount = (int)luaObject["stack"];
+            this.Price = (int)luaObject["sellPrice"];
+            this.codAmount = (int)luaObject["codAmount"];
+            this.itemQuality = (int)luaObject["itemQuality"];
         }
 
 

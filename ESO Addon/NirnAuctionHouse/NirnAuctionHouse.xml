@@ -1,0 +1,804 @@
+<GuiXml>
+  <Controls>
+  		<Label name="NAHRowLabel" font="ZoFontGame" wrapMode="ELLIPSIS" horizontalAlignment="LEFT" verticalAlignment="CENTER" virtual="true" />
+		<Label name="NAHSearchLabel" font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" virtual="true" />
+		<Control name="NAHRow" mouseEnabled="true" virtual="true">
+			<Dimensions y="30" />
+			<OnMouseEnter>
+				NAHRow_OnMouseEnter(self)
+			</OnMouseEnter>
+			<OnMouseExit>
+				NAHRow_OnMouseExit(self)
+			</OnMouseExit>
+			<OnMouseUp>
+				NAHRow_OnMouseUp(self, button, upInside)
+			</OnMouseUp>
+			<Controls>
+				<Texture name="$(parent)BG" inherits="ZO_ThinListBgStrip" />
+				
+				<Label name="$(parent)Name" inherits="NAHRowLabel">
+					<Anchor point="LEFT"/>
+					<Dimensions x="200" y="30" />
+				</Label>
+				<Label name="$(parent)Qty" inherits="NAHRowLabel">
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Name" />
+					<Dimensions x="50" y="30" />
+				</Label>
+				<Label name="$(parent)TimeLeft" inherits="NAHRowLabel">
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Qty" />
+					<Dimensions x="135" y="30" />
+				</Label>
+				<Label name="$(parent)Type" inherits="NAHRowLabel">
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)TimeLeft" />
+					<Dimensions x="125" y="30" />
+				</Label>
+				<Label name="$(parent)Bid" inherits="NAHRowLabel">
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Type" />
+					<Dimensions x="80" y="30" />
+				</Label>
+				<Label name="$(parent)Buyout" inherits="NAHRowLabel">
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Bid" />
+					<Dimensions x="80" y="30" />
+				</Label>
+				
+		<Button name="$(parent)DoBid" inherits="ZO_DefaultButton" text="Bid" hidden="false">
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Buyout" />
+					<Dimensions x="100" y="30" />
+			<OnClicked>
+				NirnAuctionHouse_BidItem(self:GetParent())
+			</OnClicked>
+		</Button>
+		<Button name="$(parent)DoBuyout" inherits="ZO_DefaultButton" text="Buyout" hidden="false">
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)DoBid" />
+					<Dimensions x="100" y="30" />
+			<OnClicked>
+				NirnAuctionHouse_BuyItem(self:GetParent())
+			</OnClicked>
+		</Button>
+		<Button name="$(parent)DoCancel" inherits="ZO_DefaultButton" text="Cancel" hidden="true">
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)DoBid" />
+					<Dimensions x="100" y="30" />
+			<OnClicked>
+				NirnAuctionHouse_CancelListing(self:GetParent())
+			</OnClicked>
+		</Button>
+			</Controls>
+		</Control>
+		
+		
+		
+		<Control name="NAHOrderRow" mouseEnabled="true" virtual="true">
+			<Dimensions y="30" />
+			<OnMouseEnter>
+				NAHRow_OnMouseEnter(self)
+			</OnMouseEnter>
+			<OnMouseExit>
+				NAHRow_OnMouseExit(self)
+			</OnMouseExit>
+			<OnMouseUp>
+				NAHRow_OnMouseUp(self, button, upInside)
+			</OnMouseUp>
+			<Controls>
+				<Texture name="$(parent)BG" inherits="ZO_ThinListBgStrip" />
+				<Label name="$(parent)Price" inherits="NAHRowLabel">
+					<Anchor point="LEFT" />
+					<Dimensions x="80" y="30" />
+				</Label>
+				<Label name="$(parent)Name" inherits="NAHRowLabel">
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Price" />
+					<Dimensions x="200" y="30" />
+				</Label>
+				<Label name="$(parent)Qty" inherits="NAHRowLabel">
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Name" />
+					<Dimensions x="75" y="30" />
+				</Label>				
+				<Label name="$(parent)TimeLeft" inherits="NAHRowLabel">
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Qty" />
+					<Dimensions x="155" y="30" />
+				</Label>
+				<Label name="$(parent)IsBuyout" inherits="NAHRowLabel">
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)TimeLeft" />
+					<Dimensions x="150" y="30" />
+				</Label>
+		<Button name="$(parent)Confirm" inherits="ZO_DefaultButton" text="Confirm" hidden="false">
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)IsBuyout" />
+					<Anchor point="RIGHT" relativePoint="RIGHT" relativeTo="$(parent)" offsetX="-16" />
+					<Dimensions x="150" y="30" />
+			<OnClicked>
+				NirnAuctionHouse_FillOrder(self:GetParent())
+			</OnClicked>
+		</Button>
+			</Controls>
+		</Control>
+  
+    <TopLevelControl name="NirnAuctionHousePanel" inherits="ZO_RightPanelFootPrint">
+      <Controls>
+				<Texture name="$(parent)BG" inherits="ZO_InsetTexture" textureFile="esoui/art/chatwindow/chat_bg_center.dds"  />
+				<Button name="$(parent)AuctionHouseRefresh" inherits="ZO_DefaultButton" text="Sync" hidden="false">
+				
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="54" />
+					<Dimensions x="150" y="30" />
+			<OnClicked>
+				NirnAuctionHouse_RefreshAH()
+			</OnClicked>
+		</Button>
+		
+				<Button name="$(parent)AuctionHouse_LastPage" inherits="ZO_DefaultButton" text="Last Page" hidden="false">
+				
+					<Anchor point="BOTTOM" relativePoint="BOTTOM" offsetX="-78" offsetY="-10" />
+					<Dimensions x="150" y="30" />
+			<OnClicked>
+				NirnAuctionHouse_LastPage()
+			</OnClicked>
+		</Button>
+		
+				<Button name="$(parent)AuctionHouse_NextPage" inherits="ZO_DefaultButton" text="Next Page" hidden="false">
+				
+				
+					<Anchor point="BOTTOM" relativePoint="BOTTOM" offsetX="78" offsetY="-10" />
+					<Dimensions x="150" y="30" />
+			<OnClicked>
+				NirnAuctionHouse_NextPage()
+			</OnClicked>
+		</Button>
+		
+		<Control name="$(parent)SearchDrop" resizeToFitDescendents="true" mouseEnabled="true">
+					<Anchor point="TOPLEFT" relativePoint="TOPLEFT" offsetX="10" offsetY="10" />
+					<OnInitialized>
+						ZO_ComboBox:New(self)
+					</OnInitialized>
+					<OnMouseUp>
+						if (button == MOUSE_BUTTON_INDEX_LEFT and upInside) then
+							ZO_ComboBox_DropdownClicked(self)
+						end
+					</OnMouseUp>
+					<Controls>
+						<Label name="$(parent)Anchor" inherits="NAHSearchLabel">
+							<Anchor point="RIGHT" />
+						</Label>
+						<Label name="$(parent)ColonText" text=":" inherits="NAHSearchLabel">
+							<Anchor point="RIGHT" relativeTo="$(parent)Anchor" relativePoint="LEFT" offsetX="-8" />
+						</Label>
+						<Label name="$(parent)SelectedItemText" inherits="NAHSearchLabel">
+							<Anchor point="RIGHT" relativeTo="$(parent)ColonText" relativePoint="LEFT" offsetX="-1" />
+						</Label>
+						<Button name="$(parent)OpenDropdown" inherits="ZO_DropdownButton">
+							<Dimensions x="16" y="16" />
+							<Anchor point="RIGHT" relativeTo="$(parent)SelectedItemText" relativePoint="LEFT" offsetX="-3" />
+							<OnClicked>
+								ZO_ComboBox_DropdownClicked(self:GetParent())
+							</OnClicked>
+						</Button>
+					</Controls>
+				</Control>
+				
+		
+				<Backdrop name="$(parent)Search" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">
+					<Anchor point="LEFT" relativeTo="$(parent)SearchDrop" relativePoint="LEFT" offsetX="0" offsetY="40" />
+					<Dimensions x="250" />
+					<Controls>
+						<EditBox name="$(parent)Box" inherits="ZO_DefaultEditForBackdrop ZO_EditDefaultText" />
+					</Controls>
+				</Backdrop>
+
+				<Control name="$(parent)FilterDrop" inherits="ZO_ComboBox">
+					<Anchor point="LEFT" relativeTo="$(parent)Search" relativePoint="LEFT" offsetX="0" offsetY="40" />
+				</Control>
+
+		
+			<Control name="$(parent)FilterDropSub" inherits="ZO_ComboBox">
+					<Dimensions x="175" /><Anchor  point="LEFT" relativeTo="$(parent)FilterDrop" relativePoint="LEFT" offsetX="0" offsetY="40" />
+				</Control>
+		
+			<Control name="$(parent)FilterDropCrafting" inherits="ZO_ComboBox"  hidden="true">
+					<Dimensions x="175" /><Anchor  point="LEFT" relativeTo="$(parent)FilterDropSub" relativePoint="LEFT" offsetX="0" offsetY="40" />
+				</Control>
+		
+			<Control name="$(parent)FilterDropSlot" inherits="ZO_ComboBox">
+					<Dimensions x="175" /><Anchor  point="LEFT" relativeTo="$(parent)FilterDropSub" relativePoint="LEFT" offsetX="0" offsetY="40" />
+				</Control>
+		
+			<Control name="$(parent)FilterDropEnch" inherits="ZO_ComboBox">
+					<Dimensions x="175" /><Anchor  point="LEFT" relativeTo="$(parent)FilterDropSlot" relativePoint="LEFT" offsetX="0" offsetY="40" />
+				</Control>
+
+			<Control name="$(parent)FilterDropTrait" inherits="ZO_ComboBox">
+					<Dimensions x="175" /><Anchor  point="LEFT" relativeTo="$(parent)FilterDropEnch" relativePoint="LEFT" offsetX="0" offsetY="40" />
+				</Control>
+
+
+
+
+				<Control name="$(parent)QualityDrop" inherits="ZO_ComboBox">
+				<Anchor point="LEFT" relativeTo="$(parent)FilterDrop" relativePoint="LEFT" offsetX="0" offsetY="290" />
+				</Control>
+				
+				
+				<Backdrop name="$(parent)PriceMin" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">
+					<Anchor point="LEFT" relativeTo="$(parent)QualityDrop" relativePoint="LEFT" offsetX="0" offsetY="80" />
+					<Dimensions x="70" />
+					<Controls>
+						<EditBox name="$(parent)Box" inherits="ZO_DefaultEditForBackdrop ZO_EditDefaultText" />
+					</Controls>
+				</Backdrop>
+				
+				<Backdrop name="$(parent)PriceMax" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">
+					<Anchor point="LEFT" relativeTo="$(parent)PriceMin" relativePoint="LEFT" offsetX="90" offsetY="0" />
+					<Dimensions x="70" />
+					<Controls>
+						<EditBox name="$(parent)Box" inherits="ZO_DefaultEditForBackdrop ZO_EditDefaultText" />
+					</Controls>
+				</Backdrop>
+				
+				<Label name="$(parent)PriceRange" inherits="NAHRowLabel" text="Price Range">
+					<Anchor point="LEFT" relativePoint="LEFT" relativeTo="$(parent)PriceMin" offsetY="-30" />
+					<Dimensions x="150" y="30" />
+				</Label>
+				
+				<Label name="$(parent)PriceRangeDash" inherits="NAHRowLabel" text="-">
+					<Anchor point="LEFT" relativePoint="LEFT" relativeTo="$(parent)PriceMin" offsetX="77" />
+					<Dimensions x="150" y="30" />
+				</Label>
+				
+				
+				
+				
+				
+				
+				<Backdrop name="$(parent)LevelMin" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">
+					<Anchor point="LEFT" relativeTo="$(parent)FilterDrop" relativePoint="LEFT" offsetX="0" offsetY="435" />
+					<Dimensions x="70" />
+					<Controls>
+						<EditBox name="$(parent)Box" inherits="ZO_DefaultEditForBackdrop ZO_EditDefaultText" />
+					</Controls>
+				</Backdrop>
+				
+				<Backdrop name="$(parent)LevelMax" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">
+					<Anchor point="LEFT" relativeTo="$(parent)LevelMin" relativePoint="LEFT" offsetX="90" offsetY="0" />
+					<Dimensions x="70" />
+					<Controls>
+						<EditBox name="$(parent)Box" inherits="ZO_DefaultEditForBackdrop ZO_EditDefaultText" />
+					</Controls>
+				</Backdrop>
+				
+				<Label name="$(parent)LevelRange" inherits="NAHRowLabel" text="Level Range" hidden="true">
+					<Anchor point="LEFT" relativePoint="LEFT" relativeTo="$(parent)LevelMin" offsetY="-30" />
+					<Dimensions x="150" y="30" />
+				</Label>
+				
+				<Label name="$(parent)LevelRangeDash" inherits="NAHRowLabel" text="-">
+					<Anchor point="LEFT" relativePoint="LEFT" relativeTo="$(parent)LevelMin" offsetX="77" />
+					<Dimensions x="150" y="30" />
+				</Label>
+				
+				<Control name="$(parent)LevelRangeType" resizeToFitDescendents="true" mouseEnabled="true">
+					<Anchor point="LEFT" relativePoint="LEFT" relativeTo="$(parent)LevelMin" offsetY="-30" />
+					<OnInitialized>
+						ZO_ComboBox:New(self)
+					</OnInitialized>
+					<OnMouseUp>
+						if (button == MOUSE_BUTTON_INDEX_LEFT and upInside) then
+							ZO_ComboBox_DropdownClicked(self)
+						end
+					</OnMouseUp>
+					<Controls>
+						<Label name="$(parent)Anchor" inherits="NAHSearchLabel">
+							<Anchor point="RIGHT" />
+						</Label>
+						<Label name="$(parent)ColonText" text=":" inherits="NAHSearchLabel">
+							<Anchor point="RIGHT" relativeTo="$(parent)Anchor" relativePoint="LEFT" offsetX="-8" />
+						</Label>
+						<Label name="$(parent)SelectedItemText" inherits="NAHSearchLabel">
+							<Anchor point="RIGHT" relativeTo="$(parent)ColonText" relativePoint="LEFT" offsetX="-1" />
+						</Label>
+						<Button name="$(parent)OpenDropdown" inherits="ZO_DropdownButton">
+							<Dimensions x="16" y="16" />
+							<Anchor point="RIGHT" relativeTo="$(parent)SelectedItemText" relativePoint="LEFT" offsetX="-3" />
+							<OnClicked>
+								ZO_ComboBox_DropdownClicked(self:GetParent())
+							</OnClicked>
+						</Button>
+					</Controls>
+				</Control>
+				
+
+			
+				<Control name="$(parent)Headers">
+					<Anchor point="TOPLEFT" offsetX="30" offsetY="90" />
+					<Anchor point="TOPRIGHT" offsetY="90" />
+					<Dimensions y="32" />
+					<Controls>
+					
+						
+						<Control name="$(parent)Name" inherits="ZO_SortHeader">
+							<OnInitialized>
+							
+								ZO_SortHeader_Initialize(self, "name", "name", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								
+							</OnInitialized>
+							<Anchor point="TOPLEFT" offsetX="300" />
+							<Dimensions x="200" y="32" />
+						</Control>
+						<Control name="$(parent)Qty" inherits="ZO_SortHeader">
+							<OnInitialized>
+							
+								ZO_SortHeader_Initialize(self, "Qty", "stackCount", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+							
+							</OnInitialized>
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Name" />
+							<Dimensions x="50" y="32" />
+						</Control>
+						<Control name="$(parent)TimeLeft" inherits="ZO_SortHeader">
+							<OnInitialized>
+							
+								ZO_SortHeader_Initialize(self, "TimeLeft", "TimeLeft", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+							
+							</OnInitialized>
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Qty" />
+							<Dimensions x="135" y="32" />
+						</Control>
+						<Control name="$(parent)Type" inherits="ZO_SortHeader">
+							<OnInitialized>
+							
+								ZO_SortHeader_Initialize(self, "itemType", "itemType", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+							
+							</OnInitialized>
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)TimeLeft" />
+							<Dimensions x="125" y="32" />
+						</Control>
+						<Control name="$(parent)Bid" inherits="ZO_SortHeader">
+							<OnInitialized>
+							
+								ZO_SortHeader_Initialize(self, "Bid", "StartingPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								
+							</OnInitialized>
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Type" />
+							<Dimensions x="80" y="32" />
+						</Control>
+						<Control name="$(parent)Buyout" inherits="ZO_SortHeader">
+							<OnInitialized>
+							
+								ZO_SortHeader_Initialize(self, "Buyout", "BuyoutPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								
+							</OnInitialized>
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Bid" />
+							<Dimensions x="80" y="32" />
+						</Control>
+						<Control name="$(parent)DoBid">						
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Buyout" />
+							<Dimensions x="125" y="32" />
+						</Control>
+						<Control name="$(parent)DoBuyout">						
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)DoBid" />
+							<Dimensions x="125" y="32" />
+						</Control>
+						
+					</Controls>
+				</Control>
+
+				<Control name="$(parent)List" inherits="ZO_ScrollList">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)Headers" relativePoint="BOTTOMLEFT" offsetX="300" offsetY="3" />
+					<Anchor point="BOTTOMRIGHT" offsetX="-35" offsetY="-32" />
+				</Control>
+
+				<Label name="$(parent)Counter" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_DISABLED">
+					<Anchor point="TOPRIGHT" relativeTo="$(parent)List" relativePoint="BOTTOMRIGHT" offsetY="6" />
+				</Label>
+			</Controls>
+			<Dimensions x="1250" y="775" />
+    </TopLevelControl>
+    
+		<TopLevelControl name="NAHTooltipTopLevel" inherits="TooltipTopLevel">
+			<Controls>
+				<Tooltip name="NAHTooltip" inherits="ZO_ItemIconTooltip" />
+			</Controls>
+		</TopLevelControl>
+		
+		
+		
+		<TopLevelControl name="NAHAuctionHouseBtn" inherits="ZO_RightPanelFootPrint">
+			<Controls>
+				<Button name="$(parent)AuctionHouse" inherits="ZO_DefaultButton" text="Auction" hidden="false">
+				
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="-224" />
+					<Dimensions x="150" y="30" />
+			<OnClicked>
+				NirnAuctionHouse_ToggleAH(self:GetParent())
+			</OnClicked>
+		</Button>
+			</Controls>
+		</TopLevelControl>
+		
+		
+		<TopLevelControl name="NAHAuctionHouseOrdersBtn" inherits="ZO_RightPanelFootPrint">
+			<Controls>
+				<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Sold Items">
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="-195" />
+					<Dimensions x="150" y="30" />
+			<OnClicked>
+				NirnAuctionHouse_ToggleOrders(self:GetParent())
+			</OnClicked>
+		</Button>
+			</Controls>
+		</TopLevelControl>
+		
+		<TopLevelControl name="NAHAuctionHouseOrdersTRKBtn" inherits="ZO_RightPanelFootPrint">
+			<Controls>
+				<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Order Tracking">
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="-165" />
+					<Dimensions x="150" y="30" />
+			<OnClicked>
+				NirnAuctionHouse_ToggleTrackedOrders(self:GetParent())
+			</OnClicked>
+		</Button>
+			</Controls>
+		</TopLevelControl>
+		
+		
+		
+		<TopLevelControl name="NAHAuctionHouseOrdersBtnNEW" inherits="ZO_RightPanelFootPrint">
+			<Controls>
+				<Button name="$(parent)ViewOrdersNew" inherits="ZO_DefaultButton" text="Sold Items (new)">
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="-195" />
+					<Dimensions x="150" y="30" />
+			<OnClicked>
+			
+				NirnAuctionHouse_ToggleOrders(self:GetParent())
+			</OnClicked>
+		</Button>
+			</Controls>
+		</TopLevelControl>
+		
+		<TopLevelControl name="NAHAuctionHouseTrackingPanel" inherits="ZO_RightPanelFootPrint">
+		<Controls>
+			<Label name="$(parent)lalel2" horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Tracked Orders">
+					<Anchor point="TOP" relativePoint="TOP" offsetX=""  offsetY="" />
+				</Label>
+			
+				<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Sync">
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="14" />
+					<Dimensions x="150" y="30" />
+			<OnClicked>
+			
+				NirnAuctionHouse_RefreshAHTrackedBids(self:GetParent())
+			</OnClicked>
+		</Button>
+		
+			
+				<Control name="$(parent)Headers">
+					<Anchor point="TOPLEFT" offsetX="30" offsetY="51" />
+					<Anchor point="TOPRIGHT" offsetY="51" />
+					<Dimensions y="32" />
+					<Controls>
+					
+						<Control name="$(parent)Price" inherits="ZO_SortHeader">
+							<OnInitialized>
+							
+								ZO_SortHeader_Initialize(self, "price", "BuyoutPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								
+							</OnInitialized>
+							<Anchor point="TOPLEFT" />
+							<Dimensions x="80" y="32" />
+						</Control>
+						<Control name="$(parent)Name" inherits="ZO_SortHeader">
+							<OnInitialized>
+							
+								ZO_SortHeader_Initialize(self, "name", "name", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								
+							</OnInitialized>
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Price" />
+							<Dimensions x="200" y="32" />
+						</Control>
+						<Control name="$(parent)Qty" inherits="ZO_SortHeader">
+							<OnInitialized>
+							
+								ZO_SortHeader_Initialize(self, "qty", "stackCount", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+							
+							</OnInitialized>
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Name" />
+							<Dimensions x="75" y="32" />
+						</Control>						
+						<Control name="$(parent)TimeLeft" inherits="ZO_SortHeader">
+							<OnInitialized>
+							
+								ZO_SortHeader_Initialize(self, "TimeLeft", "TimeLeft", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+							
+							</OnInitialized>
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Qty" />
+							<Dimensions x="150" y="32" />
+						</Control>
+						<Control name="$(parent)IsBuyout" inherits="ZO_SortHeader">
+							<OnInitialized>
+							
+								ZO_SortHeader_Initialize(self, "Status", "TradeIsBidder", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+							
+							</OnInitialized>
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)TimeLeft" />
+							<Dimensions x="150" y="32" />
+						</Control>
+						<Control name="$(parent)Buy">						
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)IsBuyout" />
+							<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)" offsetX="-16" />
+							<Dimensions x="150" y="32" />
+						</Control>
+						
+					</Controls>
+				</Control>
+
+				<Control name="$(parent)List" inherits="ZO_ScrollList">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)Headers" relativePoint="BOTTOMLEFT" offsetY="3" />
+					<Anchor point="BOTTOMRIGHT" offsetX="-35" offsetY="-32" />
+				</Control>
+
+				<Label name="$(parent)Counter" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_DISABLED">
+					<Anchor point="TOPRIGHT" relativeTo="$(parent)List" relativePoint="BOTTOMRIGHT" offsetY="6" />
+				</Label>
+			</Controls>
+		</TopLevelControl>
+		
+		
+		
+		
+		<TopLevelControl name="NAHAuctionHouseOrdersPanel" inherits="ZO_RightPanelFootPrint">
+		<Controls>
+			<Label name="$(parent)lalel2"  horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Sold Items">
+					<Anchor point="TOP" relativePoint="TOP" offsetX=""  offsetY="" />
+				</Label>
+			
+				<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Sync">
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="14" />
+					<Dimensions x="150" y="30" />
+			<OnClicked>
+			
+				NirnAuctionHouse_RefreshAHBids(self:GetParent())
+			</OnClicked>
+		</Button>
+		
+			
+				<Control name="$(parent)Headers">
+					<Anchor point="TOPLEFT" offsetX="30" offsetY="51" />
+					<Anchor point="TOPRIGHT" offsetY="51" />
+					<Dimensions y="32" />
+					<Controls>
+					
+						<Control name="$(parent)Price" inherits="ZO_SortHeader">
+							<OnInitialized>
+							
+								ZO_SortHeader_Initialize(self, "price", "BuyoutPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								
+							</OnInitialized>
+							<Anchor point="TOPLEFT" />
+							<Dimensions x="80" y="32" />
+						</Control>
+						<Control name="$(parent)Name" inherits="ZO_SortHeader">
+							<OnInitialized>
+							
+								ZO_SortHeader_Initialize(self, "name", "name", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								
+							</OnInitialized>
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Price" />
+							<Dimensions x="200" y="32" />
+						</Control>
+						<Control name="$(parent)Qty" inherits="ZO_SortHeader">
+							<OnInitialized>
+							
+								ZO_SortHeader_Initialize(self, "qty", "stackCount", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+							
+							</OnInitialized>
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Name" />
+							<Dimensions x="75" y="32" />
+						</Control>
+						
+						<Control name="$(parent)TimeLeft" inherits="ZO_SortHeader">
+							<OnInitialized>
+							
+								ZO_SortHeader_Initialize(self, "COD Cost", "TimeLeft", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+							
+							</OnInitialized>
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Qty" />
+							<Dimensions x="155" y="32" />
+						</Control>
+						<Control name="$(parent)IsBuyout" inherits="ZO_SortHeader">
+							<OnInitialized>
+							
+								ZO_SortHeader_Initialize(self, "Type", "TradeIsBidder", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+							
+							</OnInitialized>
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)TimeLeft" />
+							<Dimensions x="150" y="32" />
+						</Control>
+						<Control name="$(parent)Buy">						
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)IsBuyout" />
+							<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)" offsetX="-16" />
+							<Dimensions x="150" y="32" />
+						</Control>
+						
+					</Controls>
+				</Control>
+
+				<Control name="$(parent)List" inherits="ZO_ScrollList">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)Headers" relativePoint="BOTTOMLEFT" offsetY="3" />
+					<Anchor point="BOTTOMRIGHT" offsetX="-35" offsetY="-32" />
+				</Control>
+
+				<Label name="$(parent)Counter" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_DISABLED">
+					<Anchor point="TOPRIGHT" relativeTo="$(parent)List" relativePoint="BOTTOMRIGHT" offsetY="6" />
+				</Label>
+			</Controls>
+		</TopLevelControl>
+		
+		
+		
+		
+		
+		<TopLevelControl name="NAHAuctionHouseGoldCost"  inherits="ZO_RightPanelFootPrint">
+			<Controls>
+			<Label name="$(parent)BidName"  horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="">
+					<Anchor point="TOP" relativePoint="TOP" offsetX=""  offsetY="" />
+				</Label>
+				<Texture name="$(parent)BG" inherits="ZO_InsetTexture" textureFile="esoui/art/chatwindow/chat_bg_center.dds"  />
+					<Button name="$(parent)CancelListing" inherits="ZO_DefaultButton" text="Cancel" hidden="false">
+				
+					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmount" relativePoint="LEFT"  offsetX="0"offsetY="60" />
+					<Dimensions x="150" y="30" />
+			<OnClicked>
+				NirnAuctionHouse_DocancelListing()
+			</OnClicked>
+		</Button>
+				
+				<Button name="$(parent)PostListing" inherits="ZO_DefaultButton" text="Post Listing" hidden="false">
+				
+					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmount" relativePoint="LEFT"  offsetX="160"offsetY="60" />
+					<Dimensions x="150" y="30" />
+			<OnClicked>
+				NirnAuctionHouse_DoPostListing(self:GetParent())
+			</OnClicked>
+		</Button>
+		
+		
+				<Label name="$(parent)sellercodnotice" font="ZoFontGameSmall" horizontalAlignment="LEFT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="*Note Seller Pays COD Cost">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)CancelListing" relativePoint="BOTTOMLEFT" offsetX="75" offsetY="15" />
+				</Label>
+		
+				<Label name="$(parent)startinglabel" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Starting Price">
+					<Anchor point="TOP" relativeTo="$(parent)GoldAmountStarting" relativePoint="TOP" offsetY="25" />
+				</Label>
+			<Backdrop name="$(parent)GoldAmountStarting" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">					
+					<Anchor point="CENTER" relativePoint="CENTER" offsetX="0" offsetY="-60" />
+					<Dimensions x="250" />
+					<Controls>
+						<EditBox name="$(parent)GoldAmountBoxStarting" inherits="ZO_DefaultEditForBackdrop ZO_EditDefaultText" />
+					</Controls>
+				</Backdrop>
+		
+				<Label name="$(parent)buyoutlabel" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Buyout Price">
+					<Anchor point="TOP" relativeTo="$(parent)GoldAmountBuyout" relativePoint="TOP" offsetY="100" />
+				</Label>
+			<Backdrop name="$(parent)GoldAmountBuyout" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">					
+					<Anchor point="CENTER" relativePoint="CENTER" offsetX="0" offsetY="10" />
+					<Dimensions x="250" />
+					<Controls>
+						<EditBox name="$(parent)GoldAmountBoxBuyout" inherits="ZO_DefaultEditForBackdrop ZO_EditDefaultText" />
+					</Controls>
+				</Backdrop>
+				
+			</Controls>
+			<Anchor point="CENTER" relativePoint="CENTER" offsetX="0" offsetY="0" />
+			<Dimensions x="300" y="260" />
+		</TopLevelControl>
+		
+		
+		
+		
+		
+		<TopLevelControl name="NAHAuctionHouseGoldCostBid"  inherits="ZO_RightPanelFootPrint">
+			<Controls>
+			<Label name="$(parent)BidName"  horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="">
+					<Anchor point="TOP" relativePoint="TOP" offsetX=""  offsetY="" />
+				</Label>
+			
+				<Texture name="$(parent)BG" inherits="ZO_InsetTexture" textureFile="esoui/art/chatwindow/chat_bg_center.dds"  />
+					<Button name="$(parent)CancelListing" inherits="ZO_DefaultButton" text="Cancel" hidden="false">
+				
+					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmount" relativePoint="LEFT"  offsetX="0"offsetY="40" />
+					<Dimensions x="150" y="30" />
+			<OnClicked>
+				NirnAuctionHouse_Docancel_BidOrder()
+			</OnClicked>
+		</Button>
+				
+				<Button name="$(parent)PostListing" inherits="ZO_DefaultButton" text="Post Listing" hidden="false">
+				
+					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmount" relativePoint="LEFT"  offsetX="150"offsetY="40" />
+					<Dimensions x="150" y="30" />
+			<OnClicked>
+				NirnAuctionHouse_DoPost_BidOrder(self:GetParent())
+			</OnClicked>
+		</Button>
+		
+						
+				<Label name="$(parent)buyoutlabel" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Bid Amount">
+					<Anchor point="CENTER" relativeTo="$(parent)GoldAmountBuyout" relativePoint="CENTER" offsetY="-35" />
+				</Label>
+			<Backdrop name="$(parent)GoldAmountBid" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">					
+					<Anchor point="CENTER" relativePoint="CENTER" offsetX="0" offsetY="0" />
+					<Dimensions x="250" />
+					<Controls>
+						<EditBox name="$(parent)GoldAmountBoxBid" inherits="ZO_DefaultEditForBackdrop ZO_EditDefaultText" />
+					</Controls>
+				</Backdrop>
+				
+			</Controls>
+			<Anchor point="CENTER" relativePoint="CENTER" offsetX="0" offsetY="0" />
+			<Dimensions x="300" y="200" />
+		</TopLevelControl>
+		
+		
+		
+		
+		<TopLevelControl name="NAHAuctionHouseGoldCostBuyout"  inherits="ZO_RightPanelFootPrint" hidden="true">
+			<Controls>
+			<Label name="$(parent)BidName"  horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="">
+					<Anchor point="TOP" relativePoint="TOP" offsetX=""  offsetY="" />
+				</Label>
+			
+				<Texture name="$(parent)BG" inherits="ZO_InsetTexture" textureFile="esoui/art/chatwindow/chat_bg_center.dds"  />
+					<Button name="$(parent)CancelListing" inherits="ZO_DefaultButton" text="Cancel" hidden="false">
+				
+					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmount" relativePoint="LEFT"  offsetX="0"offsetY="40" />
+					<Dimensions x="150" y="30" />
+			<OnClicked>
+				NirnAuctionHouse_Docancel_BuyoutOrder()
+			</OnClicked>
+		</Button>
+				
+				<Button name="$(parent)PostListing" inherits="ZO_DefaultButton" text="Buyout" hidden="false">
+				
+					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmount" relativePoint="LEFT"  offsetX="150"offsetY="40" />
+					<Dimensions x="150" y="30" />
+			<OnClicked>
+				NirnAuctionHouse_DoPost_BuyoutOrder(self:GetParent())
+			</OnClicked>
+		</Button>
+		
+						
+				<Label name="$(parent)buyoutlabel" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Are You Sure Your Want to Buyout 
+ITEMNAME for ITEMCOST Gold?">
+					<Anchor point="CENTER" relativeTo="$(parent)GoldAmountBuyout" relativePoint="CENTER" offsetY="-35" />
+				</Label>
+				
+				
+				
+			</Controls>
+			<Anchor point="CENTER" relativePoint="CENTER" offsetX="0" offsetY="0" />
+			<Dimensions x="300" y="200" />
+		</TopLevelControl>
+		
+		
+		
+		
+		
+		
+		<TopLevelControl name="NAHAuctionHouse_ServerLink" inherits="ZO_RightPanelFootPrint">
+			<Controls>
+			<Label name="$(parent)lalel1" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_FAILED" text="Server Link Not Found">
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-148"  offsetY="-210" />
+				</Label>
+			<Label name="$(parent)lalel2" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_FAILED" text="(Run Documents\Elder Scrolls Online\live\AddOns\NirnAuctionHouse\NirnAuctionHouse.exe)">
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78"  offsetY="-230" />
+				</Label>
+				<Button name="$(parent)NAHAuctionHouse_ServerLink" inherits="ZO_DefaultButton" text="Recheck Server Link" hidden="false">
+				
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="-185" />
+					<Dimensions x="250" y="30" />
+			<OnClicked>
+				NirnAuctionHouse_ServerLink_Recheck()
+			</OnClicked>
+		</Button>
+			</Controls>
+		</TopLevelControl>
+		
+		
+		
+  </Controls>
+</GuiXml>

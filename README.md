@@ -1,8 +1,8 @@
-# --BETA VERSION--
+# --BETA VERSION-- Current Version:0.0.13 (See the full patch note list here: https://nirnah.com/Changelog)
 *PC Only for now
 
 
-Hosted Download Link: [MD5:3f565081680e2a0b81f6c8a303e74091]
+Hosted Download Link: [MD5:e69764de39fea6898f9b581969149d06]
 
 https://nirnah.com/NirnAuctionHouse(beta).zip
 
@@ -24,13 +24,20 @@ Nirn Auction House is global auction system, unlike the guild store you will be 
 - Ability to post an auction with only starting bid, no buyout price. (Auction Length: 24 hours)
 - Ability to post an auction with starting bid and buyout price. (Auction Length: 7 days)
 - Ability to post auction with only a buyout price. (Auction Length: 7 days)
+- Can't auction bound or stolen items!
+
 
 ### Posting Auctions / Selling Items 
 
 - Right click menu to auction items in your inventory(can auction items directly from your inventory, crafting bag, or equipped items)
 - Order tracking so you can see all your auctions and status of bids
 - Fulfill orders by a click of a button - add-on will automatically send and COD item to the buyer (Items need to be in your inventory!)
-- Seller Protection: Buyer can only bid/buyout items if you can afford them (More to come... )
+
+
+### Buyer / Seller Protection 
+- Buyer Protection (If seller doesn't fulfill trades seller will lose ranking each time, when ranking goes too low account is banned)
+- Seller Protection (If buyer doesn't pay for trades buyer will lose ranking each time, when ranking goes too low account is banned)
+- Buyer can only bid/buyout items if you can afford them
 
 ### Plugin Hotkeys 
 
@@ -69,9 +76,6 @@ Nirn Auction House is global auction system, unlike the guild store you will be 
 - Listing limit 80 - you can only have 80 auctions at a time
 - Server link required to communicate with server (NirnAuctionHouse.exe) *PC Only for now
 
-*No auctioning bound or stolen items!
-*Can't bid on items you cannot afford!
-*call out for the dev that made the serializer(Roman Starkov)
 
 
 ### Install Instructions: 
@@ -86,7 +90,7 @@ Nirn Auction House is global auction system, unlike the guild store you will be 
 http://www.esoui.com/portal.php?id=250&a=faq
 
 
-###Statements from ESO Devs
+### Statements from ESO Devs about Trusting COD sales.
 
 CoD (Cash on Delivery) is an option in the The Elder Scrolls Online's mail system. By using this, you can send an item and ensure that you will receive gold in exchange via mail. You must attach an item to the mail, and you can set a gold amount desired. The receiving player will then have to pay the specified gold amount to be able to detach the sent item.
 

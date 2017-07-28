@@ -1,0 +1,15 @@
+<Bindings>
+    <Layer name="SI_KEYBINDINGS_LAYER_GENERAL">
+        <Category name="Nirn Auction House">
+            <Action name="NAH_TOGGLE_AUCTION_HOUSE">
+                <Down>NirnAuctionHouse_ToggleAH()</Down>
+            </Action>
+            <Action name="NAH_REFRESH_AUCTION_HOUSE">
+                <Down>NirnAuctionHouse_RefreshAH()</Down>
+            </Action>
+            <Action name="NAH_TOGGLE_AUCTION_BUTTONS">
+                <Down>NirnAuctionHouse_ToggleAHButtons()</Down>
+            </Action>
+        </Category>
+    </Layer>
+</Bindings>
