@@ -580,7 +580,8 @@ function NAHAuctionList:FilterScrollList( )
 		TrackedPriceHistoryYet = false
 		TrackedPriceHistory_delay=3
 		--update crafting categories
-		if (GetString("SI_NAH_FILTERDROP", filterId) =="Crafting") then	
+		if (GetString("SI_NAH_FILTERDROP", filterId) =="Crafting") then
+		filterCraftingId=1	
 		self:UpdateChoicesComboBox(self.filterDropCrafting, "SI_NAH_FILTERDROP_CRAFTING_" .. filterSubId .. "_", 15);
 		self.frame:GetNamedChild("FilterDropCrafting"):SetHidden(false);
 		else
@@ -613,11 +614,15 @@ function NAHAuctionList:FilterScrollList( )
 		if  (GetString("SI_NAH_FILTERDROPISSUB_", filterId) =="1") then
 	--~ 	d("found sub cat")
 		filterSubId=1
+		filterCraftingId=1
 		self:UpdateChoicesComboBox(self.filterDropSub, "SI_NAH_FILTERDROPSUB_" .. filterId .. "_", 15);
+		self:UpdateChoicesComboBox(self.filterDropCrafting, "SI_NAH_FILTERDROP_CRAFTING_" .. filterSubId .. "_", 1);
 		else	
 	--~ 	d("sub cat not found")
 		filterSubId=1
+		filterCraftingId=1
 		self:UpdateChoicesComboBox(self.filterDropSub, "SI_NAH_FILTERDROPSUB_1_", 1);
+		self:UpdateChoicesComboBox(self.filterDropCrafting, "SI_NAH_FILTERDROP_CRAFTING_1_", 1);
 		end
 		
 		-- update encahnt and triat filters if filter is set to weapons or armor
@@ -694,10 +699,12 @@ local typename=GetString("SI_ITEMTYPE", data.TypeID);
 local wpntypename=GetString("SI_WEAPONTYPE", data.WeaponTypeID);
 local armortypename=GetString("SI_ARMORTYPE", data.armorTypeID);
 
+local isFurnishing=false
 local isCrafting=false
 local isConsumable=false
 
 local isOnehand=false;
+local isOther=true;
 
 --if item is weapon determine if ne hand or two
 if(data.WeaponTypeID>0)then 
@@ -809,22 +816,34 @@ end
 
 
 if GetString("SI_NAH_FILTERDROP", filterId) =="Crafting" then--crafting
+if(data.TypeID==8)then isCrafting=true; end--motif
 if(data.TypeID==10)then isCrafting=true; end--ingredient
+if(data.TypeID==31)then isCrafting=true; end--reagent
 if(data.TypeID==33)then isCrafting=true; end--potion solvent
 if(data.TypeID==35)then isCrafting=true; end--raw material
 if(data.TypeID==36)then isCrafting=true; end--material
+if(data.TypeID==38)then isCrafting=true; end--material
+if(data.TypeID==39)then isCrafting=true; end--raw material
+if(data.TypeID==40)then isCrafting=true; end--material
+if(data.TypeID==41)then isCrafting=true; end--temper
+if(data.TypeID==42)then isCrafting=true; end--temper
+if(data.TypeID==46)then isCrafting=true; end--weapon trait
+if(data.TypeID==51)then isCrafting=true; end--potency runestone
+if(data.TypeID==52)then isCrafting=true; end--aspect runestone
 if(data.TypeID==53)then isCrafting=true; end--essence runestone
 if(data.TypeID==58)then isCrafting=true; end--poison solvent
-if(data.TypeID==46)then isCrafting=true; end--weapon trait
+if(data.TypeID==62)then isCrafting=true; end--furnishing material
+
+
 	if addedyet~=true then
 	if isCrafting then
 		if filterSubId==1 
 		or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == "Provisioning" and data.CraftingSkillType==CRAFTING_TYPE_PROVISIONING) 
 		or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == "Alchemy" and data.CraftingSkillType==CRAFTING_TYPE_ALCHEMY) 
-		or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == "Blacksmithing" and data.CraftingSkillType==CRAFTING_TYPE_BLACKSMITHING) 
-		or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == "Clothing" and data.CraftingSkillType==CRAFTING_TYPE_CLOTHIER) 
+		or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == "Blacksmithing" and (data.CraftingSkillType==CRAFTING_TYPE_BLACKSMITHING or data.TypeID==8)) 
+		or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == "Clothing" and (data.CraftingSkillType==CRAFTING_TYPE_CLOTHIER or data.TypeID==8)) 
 		or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == "Enchanting" and data.CraftingSkillType==CRAFTING_TYPE_ENCHANTING) 
-		or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == "Woodworking" and data.CraftingSkillType==CRAFTING_TYPE_WOODWORKING) then
+		or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == "Woodworking" and (data.CraftingSkillType==CRAFTING_TYPE_WOODWORKING or data.TypeID==8)) then
 	
 		if filterCraftingId==1
 		or (GetString("SI_NAH_FILTERDROP_CRAFTING_" .. filterSubId .. "_" , filterCraftingId) == typename)
@@ -852,6 +871,7 @@ if(typename=="Food")then isConsumable=true; end--
 if(typename=="Drink")then isConsumable=true; end--
 if(typename=="Potion")then isConsumable=true; end--
 if(typename=="Poison")then isConsumable=true; end--
+if(data.TypeID==29)then isConsumable=true; end--recipe
 
 	if addedyet~=true then
 		if isConsumable then--~ 			
@@ -868,7 +888,7 @@ end
 
 
 
-if GetString("SI_NAH_FILTERDROP", filterId) =="Soul Gems & Glyphs" then--Furnishings
+if GetString("SI_NAH_FILTERDROP", filterId) =="Soul Gems & Glyphs" then--Soul Gems
 	if addedyet~=true then
 		if typename=="Soul Gem" or typename=="Weapon Glyph" or typename=="Armor Glyph" or typename=="Jewlery Glyph" then
 			if filterSubId==1 or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == typename) then
@@ -883,23 +903,62 @@ if GetString("SI_NAH_FILTERDROP", filterId) =="Soul Gems & Glyphs" then--Furnish
 end
 
 if GetString("SI_NAH_FILTERDROP", filterId) =="Furnishings" then--Furnishings
+
+if(data.TypeID==61)then isFurnishing=true; end--Furnishing
 	if addedyet~=true then
+	if isFurnishing then
 	if ( (data.source==NAH.currentAccount and self.searchType==3)  or (data.source~=NAH.currentAccount and self.searchType~=3)) and
 	(searchInput == "" or self:CheckForMatch(data, searchInput))  then
 		addedyet=true
 		DoAddRow=true
 	end
 	end
+	end
 end
 
 if GetString("SI_NAH_FILTERDROP", filterId) =="Other" then--Other
+--crafting
+if(data.TypeID==8)then isOther=false; end--motif
+if(data.TypeID==10)then isOther=false; end--ingredient
+if(data.TypeID==31)then isOther=false; end--reagent
+if(data.TypeID==33)then isOther=false; end--potion solvent
+if(data.TypeID==35)then isOther=false; end--raw material
+if(data.TypeID==36)then isOther=false; end--material
+if(data.TypeID==38)then isOther=false; end--material
+if(data.TypeID==39)then isOther=false; end--raw material
+if(data.TypeID==40)then isOther=false; end--material
+if(data.TypeID==41)then isOther=false; end--temper
+if(data.TypeID==42)then isOther=false; end--temper
+if(data.TypeID==46)then isOther=false; end--weapon trait
+if(data.TypeID==51)then isOther=false; end--potency runestone
+if(data.TypeID==52)then isOther=false; end--aspect runestone
+if(data.TypeID==53)then isOther=false; end--essence runestone
+if(data.TypeID==58)then isOther=false; end--poison solvent
+if(data.TypeID==62)then isOther=false; end--furnishing material
+--Consumable
+if(typename=="Food")then isOther=false; end--
+if(typename=="Drink")then isOther=false; end--
+if(typename=="Potion")then isOther=false; end--
+if(typename=="Poison")then isOther=false; end--
+if(data.TypeID==29)then isOther=false; end--recipe
+--Soul Gems
+if typename=="Soul Gem" or typename=="Weapon Glyph" or typename=="Armor Glyph" or typename=="Jewlery Glyph" then isOther=false; end 
+--Furnishings
+if(data.TypeID==61)then isOther=false; end--Furnishing
+--weapons
+if typename=="Weapon" then isOther=false; end --weapons
+--Apparel
+if typename=="Apparel" then isOther=false; end --Apparel
+
 	if addedyet~=true then
+	if isOther then
 		if filterSubId==1 or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == typename) or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == "Bait" and typename=="Lure") then
 			if ( (data.source==NAH.currentAccount and self.searchType==3)  or (data.source~=NAH.currentAccount and self.searchType~=3)) and
 			(searchInput == "" or self:CheckForMatch(data, searchInput))  then
 				addedyet=true
 				DoAddRow=true
 			end
+		end
 		end
 	end
 end
@@ -1735,7 +1794,12 @@ local function NAH_SetAccountCharData()
 	NirnAuctionHouse.list:UpdateChoicesComboBox(NirnAuctionHouse.list.filterDropEnch, "SI_NAH_FILTERDROP_ENCH_" .. NAH.settings.data.SearchSettings.CurrentFilterId .. "_", 15);
 	NirnAuctionHouse.list:UpdateChoicesComboBox(NirnAuctionHouse.list.filterDropTrait, "SI_NAH_FILTERDROP_TRAIT_" .. NAH.settings.data.SearchSettings.CurrentFilterId .. "_", 15);	
 	
-	NirnAuctionHouse.list:UpdateChoicesComboBox(NirnAuctionHouse.list.filterDropCrafting, "SI_NAH_FILTERDROP_CRAFTING_" .. NAH.settings.data.SearchSettings.CurrentFilterSubId .. "_", 15);	
+	
+		if NAH.settings.data.SearchSettings.CurrentFilterSubId then	
+		NirnAuctionHouse.list:UpdateChoicesComboBox(NirnAuctionHouse.list.filterDropCrafting, "SI_NAH_FILTERDROP_CRAFTING_" .. NAH.settings.data.SearchSettings.CurrentFilterSubId .. "_", 15);	
+		else	
+		NirnAuctionHouse.list.filterDropCrafting:UpdateChoicesComboBox(NirnAuctionHouse.list.filterDropCrafting, "SI_NAH_FILTERDROP_CRAFTING_1_", 1);
+		end
 	
 	
 		if(GetString("SI_NAH_FILTERDROP", NAH.settings.data.SearchSettings.CurrentFilterId) =="Weapon") then --SI_NAH_FILTERDROP_WPNTYPE_1_1
@@ -1798,14 +1862,34 @@ local function NAH_SetAccountCharData()
 	end
 	
 	
-	if NAH.settings.data.SearchSettings.CurrentFilterCraftingId then
-	NirnAuctionHouse.list.filterDropCrafting:SelectItemByIndex(NAH.settings.data.SearchSettings.CurrentFilterCraftingId,true)
-	end
-	
 	
 	if NAH.settings.data.SearchSettings.CurrentFilterSubId then	
 	NirnAuctionHouse.list.filterDropSub:SelectItemByIndex(NAH.settings.data.SearchSettings.CurrentFilterSubId,true)
+		
+	if NAH.settings.data.SearchSettings.CurrentFilterCraftingId then
+	NirnAuctionHouse.list:UpdateChoicesComboBox(NirnAuctionHouse.list.filterDropCrafting, "SI_NAH_FILTERDROP_CRAFTING_"..NAH.settings.data.SearchSettings.CurrentFilterSubId.."_", 1);
+		zo_callLater(function()
+			NirnAuctionHouse.list.filterDropCrafting:SelectItemByIndex(NAH.settings.data.SearchSettings.CurrentFilterCraftingId,true)
+		end, 50)
 	end
+	
+	end
+	
+	if NAH.settings.data.SearchSettings.CurrentFilterCraftingId then
+		if NAH.settings.data.SearchSettings.CurrentFilterSubId then	
+			NirnAuctionHouse.list:UpdateChoicesComboBox(NirnAuctionHouse.list.filterDropCrafting, "SI_NAH_FILTERDROP_CRAFTING_" .. NAH.settings.data.SearchSettings.CurrentFilterSubId .. "_", 15);	
+		zo_callLater(function()
+			NirnAuctionHouse.list.filterDropCrafting:SelectItemByIndex(NAH.settings.data.SearchSettings.CurrentFilterCraftingId,true)
+		end, 50)
+		else	
+			NirnAuctionHouse.list.filterDropCrafting:UpdateChoicesComboBox(NirnAuctionHouse.list.filterDropCrafting, "SI_NAH_FILTERDROP_CRAFTING_1_", 1);
+		zo_callLater(function()
+			NirnAuctionHouse.list.filterDropCrafting:SelectItemByIndex(1,true)
+		end, 50)
+		end
+	end
+	
+
 	
 	if NAH.settings.data.SearchSettings.CurrentSearch then
 	NirnAuctionHouse.list.My_searchBox:SetText(NAH.settings.data.SearchSettings.CurrentSearch)
@@ -1873,51 +1957,6 @@ local function NAH_SetAccountCharData()
 	
 if NAH.settings.ReloadingUI then 
 NAH.settings.ReloadingUI=false
-
-
-
-
---~ 	if NAH.settings.ReloadTradeDataTracked then
---~ 	NAH.settings.ReloadTradeDataTracked=false;
---~ 	end
---~ 	
---~ 	if NAH.settings.ReloadTradeData then
---~ 	NAH.settings.ReloadTradeData=false;
---~ 	end
---~ 	
---~ 	if NAH.settings.PostPaidOrders then
---~ 	NAH.settings.PostPaidOrders=false;
---~ 	NAH.settings.data.PaidOrders = {}
---~ 	end
---~ 	
---~ 	if NAH.settings.PostFilledOrders then
---~ 	NAH.settings.PostFilledOrders=false;
---~ 	NAH.settings.data.FilledOrders = {}
---~ 	end
---~ 	
---~ 	if NAH.settings.PostListings then
---~ 	NAH.settings.PostListings=false;
---~ 	NAH.settings.data.Listings = {}
---~ 	end
---~ 	
---~ 	if NAH.settings.PostBids then
---~ 	NAH.settings.PostBids=false;
---~ 	NAH.settings.data.Bids = {}
---~ 	end
-	
-	
-	
---~ 	if NAH.settings.PostBids or NAH.settings.PostListings or NAH.settings.PostFilledOrders or NAH.settings.PostPaidOrders  then
---~ 	NAH.settings.ReloadTradeData=true	
---~ 	NirnAuctionHouse:forceWriteSavedVars()
---~ 	end
-	
-	
-	
-	
-	
-	
-	
 end
 
 	

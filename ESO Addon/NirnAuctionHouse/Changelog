@@ -1,5 +1,8 @@
 Changelog
 
+v0.0.13b "beta" @Elo
+ - bugfix search filters and categories
+
 v0.0.13 "beta" @Elo
  - Buyer Protection (If seller doesnt fulfill trades seller will lose ranking each time, when ranking goes too low account is banned)
  - Seller Protection (If buyer doesnt pay for trades buyer will lose ranking each time, when ranking goes too low account is banned)
