@@ -10,6 +10,22 @@
             <Action name="NAH_TOGGLE_AUCTION_BUTTONS">
                 <Down>NirnAuctionHouse_ToggleAHButtons()</Down>
             </Action>
+            <Action name="NAH_LastPage">
+                <Down>NirnAuctionHouse_LastPage()</Down>
+            </Action>
+            <Action name="NAH_NextPage">
+                <Down>NirnAuctionHouse_NextPage()</Down>
+            </Action>
         </Category>
     </Layer>
+    <Layer name="GamepadUIMode" allowFallthrough="false">
+		<Category>
+			<AllowAction name="NAH_TOGGLE_AUCTION_HOUSE"/>
+			<AllowAction name="NAH_REFRESH_AUCTION_HOUSE"/>
+			<AllowAction name="NAH_TOGGLE_AUCTION_BUTTONS"/>
+			<AllowAction name="NAH_LastPage"/>
+			<AllowAction name="NAH_NextPage"/>
+		</Category>
+	</Layer>
+    
 </Bindings>

@@ -1,0 +1,2 @@
+function NirnAuctionHouse:CheckNotifications()
+end

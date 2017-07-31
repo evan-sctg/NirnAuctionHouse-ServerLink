@@ -44,6 +44,9 @@
 		<Button name="$(parent)DoBid" inherits="ZO_DefaultButton" text="Bid" hidden="false">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Buyout" />
 					<Dimensions x="100" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_BID))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_BidItem(self:GetParent())
 			</OnClicked>
@@ -51,6 +54,9 @@
 		<Button name="$(parent)DoBuyout" inherits="ZO_DefaultButton" text="Buyout" hidden="false">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)DoBid" />
 					<Dimensions x="100" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_BUYOUT))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_BuyItem(self:GetParent())
 			</OnClicked>
@@ -58,6 +64,9 @@
 		<Button name="$(parent)DoCancel" inherits="ZO_DefaultButton" text="Cancel" hidden="true">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)DoBid" />
 					<Dimensions x="100" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_CANCEL))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_CancelListing(self:GetParent())
 			</OnClicked>
@@ -104,6 +113,9 @@
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)IsBuyout" />
 					<Anchor point="RIGHT" relativePoint="RIGHT" relativeTo="$(parent)" offsetX="-16" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_CONFIRM))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_FillOrder(self:GetParent())
 			</OnClicked>
@@ -115,6 +127,9 @@
       <Controls>
 				<Texture name="$(parent)BG" inherits="ZO_InsetTexture" textureFile="esoui/art/chatwindow/chat_bg_center.dds"  />
 				<Button name="$(parent)AuctionHouseRefresh" inherits="ZO_DefaultButton" text="Sync" hidden="false">
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_SYNC))
+					</OnInitialized>
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="54" />
 					<Dimensions x="150" y="30" />
@@ -125,6 +140,9 @@
 		
 				<Button name="$(parent)AuctionHouse_LastPage" inherits="ZO_DefaultButton" text="Last Page" hidden="false">
 				
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_LAST_PAGE))
+					</OnInitialized>
 					<Anchor point="BOTTOM" relativePoint="BOTTOM" offsetX="-78" offsetY="-10" />
 					<Dimensions x="150" y="30" />
 			<OnClicked>
@@ -134,6 +152,9 @@
 		
 				<Button name="$(parent)AuctionHouse_NextPage" inherits="ZO_DefaultButton" text="Next Page" hidden="false">
 				
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_NEXT_PAGE))
+					</OnInitialized>
 				
 					<Anchor point="BOTTOM" relativePoint="BOTTOM" offsetX="78" offsetY="-10" />
 					<Dimensions x="150" y="30" />
@@ -233,6 +254,9 @@
 				<Label name="$(parent)PriceRange" inherits="NAHRowLabel" text="Price Range">
 					<Anchor point="LEFT" relativePoint="LEFT" relativeTo="$(parent)PriceMin" offsetY="-30" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_PRICERANGE))
+					</OnInitialized>
 				</Label>
 				
 				<Label name="$(parent)PriceRangeDash" inherits="NAHRowLabel" text="-">
@@ -264,6 +288,9 @@
 				<Label name="$(parent)LevelRange" inherits="NAHRowLabel" text="Level Range" hidden="true">
 					<Anchor point="LEFT" relativePoint="LEFT" relativeTo="$(parent)LevelMin" offsetY="-30" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_LEVELRANGE))
+					</OnInitialized>
 				</Label>
 				
 				<Label name="$(parent)LevelRangeDash" inherits="NAHRowLabel" text="-">
@@ -313,7 +340,7 @@
 						<Control name="$(parent)Name" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
-								ZO_SortHeader_Initialize(self, "name", "name", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_NAME), "name", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 								
 							</OnInitialized>
 							<Anchor point="TOPLEFT" offsetX="300" />
@@ -322,7 +349,7 @@
 						<Control name="$(parent)Qty" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
-								ZO_SortHeader_Initialize(self, "Qty", "stackCount", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_QTY), "stackCount", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 							
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Name" />
@@ -331,7 +358,7 @@
 						<Control name="$(parent)TimeLeft" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
-								ZO_SortHeader_Initialize(self, "TimeLeft", "TimeLeft", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_TIMELEFT), "TimeLeft", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 							
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Qty" />
@@ -340,7 +367,7 @@
 						<Control name="$(parent)Type" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
-								ZO_SortHeader_Initialize(self, "itemType", "itemType", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_TYPE), "itemType", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 							
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)TimeLeft" />
@@ -349,7 +376,7 @@
 						<Control name="$(parent)Bid" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
-								ZO_SortHeader_Initialize(self, "Bid", "StartingPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_BID), "StartingPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 								
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Type" />
@@ -358,7 +385,7 @@
 						<Control name="$(parent)Buyout" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
-								ZO_SortHeader_Initialize(self, "Buyout", "BuyoutPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_BUYOUT), "BuyoutPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 								
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Bid" />
@@ -402,6 +429,9 @@
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="-224" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_AUCTION))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ToggleAH(self:GetParent())
 			</OnClicked>
@@ -415,6 +445,9 @@
 				<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Sold Items">
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="-195" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_SOLDITEMS))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ToggleOrders(self:GetParent())
 			</OnClicked>
@@ -427,6 +460,9 @@
 				<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Order Tracking">
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="-165" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_ORDERTRACKING))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ToggleTrackedOrders(self:GetParent())
 			</OnClicked>
@@ -441,6 +477,9 @@
 				<Button name="$(parent)ViewOrdersNew" inherits="ZO_DefaultButton" text="Sold Items (new)">
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="-195" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_SOLDITEMS_NEW))
+					</OnInitialized>
 			<OnClicked>
 			
 				NirnAuctionHouse_ToggleOrders(self:GetParent())
@@ -453,11 +492,17 @@
 		<Controls>
 			<Label name="$(parent)lalel2" horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Tracked Orders">
 					<Anchor point="TOP" relativePoint="TOP" offsetX=""  offsetY="" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_TRACKEDORDERS))
+					</OnInitialized>
 				</Label>
 			
 				<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Sync">
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="14" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_SYNC))
+					</OnInitialized>
 			<OnClicked>
 			
 				NirnAuctionHouse_RefreshAHTrackedBids(self:GetParent())
@@ -474,7 +519,7 @@
 						<Control name="$(parent)Price" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
-								ZO_SortHeader_Initialize(self, "price", "BuyoutPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_PRICE), "BuyoutPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 								
 							</OnInitialized>
 							<Anchor point="TOPLEFT" />
@@ -483,7 +528,7 @@
 						<Control name="$(parent)Name" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
-								ZO_SortHeader_Initialize(self, "name", "name", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_NAME), "name", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 								
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Price" />
@@ -492,7 +537,7 @@
 						<Control name="$(parent)Qty" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
-								ZO_SortHeader_Initialize(self, "qty", "stackCount", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_QTY), "stackCount", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 							
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Name" />
@@ -501,7 +546,7 @@
 						<Control name="$(parent)TimeLeft" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
-								ZO_SortHeader_Initialize(self, "TimeLeft", "TimeLeft", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_TIMELEFT), "TimeLeft", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 							
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Qty" />
@@ -510,7 +555,7 @@
 						<Control name="$(parent)IsBuyout" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
-								ZO_SortHeader_Initialize(self, "Status", "TradeIsBidder", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_STATUS), "TradeIsBidder", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 							
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)TimeLeft" />
@@ -543,11 +588,17 @@
 		<Controls>
 			<Label name="$(parent)lalel2"  horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Sold Items">
 					<Anchor point="TOP" relativePoint="TOP" offsetX=""  offsetY="" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_SOLDITEMS))
+					</OnInitialized>
 				</Label>
 			
 				<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Sync">
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="14" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_SYNC))
+					</OnInitialized>
 			<OnClicked>
 			
 				NirnAuctionHouse_RefreshAHBids(self:GetParent())
@@ -564,7 +615,7 @@
 						<Control name="$(parent)Price" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
-								ZO_SortHeader_Initialize(self, "price", "BuyoutPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_PRICE), "BuyoutPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 								
 							</OnInitialized>
 							<Anchor point="TOPLEFT" />
@@ -573,7 +624,7 @@
 						<Control name="$(parent)Name" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
-								ZO_SortHeader_Initialize(self, "name", "name", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_NAME), "name", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 								
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Price" />
@@ -582,7 +633,7 @@
 						<Control name="$(parent)Qty" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
-								ZO_SortHeader_Initialize(self, "qty", "stackCount", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_QTY), "stackCount", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 							
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Name" />
@@ -592,7 +643,7 @@
 						<Control name="$(parent)TimeLeft" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
-								ZO_SortHeader_Initialize(self, "COD Cost", "TimeLeft", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_CODCOST), "TimeLeft", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 							
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Qty" />
@@ -601,7 +652,7 @@
 						<Control name="$(parent)IsBuyout" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
-								ZO_SortHeader_Initialize(self, "Type", "TradeIsBidder", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_TYPE), "TradeIsBidder", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 							
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)TimeLeft" />
@@ -641,6 +692,9 @@
 				
 					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmount" relativePoint="LEFT"  offsetX="0"offsetY="60" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_CANCEL))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_DocancelListing()
 			</OnClicked>
@@ -650,6 +704,9 @@
 				
 					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmount" relativePoint="LEFT"  offsetX="160"offsetY="60" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_POSTLISTING))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_DoPostListing(self:GetParent())
 			</OnClicked>
@@ -658,10 +715,16 @@
 		
 				<Label name="$(parent)sellercodnotice" font="ZoFontGameSmall" horizontalAlignment="LEFT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="*Note Seller Pays COD Cost">
 					<Anchor point="TOPLEFT" relativeTo="$(parent)CancelListing" relativePoint="BOTTOMLEFT" offsetX="75" offsetY="15" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_SELLERPAYSCOD))
+					</OnInitialized>
 				</Label>
 		
 				<Label name="$(parent)startinglabel" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Starting Price">
 					<Anchor point="TOP" relativeTo="$(parent)GoldAmountStarting" relativePoint="TOP" offsetY="25" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_STARTINGPRICE))
+					</OnInitialized>
 				</Label>
 			<Backdrop name="$(parent)GoldAmountStarting" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">					
 					<Anchor point="CENTER" relativePoint="CENTER" offsetX="0" offsetY="-60" />
@@ -673,6 +736,9 @@
 		
 				<Label name="$(parent)buyoutlabel" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Buyout Price">
 					<Anchor point="TOP" relativeTo="$(parent)GoldAmountBuyout" relativePoint="TOP" offsetY="100" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_BUYOUTPRICE))
+					</OnInitialized>
 				</Label>
 			<Backdrop name="$(parent)GoldAmountBuyout" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">					
 					<Anchor point="CENTER" relativePoint="CENTER" offsetX="0" offsetY="10" />
@@ -702,6 +768,9 @@
 				
 					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmount" relativePoint="LEFT"  offsetX="0"offsetY="40" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_CANCEL))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_Docancel_BidOrder()
 			</OnClicked>
@@ -711,6 +780,9 @@
 				
 					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmount" relativePoint="LEFT"  offsetX="150"offsetY="40" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_POSTLISTING))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_DoPost_BidOrder(self:GetParent())
 			</OnClicked>
@@ -719,6 +791,9 @@
 						
 				<Label name="$(parent)buyoutlabel" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Bid Amount">
 					<Anchor point="CENTER" relativeTo="$(parent)GoldAmountBuyout" relativePoint="CENTER" offsetY="-35" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_BIDAMOUNT))
+					</OnInitialized>
 				</Label>
 			<Backdrop name="$(parent)GoldAmountBid" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">					
 					<Anchor point="CENTER" relativePoint="CENTER" offsetX="0" offsetY="0" />
@@ -747,6 +822,9 @@
 				
 					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmount" relativePoint="LEFT"  offsetX="0"offsetY="40" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_CANCEL))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_Docancel_BuyoutOrder()
 			</OnClicked>
@@ -756,6 +834,9 @@
 				
 					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmount" relativePoint="LEFT"  offsetX="150"offsetY="40" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_BUYOUT))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_DoPost_BuyoutOrder(self:GetParent())
 			</OnClicked>
@@ -783,14 +864,23 @@ ITEMNAME for ITEMCOST Gold?">
 			<Controls>
 			<Label name="$(parent)lalel1" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_FAILED" text="Server Link Not Found">
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-148"  offsetY="-210" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_SERVERLINKNOTFOUND))
+					</OnInitialized>
 				</Label>
 			<Label name="$(parent)lalel2" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_FAILED" text="(Run Documents\Elder Scrolls Online\live\AddOns\NirnAuctionHouse\NirnAuctionHouse.exe)">
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78"  offsetY="-230" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_SERVERLINKLOC))
+					</OnInitialized>
 				</Label>
 				<Button name="$(parent)NAHAuctionHouse_ServerLink" inherits="ZO_DefaultButton" text="Recheck Server Link" hidden="false">
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="-185" />
 					<Dimensions x="250" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_RECHECKSERVERLINK))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ServerLink_Recheck()
 			</OnClicked>

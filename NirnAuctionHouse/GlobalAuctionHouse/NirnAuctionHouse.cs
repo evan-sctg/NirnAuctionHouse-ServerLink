@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using LuaTableHandlers;
@@ -11,8 +10,6 @@ using System.Net;
 using System.Text.RegularExpressions;
 
 
-using System.Runtime.InteropServices;
-using IWshRuntimeLibrary;
 using File=System.IO.File;
 using System.Media;
 
@@ -34,7 +31,9 @@ namespace GlobalAuctionHouse
         private const int MessageListMaxCount = 100;
 
         private string StatusText;
-        
+
+
+        private DateTime LastParseTime;
 
         private string LastSyncTimeString;
         private DateTime LastSyncTime;
@@ -78,6 +77,17 @@ namespace GlobalAuctionHouse
 
         public string AddonDirectory = Path.GetFullPath("../NirnAuctionHouse");
 
+        public bool DoPlaySounds = true;
+        public bool DoPlaySounds_success_listing = false;
+        public bool DoPlaySounds_success_buy = false;
+        public bool DoPlaySounds_success_cancel = false;
+
+        bool DoActiveSellersOnly = false;
+
+
+        bool foundAccount = false;
+
+
         public Form1()
         {
             InitializeComponent();
@@ -115,6 +125,7 @@ namespace GlobalAuctionHouse
 
 
             this.ModInitiate();
+            this.ModNotification("");
             this.StartWatchingSavedVars();
             
       
@@ -124,7 +135,25 @@ namespace GlobalAuctionHouse
 
         private void GetAPIEndpoint()
         {
-            this.CurGameServer = this.GetGameServerFromFile();
+            GetAPIEndpoint("");
+        }
+        private void GetAPIEndpoint(string worldname)
+        {
+
+            if (worldname=="") {
+                this.CurGameServer = this.GetGameServerFromFile();
+            } else
+            {
+
+                if (worldname == "NA Megaserver")
+                {
+                    this.CurGameServer = GameServer.NA;
+                }else
+                {
+                    this.CurGameServer = GameServer.EU;
+                }
+            }
+            
             if (this.CurGameServer==GameServer.NA)
             {
                this.APIEndpoint = new Uri("https://nirnah.com");
@@ -135,42 +164,9 @@ namespace GlobalAuctionHouse
 
         }
 
-        private void SetStartup()
-        {
-
-            WshShell wshShell = new WshShell();
+  
 
 
-
-            IWshRuntimeLibrary.IWshShortcut shortcut;
-            string startUpFolderPath =
-              Environment.GetFolderPath(Environment.SpecialFolder.Startup);
-
-            // Create the shortcut
-            shortcut =
-              (IWshRuntimeLibrary.IWshShortcut)wshShell.CreateShortcut(
-                startUpFolderPath + "\\" +
-                Application.ProductName + ".lnk");
-
-            shortcut.TargetPath = Application.ExecutablePath;
-            shortcut.WorkingDirectory = Application.StartupPath;
-            shortcut.Description = "Launch Nirn Auction House";
-            shortcut.Save();
-
-        }
-
-
-        private void RemoveStartup()
-        {
-            string startUpFolderPath =
-              Environment.GetFolderPath(Environment.SpecialFolder.Startup);
-
-            if (File.Exists(startUpFolderPath + "\\" + Application.ProductName + ".lnk"))
-            {
-                File.Delete(startUpFolderPath + "\\" + Application.ProductName + ".lnk");
-            }
-
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -190,7 +186,7 @@ namespace GlobalAuctionHouse
             else
             {
                 TimeSpan totalTimeTaken = DateTime.Now.Subtract(LastSyncTime);
-                if (totalTimeTaken.TotalMilliseconds > 2000)
+                if (totalTimeTaken.TotalMilliseconds > 5000)
                 {
                     
                     oktoSync = true;
@@ -222,7 +218,7 @@ namespace GlobalAuctionHouse
             string str = Path.Combine(SavedVariableDirectory, "NirnAuctionHouse.lua");
             if (!File.Exists(str))
             {
-                this.ToLog("Auction House Saved File doesnt exist yet: " + str);
+                //this.ToLog("Auction House Saved File doesnt exist yet: " + str);
                 this.StatusText = "Auction House Saved File doesnt exist yet";
                 label1.Text = this.StatusText;
                 return;
@@ -338,7 +334,7 @@ namespace GlobalAuctionHouse
             else
             {
                 TimeSpan totalTimeTaken = DateTime.Now.Subtract(LastSyncTimeFOs);
-                if (totalTimeTaken.TotalMilliseconds > 2000)
+                if (totalTimeTaken.TotalMilliseconds > 5000)
                 {
                   //  this.StatusText = "bid totalTimeTaken.TotalMilliseconds: " + totalTimeTaken.TotalMilliseconds;
                  //   label1.Text = this.StatusText;
@@ -369,7 +365,7 @@ namespace GlobalAuctionHouse
             string str = Path.Combine(SavedVariableDirectory, "NirnAuctionHouse.lua");
             if (!File.Exists(str))
             {
-                this.ToLog("Auction House Saved File doesnt exist yet: " + str);
+               // this.ToLog("Auction House Saved File doesnt exist yet: " + str);
                 this.StatusText = "Auction House Trade File doesnt exist yet";
                 label1.Text = this.StatusText;
                 return;
@@ -499,7 +495,7 @@ namespace GlobalAuctionHouse
             else
             {
                 TimeSpan totalTimeTaken = DateTime.Now.Subtract(LastSyncTimePaidOrder);
-                if (totalTimeTaken.TotalMilliseconds > 2000)
+                if (totalTimeTaken.TotalMilliseconds > 5000)
                 {
                     oktoSync = true;
                 }
@@ -530,7 +526,7 @@ namespace GlobalAuctionHouse
             string str = Path.Combine(SavedVariableDirectory, "NirnAuctionHouse.lua");
             if (!File.Exists(str))
             {
-                this.ToLog("Auction House Saved File doesnt exist yet: " + str);
+                //this.ToLog("Auction House Saved File doesnt exist yet: " + str);
                 this.StatusText = "Auction House Trade File doesnt exist yet";
                 label1.Text = this.StatusText;
                 return;
@@ -653,7 +649,7 @@ namespace GlobalAuctionHouse
             else
             {
                 TimeSpan totalTimeTaken = DateTime.Now.Subtract(LastSyncTimeBid);
-                if (totalTimeTaken.TotalMilliseconds > 2000)
+                if (totalTimeTaken.TotalMilliseconds > 5000)
                 {
                     oktoSync = true;
                 }
@@ -684,7 +680,7 @@ namespace GlobalAuctionHouse
             string str = Path.Combine(SavedVariableDirectory, "NirnAuctionHouse.lua");
             if (!File.Exists(str))
             {
-                this.ToLog("Auction House Saved File doesnt exist yet: " + str);
+               // this.ToLog("Auction House Saved File doesnt exist yet: " + str);
                 this.StatusText = "Auction House Trade File doesnt exist yet";
                 label1.Text = this.StatusText;
                 return;
@@ -809,11 +805,36 @@ namespace GlobalAuctionHouse
             try
             {
                 
-                string str = this.SendPackage(this.APIEndpoint + "/proc/trade/new", tradeModels.ToList<AuctionEntry>());
+                string ServerResponse = this.SendPackage(this.APIEndpoint + "/proc/trade/new", tradeModels.ToList<AuctionEntry>());
+                if (ServerResponse == "The resource is created successfully!" || ServerResponse == "Done!")
+                {
+                    ModNotification("Successfully Listed Item(s) for sale - processing may take up to 60 seconds");
+                    this.StatusText = "Successfully Listed Item(s) for sale";
+                    if (DoPlaySounds_success_listing)
+                    {
+                        PlaySuccessSound();
+                    }
+                }
+                else
+                {
+                    //failed sound is already played by sendpackage function should the request fail
 
-                this.StatusText = "result: " + str;
+                    if (ServerResponse=="Trade Limit Reached")
+                    {
+                        ModNotification("Failed to List Item(s) for sale: Trade Limit Reached");
+                        this.StatusText = "Failed to List Item(s) for sale: " + ServerResponse;
+                    }
+                    else
+                    {
+                        ModNotification("Failed to List Item(s) for sale");
+                        this.StatusText = "Failed to List Item(s) for sale: " + ServerResponse;
+
+                    }
+                    
+                }
+
                 label1.Text = this.StatusText;
-                
+
                 return;
 
             }
@@ -842,10 +863,44 @@ namespace GlobalAuctionHouse
           
             try
             {
-                
-                string str = this.SendPackage(this.APIEndpoint + "/proc/trade/filled", tradeModels.ToList<AuctionFilledOrderEntry>());
+                AuctionFilledOrderEntry firstFilledOrder = tradeModels.FirstOrDefault<AuctionFilledOrderEntry>();
+                if (firstFilledOrder == null) { return; }
+               
+                string ServerResponse = this.SendPackage(this.APIEndpoint + "/proc/trade/filled", tradeModels.ToList<AuctionFilledOrderEntry>());
+                if (ServerResponse == "The resource is created successfully!" || ServerResponse == "Done!")
+                {
+                    if (firstFilledOrder.BidID == 1)
+                    {
+                        ModNotification("Successfully Canceled Item(s) for sale - Processing may take up to 60 seconds");
+                        this.StatusText = "Successfully Canceled Item(s) for sale";
+                        if (DoPlaySounds_success_cancel)
+                        {
+                            PlaySuccessSound();
+                        }
+                        
 
-                this.StatusText = "result: " + str;
+                    } else
+                    {
+                        ModNotification("Successfully Filled Order");
+                        this.StatusText = "Successfully Filled Order";
+                    }
+                }
+                else
+                {
+                    //failed sound is already played by sendpackage function should the request fail
+                    if (firstFilledOrder.BidID == 1)
+                    {
+                        ModNotification("Failed to Cancel Item(s) for sale");
+                        this.StatusText = "Failed to Cancel Item(s) for sale: " + ServerResponse;
+
+                    }
+                    else
+                    {
+                        ModNotification("Failed to List Item(s) for sale");
+                        this.StatusText = "Failed to List Item(s) for sale: " + ServerResponse;
+                    }
+                }
+
                 label1.Text = this.StatusText;
                 return;
 
@@ -872,9 +927,23 @@ namespace GlobalAuctionHouse
             try
             {
                 
-                string str = this.SendPackage(this.APIEndpoint + "/proc/bid/new", tradeModels.ToList<AuctionBidEntry>());
+                string ServerResponse = this.SendPackage(this.APIEndpoint + "/proc/bid/new", tradeModels.ToList<AuctionBidEntry>());
+                if (ServerResponse == "The resource is created successfully!" || ServerResponse == "Done!")
+                {
+                    ModNotification("Successfully bid on or bought Item(s)");
+                    this.StatusText = "Successfully bid on or bought Item(s)"; 
+                    if (DoPlaySounds_success_buy)
+                    {
+                        PlaySuccessSound();
+                    }
+                }
+                else
+                {
+                    //failed sound is already played by sendpackage function should the request fail
+                    ModNotification("Failed to bid on or buy Item(s), Check the log file for more information");
+                    this.StatusText = "Failed to bid on or buy Item(s): " + ServerResponse;
+                }
 
-                this.StatusText = "result: " + str;
                 label1.Text = this.StatusText;
                 return;
                 
@@ -902,9 +971,19 @@ namespace GlobalAuctionHouse
             try
             {
 
-                string str = this.SendPackage(this.APIEndpoint + "/proc/trade/paid", tradeModels.ToList<AuctionPaidOrdersEntry>());
+                string ServerResponse = this.SendPackage(this.APIEndpoint + "/proc/trade/paid", tradeModels.ToList<AuctionPaidOrdersEntry>());
+                if (ServerResponse == "The resource is created successfully!" || ServerResponse == "Done!")
+                {
+                    ModNotification("Successfully Purchased Item(s) for sale");
+                    this.StatusText = "Successfully Purchased Item(s) for sale";
+                }
+                else
+                {
+                    //failed sound is already played by sendpackage function should the request fail
+                    ModNotification("Failed to register purchased for item(s)");
+                    this.StatusText = "Failed to register purchased for item(s): " + ServerResponse;
+                }
 
-                this.StatusText = "result: " + str;
                 label1.Text = this.StatusText;
                 return;
 
@@ -933,7 +1012,18 @@ namespace GlobalAuctionHouse
             try
             {
               using (WebClient client = new WebClient()) {
-                string TradeListContent = client.DownloadString(this.APIEndpoint + "/proc/tradelist");
+
+                    string TradeListContent;
+                    if (DoActiveSellersOnly)
+                    {
+
+                        TradeListContent = client.DownloadString(this.APIEndpoint + "/proc/tradelist/active");
+                    }
+                    else
+                    {
+
+                        TradeListContent = client.DownloadString(this.APIEndpoint + "/proc/tradelist");
+                    }
                 File.WriteAllText(this.TradeListPath, TradeListContent);
             }
 
@@ -1093,14 +1183,34 @@ namespace GlobalAuctionHouse
 
         public void parseSavedVars()
         {
+            bool oktoSync = false;
 
+            if (LastParseTime == null)
+            {
+                oktoSync = true;
+            }
+            else
+            {
+                TimeSpan totalTimeTaken = DateTime.Now.Subtract(LastParseTime);
+                if (totalTimeTaken.TotalMilliseconds > 5000)
+                {
+
+                    oktoSync = true;
+                }
+
+            }
+
+            if (!oktoSync) { return; }
+            
+           foundAccount = false;
+            this.ModNotification("");
             this.StatusText = "parsing saved vars";
             label1.Text = this.StatusText;
 
             string str = Path.Combine(SavedVariableDirectory, "NirnAuctionHouse.lua");
             if (!File.Exists(str))
             {
-                this.ToLog("Auction House Saved File doesnt exist yet: " + str);
+                //this.ToLog("Auction House Saved File doesnt exist yet: " + str);
                 this.StatusText = "Auction House Saved File doesnt exist yet";
                 label1.Text = this.StatusText;
                 return;
@@ -1128,6 +1238,7 @@ namespace GlobalAuctionHouse
                             if (acctdata["ActiveAccount"] != null && (string)acctdata["ActiveAccount"] != "" && (string)acctdata["ActiveAccount"] != "\"\"")
                             {
 
+                                    foundAccount = true;
                                     bool DoReloadTradeData = false;
                                     bool DoPostListings = false;
                                     bool DoPostBids = false;
@@ -1135,10 +1246,23 @@ namespace GlobalAuctionHouse
                                     bool DoPostFilledOrders = false;
                                     bool DoPostPaidOrders = false;
 
-                                    try { 
+                                    try {
+                                        
 
-                                 DoReloadTradeData = (bool)acctdata["ReloadTradeData"];
-                                 DoPostListings = (bool)acctdata["PostListings"];
+                                            string GameWorldName = (string)acctdata["WorldName"];
+                                            GetAPIEndpoint(GameWorldName);
+
+                                        DoPlaySounds = (bool)acctdata["PlaySounds"];
+                                        DoPlaySounds_success_listing = (bool)acctdata["PlaySounds_success_listing"];
+                                        DoPlaySounds_success_buy = (bool)acctdata["PlaySounds_success_buy"];
+                                        DoPlaySounds_success_cancel = (bool)acctdata["PlaySounds_success_cancel"];
+
+
+
+                                        DoActiveSellersOnly = (bool)acctdata["ActiveSellersOnly"];
+
+                                        DoReloadTradeData = (bool)acctdata["ReloadTradeData"];
+                                        DoPostListings = (bool)acctdata["PostListings"];
                                      DoPostBids = (bool)acctdata["PostBids"];
                                      ReloadTradeDataTracked = false;
                                         if (acctdata.ContainsKey("ReloadTradeDataTracked")) { ReloadTradeDataTracked = (bool)acctdata["ReloadTradeDataTracked"]; }
@@ -1215,8 +1339,13 @@ namespace GlobalAuctionHouse
 
             this.StatusText = "Finished Parsing saved vars";
             label1.Text = this.StatusText;
+            this.LastParseTime = DateTime.Now;
 
-            
+           // if (!foundAccount) {
+
+           // }
+
+
         }
 
 
@@ -1263,6 +1392,34 @@ namespace GlobalAuctionHouse
 
         }
 
+
+
+        public void ModNotification(string notification)
+        {
+            try
+            {
+
+                string modNotificationFile = "ModNotifications.Lua";
+                if (File.Exists(modNotificationFile)) { File.Delete(modNotificationFile); }
+                using (StreamWriter streamWriter = new StreamWriter(modNotificationFile, true))
+                {
+                    streamWriter.WriteLine("function NirnAuctionHouse:CheckNotifications()");
+                    if (notification!="")
+                    {
+                        streamWriter.WriteLine("d(\"" + notification + "\")");
+                    }
+                    streamWriter.WriteLine("end");
+                }
+            }
+            catch (Exception exception)
+            {
+                this.ToLog("ModNotifications Error");
+                this.ToLog(exception);
+            }
+
+        }
+
+
         private void button2_Click(object sender, EventArgs e)
         {
             this.UpdateTradeList();
@@ -1278,12 +1435,34 @@ namespace GlobalAuctionHouse
             this.ModDeactivate();
             
         }
+        
+       
 
+        private void PlaySuccessSound()
+        {
+            if (DoPlaySounds)
+            {
+               SoundPlayer TaDaSound = new SoundPlayer(NirnAuctionHouse.Properties.Resources.TaDa);
+            TaDaSound.Play();
+            }
+        }
+
+        private void PlayFailedSound()
+        {
+            if (DoPlaySounds)
+            {
+                SoundPlayer SadTromboneSound = new SoundPlayer(NirnAuctionHouse.Properties.Resources.SadTrombone);
+                SadTromboneSound.Play();
+            }
+        }
 
         private void PlayNewSoldItemsSound()
-        {     
-            SoundPlayer SoldItemsSound = new SoundPlayer(NirnAuctionHouse.Properties.Resources.SoldItemsSound);
-            SoldItemsSound.Play();
+        {
+            if (DoPlaySounds)
+            {
+                SoundPlayer SoldItemsSound = new SoundPlayer(NirnAuctionHouse.Properties.Resources.SoldItemsSound);
+                SoldItemsSound.Play();
+            }
         }
 
 
@@ -1292,24 +1471,27 @@ namespace GlobalAuctionHouse
             this.PlayNewSoldItemsSound();            
         }
 
-       
+
 
 
         private void HandleTimedEvents()
         {
-            
+
+
+            foundAccount = this.LoadActiveAccount();
+            if (foundAccount) { 
             this.GetAPIEndpoint();
-            this.LoadActiveAccount();
             this.UpdateBidList();
             this.UpdateTradeList();
             this.UpdateTrackedBidList();
 
-         
+
             bool newBidsFound = this.CheckNewBids();
-                if (newBidsFound)
-                {
-                    this.ReloadGameBids();//alert mod that there are new bids waiting for it                
-                }
+            if (newBidsFound)
+            {
+                this.ReloadGameBids();//alert mod that there are new bids waiting for it                
+            }
+         }
         }
 
         private void DoTimer()
@@ -1402,7 +1584,7 @@ namespace GlobalAuctionHouse
         }
         
 
-        public void LoadActiveAccount() {
+        public bool LoadActiveAccount() {
             try
             {
 
@@ -1410,10 +1592,10 @@ namespace GlobalAuctionHouse
                 string str = Path.Combine(SavedVariableDirectory, "NirnAuctionHouse.lua");
                 if (!File.Exists(str))
                 {
-                    this.ToLog("Auction House Saved File doesnt exist yet: " + str);
+                    //this.ToLog("Auction House Saved File doesnt exist yet: " + str);
                     this.StatusText = "Auction House Saved File doesnt exist yet";
                     label1.Text = this.StatusText;
-                    return;
+                    return false;
                 }
                 Dictionary<string, LsonValue> SavedVariableFileData = ReadSavedVariableFile();
 
@@ -1431,7 +1613,7 @@ namespace GlobalAuctionHouse
                   {
                             ActiveAccount = tmpActiveAccount;
                            // this.ToLog("Account Found: " + tmpActiveAccount);
-                            return;
+                            return true;
                     }
                 }
             }
@@ -1443,6 +1625,7 @@ namespace GlobalAuctionHouse
             {
                 this.ToLog(exception);
             }
+            return false;
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -1486,57 +1669,45 @@ namespace GlobalAuctionHouse
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            SetStartup();
+            this.StatusText = "Testing Communication with server";
+            label1.Text = this.StatusText;
+            try
+            {
+               
+
+                string ConnectionTest = this.SendPackage(this.APIEndpoint + "/proc/connectivity", " { \"isConnected\":1,\"ItemData\":{\"itemId\":33768,\"stackCount\":3,\"IsBuyout\":1,\"Item\":{\"ID\":33768,\"ItemLink\":\" | H1:item: 33768:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0 | h | h\",\"LevelTotal\":1,\"RequiredLevel\":1,\"RequiredChampionPoints\":0,\"Name\":\"Comberry\",\"Quality\":1,\"Condition\":100,\"RepairCost\":0,\"ArmorRating\":0,\"WeaponPower\":0,\"StatVal\":0,\"ItemCharge\":0,\"ItemChargeMax\":0,\"ItemChargePercent\":0,\"enchantHeader\":\"\",\"enchantDescription\":\"\",\"traitDescription\":\"\",\"traitType\":\"NONE\",\"traitSubtypeDescription\":\"\",\"traitSubtype\":\"NONE\",\"setName\":\"\",\"sellValue\":0,\"Trait\":null,\"ItemType\":10,\"ItemWeaponType\":0,\"ItemArmorType\":0},\"StartingPrice\":30,\"BuyoutPrice\":45}}");
+                if (ConnectionTest== "Done!")
+                {
+                    PlaySuccessSound();
+                    this.StatusText = "Successfully Communicated with server";
+                    label1.Text = this.StatusText;
+                }
+                else
+                {
+                    //failed sound is already played by sendpackage function should teh request fail
+                    this.StatusText = "Failed to Communicate with server: "+ ConnectionTest;
+                    label1.Text = this.StatusText;
+
+                }
+
+                return;
+
+            }
+            catch (Exception exception)
+            {
+                this.ToLog("Connection Test Error");
+                this.ToLog(exception);
+            }
         }
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            RemoveStartup();
+            //RemoveStartup();
         }
 
 
 
-
-
-
-
-        public static string GetAccountName()
-        {
-            string ParamValue = "";
-            string ParamName="";
-            string SettingsFile = Path.GetFullPath("../../UserSettings.txt");
-            if (!File.Exists(SettingsFile))
-            {
-                return "";
-            }
-            using (StringReader SettingsFileReader = new StringReader(System.IO.File.ReadAllText(SettingsFile)))
-            {
-                do
-                {
-                    string LineContent = SettingsFileReader.ReadLine();
-                    if (LineContent != null)
-                    {
-                        Match ISSettings = (new Regex("SET (.*) \"(.*)\"")).Match(LineContent);
-                        if (ISSettings.Success)
-                        {
-                            ParamName = ISSettings.Groups[1].Value;
-                            ParamValue = ISSettings.Groups[2].Value;
-                            if (ParamName.ToLower() == "accountname")
-                            {
-                                return "@" + ParamValue;
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        return "";
-                    }
-                }
-                while (ParamName.ToLower() != "accountname");
-            }
-            return "";
-        }
+        
 
 
         public GameServer GetGameServerFromFile()
@@ -1682,26 +1853,37 @@ namespace GlobalAuctionHouse
             {
 
                 string ServerResponse = "";
-                using (var client = new WebClient())
-                {
-                    ServerResponse = client.UploadString(Endpoint, Package);
+                var httpWebRequest = (HttpWebRequest)WebRequest.Create(Endpoint);
+                httpWebRequest.ContentType = "application/json";
+                httpWebRequest.Method = "POST";
 
+                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                {
+                    streamWriter.Write(Package);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                var streamReader = new StreamReader(httpResponse.GetResponseStream());
+                    ServerResponse = streamReader.ReadToEnd();
                     if (ServerResponse == "The resource is created successfully!" || ServerResponse == "Done!")
                     {
-                       // this.ToLog("Package Successfully Sent");
+                        // this.ToLog("Package Successfully Sent");
                     }
                     else
-                    {
-                        this.ToLog("sending Package to: " + Endpoint);
-                        this.ToLog("SendPackage: " + ServerResponse);
+                     {
+                    PlayFailedSound();
+                    this.ToLog("sending Package to: " + Endpoint);
+                    this.ToLog("sending Package: " + Package);
+                    this.ToLog("SendPackage: " + ServerResponse);
                     }
                     return ServerResponse;
-
-                }                             
                
             }
             catch (Exception ex)
             {
+                PlayFailedSound();
                 this.ToLog(ex.Message);
             }
             return "";
@@ -1730,6 +1912,7 @@ namespace GlobalAuctionHouse
             try
             {
                 this.ModDeactivate();
+                this.ModNotification("");
             }
             catch (Exception exception)
             {

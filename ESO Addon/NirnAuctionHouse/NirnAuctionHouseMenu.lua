@@ -30,7 +30,7 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 		name = "Nirn Auction House",
 		displayName = NirnAuctionHouse.colors.title .. "Nirn Auction House|r",
 		author = "Elo",
-		version = "0.0.8",
+		version = "0.0.14",
 		slashCommand = "/ahsetup",
 		registerForRefresh = true
 	}
@@ -44,129 +44,50 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.AddListingsToMasterMerchant = true else NAH.settings.AddListingsToMasterMerchant = false end  end,
 			default = self.EnabledTable[2]
 		},
---~ 		{
---~ 			type = "description",
---~ 			title = NirnAuctionHouse.colors.instructional .. "Average" .. NirnAuctionHouse.colors.default,
---~ 			text = "The average price of all items."
---~ 		},
---~ 		{
---~ 			type = "description",
---~ 			title = NirnAuctionHouse.colors.instructional .. "Median" .. NirnAuctionHouse.colors.default,
---~ 			text = "The price value for which half of the items cost more and half cost less."
---~ 		},
---~ 		{
---~ 			type = "description",
---~ 			title = NirnAuctionHouse.colors.instructional .. "Most Frequently Used (also known as Mode)" .. NirnAuctionHouse.colors.default,
---~ 			text = "The most common price value."
---~ 		},
---~ 		{
---~ 			type = "description",
---~ 			title = NirnAuctionHouse.colors.instructional .. "Weighted Average" .. NirnAuctionHouse.colors.default,
---~ 			text = "The average price of all items, with date taken into account. The latest data gets a wighting of X, where X is the number of days the data covers, thus making newest data worth more."
---~ 		},
---~ 		{
---~ 			type = "checkbox",
---~ 			name = "Show Min / Max Prices",
---~ 			tooltip = "Show minimum and maximum sell values",
---~ 			getFunc = function() return NirnAuctionHouse.settings.showMinMax end,
---~ 			setFunc = function(check) NirnAuctionHouse.settings.showMinMax = check end,
---~ 			default = true
---~ 		},
---~ 		{
---~ 			type = "checkbox",
---~ 			name = "Show 'Seen'",
---~ 			tooltip = "Show how many times an item was seen in the guild stores",
---~ 			getFunc = function() return NirnAuctionHouse.settings.showSeen end,
---~ 			setFunc = function(check) NirnAuctionHouse.settings.showSeen = check end,
---~ 			default = true
---~ 		},
---~ 		{
---~ 			type = "dropdown",
---~ 			name = "Show only if key is pressed",
---~ 			tooltip = "Show pricing on tooltip only if one of the following keys is pressed.  This is useful if you have too many addons modifying your tooltips.",
---~ 			choices = self.keyTable,
---~ 			getFunc = function() return NirnAuctionHouse.settings.keyPress or self.keyTable[1] end,
---~ 			setFunc = function(key) NirnAuctionHouse.settings.keyPress = key end,
---~ 			default = self.keyTable[1]
---~ 		},
---~ 		{
---~ 			type = "dropdown",
---~ 			name = "Limit results to a specific guild",
---~ 			tooltip = "Check pricing data from all guild, or a specific one",
---~ 			choices = self:GetGuildList(),
---~ 			getFunc = function() return self:GetGuildList()[NirnAuctionHouse.settings.limitToGuild or 1] end,
---~ 			setFunc = function(...) self:setLimitToGuild(...) end,
---~ 			default = self:GetGuildList()[1]
---~ 		},
---~ 		{
---~ 			type = "checkbox",
---~ 			name = "Ignore infrequent items",
---~ 			tooltip = "Ignore items that were seen only once or twice, as their price statistics may be inaccurate",
---~ 			getFunc = function() return NirnAuctionHouse.settings.ignoreFewItems end,
---~ 			setFunc = function(check) NirnAuctionHouse.settings.ignoreFewItems = check end,
---~ 			default = false
---~ 		},
---~ 		{
---~ 			type = "slider",
---~ 			name = "Keep item prices for (days):",
---~ 			tooltip = "Keep item prices for selected number of days. Older data will be automatically removed.",
---~ 			min = 7,
---~ 			max = 120,
---~ 			getFunc = function() return NirnAuctionHouse.settings.historyDays end,
---~ 			setFunc = function(days) NirnAuctionHouse.settings.historyDays = days end,
---~ 			default = 90
---~ 		},
---~ 		{
---~ 			type = "checkbox",
---~ 			name = "Audible notification",
---~ 			tooltip = "Play an audio notification when item scan is complete",
---~ 			getFunc = function() return NirnAuctionHouse.settings.isPlaySound end,
---~ 			setFunc = function(check) NirnAuctionHouse.settings.isPlaySound = check end,
---~ 			default = false
---~ 		},
---~ 		{
---~ 			type = "dropdown",
---~ 			name = "Sound type",
---~ 			tooltip = "Select which sound to play upon scan completion",
---~ 			choices = self.soundTable,
---~ 			getFunc = function() return NirnAuctionHouse.settings.playSound or self.soundTable[1] end,
---~ 			setFunc = function(value) NirnAuctionHouse.settings.playSound = value end,
---~ 			disabled = function() return not NirnAuctionHouse.settings.isPlaySound end,
---~ 			default = self.soundTable[1]
---~ 		},
+		{
+			type = "checkbox",
+			name = "Only show listings from active sellers",
+			tooltip = "Hide trades where the seller does not have Server Link active",
+			getFunc = function() return NAH.settings.ActiveSellersOnly end,
+			setFunc = function(IsActiveSellersOnly) NAH.settings.ActiveSellersOnly = IsActiveSellersOnly end,
+			default = false
+		},
+		{
+			type = "checkbox",
+			name = "Enable Server Link notification sounds",
+			tooltip = "Allow Server Link to play notification sounds",
+			getFunc = function() return NAH.settings.PlaySounds end,
+			setFunc = function(DoPlaySounds) NAH.settings.PlaySounds = DoPlaySounds end,
+			default = true
+		},
+		{
+			type = "checkbox",
+			name = "Enable Server Link notification on successful post Listing",
+			tooltip = "Allow Server Link to play notification sounds when listings are successfully posted",
+			getFunc = function() return NAH.settings.PlaySounds_success_listing end,
+			setFunc = function(DoPlaySounds) NAH.settings.PlaySounds_success_listing = DoPlaySounds end,
+			default = false
+		},
+		{
+			type = "checkbox",
+			name = "Enable Server Link notification on successful Buyout or Bid",
+			tooltip = "Allow Server Link to play notification sounds on successfull Buyout or Bid",
+			getFunc = function() return NAH.settings.PlaySounds_success_buy end,
+			setFunc = function(DoPlaySounds) NAH.settings.PlaySounds_success_buy = DoPlaySounds end,
+			default = false
+		},
+		{
+			type = "checkbox",
+			name = "Enable Server Link notification on successful cancel listings",
+			tooltip = "Allow Server Link to play notification sounds on successfully canceling listings",
+			getFunc = function() return NAH.settings.PlaySounds_success_cancel end,
+			setFunc = function(DoPlaySounds) NAH.settings.PlaySounds_success_cancel = DoPlaySounds end,
+			default = false
+		}
 	}
 
 	local LAM2 = LibStub:GetLibrary("LibAddonMenu-2.0")
 	LAM2:RegisterAddonPanel("NirnAuctionHouseOptions", panelData)
 	LAM2:RegisterOptionControls("NirnAuctionHouseOptions", optionsData)
 end
-
-function NirnAuctionHouseMenu:IsKeyPressed()
---~ 	return NirnAuctionHouse.settings.keyPress == self.keyTable[1] or
---~ 		(NirnAuctionHouse.settings.keyPress == self.keyTable[2] and IsShiftKeyDown()) or
---~ 		(NirnAuctionHouse.settings.keyPress == self.keyTable[3] and IsControlKeyDown()) or
---~ 		(NirnAuctionHouse.settings.keyPress == self.keyTable[4] and IsAltKeyDown()) or
---~ 		(NirnAuctionHouse.settings.keyPress == self.keyTable[5] and IsCommandKeyDown())
-end
-
---~ function NirnAuctionHouseMenu:GetGuildList()
---~ 	local guildList = {}
---~ 	guildList[1] = "All Guilds"
---~ 	for i = 1, GetNumGuilds() do
---~ 		guildList[i + 1] = GetGuildName(GetGuildId(i))
---~ 	end
---~ 	return guildList
---~ end
-
---~ function NirnAuctionHouseMenu:setLimitToGuild(guildName)
---~ 	local guildList = self:GetGuildList()
---~ 	for i, name in pairs(guildList) do
---~ 		if name == guildName then
---~ 			NirnAuctionHouse.settings.limitToGuild = i
---~ 			return
---~ 		end
---~ 	end
---~ 	-- Guild not found.  Default to 'All Guilds'
---~ 	NirnAuctionHouse.settings.limitToGuild = 1
---~ end
 

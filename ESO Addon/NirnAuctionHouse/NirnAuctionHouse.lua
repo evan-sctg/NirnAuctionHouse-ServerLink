@@ -55,6 +55,11 @@ local NirnAuctionHouse = NirnAuctionHouse
 		AddListingsToMasterMerchant = false,
 		AutoPost = false,
 		ServerLink_INITIATED = false,
+		ActiveSellersOnly = false,
+		PlaySounds = true,
+		PlaySounds_success_listing = false,
+		PlaySounds_success_buy = false,
+		PlaySounds_success_cancel = false,
 		
 	data = {
 		PaidOrders = {},
@@ -580,7 +585,7 @@ function NAHAuctionList:FilterScrollList( )
 		TrackedPriceHistoryYet = false
 		TrackedPriceHistory_delay=3
 		--update crafting categories
-		if (GetString("SI_NAH_FILTERDROP", filterId) =="Crafting") then
+		if filterId==5 then--crafting
 		filterCraftingId=1	
 		self:UpdateChoicesComboBox(self.filterDropCrafting, "SI_NAH_FILTERDROP_CRAFTING_" .. filterSubId .. "_", 15);
 		self.frame:GetNamedChild("FilterDropCrafting"):SetHidden(false);
@@ -589,7 +594,7 @@ function NAHAuctionList:FilterScrollList( )
 		end
 		
 		--update slot dropdown with weapon types if a weapon otherwise check slot lists
-		if(GetString("SI_NAH_FILTERDROP", filterId) =="Weapon") then --SI_NAH_FILTERDROP_WPNTYPE_1_1
+		if filterId==2 then --SI_NAH_FILTERDROP_WPNTYPE_1_1 --weapon
 		self:UpdateChoicesComboBox(self.filterDropSlot, "SI_NAH_FILTERDROP_WPNTYPE_" .. filterSubId .. "_", 15);
 		else
 		self:UpdateChoicesComboBox(self.filterDropSlot, "SI_NAH_FILTERDROP_SLOT_" .. filterId .. "_", 15);
@@ -626,10 +631,10 @@ function NAHAuctionList:FilterScrollList( )
 		end
 		
 		-- update encahnt and triat filters if filter is set to weapons or armor
-		if (GetString("SI_NAH_FILTERDROP", filterId) =="Weapon") or (GetString("SI_NAH_FILTERDROP", filterId) =="Apparel") then	
+		if filterId==2 or filterId==3 then--weapon or apparel
 		self:UpdateChoicesComboBox(self.filterDropEnch, "SI_NAH_FILTERDROP_ENCH_" .. filterId .. "_", 15);
 		self:UpdateChoicesComboBox(self.filterDropTrait, "SI_NAH_FILTERDROP_TRAIT_" .. filterId .. "_", 15);	
-			if(GetString("SI_NAH_FILTERDROP", filterId) =="Weapon") then --SI_NAH_FILTERDROP_WPNTYPE_1_1
+			if filterId==2 then --SI_NAH_FILTERDROP_WPNTYPE_1_1 --weapon
 			self:UpdateChoicesComboBox(self.filterDropSlot, "SI_NAH_FILTERDROP_WPNTYPE_" .. filterSubId .. "_", 15);
 			else
 			self:UpdateChoicesComboBox(self.filterDropSlot, "SI_NAH_FILTERDROP_SLOT_" .. filterId .. "_", 15);
@@ -646,7 +651,7 @@ function NAHAuctionList:FilterScrollList( )
 		
 		
 		--show the crafting sub filter if crafting is selected
-		if (GetString("SI_NAH_FILTERDROP", filterId) =="Crafting") then	
+		if filterId==5 then	--crafting
 		self.frame:GetNamedChild("FilterDropCrafting"):SetHidden(false);
 		else
 		self.frame:GetNamedChild("FilterDropCrafting"):SetHidden(true);		
@@ -815,7 +820,7 @@ end
 
 
 
-if GetString("SI_NAH_FILTERDROP", filterId) =="Crafting" then--crafting
+if filterId==5 then--crafting
 if(data.TypeID==8)then isCrafting=true; end--motif
 if(data.TypeID==10)then isCrafting=true; end--ingredient
 if(data.TypeID==31)then isCrafting=true; end--reagent
@@ -838,19 +843,19 @@ if(data.TypeID==62)then isCrafting=true; end--furnishing material
 	if addedyet~=true then
 	if isCrafting then
 		if filterSubId==1 
-		or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == "Provisioning" and data.CraftingSkillType==CRAFTING_TYPE_PROVISIONING) 
-		or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == "Alchemy" and data.CraftingSkillType==CRAFTING_TYPE_ALCHEMY) 
-		or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == "Blacksmithing" and (data.CraftingSkillType==CRAFTING_TYPE_BLACKSMITHING or data.TypeID==8)) 
-		or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == "Clothing" and (data.CraftingSkillType==CRAFTING_TYPE_CLOTHIER or data.TypeID==8)) 
-		or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == "Enchanting" and data.CraftingSkillType==CRAFTING_TYPE_ENCHANTING) 
-		or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == "Woodworking" and (data.CraftingSkillType==CRAFTING_TYPE_WOODWORKING or data.TypeID==8)) then
+		or (filterId==5 and filterSubId==6 and data.CraftingSkillType==CRAFTING_TYPE_PROVISIONING) --Provisioning
+		or (filterId==5 and filterSubId==2 and data.CraftingSkillType==CRAFTING_TYPE_ALCHEMY) --Alchemy
+		or (filterId==5 and filterSubId==3 and (data.CraftingSkillType==CRAFTING_TYPE_BLACKSMITHING or data.TypeID==8)) --Blacksmithing
+		or (filterId==5 and filterSubId==4 and (data.CraftingSkillType==CRAFTING_TYPE_CLOTHIER or data.TypeID==8)) --Clothing
+		or (filterId==5 and filterSubId==5 and data.CraftingSkillType==CRAFTING_TYPE_ENCHANTING) --Enchanting
+		or (filterId==5 and filterSubId==7 and (data.CraftingSkillType==CRAFTING_TYPE_WOODWORKING or data.TypeID==8)) then--Woodworking
 	
 		if filterCraftingId==1
 		or (GetString("SI_NAH_FILTERDROP_CRAFTING_" .. filterSubId .. "_" , filterCraftingId) == typename)
-		or (GetString("SI_NAH_FILTERDROP_CRAFTING_" .. filterSubId .. "_" , filterCraftingId) == "Reagent" and (typename=="Herb" or typename=="Fungus" or typename=="Animal Parts" ) )
-		or (GetString("SI_NAH_FILTERDROP_CRAFTING_" .. filterSubId .. "_" , filterCraftingId) == "Food Ingredients" and (data.itemFlavor=="An ingredient for crafting food." ) )
-		or (GetString("SI_NAH_FILTERDROP_CRAFTING_" .. filterSubId .. "_" , filterCraftingId) == "Drink Ingredients" and (data.itemFlavor=="An ingredient for crafting beverages." ) )
-		or (GetString("SI_NAH_FILTERDROP_CRAFTING_" .. filterSubId .. "_" , filterCraftingId) == "Rare Ingredients" and (data.itemFlavor=="Used in crafting decorative food or finishing touches." ) )
+		or (filterSubId==2 and filterCraftingId==4 and (data.TypeID==31 or typename=="Herb" or typename=="Fungus" or typename=="Animal Parts" ) )--Reagent
+		or (filterSubId==6 and filterCraftingId==2 and (data.itemFlavor=="An ingredient for crafting food." ) )--Food Ingredients
+		or (filterSubId==6 and filterCraftingId==3 and (data.itemFlavor=="An ingredient for crafting beverages." ) )--Drink Ingredients
+		or (filterSubId==6 and filterCraftingId==4 and (data.itemFlavor=="Used in crafting decorative food or finishing touches." ) )--Rare Ingredients
 		then
 		
 			if ( (data.source==NAH.currentAccount and self.searchType==3)  or (data.source~=NAH.currentAccount and self.searchType~=3)) and
@@ -866,11 +871,11 @@ if(data.TypeID==62)then isCrafting=true; end--furnishing material
 	end
 end
 
-if GetString("SI_NAH_FILTERDROP", filterId) =="Consumables" then--Consumable
-if(typename=="Food")then isConsumable=true; end--
-if(typename=="Drink")then isConsumable=true; end--
-if(typename=="Potion")then isConsumable=true; end--
-if(typename=="Poison")then isConsumable=true; end--
+if filterId==6 then--Consumable
+if(data.TypeID==4)then isConsumable=true; end--Food
+if(data.TypeID==12)then isConsumable=true; end--Drink
+if(data.TypeID==7)then isConsumable=true; end--Potion
+if(data.TypeID==30)then isConsumable=true; end--Poison
 if(data.TypeID==29)then isConsumable=true; end--recipe
 
 	if addedyet~=true then
@@ -888,9 +893,10 @@ end
 
 
 
-if GetString("SI_NAH_FILTERDROP", filterId) =="Soul Gems & Glyphs" then--Soul Gems
+if filterId==4 then--Soul Gems & Glyphs
 	if addedyet~=true then
-		if typename=="Soul Gem" or typename=="Weapon Glyph" or typename=="Armor Glyph" or typename=="Jewlery Glyph" then
+--~ 		if typename=="Soul Gem" or typename=="Weapon Glyph" or typename=="Armor Glyph" or typename=="Jewlery Glyph" then
+		if data.TypeID==19 or data.TypeID==20 or data.TypeID==21 or data.TypeID==26 then
 			if filterSubId==1 or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == typename) then
 				if ( (data.source==NAH.currentAccount and self.searchType==3)  or (data.source~=NAH.currentAccount and self.searchType~=3)) and
 				(searchInput == "" or self:CheckForMatch(data, searchInput))  then
@@ -902,7 +908,7 @@ if GetString("SI_NAH_FILTERDROP", filterId) =="Soul Gems & Glyphs" then--Soul Ge
 	end
 end
 
-if GetString("SI_NAH_FILTERDROP", filterId) =="Furnishings" then--Furnishings
+if filterId==7 then--Furnishings
 
 if(data.TypeID==61)then isFurnishing=true; end--Furnishing
 	if addedyet~=true then
@@ -916,7 +922,7 @@ if(data.TypeID==61)then isFurnishing=true; end--Furnishing
 	end
 end
 
-if GetString("SI_NAH_FILTERDROP", filterId) =="Other" then--Other
+if filterId==8 then--Other
 --crafting
 if(data.TypeID==8)then isOther=false; end--motif
 if(data.TypeID==10)then isOther=false; end--ingredient
@@ -936,23 +942,24 @@ if(data.TypeID==53)then isOther=false; end--essence runestone
 if(data.TypeID==58)then isOther=false; end--poison solvent
 if(data.TypeID==62)then isOther=false; end--furnishing material
 --Consumable
-if(typename=="Food")then isOther=false; end--
-if(typename=="Drink")then isOther=false; end--
-if(typename=="Potion")then isOther=false; end--
-if(typename=="Poison")then isOther=false; end--
+
+if(data.TypeID==4)then isOther=false; end--Food
+if(data.TypeID==12)then isOther=false; end--Drink
+if(data.TypeID==7)then isOther=false; end--Potion
+if(data.TypeID==30)then isOther=false; end--Poison
 if(data.TypeID==29)then isOther=false; end--recipe
 --Soul Gems
-if typename=="Soul Gem" or typename=="Weapon Glyph" or typename=="Armor Glyph" or typename=="Jewlery Glyph" then isOther=false; end 
+if data.TypeID==19 or data.TypeID==20 or data.TypeID==21 or data.TypeID==26 then isOther=false; end 
 --Furnishings
 if(data.TypeID==61)then isOther=false; end--Furnishing
 --weapons
-if typename=="Weapon" then isOther=false; end --weapons
+if filterId==2 then isOther=false; end --weapons
 --Apparel
-if typename=="Apparel" then isOther=false; end --Apparel
+if filterId==3 then isOther=false; end --Apparel
 
 	if addedyet~=true then
 	if isOther then
-		if filterSubId==1 or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == typename) or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == "Bait" and typename=="Lure") then
+		if filterSubId==1 or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == typename) or (filterId==8 and filterSubId==2 and data.TypeID==16) then--bait or lure
 			if ( (data.source==NAH.currentAccount and self.searchType==3)  or (data.source~=NAH.currentAccount and self.searchType~=3)) and
 			(searchInput == "" or self:CheckForMatch(data, searchInput))  then
 				addedyet=true
@@ -965,16 +972,16 @@ end
 
 
 
-if GetString("SI_NAH_FILTERDROP", filterId) =="Weapon" then--Furnishings
+if filterId==2 then--Weapon
 	if addedyet~=true then
 	if typename=="Weapon" then
-		if filterSubId==1 or (GetString("SI_NAH_FILTERDROP", filterId) =="Weapon" and ((GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId)=="One-Handed" and isOnehand) or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId)=="Two-Handed" and isOnehand==false)) ) then
+		if filterSubId==1 or (filterId==2 and ((filterSubId==2 and isOnehand) or (filterSubId==3 and isOnehand==false)) ) then
 		if filterSLOTId==1 or (wpntypename==GetString("SI_NAH_FILTERDROP_WPNTYPE_" .. filterSubId .. "_" , filterSLOTId) ) then
 --~ 		d(data.enchantHeader.." - "..GetString("SI_NAH_FILTERDROP_ENCH_" .. filterId .. "_" , filterENCHId).." Enchantment")
 		if filterENCHId==1 
 		or (data.enchantHeader==GetString("SI_NAH_FILTERDROP_ENCH_" .. filterId .. "_" , filterENCHId).." Enchantment" ) 
-		or (data.enchantHeader== "Fiery Weapon Enchantment" and  "Flame Weapon"== GetString("SI_NAH_FILTERDROP_ENCH_" .. filterId .. "_" , filterENCHId) ) 
-		or (data.enchantHeader== "Frozen Weapon Enchantment" and  "Frost Weapon"== GetString("SI_NAH_FILTERDROP_ENCH_" .. filterId .. "_" , filterENCHId) ) 
+		or (data.enchantHeader== "Fiery Weapon Enchantment" and  filterENCHId==9 ) 
+		or (data.enchantHeader== "Frozen Weapon Enchantment" and  filterENCHId==10 ) 
 		or ("Other"== GetString("SI_NAH_FILTERDROP_ENCH_" .. filterId .. "_" , filterENCHId)  and data.enchantHeader~="" and (
 		zo_plainstrfind(data.enchantHeader:lower(), "fiery weapon" )==false
 		and zo_plainstrfind(data.enchantHeader:lower(), "frozen weapon" )==false
@@ -1009,20 +1016,20 @@ end
 
 
 
-if GetString("SI_NAH_FILTERDROP", filterId) =="Apparel" then--Furnishings
+if filterId==3 then--Furnishings
 	if addedyet~=true then
-		if typename=="Apparel" then
+		if data.TypeID==2 then --Apparel
 		if filterSubId==1 
-		or ( GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId)=="Light Armor" and armortypename=="Light" ) 
-		or ( GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId)=="Medium Armor" and armortypename=="Medium" ) 
-		or ( GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId)=="Heavy Armor" and armortypename=="Heavy" ) 
-		or ( GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId)=="Shield" and armortypename=="Shield" ) 
-		or ( GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId)=="Accessory" and data.armorTypeID==0 ) 
+		or ( filterId==3 and filterSubId==2 and data.armorTypeID==1 ) --Light Armor
+		or ( filterId==3 and filterSubId==3 and data.armorTypeID==2 )  --Medium Armor
+		or ( filterId==3 and filterSubId==4 and data.armorTypeID==3 )  --Heavy Armor
+		or ( filterId==3 and filterSubId==5 and data.armorTypeID==4 )  --Shield
+		or ( filterId==3 and filterSubId==6 and data.armorTypeID==0 )  --Accessory
 		then
 			if  filterSLOTId==1 or ( equiptype==GetString("SI_NAH_FILTERDROP_SLOT_"..filterId.."_", filterSLOTId) ) then
 			if  filterENCHId==1 
 			or ( zo_plainstrfind(data.enchantHeader:lower(), GetString("SI_NAH_FILTERDROP_ENCH_"..filterId.."_", filterENCHId):lower() )  )  
-			or  (GetString("SI_NAH_FILTERDROP_ENCH_"..filterId.."_", filterENCHId)=="Other"  and (zo_plainstrfind(data.enchantHeader:lower(), "health" )==false and zo_plainstrfind(data.enchantHeader:lower(), "magicka" ) == false and zo_plainstrfind(data.enchantHeader:lower(), "stamina" )==false and data.enchantHeader~=""  ) ) 
+			or  (filterENCHId==5  and (zo_plainstrfind(data.enchantHeader:lower(), "health" )==false and zo_plainstrfind(data.enchantHeader:lower(), "magicka" ) == false and zo_plainstrfind(data.enchantHeader:lower(), "stamina" )==false and data.enchantHeader~=""  ) ) 
 			then 
 			if  filterTRAITId==1 or ( NirnAuctionHouse_ReadableTraitTypeNorm(data.traitType)==GetString("SI_NAH_FILTERDROP_TRAIT_"..filterId.."_", filterTRAITId) ) then
 				if ( (data.source==NAH.currentAccount and self.searchType==3)  or (data.source~=NAH.currentAccount and self.searchType~=3)) and
@@ -1466,18 +1473,22 @@ NirnAuctionHouse_OpenGoldCostBuyout()
 end	
 
  function NirnAuctionHouse_NextPage( )
+  if not NirnAuctionHousePanel:IsHidden() then
 	 if (NAH.settings.data.SearchSettings.NumPages>NAH.settings.data.SearchSettings.Page) then
 	NAH.settings.data.SearchSettings.Page=NAH.settings.data.SearchSettings.Page+1
 	NAH.settings.data.SearchSettings.PageChange=true
 	NirnAuctionHouse.list:RefreshFilters()
 	 end
+	 end
  end
  
  function NirnAuctionHouse_LastPage( )
+  if not NirnAuctionHousePanel:IsHidden() then
 	 if NAH.settings.data.SearchSettings.Page > 1 then
 	NAH.settings.data.SearchSettings.Page=NAH.settings.data.SearchSettings.Page-1
 	NAH.settings.data.SearchSettings.PageChange=true
 	NirnAuctionHouse.list:RefreshFilters()
+	 end
 	 end
  end
  
@@ -1493,11 +1504,12 @@ NirnAuctionHouse_HideBtns();
 
  end	 
  
+
+
  function NirnAuctionHouse_ToggleAH( )
  if(NirnAuctionHouse.ServerLink_INITIATED)then
  if NirnAuctionHousePanel:IsHidden() then
  SCENE_MANAGER:Show("NAHScene");
- 
  else
  NirnAuctionHousePanel:SetHidden(true);  
 SCENE_MANAGER:Hide("NAHScene");
@@ -1724,6 +1736,8 @@ local function NAH_SetAccountCharData()
 --~ 	NirnAuctionHouse_ServerLink_INITIATED( )
 --~ 	end
 	NirnAuctionHouse:CheckServerLinkInitiated()
+	NirnAuctionHouse:CheckNotifications()
+
 	
 	if NAH.settings.ReloadTradeData then
 	NAH.settings.ReloadTradeData=false;
@@ -2176,13 +2190,17 @@ function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 	end
 	---
 	
+
+	
 	
 	SLASH_COMMANDS["/ah"] = function(...) self:CommandHandler(...) end
 	SLASH_COMMANDS["/nah"] = function(...) self:CommandHandler(...) end
 	SLASH_COMMANDS["/NirnAuctionHouse"] = function(...) self:CommandHandler(...) end
 
 	
-	
+	if KEYBIND_STRIP:HasKeybindButtonGroup(keybindDescriptor) then
+			KEYBIND_STRIP:RemoveKeybindButtonGroup(keybindDescriptor) 
+		end
 	
 
 	-- Load saved settings
@@ -2212,6 +2230,7 @@ function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 	
 	NirnAuctionHouse.GoldCostPanel = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmount");
 	
+	
 end
 
 
@@ -2219,6 +2238,7 @@ end
 function NirnAuctionHouse:setActiveAccount()
 NAH.currentCharacterId = GetCurrentCharacterId()
 	NAH.currentAccount = GetDisplayName()
+	NAH.settings.WorldName=GetWorldName("");--Returns "NA Megaserver"
 	NAH.settings.ActiveAccount=NAH.currentAccount
 	NAH.settings.ActiveCharacterId=NAH.currentCharacterId
 	NAH.settings.CurCharacterId=NAH.currentCharacterId
@@ -2957,6 +2977,7 @@ end
 function NirnAuctionHouse:NAHWindow_orders_hide()
  SCENE_MANAGER:Hide("NAHSceneOrders");
 end
+
 
 
 

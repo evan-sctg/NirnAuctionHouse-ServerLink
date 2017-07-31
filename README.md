@@ -1,8 +1,8 @@
-# --BETA VERSION-- Current Version:0.0.13 (See the full patch note list here: https://nirnah.com/Changelog)
+# --BETA VERSION-- Current Version:0.0.14 (See the full patch note list here: https://nirnah.com/Changelog)
 *PC Only for now
 
 
-Hosted Download Link: [MD5:0fa3647ea61fcac4f76b17cbb4c3cd6b]
+Hosted Download Link: [MD5:b1ab7cf0762ab28595e2f00e76f94cd2]
 
 https://nirnah.com/NirnAuctionHouse(beta).zip
 
@@ -15,8 +15,10 @@ https://nirnah.com/NirnAuctionHouse(beta).zip
 -- more seller security, buyer history, troll protection
 
 ### FEATURES 
-Nirn Auction House allows you to trade with anyone across all of Nirn with no listing fees or tax
-Nirn Auction House is global auction system, unlike the guild store you will be able to bid on items as well as buyout items.
+Nirn Auction House allows you to trade with anyone across all of Nirn with no listing fees or tax.
+When using NAH you simply pay the ESO postage fee when you mail a sold item.
+NAH is a global auction system, unlike the guild store you will be able to list, watch, view, bid for items and buyout items.
+
 
 
 ### Auction Buying and Selling Functionality 
@@ -74,6 +76,8 @@ Nirn Auction House is global auction system, unlike the guild store you will be 
 - Listings with a buyout price will last 7 days
 - Listings with no buyout price will last 24 hours
 - Listing limit 80 - you can only have 80 auctions at a time
+- Setting to Only show active trades (Hide trades where the seller does not have Server Link active)
+- Translated for all languages (need feedback)
 - Server link required to communicate with server (NirnAuctionHouse.exe) *PC Only for now
 
 

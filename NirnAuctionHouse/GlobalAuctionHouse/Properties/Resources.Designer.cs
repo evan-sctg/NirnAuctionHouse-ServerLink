@@ -63,9 +63,27 @@ namespace NirnAuctionHouse.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
+        internal static System.IO.UnmanagedMemoryStream SadTrombone {
+            get {
+                return ResourceManager.GetStream("SadTrombone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
         internal static System.IO.UnmanagedMemoryStream SoldItemsSound {
             get {
                 return ResourceManager.GetStream("SoldItemsSound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream TaDa {
+            get {
+                return ResourceManager.GetStream("TaDa", resourceCulture);
             }
         }
     }

@@ -3,6 +3,44 @@ ZO_CreateStringId("SI_NAH_TITLE"           , "Nirn Auction House");
 ZO_CreateStringId("SI_NAH_HEADER_NAME"     , "Name");
 ZO_CreateStringId("SI_NAH_HEADER_TYPE"     , "Type");
 ZO_CreateStringId("SI_NAH_HEADER_SOURCE"   , "Source");
+ZO_CreateStringId("SI_NAH_HEADER_CODCOST"   , "COD Cost");
+ZO_CreateStringId("SI_NAH_HEADER_QTY"   , "qty");
+ZO_CreateStringId("SI_NAH_HEADER_PRICE"   , "price");
+ZO_CreateStringId("SI_NAH_HEADER_STATUS"   , "Status");
+ZO_CreateStringId("SI_NAH_HEADER_TIMELEFT"   , "TimeLeft");
+ZO_CreateStringId("SI_NAH_HEADER_BUYOUT"   , "Buyout");
+ZO_CreateStringId("SI_NAH_HEADER_BID"   , "Bid");
+
+
+ZO_CreateStringId("SI_NAH_LAST_PAGE"   , "Last Page");
+ZO_CreateStringId("SI_NAH_NEXT_PAGE"   , "Next Page");
+ZO_CreateStringId("SI_NAH_SYNC"   , "Sync");
+ZO_CreateStringId("SI_NAH_BID"   , "Bid");
+ZO_CreateStringId("SI_NAH_BUYOUT"   , "Buyout");
+ZO_CreateStringId("SI_NAH_CANCEL"   , "Cancel");
+ZO_CreateStringId("SI_NAH_CONFIRM"   , "Confirm");
+
+ZO_CreateStringId("SI_NAH_AUCTION"   , "Auction");
+ZO_CreateStringId("SI_NAH_SOLDITEMS"   , "Sold Items");
+ZO_CreateStringId("SI_NAH_SOLDITEMS_NEW"   , "Sold Items (new)");
+ZO_CreateStringId("SI_NAH_ORDERTRACKING"   , "Order Tracking");
+
+ZO_CreateStringId("SI_NAH_TRACKEDORDERS"   , "Tracked Orders");
+ZO_CreateStringId("SI_NAH_POSTLISTING"   , "Post Listing");
+
+ZO_CreateStringId("SI_NAH_PRICERANGE"   , "Price Range");
+ZO_CreateStringId("SI_NAH_LEVELRANGE"   , "Level Range");
+
+ZO_CreateStringId("SI_NAH_STARTINGPRICE"   , "Starting Price");
+ZO_CreateStringId("SI_NAH_BUYOUTPRICE"   , "Buyout Price");
+ZO_CreateStringId("SI_NAH_BIDAMOUNT"   , "Bid Amount");
+ZO_CreateStringId("SI_NAH_BIDAMOUNT"   , "Bid Amount");
+
+ZO_CreateStringId("SI_NAH_SELLERPAYSCOD"   , "*Note Seller Pays COD Cost");
+ZO_CreateStringId("SI_NAH_SERVERLINKNOTFOUND"   , "Server Link Not Found");
+ZO_CreateStringId("SI_NAH_SERVERLINKLOC"   , "(Run Documents\Elder Scrolls Online\live\AddOns\NirnAuctionHouse\NirnAuctionHouse.exe)");
+ZO_CreateStringId("SI_NAH_RECHECKSERVERLINK"   , "Recheck Server Link");
+
 
 ZO_CreateStringId("SI_NAH_TYPE_CRAFTED"    , GetString(SI_ITEM_FORMAT_STR_CRAFTED));
 ZO_CreateStringId("SI_NAH_TYPE_MONSTER"    , "Monster");
@@ -67,7 +105,7 @@ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_1"     , "All Sub Categories");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_2"     , "Soul Gem");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_3"     , "Armor Glyph");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_4"     , "Weapon Glyph");
-ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_5"     , "Jewlery Glyph");
+ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_5"     , "Jewelry Glyph");
 
 
 
@@ -222,19 +260,6 @@ ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_3_9"     , "Flame Staff");
 
 
 
-
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_2"     , "Axe");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_3"     , "Bow");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_4"     , "Dagger");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_5"     , "Mace");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_6"     , "Sword");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_7"     , "Staff");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_8"     , "Healing Staff");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_9"     , "Lightning Staff");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_10"     , "Frost Staff");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_11"     , "Flame Staff");
-
-
 ZO_CreateStringId("SI_NAH_FILTERDROP_SLOT_3_1"     , "All Armor Slots");
 ZO_CreateStringId("SI_NAH_FILTERDROP_SLOT_3_2"     , "Chest");
 ZO_CreateStringId("SI_NAH_FILTERDROP_SLOT_3_3"     , "Feet");
@@ -298,8 +323,8 @@ ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_6_1"     , "All");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_6_2"     , "Food Ingredients");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_6_3"     , "Drink Ingredients");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_6_4"     , "Rare Ingredients");
-ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_6_5"     , "Food Recipie");
-ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_6_6"     , "Drink Recipie");
+ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_6_5"     , "Food Recipe");
+ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_6_6"     , "Drink Recipe");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_6_7"     , "Furnishing Design");
 
 
@@ -315,72 +340,3 @@ ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_7_8"     , "Resin");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_7_9"     , "Furnishing Blueprint");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_7_10"     , "Furnishing Material");
 
-
-
-
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_1"     , "All Weapons");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_2"     , "Axe");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_3"     , "Bow");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_4"     , "Dagger");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_5"     , "Mace");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_6"     , "Sword");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_7"     , "Staff");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_8"     , "Healing Staff");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_9"     , "Lightning Staff");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_10"     , "Frost Staff");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_11"     , "Flame Staff");
-
-
-
-
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_9_1"     , "All Sub Categories");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_9_2"     , "Potion Solvent");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_9_3"     , "Poison Solvent");
-
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_1"     , "All Sub Categories");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_2"     , "Weapon Trait");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_3"     , "Armor Trait");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_4"     , "Reagent");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_5"     , "Ingredient");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_6"     , "Solvent");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_7"     , "Aspect Runestone");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_8"     , "Essence Runestone");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_9"     , "Potency Runestone");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_10"     , "Style Material");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_11"     , "Raw Material");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_12"     , "Material");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_13"     , "Motif");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_14"     , "Temper");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_15"     , "Tannin");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_16"     , "Resin");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_17"     , "Glyph");
-
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_5_1"     , "All Sub Categories");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_5_2"     , "Minor");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_5_3"     , "Lesser");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_5_4"     , "Major");
-
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_11_1"     , "All Sub Categories");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_11_2"     , "Aspect");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_11_3"     , "Essence");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_11_4"     , "Potency");
-
-
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_1"     , "All Sub Categories");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_2"     , "Light");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_3"     , "Medium");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_4"     , "Heavy");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_5"     , "Shield");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_2_6"     , "Accessory");
-
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_3_1"     , "All Sub Categories");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_3_2"     , "Axe");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_3_3"     , "Bow");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_3_4"     , "Dagger");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_3_5"     , "Mace");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_3_6"     , "Sword");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_3_7"     , "Staff");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_3_8"     , "Healing Staff");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_3_9"     , "Lightning Staff");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_3_10"     , "Frost Staff");
---~ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_3_11"     , "Flame Staff");

@@ -1,5 +1,16 @@
 Changelog
 
+v0.0.14 "beta" @Elo
+ - In-Game notifications indicating success or failure of actions
+ - Added notification sounds to the Server Link 
+ - Added settings for sounds in the addon to turn off notification sounds
+ - Added test server connection in debugging tab
+ - Added setting to Only show active trades (Hide trades where the seller does not have Server Link active)
+ - Added translation
+ - Fixed search filter bugs for non english clients (still need some translations to fix others)
+ - Fixed bug posting trades for non english clients (thanks for your feedback)
+ - Added CoD cost to suggested listing price
+
 v0.0.13b "beta" @Elo
  - bugfix search filters and categories
 
