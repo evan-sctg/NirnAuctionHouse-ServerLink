@@ -1024,7 +1024,30 @@ namespace GlobalAuctionHouse
 
                         TradeListContent = client.DownloadString(this.APIEndpoint + "/proc/tradelist");
                     }
-                File.WriteAllText(this.TradeListPath, TradeListContent);
+
+
+                    string Verifycontent = TradeListContent.Replace("function NirnAuctionHouse:LoadTrades()", "");
+                    Verifycontent = Verifycontent.Replace("]={[\"ID\"]=\"", "");
+                    Verifycontent = Verifycontent.Replace(",[\"TimeLeft\"]=\"", "");
+                    Verifycontent = Verifycontent.Replace(",[\"CharName\"]=\"@", "");
+                    Verifycontent = Verifycontent.Replace(",[\"Item\"]={[\"ID\"]=", "");
+                    Verifycontent = Verifycontent.Replace(",[\"Name\"]=\"", "");
+                    Verifycontent = Verifycontent.Replace(",[\"StartingPrice\"]=", "");
+                    Verifycontent = Verifycontent.Replace(",[\"BuyoutPrice\"]=", "");
+                    Verifycontent = Verifycontent.Replace(",[\"stackCount\"]=", "");
+                    Verifycontent = Verifycontent.Replace(",[\"ItemLink\"]=\"", "");
+                    Verifycontent = Verifycontent.Replace("self.GlobalTrades={[", "");
+                    
+                     if (!Verifycontent.Contains("function") && !Verifycontent.Contains("(") && !Verifycontent.Contains(")") && !Verifycontent.Contains("--") && !Verifycontent.Contains("="))
+                    {
+                        File.WriteAllText(this.TradeListPath, TradeListContent);
+                    }
+                    else
+                    {
+                        this.ToLog("Unknown content recieved for Trade list");
+                    }
+
+                    
             }
 
             }
@@ -1062,7 +1085,26 @@ namespace GlobalAuctionHouse
                     {
                         
                         string BidListContent = client.DownloadString(this.APIEndpoint + "/proc/bidlist/" + ActiveAccount);
-                        File.WriteAllText(this.BidListPath, BidListContent);
+                        string Verifycontent = BidListContent.Replace("function NirnAuctionHouse:LoadBids()", "");
+                        Verifycontent = Verifycontent.Replace("]={[\"ID\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace(",[\"TradeID\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace(",[\"TimeLeft\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace(",[\"TradeIsBidder\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace(",[\"Seller\"]=\"@", "");
+                        Verifycontent = Verifycontent.Replace(",[\"Buyer\"]=\"@", "");
+                        Verifycontent = Verifycontent.Replace(",[\"Item\"]={[\"ID\"]=", "");
+                        Verifycontent = Verifycontent.Replace(",[\"BuyoutPrice\"]=", "");
+                        Verifycontent = Verifycontent.Replace(",[\"stackCount\"]=", "");
+                        Verifycontent = Verifycontent.Replace(",[\"ItemLink\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace("NirnAuctionHouse.NewBids={", "");
+                        if (!Verifycontent.Contains("function") && !Verifycontent.Contains("(") && !Verifycontent.Contains(")") && !Verifycontent.Contains("--") && !Verifycontent.Contains("="))
+                        {
+                            File.WriteAllText(this.BidListPath, BidListContent);
+                        }else
+                        {
+                            this.ToLog("Unknown content recieved for Bidlist");
+                        }
+                        
                         
                         this.StatusText = "Updated Bid List";
                       //  label1.Text = this.StatusText;
@@ -1108,7 +1150,28 @@ namespace GlobalAuctionHouse
                     {
                         
                         string TrackedBidListContent = client.DownloadString(this.APIEndpoint + "/proc/mybidlist/" + ActiveAccount);
-                        File.WriteAllText(this.TrackedBidListPath, TrackedBidListContent);
+                        string Verifycontent = TrackedBidListContent.Replace("function NirnAuctionHouse:LoadTrackedBids()", "");
+                        Verifycontent = Verifycontent.Replace("]={[\"ID\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace(",[\"TradeID\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace(",[\"TimeLeft\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace(",[\"TradeIsHighestBid\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace(",[\"TradeIsBidder\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace(",[\"Seller\"]=\"@", "");
+                        Verifycontent = Verifycontent.Replace(",[\"Buyer\"]=\"@", "");
+                        Verifycontent = Verifycontent.Replace(",[\"Item\"]={[\"ID\"]=", "");
+                        Verifycontent = Verifycontent.Replace(",[\"StartingPrice\"]=", "");
+                        Verifycontent = Verifycontent.Replace(",[\"BuyoutPrice\"]=", "");
+                        Verifycontent = Verifycontent.Replace(",[\"stackCount\"]=", "");
+                        Verifycontent = Verifycontent.Replace(",[\"ItemLink\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace("NirnAuctionHouse.TrackedBids={", "");
+                        if (!Verifycontent.Contains("function") && !Verifycontent.Contains("(") && !Verifycontent.Contains(")") && !Verifycontent.Contains("--") && !Verifycontent.Contains("="))
+                        {
+                            File.WriteAllText(this.TrackedBidListPath, TrackedBidListContent);
+                        }
+                        else
+                        {
+                            this.ToLog("Unknown content recieved for Tracked Orders");
+                        }
 
                         this.StatusText = "Updated Tracked Bid List";
                        // label1.Text = this.StatusText;
@@ -1536,7 +1599,6 @@ namespace GlobalAuctionHouse
                     try
                     {
                  string BidListContent = client.DownloadString(this.APIEndpoint + "/proc/bidlist/" + ActiveAccount + "/json");
-                    //File.WriteAllText(Constants.BidListPath, BidListContent);
 
                     if (BidListContent == "" || BidListContent == "[]")
                     {
