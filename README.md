@@ -1,8 +1,8 @@
-# --BETA VERSION-- Current Version:0.0.14c (See the full patch note list here: https://nirnah.com/Changelog)
+# --BETA VERSION-- Current Version:0.0.15 (See the full patch note list here: https://nirnah.com/Changelog)
 *PC Only for now
 
 
-Hosted Download Link: [MD5:6ac35150e2b9c9051995b597ede2d131]
+Hosted Download Link: [MD5:7cbf4261fac284c1036051afb92acb55]
 
 https://nirnah.com/NirnAuctionHouse(beta).zip
 
@@ -10,7 +10,6 @@ https://nirnah.com/NirnAuctionHouse(beta).zip
 
 ### Upcoming Changes/Features 
 -- MAC version
--- movable interface buttons
 -- global auction price history
 -- more seller security, buyer history, troll protection
 
@@ -31,7 +30,7 @@ NAH is a global auction system, unlike the guild store you will be able to list,
 
 ### Posting Auctions / Selling Items 
 
-- Right click menu to auction items in your inventory(can auction items directly from your inventory, crafting bag, or equipped items)
+- Right click menu to auction items in your inventory(can auction/cancel items directly from your inventory, crafting bag, or equipped items)
 - Order tracking so you can see all your auctions and status of bids
 - Fulfill orders by a click of a button - add-on will automatically send and COD item to the buyer (Items need to be in your inventory!)
 
@@ -39,6 +38,7 @@ NAH is a global auction system, unlike the guild store you will be able to list,
 ### Buyer / Seller Protection 
 - Buyer Protection (If seller doesn't fulfill trades seller will lose ranking each time, when ranking goes too low account is banned)
 - Seller Protection (If buyer doesn't pay for trades buyer will lose ranking each time, when ranking goes too low account is banned)
+- Client account authenticity tokens
 - Buyer can only bid/buyout items if you can afford them
 
 ### Plugin Hotkeys 

@@ -1,4 +1,28 @@
 Changelog
+Latest Version: https://nirnah.com/NirnAuctionHouse(beta).zip
+Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
+
+
+v0.0.15 "beta" @Elo
+ - Added Cancel Auction option to right click menu in inventory (cancel your listings from your bank, inventory, or crafting bag)
+ - Added icons for auction listings
+ - Added Server Link version conflict protection
+ - Added settings version conflict protection
+ - bugfix level range and price range
+ - Movable Nirn Auction House button (click and drag above or below the button - position is persistent
+ - New default location for Nirn Auction House button (bottom right)
+ - Added ability to post multiple of the same item type without separate syncs
+ - Updated German translations (thanks TNTKokser for all the german translation fixes)
+ - Translated messages that come from server link
+ - Added client account authenticity tokens
+ - Interface changes
+
+
+v0.0.14c "beta" @Elo
+ - Client-side EXE now has content validation for all server side data (LUA Protection)
+
+v0.0.14b "beta" @Elo
+ - Translation Updates and fixes
 
 v0.0.14 "beta" @Elo
  - In-Game notifications indicating success or failure of actions

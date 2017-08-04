@@ -1,5 +1,27 @@
 ZO_CreateStringId("SI_NAH_TITLE"           , "Аукционный дом Нирн");
 
+
+ZO_CreateStringId("SI_NAH_STRING_SHOWING"     , "отображение");--new
+ZO_CreateStringId("SI_NAH_STRING_TOTAL"     , "Всего");--new
+ZO_CreateStringId("SI_NAH_STRING_PAGE"     , "страница");--new
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_LISTING"     , "Успешно перечисленные товары для продажи - обработка может занять до 60 секунд");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING"     , "Не удалось просмотреть список товаров для продажи");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING_TRADELIMIT"     , "Не удалось выполнить список товаров для продажи: достигнут торговый предел");--new
+
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_CANCELED"     , "Успешно отмененные товары для продажи - Обработка может занять до 60 секунд");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_CANCELED"     , "Не удалось отменить товары для продажи");--new
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_FILLED"     , "Успешно заполненный заказ");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_FILLED"     , "Не удалось зарегистрировать заполненный заказ");--new
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "Успешное предложение или покупка товаров");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_BID"     , "Не удалось принять участие в торгах или купить товары, проверить файл журнала для получения дополнительной информации");--new
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_PAID"     , "Успешно купленные товары для продажи");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_PAID"     , "Не удалось зарегистрировать приобретенные товары");--new
+
 ZO_CreateStringId("SI_NAH_HEADER_NAME"     , "имя");
 ZO_CreateStringId("SI_NAH_HEADER_TYPE"     , "Тип");
 ZO_CreateStringId("SI_NAH_HEADER_SOURCE"   , "Источник");
@@ -40,6 +62,9 @@ ZO_CreateStringId("SI_NAH_SERVERLINKNOTFOUND"   , "Ссылка на серве�
 ZO_CreateStringId("SI_NAH_SERVERLINKLOC"   , "(запуск Documents\Elder Scrolls Online\live\AddOns\NirnAuctionHouse\NirnAuctionHouse.exe)");
 ZO_CreateStringId("SI_NAH_RECHECKSERVERLINK"   , "Перепроверить ссылку сервера");
 
+ZO_CreateStringId("SI_NAH_SERVERLINKUPDATE"   , "Несоответствие версии сервера");--new
+ZO_CreateStringId("SI_NAH_SERVERLINKUPDATE_DIRECTIONS"   , "(Закройте ссылку сервера NirnAuctionHouse.exe и переустановите аддон или обновите ссылку на сервер)");--new
+
 
 ZO_CreateStringId("SI_NAH_TYPE_CRAFTED"    , GetString(SI_ITEM_FORMAT_STR_CRAFTED));
 ZO_CreateStringId("SI_NAH_TYPE_MONSTER"    , "Monster");
@@ -52,7 +77,7 @@ ZO_CreateStringId("SI_NAH_STYLE_ALLIANCE"  , "Alliance Style");
 
 ZO_CreateStringId("SI_NAH_SEARCHDROP1"     , "Основной поиск");
 ZO_CreateStringId("SI_NAH_SEARCHDROP2"     , "Детальная информация Поиск");
-ZO_CreateStringId("SI_NAH_SEARCHDROP3"     , "Мои объявления");
+ZO_CreateStringId("SI_NAH_MYLISTINGS"     , "Мои объявления");
 
 
 ZO_CreateStringId("SI_NAH_LEVELDROP1"     , "Уровень");

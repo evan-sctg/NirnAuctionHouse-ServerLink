@@ -50,6 +50,7 @@ namespace GlobalAuctionHouse
         private Dictionary<string, AuctionBidEntry> _currentBidsData;
 
         private string ActiveAccount = "";
+        private string ActiveAccountUUID = "";
 
 
         private string LogDir = "Log";
@@ -204,8 +205,15 @@ namespace GlobalAuctionHouse
                 this.LoadActiveAccount();
             }
 
+            if (ActiveAccountUUID == null || ActiveAccountUUID == "")
+            {
+                this.StatusText = "Loading Active Account UUID";
+                // label1.Text = this.StatusText;
+                this.UpdateUUID();
+            }
 
-            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"")
+
+            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"" || ActiveAccountUUID == null || ActiveAccountUUID == "")
             {
                 this.ToLog("ParseNPostListings no active account");
                 return;
@@ -256,7 +264,7 @@ namespace GlobalAuctionHouse
                             
                                     
 
-                                    AuctionTradeData FirstAuctionTradeData = AuctionTradeData.LoadFromSavedVars(item[ActiveAccount], ActiveAccount);
+                                    AuctionTradeData FirstAuctionTradeData = AuctionTradeData.LoadFromSavedVars(item[ActiveAccount], ActiveAccount + "~" + ActiveAccountUUID);
 
 
                                 if (FirstAuctionTradeData.AuctionEntries == null)
@@ -353,8 +361,16 @@ namespace GlobalAuctionHouse
                 this.LoadActiveAccount();
             }
 
+            if (ActiveAccountUUID == null || ActiveAccountUUID == "")
+            {
+                this.StatusText = "Loading Active Account UUID";
+                // label1.Text = this.StatusText;
+                this.UpdateUUID();
+            }
 
-            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"") { return; }
+
+
+            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"" || ActiveAccountUUID == null || ActiveAccountUUID == "") { return; }
 
             //for debugging
             //this.LastSyncTime = DateTime.Now;
@@ -403,7 +419,7 @@ namespace GlobalAuctionHouse
                                 LsonValue Bitem = items["$AccountWide"]["data"]["FilledOrders"];
                                     foreach (string key in Bitem.Keys)
                                     {
-                                        AuctionFilledOrderEntry TmpFilledOrder = new AuctionFilledOrderEntry(Bitem[key]);
+                                        AuctionFilledOrderEntry TmpFilledOrder = new AuctionFilledOrderEntry(Bitem[key], ActiveAccount + "~" + ActiveAccountUUID);
                                         if (TmpFilledOrder.TradeID > 0)
                                         {
                                         TmpFilledOrders.Add(TmpFilledOrder);
@@ -514,8 +530,16 @@ namespace GlobalAuctionHouse
                 this.LoadActiveAccount();
             }
 
+            if (ActiveAccountUUID == null || ActiveAccountUUID == "")
+            {
+                this.StatusText = "Loading Active Account UUID";
+                // label1.Text = this.StatusText;
+                this.UpdateUUID();
+            }
 
-            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"") { return; }
+
+
+            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"" || ActiveAccountUUID == null || ActiveAccountUUID == "") { return; }
 
             //for debugging
             //this.LastSyncTime = DateTime.Now;
@@ -561,7 +585,7 @@ namespace GlobalAuctionHouse
                         LsonValue POitem = items["$AccountWide"]["data"]["PaidOrders"];
                         foreach (string key in POitem.Keys)
                         {
-                            AuctionPaidOrdersEntry tmpAuctionPaidOrderEntry = new AuctionPaidOrdersEntry(POitem[key], ActiveAccount);
+                            AuctionPaidOrdersEntry tmpAuctionPaidOrderEntry = new AuctionPaidOrdersEntry(POitem[key], ActiveAccount + "~" + ActiveAccountUUID);
                             if (tmpAuctionPaidOrderEntry.ItemID != null && tmpAuctionPaidOrderEntry.ItemID>0)
                             {
                                 tmpAuctionPaidOrderEntries.Add(tmpAuctionPaidOrderEntry);
@@ -573,7 +597,7 @@ namespace GlobalAuctionHouse
 
 
 
-                        AuctionPaidOrdersEntry FirstAuctionPaidOrderEntry = tmpAuctionPaidOrderEntries.FirstOrDefault<AuctionPaidOrdersEntry>((AuctionPaidOrdersEntry x) => x.Buyer == ActiveAccount);
+                        AuctionPaidOrdersEntry FirstAuctionPaidOrderEntry = tmpAuctionPaidOrderEntries.FirstOrDefault<AuctionPaidOrdersEntry>((AuctionPaidOrdersEntry x) => x.Buyer == ActiveAccount + "~" + ActiveAccountUUID);
 
 
                         if (FirstAuctionPaidOrderEntry == null)
@@ -669,7 +693,14 @@ namespace GlobalAuctionHouse
             }
 
 
-            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"") { return; }
+            if (ActiveAccountUUID == null || ActiveAccountUUID == "")
+            {
+                this.StatusText = "Loading Active Account UUID";
+                // label1.Text = this.StatusText;
+                this.UpdateUUID();
+            }
+
+            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"" || ActiveAccountUUID == null || ActiveAccountUUID == "") { return; }
 
             //for debugging
             //this.LastSyncTime = DateTime.Now;
@@ -715,7 +746,7 @@ namespace GlobalAuctionHouse
                             LsonValue Bitem = items["$AccountWide"]["data"]["Bids"];
                                     foreach (string key in Bitem.Keys)
                                     {
-                                        AuctionBidEntry tmpAuctionBidEntry = new AuctionBidEntry(Bitem[key], ActiveAccount);
+                                        AuctionBidEntry tmpAuctionBidEntry = new AuctionBidEntry(Bitem[key], ActiveAccount + "~" + ActiveAccountUUID);
                                         if (tmpAuctionBidEntry.ItemLink != "")
                                         {
                                     tmpAuctionBidEntries.Add(tmpAuctionBidEntry);
@@ -727,7 +758,7 @@ namespace GlobalAuctionHouse
 
 
 
-                                    AuctionBidEntry FirstAuctionBidEntry = tmpAuctionBidEntries.FirstOrDefault<AuctionBidEntry>((AuctionBidEntry x) => x.Buyer == ActiveAccount);
+                                    AuctionBidEntry FirstAuctionBidEntry = tmpAuctionBidEntries.FirstOrDefault<AuctionBidEntry>((AuctionBidEntry x) => x.Buyer == ActiveAccount + "~" + ActiveAccountUUID);
 
 
                                 if (FirstAuctionBidEntry == null)
@@ -808,7 +839,7 @@ namespace GlobalAuctionHouse
                 string ServerResponse = this.SendPackage(this.APIEndpoint + "/proc/trade/new", tradeModels.ToList<AuctionEntry>());
                 if (ServerResponse == "The resource is created successfully!" || ServerResponse == "Done!")
                 {
-                    ModNotification("Successfully Listed Item(s) for sale - processing may take up to 60 seconds");
+                    ModNotification("SI_NAH_STRING_SUCCESS_LISTING");
                     this.StatusText = "Successfully Listed Item(s) for sale";
                     if (DoPlaySounds_success_listing)
                     {
@@ -821,12 +852,12 @@ namespace GlobalAuctionHouse
 
                     if (ServerResponse=="Trade Limit Reached")
                     {
-                        ModNotification("Failed to List Item(s) for sale: Trade Limit Reached");
+                        ModNotification("SI_NAH_STRING_FAILED_LISTING_TRADELIMIT");
                         this.StatusText = "Failed to List Item(s) for sale: " + ServerResponse;
                     }
                     else
                     {
-                        ModNotification("Failed to List Item(s) for sale");
+                        ModNotification("SI_NAH_STRING_FAILED_LISTING");
                         this.StatusText = "Failed to List Item(s) for sale: " + ServerResponse;
 
                     }
@@ -871,7 +902,7 @@ namespace GlobalAuctionHouse
                 {
                     if (firstFilledOrder.BidID == 1)
                     {
-                        ModNotification("Successfully Canceled Item(s) for sale - Processing may take up to 60 seconds");
+                        ModNotification("SI_NAH_STRING_SUCCESS_CANCELED");
                         this.StatusText = "Successfully Canceled Item(s) for sale";
                         if (DoPlaySounds_success_cancel)
                         {
@@ -881,7 +912,7 @@ namespace GlobalAuctionHouse
 
                     } else
                     {
-                        ModNotification("Successfully Filled Order");
+                        ModNotification("SI_NAH_STRING_SUCCESS_FILLED");
                         this.StatusText = "Successfully Filled Order";
                     }
                 }
@@ -890,14 +921,14 @@ namespace GlobalAuctionHouse
                     //failed sound is already played by sendpackage function should the request fail
                     if (firstFilledOrder.BidID == 1)
                     {
-                        ModNotification("Failed to Cancel Item(s) for sale");
+                        ModNotification("SI_NAH_STRING_FAILED_CANCELED");
                         this.StatusText = "Failed to Cancel Item(s) for sale: " + ServerResponse;
 
                     }
                     else
                     {
-                        ModNotification("Failed to List Item(s) for sale");
-                        this.StatusText = "Failed to List Item(s) for sale: " + ServerResponse;
+                        ModNotification("SI_NAH_STRING_FAILED_FILLED");
+                        this.StatusText = "Failed to list filled order: " + ServerResponse;
                     }
                 }
 
@@ -930,7 +961,7 @@ namespace GlobalAuctionHouse
                 string ServerResponse = this.SendPackage(this.APIEndpoint + "/proc/bid/new", tradeModels.ToList<AuctionBidEntry>());
                 if (ServerResponse == "The resource is created successfully!" || ServerResponse == "Done!")
                 {
-                    ModNotification("Successfully bid on or bought Item(s)");
+                    ModNotification("SI_NAH_STRING_SUCCESS_BID");
                     this.StatusText = "Successfully bid on or bought Item(s)"; 
                     if (DoPlaySounds_success_buy)
                     {
@@ -940,7 +971,7 @@ namespace GlobalAuctionHouse
                 else
                 {
                     //failed sound is already played by sendpackage function should the request fail
-                    ModNotification("Failed to bid on or buy Item(s), Check the log file for more information");
+                    ModNotification("SI_NAH_STRING_FAILED_BID");
                     this.StatusText = "Failed to bid on or buy Item(s): " + ServerResponse;
                 }
 
@@ -974,13 +1005,13 @@ namespace GlobalAuctionHouse
                 string ServerResponse = this.SendPackage(this.APIEndpoint + "/proc/trade/paid", tradeModels.ToList<AuctionPaidOrdersEntry>());
                 if (ServerResponse == "The resource is created successfully!" || ServerResponse == "Done!")
                 {
-                    ModNotification("Successfully Purchased Item(s) for sale");
+                    ModNotification("SI_NAH_STRING_SUCCESS_PAID");
                     this.StatusText = "Successfully Purchased Item(s) for sale";
                 }
                 else
                 {
                     //failed sound is already played by sendpackage function should the request fail
-                    ModNotification("Failed to register purchased for item(s)");
+                    ModNotification("SI_NAH_STRING_FAILED_PAID");
                     this.StatusText = "Failed to register purchased for item(s): " + ServerResponse;
                 }
 
@@ -1055,9 +1086,80 @@ namespace GlobalAuctionHouse
             {
                 this.ToLog(exception);
             }
-          
+
         }
 
+
+        
+
+             private void UpdateUUID()
+        {
+
+            this.StatusText = "Updating UUID";
+            // label1.Text = this.StatusText;
+
+            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"")
+            {
+                this.StatusText = "Loading Active Account";
+                // label1.Text = this.StatusText;
+                this.LoadActiveAccount();
+            }
+
+
+
+            if (ActiveAccount != "" && ActiveAccount != "@" && ActiveAccount != "\"\"")
+            {
+                try
+                {
+                    string AccountUUIDFile = Path.Combine(SavedVariableDirectory, ActiveAccount + "_AccountUUID.txt");
+                    Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+                    string UUIDContent = "";
+
+
+                    if (!File.Exists(AccountUUIDFile))
+                    {
+
+                        using (WebClient client = new WebClient())
+                        {
+
+                            UUIDContent = client.DownloadString(this.APIEndpoint + "/proc/uuid/" + ActiveAccount);
+                            UUIDContent = rgx.Replace(UUIDContent, "");
+                            if (!UUIDContent.Contains("Attempt Detected"))
+                            {
+                                File.WriteAllText(AccountUUIDFile, UUIDContent);
+                                ActiveAccountUUID = UUIDContent;
+                            }
+                            else
+                            {
+                                this.ToLog("Your Account is inaccessible, Please Contact the Admin Author");
+                            }
+
+
+                            this.StatusText = "Updated UUID";
+                            //  label1.Text = this.StatusText;
+                        }
+                    }else
+                    {
+                        UUIDContent=File.ReadAllText(AccountUUIDFile);
+                        UUIDContent = rgx.Replace(UUIDContent, "");
+                        ActiveAccountUUID = UUIDContent;
+
+                    }
+
+                }
+                catch (Exception exception)
+                {
+                    this.ToLog(exception);
+                }
+
+            }
+            else
+            {
+
+                // this.ToLog("UpdateBidList no account found");
+
+            }
+        }
 
 
 
@@ -1075,16 +1177,25 @@ namespace GlobalAuctionHouse
             }
 
 
+                if (ActiveAccountUUID==null || ActiveAccountUUID == "")
+                {
+                    this.StatusText = "Loading Active Account UUID";
+                    // label1.Text = this.StatusText;
+                    this.UpdateUUID();
+                }
 
-            if (ActiveAccount != "" && ActiveAccount != "@" && ActiveAccount != "\"\"")
+            if (ActiveAccount != "" && ActiveAccount != "@" && ActiveAccount != "\"\"" && ActiveAccountUUID != null &&ActiveAccountUUID != "")
             {
+
+
+
                 try
                 {
 
                     using (WebClient client = new WebClient())
                     {
                         
-                        string BidListContent = client.DownloadString(this.APIEndpoint + "/proc/bidlist/" + ActiveAccount);
+                        string BidListContent = client.DownloadString(this.APIEndpoint + "/proc/bidlist/" + ActiveAccount+ "~" + ActiveAccountUUID);
                         string Verifycontent = BidListContent.Replace("function NirnAuctionHouse:LoadBids()", "");
                         Verifycontent = Verifycontent.Replace("]={[\"ID\"]=\"", "");
                         Verifycontent = Verifycontent.Replace(",[\"TradeID\"]=\"", "");
@@ -1139,9 +1250,15 @@ namespace GlobalAuctionHouse
                 this.LoadActiveAccount();
             }
 
+            if (ActiveAccountUUID == null || ActiveAccountUUID == "")
+            {
+                this.StatusText = "Loading Active Account UUID";
+                // label1.Text = this.StatusText;
+                this.UpdateUUID();
+            }
 
 
-            if (ActiveAccount != "" && ActiveAccount != "\"\"")
+            if (ActiveAccount != "" && ActiveAccount != "\"\"" && ActiveAccountUUID != null && ActiveAccountUUID != "")
             {
                 try
                 {
@@ -1149,7 +1266,7 @@ namespace GlobalAuctionHouse
                     using (WebClient client = new WebClient())
                     {
                         
-                        string TrackedBidListContent = client.DownloadString(this.APIEndpoint + "/proc/mybidlist/" + ActiveAccount);
+                        string TrackedBidListContent = client.DownloadString(this.APIEndpoint + "/proc/mybidlist/" + ActiveAccount + "~" + ActiveAccountUUID);
                         string Verifycontent = TrackedBidListContent.Replace("function NirnAuctionHouse:LoadTrackedBids()", "");
                         Verifycontent = Verifycontent.Replace("]={[\"ID\"]=\"", "");
                         Verifycontent = Verifycontent.Replace(",[\"TradeID\"]=\"", "");
@@ -1180,7 +1297,7 @@ namespace GlobalAuctionHouse
                 }
                 catch (Exception exception)
                 {
-                    this.ToLog(this.APIEndpoint + "/proc/mybidlist/" + ActiveAccount);
+                    this.ToLog(this.APIEndpoint + "/proc/mybidlist/" + ActiveAccount + "~" + ActiveAccountUUID);
                     this.ToLog(exception);
                 }
 
@@ -1443,7 +1560,7 @@ namespace GlobalAuctionHouse
                 using (StreamWriter streamWriter = new StreamWriter(modInitFile, true))
                 {
                     streamWriter.WriteLine("function NirnAuctionHouse:CheckServerLinkInitiated()");
-                    streamWriter.WriteLine("NirnAuctionHouse_ServerLink_INITIATED( )");
+                    streamWriter.WriteLine("NirnAuctionHouse_ServerLink_INITIATED(\"0.0.0.21\")");
                     streamWriter.WriteLine("end");
                 }
             }
@@ -1469,7 +1586,7 @@ namespace GlobalAuctionHouse
                     streamWriter.WriteLine("function NirnAuctionHouse:CheckNotifications()");
                     if (notification!="")
                     {
-                        streamWriter.WriteLine("d(\"" + notification + "\")");
+                        streamWriter.WriteLine("d(GetString(" + notification + "))");
                     }
                     streamWriter.WriteLine("end");
                 }
@@ -1542,7 +1659,7 @@ namespace GlobalAuctionHouse
 
 
             foundAccount = this.LoadActiveAccount();
-            if (foundAccount) { 
+            if (foundAccount) {
             this.GetAPIEndpoint();
             this.UpdateBidList();
             this.UpdateTradeList();
@@ -1590,15 +1707,21 @@ namespace GlobalAuctionHouse
                 this.LoadActiveAccount();
             }
 
+            if (ActiveAccountUUID == null || ActiveAccountUUID == "")
+            {
+                this.StatusText = "Loading Active Account UUID";
+                // label1.Text = this.StatusText;
+                this.UpdateUUID();
+            }
 
-            if (ActiveAccount != "" && ActiveAccount != "\"\"")
+            if (ActiveAccount != "" && ActiveAccount != "\"\"" && ActiveAccountUUID != null && ActiveAccountUUID != "")
             {
 
                 using (WebClient client = new WebClient())
                 {
                     try
                     {
-                 string BidListContent = client.DownloadString(this.APIEndpoint + "/proc/bidlist/" + ActiveAccount + "/json");
+                 string BidListContent = client.DownloadString(this.APIEndpoint + "/proc/bidlist/" + ActiveAccount + "~" + ActiveAccountUUID + "/json");
 
                     if (BidListContent == "" || BidListContent == "[]")
                     {
@@ -1674,7 +1797,8 @@ namespace GlobalAuctionHouse
                     if (tmpActiveAccount != null && (string)tmpActiveAccount != "" && (string)tmpActiveAccount != "@" && (string)tmpActiveAccount != "\"\"")
                   {
                             ActiveAccount = tmpActiveAccount;
-                           // this.ToLog("Account Found: " + tmpActiveAccount);
+                            // this.ToLog("Account Found: " + tmpActiveAccount);
+                            this.UpdateUUID();
                             return true;
                     }
                 }

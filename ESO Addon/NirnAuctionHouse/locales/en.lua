@@ -1,5 +1,28 @@
 ZO_CreateStringId("SI_NAH_TITLE"           , "Nirn Auction House");
 
+ZO_CreateStringId("SI_NAH_STRING_SHOWING"     , "showing");
+ZO_CreateStringId("SI_NAH_STRING_TOTAL"     , "total");
+ZO_CreateStringId("SI_NAH_STRING_PAGE"     , "page");
+
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_LISTING"     , "Successfully Listed Item(s) for sale - processing may take up to 60 seconds");
+ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING"     , "Failed to List Item(s) for sale");
+ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING_TRADELIMIT"     , "Failed to List Item(s) for sale: Trade Limit Reached");
+
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_CANCELED"     , "Successfully Canceled Item(s) for sale - Processing may take up to 60 seconds");
+ZO_CreateStringId("SI_NAH_STRING_FAILED_CANCELED"     , "Failed to Cancel Item(s) for sale");
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_FILLED"     , "Successfully filled order");
+ZO_CreateStringId("SI_NAH_STRING_FAILED_FILLED"     , "Failed to register filled order");
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "Successfully bid on or bought Item(s)");
+ZO_CreateStringId("SI_NAH_STRING_FAILED_BID"     , "Failed to bid on or buy Item(s), Check the log file for more information");
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_PAID"     , "Successfully Purchased Item(s) for sale");
+ZO_CreateStringId("SI_NAH_STRING_FAILED_PAID"     , "Failed to register purchased for item(s)");
+
+
 ZO_CreateStringId("SI_NAH_HEADER_NAME"     , "Name");
 ZO_CreateStringId("SI_NAH_HEADER_TYPE"     , "Type");
 ZO_CreateStringId("SI_NAH_HEADER_SOURCE"   , "Source");
@@ -41,6 +64,9 @@ ZO_CreateStringId("SI_NAH_SERVERLINKNOTFOUND"   , "Server Link Not Found");
 ZO_CreateStringId("SI_NAH_SERVERLINKLOC"   , "(Run Documents\Elder Scrolls Online\live\AddOns\NirnAuctionHouse\NirnAuctionHouse.exe)");
 ZO_CreateStringId("SI_NAH_RECHECKSERVERLINK"   , "Recheck Server Link");
 
+ZO_CreateStringId("SI_NAH_SERVERLINKUPDATE"   , "Server Link Version Mismatch");
+ZO_CreateStringId("SI_NAH_SERVERLINKUPDATE_DIRECTIONS"   , "(Close the Server Link NirnAuctionHouse.exe and reinstall addon or update Server Link)");
+
 
 ZO_CreateStringId("SI_NAH_TYPE_CRAFTED"    , GetString(SI_ITEM_FORMAT_STR_CRAFTED));
 ZO_CreateStringId("SI_NAH_TYPE_MONSTER"    , "Monster");
@@ -53,7 +79,7 @@ ZO_CreateStringId("SI_NAH_STYLE_ALLIANCE"  , "Alliance Style");
 
 ZO_CreateStringId("SI_NAH_SEARCHDROP1"     , "Basic Search");
 ZO_CreateStringId("SI_NAH_SEARCHDROP2"     , "Item Info Search ");
-ZO_CreateStringId("SI_NAH_SEARCHDROP3"     , "My Listings");
+ZO_CreateStringId("SI_NAH_MYLISTINGS"     , "My Listings");
 
 
 ZO_CreateStringId("SI_NAH_LEVELDROP1"     , "Level Range");

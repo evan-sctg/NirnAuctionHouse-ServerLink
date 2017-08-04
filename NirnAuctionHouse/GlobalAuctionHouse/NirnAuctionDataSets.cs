@@ -39,7 +39,7 @@ namespace GlobalAuctionHouse
 
                     LsonValue item = (acctdata)["data"]["Listings"];
                     List<AuctionEntry> CurAuctionEntries = new List<AuctionEntry>();
-                        foreach (string key in item.Keys)
+                        foreach (int key in item.Keys)
                         {
                             LsonValue tmpdict = item[key];
                             if (tmpdict.ContainsKey("attributes") && tmpdict.ContainsKey("Listing"))
@@ -518,6 +518,13 @@ namespace GlobalAuctionHouse
         }
 
         [DataMember]
+        public string ActiveAccountData
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public int? BidID
         {
             get;
@@ -535,9 +542,11 @@ namespace GlobalAuctionHouse
         {
         }
 
-        public AuctionFilledOrderEntry(LsonValue luaObject)
+        public AuctionFilledOrderEntry(LsonValue luaObject, string ActiveAccountcreds)
         {
-           // try{
+            // try{
+
+                this.ActiveAccountData = ActiveAccountcreds;
                 luaObject = luaObject["Order"];
             int i = 0;
             if (!int.TryParse((string)luaObject["TradeID"], out i)) i = 0;

@@ -1,5 +1,26 @@
 ZO_CreateStringId("SI_NAH_TITLE"           , "ニルオークションハウス");
 
+ZO_CreateStringId("SI_NAH_STRING_SHOWING"     , "表示する");--new
+ZO_CreateStringId("SI_NAH_STRING_TOTAL"     , "合計");--new
+ZO_CreateStringId("SI_NAH_STRING_PAGE"     , "ページ");--new
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_LISTING"     , "売り上げに成功した商品 - 処理には最大60秒かかる場合があります");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING"     , "販売アイテムを一覧表示できませんでした");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING_TRADELIMIT"     , "販売アイテムの一覧表示に失敗しました：取引限度額に達しました");--new
+
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_CANCELED"     , "正常にキャンセルされたアイテムの販売 - 処理には最大60秒かかる場合があります");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_CANCELED"     , "販売アイテムのキャンセルに失敗しました");--new
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_FILLED"     , "注文を完了しました");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_FILLED"     , "記入済み注文の登録に失敗しました");--new
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "成功した入札または購入した商品");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_BID"     , "入札またはアイテムの購入に失敗しました。詳細についてはログファイルを確認してください");--new
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_PAID"     , "販売アイテムを購入しました");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_PAID"     , "購入した商品の登録に失敗しました");--new
+
 ZO_CreateStringId("SI_NAH_HEADER_NAME"     , "名");
 ZO_CreateStringId("SI_NAH_HEADER_TYPE"     , "タイプ");
 ZO_CreateStringId("SI_NAH_HEADER_SOURCE"   , "ソース");
@@ -40,6 +61,9 @@ ZO_CreateStringId("SI_NAH_SERVERLINKNOTFOUND"   , "サーバーリンクが見�
 ZO_CreateStringId("SI_NAH_SERVERLINKLOC"   , "(打ち上げ Documents\Elder Scrolls Online\live\AddOns\NirnAuctionHouse\NirnAuctionHouse.exe)");
 ZO_CreateStringId("SI_NAH_RECHECKSERVERLINK"   , "サーバーの再確認リンク");
 
+ZO_CreateStringId("SI_NAH_SERVERLINKUPDATE"   , "サーバーリンクバージョンの不一致");--new
+ZO_CreateStringId("SI_NAH_SERVERLINKUPDATE_DIRECTIONS"   , "(サーバーリンクNirnAuctionHouse.exeを閉じて、アドオンを再インストールするかサーバーリンクを更新します)");--new
+
 
 ZO_CreateStringId("SI_NAH_TYPE_CRAFTED"    , GetString(SI_ITEM_FORMAT_STR_CRAFTED));
 ZO_CreateStringId("SI_NAH_TYPE_MONSTER"    , "Monster");
@@ -52,7 +76,7 @@ ZO_CreateStringId("SI_NAH_STYLE_ALLIANCE"  , "Alliance Style");
 
 ZO_CreateStringId("SI_NAH_SEARCHDROP1"     , "基本的な検索");
 ZO_CreateStringId("SI_NAH_SEARCHDROP2"     , "アイテム詳細検索");
-ZO_CreateStringId("SI_NAH_SEARCHDROP3"     , "マイリスト");
+ZO_CreateStringId("SI_NAH_MYLISTINGS"     , "マイリスト");
 
 
 ZO_CreateStringId("SI_NAH_LEVELDROP1"     , "レベル範囲");

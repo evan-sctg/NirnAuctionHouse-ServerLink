@@ -1,5 +1,26 @@
 ZO_CreateStringId("SI_NAH_TITLE"           , "Casa de Subastas Nirn");
 
+ZO_CreateStringId("SI_NAH_STRING_SHOWING"     , "Mostrando");--new
+ZO_CreateStringId("SI_NAH_STRING_TOTAL"     , "total");--new
+ZO_CreateStringId("SI_NAH_STRING_PAGE"     , "p√°gina");--new
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_LISTING"     , "Listados con √©xito Art√≠culos para la venta: el procesamiento puede tardar hasta 60 segundos");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING"     , "No se pudo registrar los art√≠culos a la venta");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING_TRADELIMIT"     , "No se pudo registrar los art√≠culos a la venta: L√≠mite comercial alcanzado");--new
+
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_CANCELED"     , "Art√≠culos cancelados con √©xito - El procesamiento puede tardar hasta 60 segundos");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_CANCELED"     , "No se pudo cancelar art√≠culos para la venta");--new
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_FILLED"     , "Orden llenado correctamente");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_FILLED"     , "Error al registrar el pedido lleno");--new
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "Lance con √©xito en o compr√≥ art√≠culos");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_BID"     , "Error al pujar o comprar art√≠culos, consultar el archivo de registro para obtener m√°s informaci√≥n");--new
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_PAID"     , "Art√≠culos comprados con √©xito para la venta");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_PAID"     , "Error al registrar la compra de art√≠culos");--new
+
 ZO_CreateStringId("SI_NAH_HEADER_NAME"     , "Nombre");
 ZO_CreateStringId("SI_NAH_HEADER_TYPE"     , "Tipo");
 ZO_CreateStringId("SI_NAH_HEADER_SOURCE"   , "Fuente");
@@ -13,7 +34,7 @@ ZO_CreateStringId("SI_NAH_HEADER_BID"   , "Oferta");
 
 
 ZO_CreateStringId("SI_NAH_LAST_PAGE"   , "Pagina anterior");
-ZO_CreateStringId("SI_NAH_NEXT_PAGE"   , "Siguiente p·gina");
+ZO_CreateStringId("SI_NAH_NEXT_PAGE"   , "Siguiente p√°gina");
 ZO_CreateStringId("SI_NAH_SYNC"   , "Sincronizar");
 ZO_CreateStringId("SI_NAH_BID"   , "Oferta");
 ZO_CreateStringId("SI_NAH_BUYOUT"   , "Compra");
@@ -21,8 +42,8 @@ ZO_CreateStringId("SI_NAH_CANCEL"   , "Cancelar");
 ZO_CreateStringId("SI_NAH_CONFIRM"   , "Confirmar");
 
 ZO_CreateStringId("SI_NAH_AUCTION"   , "Subasta");
-ZO_CreateStringId("SI_NAH_SOLDITEMS"   , "ArtÌculos vendidos");
-ZO_CreateStringId("SI_NAH_SOLDITEMS_NEW"   , "ArtÌculos vendidos (nuevo)");
+ZO_CreateStringId("SI_NAH_SOLDITEMS"   , "Art√≠culos vendidos");
+ZO_CreateStringId("SI_NAH_SOLDITEMS_NEW"   , "Art√≠culos vendidos (nuevo)");
 ZO_CreateStringId("SI_NAH_ORDERTRACKING"   , "Rastreo de orden");
 
 ZO_CreateStringId("SI_NAH_TRACKEDORDERS"   , "Ordenes de seguimiento");
@@ -40,6 +61,9 @@ ZO_CreateStringId("SI_NAH_SERVERLINKNOTFOUND"   , "Enlace del servidor no encont
 ZO_CreateStringId("SI_NAH_SERVERLINKLOC"   , "(Lanzamiento Documents\Elder Scrolls Online\live\AddOns\NirnAuctionHouse\NirnAuctionHouse.exe)");
 ZO_CreateStringId("SI_NAH_RECHECKSERVERLINK"   , "Vuelva a comprobar el enlace del servidor");
 
+ZO_CreateStringId("SI_NAH_SERVERLINKUPDATE"   , "Error de coincidencia de versi√≥n de servidor");--new
+ZO_CreateStringId("SI_NAH_SERVERLINKUPDATE_DIRECTIONS"   , "(Cierre el enlace de servidor NirnAuctionHouse.exe y vuelva a instalar el complemento o la actualizaci√≥n Server Link)");--new
+
 
 ZO_CreateStringId("SI_NAH_TYPE_CRAFTED"    , GetString(SI_ITEM_FORMAT_STR_CRAFTED));
 ZO_CreateStringId("SI_NAH_TYPE_MONSTER"    , "Monster");
@@ -50,37 +74,37 @@ ZO_CreateStringId("SI_NAH_SOURCE_SPECIAL2" , GetString(SI_BATTLEGROUND_HUD_HEADE
 
 ZO_CreateStringId("SI_NAH_STYLE_ALLIANCE"  , "Alliance Style");
 
-ZO_CreateStringId("SI_NAH_SEARCHDROP1"     , "B˙squeda b·sica");
-ZO_CreateStringId("SI_NAH_SEARCHDROP2"     , "Detalle del artÌculo ");
-ZO_CreateStringId("SI_NAH_SEARCHDROP3"     , "Mis listados");
+ZO_CreateStringId("SI_NAH_SEARCHDROP1"     , "B√∫squeda b√°sica");
+ZO_CreateStringId("SI_NAH_SEARCHDROP2"     , "Detalle del art√≠culo ");
+ZO_CreateStringId("SI_NAH_MYLISTINGS"     , "Mis listados");
 
 
 ZO_CreateStringId("SI_NAH_LEVELDROP1"     , "Rango de nivel");
-ZO_CreateStringId("SI_NAH_LEVELDROP2"     , "Rango de Puntos CampeÛn");
+ZO_CreateStringId("SI_NAH_LEVELDROP2"     , "Rango de Puntos Campe√≥n");
 
 
 ZO_CreateStringId("SI_NAH_QUALITYDROP1"     , "Cualquier cualidad");
 ZO_CreateStringId("SI_NAH_QUALITYDROP2"     , "Normal");
 ZO_CreateStringId("SI_NAH_QUALITYDROP3"     , "Multa");
 ZO_CreateStringId("SI_NAH_QUALITYDROP4"     , "Superior");
-ZO_CreateStringId("SI_NAH_QUALITYDROP5"     , "…pico");
+ZO_CreateStringId("SI_NAH_QUALITYDROP5"     , "√âpico");
 ZO_CreateStringId("SI_NAH_QUALITYDROP6"     , "Legendario");
 
 ZO_CreateStringId("SI_NAH_FILTERDROP1"     , "todas las categorias");
 ZO_CreateStringId("SI_NAH_FILTERDROP2"     , "Vestir");
 ZO_CreateStringId("SI_NAH_FILTERDROP3"     , "Arma");
-ZO_CreateStringId("SI_NAH_FILTERDROP4"     , "ArtesanÌa");
+ZO_CreateStringId("SI_NAH_FILTERDROP4"     , "Artesan√≠a");
 ZO_CreateStringId("SI_NAH_FILTERDROP5"     , "Joya del alma");
 ZO_CreateStringId("SI_NAH_FILTERDROP6"     , "Trofeo");
 ZO_CreateStringId("SI_NAH_FILTERDROP7"     , "Herramienta");
 
 
 
-ZO_CreateStringId("SI_NAH_FILTERDROP1"     , "Todos los artÌculos");
+ZO_CreateStringId("SI_NAH_FILTERDROP1"     , "Todos los art√≠culos");
 ZO_CreateStringId("SI_NAH_FILTERDROP2"     , "Arma");
 ZO_CreateStringId("SI_NAH_FILTERDROP3"     , "Vestir");
 ZO_CreateStringId("SI_NAH_FILTERDROP4"     , "Gemas y glifos del alma");
-ZO_CreateStringId("SI_NAH_FILTERDROP5"     , "ArtesanÌa");
+ZO_CreateStringId("SI_NAH_FILTERDROP5"     , "Artesan√≠a");
 ZO_CreateStringId("SI_NAH_FILTERDROP6"     , "Consumibles");
 ZO_CreateStringId("SI_NAH_FILTERDROP7"     , "Mobiliario");
 ZO_CreateStringId("SI_NAH_FILTERDROP8"     , "Otro");
@@ -100,17 +124,17 @@ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_3_5"     , "Proteger");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_3_6"     , "Accesorio");
 
 
-ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_1"     , "Todas las subcategorÌas");
+ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_1"     , "Todas las subcategor√≠as");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_2"     , "Joya del alma");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_3"     , "Glifo de armadura");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_4"     , "Glifo de arma");
-ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_5"     , "JoyerÌa Glyph");
+ZO_CreateStringId("SI_NAH_FILTERDROPSUB_4_5"     , "Joyer√≠a Glyph");
 
 
 
-ZO_CreateStringId("SI_NAH_FILTERDROPSUB_5_1"     , "Todas las subcategorÌas");
+ZO_CreateStringId("SI_NAH_FILTERDROPSUB_5_1"     , "Todas las subcategor√≠as");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_5_2"     , "Alquimia");
-ZO_CreateStringId("SI_NAH_FILTERDROPSUB_5_3"     , "HerrerÌa");
+ZO_CreateStringId("SI_NAH_FILTERDROPSUB_5_3"     , "Herrer√≠a");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_5_4"     , "Ropa");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_5_5"     , "Encantador");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_5_6"     , "Aprovisionamiento");
@@ -120,27 +144,27 @@ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_5_7"     , "Trabajo de la madera");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_6_1"     , "Todos los consumibles");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_6_2"     , "Comida");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_6_3"     , "Beber");
-ZO_CreateStringId("SI_NAH_FILTERDROPSUB_6_4"     , "PociÛn");
+ZO_CreateStringId("SI_NAH_FILTERDROPSUB_6_4"     , "Poci√≥n");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_6_5"     , "Veneno");
 
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_7_1"     , "Todos los muebles");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_7_2"     , "Mueble");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_7_3"     , "Suite");
-ZO_CreateStringId("SI_NAH_FILTERDROPSUB_7_4"     , "SalÛn");
+ZO_CreateStringId("SI_NAH_FILTERDROPSUB_7_4"     , "Sal√≥n");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_7_5"     , "Biblioteca");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_7_6"     , "Comida");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_7_7"     , "Comedor");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_7_8"     , "Undercroft");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_7_9"     , "Hogar");
-ZO_CreateStringId("SI_NAH_FILTERDROPSUB_7_10"     , "GalerÌa");
+ZO_CreateStringId("SI_NAH_FILTERDROPSUB_7_10"     , "Galer√≠a");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_7_11"     , "Taller");
-ZO_CreateStringId("SI_NAH_FILTERDROPSUB_7_12"     , "IluminaciÛn");
+ZO_CreateStringId("SI_NAH_FILTERDROPSUB_7_12"     , "Iluminaci√≥n");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_7_13"     , "Conservatorio");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_7_14"     , "Estructuras");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_7_15"     , "Diverso");
 
 
-ZO_CreateStringId("SI_NAH_FILTERDROPSUB_8_1"     , "Todas las subcategorÌas");
+ZO_CreateStringId("SI_NAH_FILTERDROPSUB_8_1"     , "Todas las subcategor√≠as");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_8_2"     , "Cebo");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_8_3"     , "Herramienta");
 ZO_CreateStringId("SI_NAH_FILTERDROPSUB_8_4"     , "Cerco");
@@ -172,15 +196,15 @@ ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_1"     , "Todos los encantamientos d
 ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_2"     , "Absorber la salud");
 ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_3"     , "Absorber Magicka");
 ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_4"     , "Arma embotellada");
-ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_5"     , "frenÈtico");
+ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_5"     , "fren√©tico");
 ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_6"     , "Arma cargada");
-ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_7"     , "DaÒo a la salud");
-ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_8"     , "Escudo de DaÒo");
+ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_7"     , "Da√±o a la salud");
+ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_8"     , "Escudo de Da√±o");
 ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_9"     , "Arma de fuego");
 ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_10"     , "Arma de Frost");
 ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_11"     , "Arma envenenada");
 ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_12"     , "Armadura Reducida");
-ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_13"     , "Reducir la energÌa");
+ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_13"     , "Reducir la energ√≠a");
 ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_14"     , "Aguante Regen");
 ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_15"     , "Otro");
 
@@ -205,7 +229,7 @@ ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_2_8"     , "Florido");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_2_9"     , "Motorizado");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_2_10"     , "Preciso");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_2_11"     , "Afilado");
-ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_2_12"     , "FormaciÛn");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_2_12"     , "Formaci√≥n");
 
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_1"     , "Todos los rasgos de armadura");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_2"     , "Divinas");
@@ -214,9 +238,9 @@ ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_4"     , "Infundido");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_5"     , "Intrincado");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_6"     , "Nirnhoned");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_7"     , "Florido");
-ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_8"     , "PrÛspero");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_8"     , "Pr√≥spero");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_9"     , "Reforzado");
-ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_10"     , "FormaciÛn");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_10"     , "Formaci√≥n");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_11"     , "Bien ajustado");
 
 
@@ -230,7 +254,7 @@ ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_1_3"     , "Arco");
 ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_1_4"     , "Daga");
 ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_1_5"     , "Mazo");
 ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_1_6"     , "Espada");
-ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_1_7"     , "Personal de sanaciÛn");
+ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_1_7"     , "Personal de sanaci√≥n");
 ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_1_8"     , "Personal del rayo");
 ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_1_9"     , "Personal de helada");
 ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_1_10"     , "Personal de la llama");
@@ -251,7 +275,7 @@ ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_3_2"     , "Hacha");
 ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_3_3"     , "Arco");
 ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_3_4"     , "Mazo");
 ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_3_5"     , "Espada");
-ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_3_6"     , "Personal de sanaciÛn");
+ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_3_6"     , "Personal de sanaci√≥n");
 ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_3_7"     , "Personal del rayo");
 ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_3_8"     , "Personal de helada");
 ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_3_9"     , "Personal de la llama");
@@ -279,8 +303,8 @@ ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_2_1"     , "Todas");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_2_2"     , "Solvente de Pociones");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_2_3"     , "Disolvente venenoso");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_2_4"     , "Reactivo");
-ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_2_5"     , "FÛrmula de decoraciÛn");
-ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_2_6"     , "Material de decoraciÛn");
+ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_2_5"     , "F√≥rmula de decoraci√≥n");
+ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_2_6"     , "Material de decoraci√≥n");
 
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_3_1"     , "Todas");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_3_2"     , "Motivo");
@@ -291,7 +315,7 @@ ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_3_6"     , "Materia prima");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_3_7"     , "Material");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_3_8"     , "Templar");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_3_9"     , "Diagrama de Mobiliario");
-ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_3_10"     , "Material de decoraciÛn");
+ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_3_10"     , "Material de decoraci√≥n");
 
 
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_4_1"     , "Todas");
@@ -301,8 +325,8 @@ ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_4_4"     , "Armadura");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_4_5"     , "Materia prima");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_4_6"     , "Material");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_4_7"     , "Tanino");
-ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_4_8"     , "PatrÛn de mobiliario");
-ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_4_9"     , "Material de decoraciÛn");
+ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_4_8"     , "Patr√≥n de mobiliario");
+ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_4_9"     , "Material de decoraci√≥n");
 
 
 
@@ -313,7 +337,7 @@ ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_5_2"     , "Aspecto Runestone");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_5_3"     , "Esencia Runestone");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_5_4"     , "Potencia Runestone");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_5_5"     , "Esquema de mobiliario");
-ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_5_6"     , "Material de decoraciÛn");
+ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_5_6"     , "Material de decoraci√≥n");
 
 
 
@@ -337,5 +361,5 @@ ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_7_6"     , "Materia prima");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_7_7"     , "Material");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_7_8"     , "Resina");
 ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_7_9"     , "Plan de equipamiento");
-ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_7_10"     , "Material de decoraciÛn");
+ZO_CreateStringId("SI_NAH_FILTERDROP_CRAFTING_7_10"     , "Material de decoraci√≥n");
 

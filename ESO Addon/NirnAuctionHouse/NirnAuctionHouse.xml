@@ -3,7 +3,7 @@
   		<Label name="NAHRowLabel" font="ZoFontGame" wrapMode="ELLIPSIS" horizontalAlignment="LEFT" verticalAlignment="CENTER" virtual="true" />
 		<Label name="NAHSearchLabel" font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" virtual="true" />
 		<Control name="NAHRow" mouseEnabled="true" virtual="true">
-			<Dimensions y="30" />
+			<Dimensions y="60" />
 			<OnMouseEnter>
 				NAHRow_OnMouseEnter(self)
 			</OnMouseEnter>
@@ -16,8 +16,16 @@
 			<Controls>
 				<Texture name="$(parent)BG" inherits="ZO_ThinListBgStrip" />
 				
+				<Texture name="$(parent)ICONBG" inherits="ZO_ThinListBgStrip" textureFile="esoui/art/chatwindow/chat_bg_center.dds">
+					<Dimensions x="60" y="60" />
+					<Anchor point="LEFT" offsetX=""  />
+				</Texture>
+				<Texture name="$(parent)Icon">
+					<Dimensions x="50" y="50" />
+					<Anchor point="LEFT"  offsetX="5" offsetY="0"   />
+				</Texture>
 				<Label name="$(parent)Name" inherits="NAHRowLabel">
-					<Anchor point="LEFT"/>
+					<Anchor point="LEFT" relativePoint="RIGHT" offsetX="10"  relativeTo="$(parent)Icon"/>
 					<Dimensions x="200" y="30" />
 				</Label>
 				<Label name="$(parent)Qty" inherits="NAHRowLabel">
@@ -77,7 +85,7 @@
 		
 		
 		<Control name="NAHOrderRow" mouseEnabled="true" virtual="true">
-			<Dimensions y="30" />
+			<Dimensions y="60" />
 			<OnMouseEnter>
 				NAHRow_OnMouseEnter(self)
 			</OnMouseEnter>
@@ -89,8 +97,16 @@
 			</OnMouseUp>
 			<Controls>
 				<Texture name="$(parent)BG" inherits="ZO_ThinListBgStrip" />
+				<Texture name="$(parent)ICONBG" inherits="ZO_ThinListBgStrip" textureFile="esoui/art/chatwindow/chat_bg_center.dds">
+					<Dimensions x="60" y="60" />
+					<Anchor point="LEFT" offsetX=""  />
+				</Texture>
+				<Texture name="$(parent)Icon">
+					<Dimensions x="50" y="50" />
+					<Anchor point="LEFT" offsetX="5" offsetY="0"    />
+				</Texture>
 				<Label name="$(parent)Price" inherits="NAHRowLabel">
-					<Anchor point="LEFT" />
+					<Anchor point="LEFT" relativePoint="RIGHT" offsetX="10"  relativeTo="$(parent)Icon" />
 					<Dimensions x="80" y="30" />
 				</Label>
 				<Label name="$(parent)Name" inherits="NAHRowLabel">
@@ -126,17 +142,68 @@
     <TopLevelControl name="NirnAuctionHousePanel" inherits="ZO_RightPanelFootPrint">
       <Controls>
 				<Texture name="$(parent)BG" inherits="ZO_InsetTexture" textureFile="esoui/art/chatwindow/chat_bg_center.dds"  />
+			<Label name="$(parent)title"  horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Auction">
+					<Anchor point="TOP" relativePoint="TOP" offsetX="130"  offsetY="50" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_AUCTION))
+					</OnInitialized>
+				</Label>
+				
 				<Button name="$(parent)AuctionHouseRefresh" inherits="ZO_DefaultButton" text="Sync" hidden="false">
 					<OnInitialized>
 						self:SetText(GetString(SI_NAH_SYNC))
 					</OnInitialized>
 				
-					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="54" />
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-178" offsetY="55" />
 					<Dimensions x="150" y="30" />
 			<OnClicked>
 				NirnAuctionHouse_RefreshAH()
 			</OnClicked>
 		</Button>
+		<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Sold Items">
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)AuctionHouseRefresh"  offsetY="-55" />
+					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_SOLDITEMS))
+					</OnInitialized>
+			<OnClicked>
+				NirnAuctionHouse_ToggleOrders(self:GetParent())
+			</OnClicked>
+		</Button>
+		<Button name="$(parent)ViewTrackedOrders" inherits="ZO_DefaultButton" text="Order Tracking">
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)AuctionHouseRefresh" offsetY="-55"  offsetX="-170" />
+					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_ORDERTRACKING))
+					</OnInitialized>
+			<OnClicked>
+				NirnAuctionHouse_ToggleTrackedOrders(self:GetParent())
+			</OnClicked>
+		</Button>
+		<Button name="$(parent)AuctionHouse" inherits="ZO_DefaultButton" text="Auction" hidden="false">
+				
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)ViewTrackedOrders" offsetX="-170" />
+					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_AUCTION))
+					</OnInitialized>
+			<OnClicked>
+				NirnAuctionHouse:NAHWindow_show(self:GetParent())
+			</OnClicked>
+		</Button>
+		<Button name="$(parent)MyListings" inherits="ZO_DefaultButton" text="My Listings" hidden="false">
+				
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)AuctionHouse" offsetX="-170" />
+					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_MYLISTINGS))
+					</OnInitialized>
+			<OnClicked>
+				NirnAuctionHouse_ShowMyListings(self:GetParent())
+			</OnClicked>
+		</Button>
+		
+		
 		
 				<Button name="$(parent)AuctionHouse_LastPage" inherits="ZO_DefaultButton" text="Last Page" hidden="false">
 				
@@ -343,7 +410,7 @@
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_NAME), "name", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 								
 							</OnInitialized>
-							<Anchor point="TOPLEFT" offsetX="300" />
+							<Anchor point="TOPLEFT" offsetX="270" />
 							<Dimensions x="200" y="32" />
 						</Control>
 						<Control name="$(parent)Qty" inherits="ZO_SortHeader">
@@ -404,7 +471,7 @@
 				</Control>
 
 				<Control name="$(parent)List" inherits="ZO_ScrollList">
-					<Anchor point="TOPLEFT" relativeTo="$(parent)Headers" relativePoint="BOTTOMLEFT" offsetX="300" offsetY="3" />
+					<Anchor point="TOPLEFT" relativeTo="$(parent)Headers" relativePoint="BOTTOMLEFT" offsetX="200" offsetY="3" />
 					<Anchor point="BOTTOMRIGHT" offsetX="-35" offsetY="-32" />
 				</Control>
 
@@ -423,24 +490,29 @@
 		
 		
 		
-		<TopLevelControl name="NAHAuctionHouseBtn" inherits="ZO_RightPanelFootPrint">
+		<TopLevelControl name="NAHAuctionHouseBtn" mouseEnabled="true" movable="true" clampedToScreen="true">
 			<Controls>
-				<Button name="$(parent)AuctionHouse" inherits="ZO_DefaultButton" text="Auction" hidden="false">
+				<Button name="$(parent)AuctionHouse" inherits="ZO_DefaultButton" text="Nirn Auction House" hidden="false">
 				
-					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="-224" />
-					<Dimensions x="150" y="30" />
+					<Anchor point="CENTER" />
+					<Dimensions x="190" y="30" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_AUCTION))
+						self:SetText(GetString(SI_NAH_TITLE))
 					</OnInitialized>
 			<OnClicked>
-				NirnAuctionHouse_ToggleAH(self:GetParent())
+				NirnAuctionHouse_ToggleNAH(self:GetParent())
 			</OnClicked>
 		</Button>
 			</Controls>
+      <OnMoveStop>
+        NirnAuctionHouse:OnUIPosUpdate(self)
+      </OnMoveStop>
+			<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" offsetX="-78" offsetY="-70" />			
+					<Dimensions x="190" y="45" />
 		</TopLevelControl>
 		
 		
-		<TopLevelControl name="NAHAuctionHouseOrdersBtn" inherits="ZO_RightPanelFootPrint">
+		<TopLevelControl name="NAHAuctionHouseOrdersBtn" inherits="ZO_RightPanelFootPrint" hidden="true">
 			<Controls>
 				<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Sold Items">
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="-195" />
@@ -455,7 +527,7 @@
 			</Controls>
 		</TopLevelControl>
 		
-		<TopLevelControl name="NAHAuctionHouseOrdersTRKBtn" inherits="ZO_RightPanelFootPrint">
+		<TopLevelControl name="NAHAuctionHouseOrdersTRKBtn" inherits="ZO_RightPanelFootPrint" hidden="true">
 			<Controls>
 				<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Order Tracking">
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="-165" />
@@ -491,14 +563,17 @@
 		<TopLevelControl name="NAHAuctionHouseTrackingPanel" inherits="ZO_RightPanelFootPrint">
 		<Controls>
 			<Label name="$(parent)lalel2" horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Tracked Orders">
-					<Anchor point="TOP" relativePoint="TOP" offsetX=""  offsetY="" />
+					<Anchor point="TOP" relativePoint="TOP" offsetX="-10"  offsetY="10" />
 					<OnInitialized>
 						self:SetText(GetString(SI_NAH_TRACKEDORDERS))
 					</OnInitialized>
 				</Label>
+				
+				
+		
 			
-				<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Sync">
-					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="14" />
+				<Button name="$(parent)Sync" inherits="ZO_DefaultButton" text="Sync">
+				<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-178" offsetY="14" />
 					<Dimensions x="150" y="30" />
 					<OnInitialized>
 						self:SetText(GetString(SI_NAH_SYNC))
@@ -506,6 +581,45 @@
 			<OnClicked>
 			
 				NirnAuctionHouse_RefreshAHTrackedBids(self:GetParent())
+			</OnClicked>
+		</Button>
+		<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Sold Items" disabled="true">
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)Sync" offsetY="-55" />
+					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_SOLDITEMS))
+					</OnInitialized>
+			<OnClicked>
+				NirnAuctionHouse_ToggleOrders(self:GetParent())
+			</OnClicked>
+		</Button>
+		<Button name="$(parent)ViewCurr" inherits="ZO_DefaultButton" text="Order Tracking">
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)Sync" offsetY="-55"  offsetX="-170" />
+					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_ORDERTRACKING))
+					</OnInitialized>
+		</Button>
+		<Button name="$(parent)AuctionHouse" inherits="ZO_DefaultButton" text="Auction" hidden="false">
+				
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)ViewCurr" offsetX="-170" />
+					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_AUCTION))
+					</OnInitialized>
+			<OnClicked>
+				NirnAuctionHouse:NAHWindow_show(self:GetParent())
+			</OnClicked>
+		</Button>
+		<Button name="$(parent)MyListings" inherits="ZO_DefaultButton" text="My Listings" hidden="false">
+				
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)AuctionHouse" offsetX="-170" />
+					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_MYLISTINGS))
+					</OnInitialized>
+			<OnClicked>
+				NirnAuctionHouse_ShowMyListings(self:GetParent())
 			</OnClicked>
 		</Button>
 		
@@ -522,7 +636,7 @@
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_PRICE), "BuyoutPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 								
 							</OnInitialized>
-							<Anchor point="TOPLEFT" />
+							<Anchor point="TOPLEFT" offsetX="70" />
 							<Dimensions x="80" y="32" />
 						</Control>
 						<Control name="$(parent)Name" inherits="ZO_SortHeader">
@@ -587,14 +701,14 @@
 		<TopLevelControl name="NAHAuctionHouseOrdersPanel" inherits="ZO_RightPanelFootPrint">
 		<Controls>
 			<Label name="$(parent)lalel2"  horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Sold Items">
-					<Anchor point="TOP" relativePoint="TOP" offsetX=""  offsetY="" />
+					<Anchor point="TOP" relativePoint="TOP" offsetX="-15"  offsetY="10" />
 					<OnInitialized>
 						self:SetText(GetString(SI_NAH_SOLDITEMS))
 					</OnInitialized>
 				</Label>
 			
-				<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Sync">
-					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="14" />
+				<Button name="$(parent)Sync" inherits="ZO_DefaultButton" text="Sync">
+				<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-178" offsetY="14" />
 					<Dimensions x="150" y="30" />
 					<OnInitialized>
 						self:SetText(GetString(SI_NAH_SYNC))
@@ -602,6 +716,45 @@
 			<OnClicked>
 			
 				NirnAuctionHouse_RefreshAHBids(self:GetParent())
+			</OnClicked>
+		</Button>
+		<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Sold Items" disabled="true">
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)Sync" offsetY="-55" />
+					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_SOLDITEMS))
+					</OnInitialized>
+		</Button>
+		<Button name="$(parent)ViewTrackedOrders" inherits="ZO_DefaultButton" text="Order Tracking">
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)Sync" offsetX="-170" offsetY="-55" />
+					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_ORDERTRACKING))
+					</OnInitialized>
+			<OnClicked>
+				NirnAuctionHouse_ToggleTrackedOrders(self:GetParent())
+			</OnClicked>
+		</Button>
+		<Button name="$(parent)AuctionHouse" inherits="ZO_DefaultButton" text="Auction" hidden="false">
+				
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)ViewTrackedOrders" offsetX="-170" />
+					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_AUCTION))
+					</OnInitialized>
+			<OnClicked>
+				NirnAuctionHouse:NAHWindow_show(self:GetParent())
+			</OnClicked>
+		</Button>
+		<Button name="$(parent)MyListings" inherits="ZO_DefaultButton" text="My Listings" hidden="false">
+				
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)AuctionHouse" offsetX="-170" />
+					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_MYLISTINGS))
+					</OnInitialized>
+			<OnClicked>
+				NirnAuctionHouse_ShowMyListings(self:GetParent())
 			</OnClicked>
 		</Button>
 		
@@ -618,7 +771,7 @@
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_PRICE), "BuyoutPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 								
 							</OnInitialized>
-							<Anchor point="TOPLEFT" />
+							<Anchor point="TOPLEFT"  offsetX="70"/>
 							<Dimensions x="80" y="32" />
 						</Control>
 						<Control name="$(parent)Name" inherits="ZO_SortHeader">
@@ -872,6 +1025,34 @@ ITEMNAME for ITEMCOST Gold?">
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78"  offsetY="-230" />
 					<OnInitialized>
 						self:SetText(GetString(SI_NAH_SERVERLINKLOC))
+					</OnInitialized>
+				</Label>
+				<Button name="$(parent)NAHAuctionHouse_ServerLink" inherits="ZO_DefaultButton" text="Recheck Server Link" hidden="false">
+				
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78" offsetY="-185" />
+					<Dimensions x="250" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_RECHECKSERVERLINK))
+					</OnInitialized>
+			<OnClicked>
+				NirnAuctionHouse_ServerLink_Recheck()
+			</OnClicked>
+		</Button>
+			</Controls>
+		</TopLevelControl>
+		
+		<TopLevelControl name="NAHAuctionHouse_ServerLink_VERSION" inherits="ZO_RightPanelFootPrint" hidden="true">
+			<Controls>
+			<Label name="$(parent)lalel1" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_FAILED" text="Server Link Version Mismatch">
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-148"  offsetY="-210" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_SERVERLINKUPDATE))
+					</OnInitialized>
+				</Label>
+			<Label name="$(parent)lalel2" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_FAILED" text="(Close the Server Link NirnAuctionHouse.exe and reinstall addon or update Server Link)">
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-78"  offsetY="-230" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_SERVERLINKUPDATE_DIRECTIONS))
 					</OnInitialized>
 				</Label>
 				<Button name="$(parent)NAHAuctionHouse_ServerLink" inherits="ZO_DefaultButton" text="Recheck Server Link" hidden="false">
