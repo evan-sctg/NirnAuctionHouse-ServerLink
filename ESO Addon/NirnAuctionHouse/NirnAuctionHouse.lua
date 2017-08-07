@@ -261,7 +261,13 @@ function NAHSoldItemList:BuildMasterList( )
 	self.masterList = { };
 	if NirnAuctionHouse.NewBids~= nil then
 	for i,GlobalBid in ipairs(NirnAuctionHouse.NewBids) do
-	table.insert(self.masterList, NirnAuctionHouse.CreateEntryFromRaw(GlobalBid));
+	local rowdata=NirnAuctionHouse.CreateEntryFromRaw(GlobalBid)
+	table.insert(self.masterList,rowdata );
+	
+		if(NirnAuctionHouse.list.MyListedTrades~=nil)then
+		rowdata.IsSoldItem=true
+		table.insert(NirnAuctionHouse.list.MyListedTrades, rowdata);
+		end
 	end
 	end
 end
@@ -519,19 +525,44 @@ function NAHAuctionList:Setup( )
 end
 	
 
-	--NirnAuctionHouse.list:BuildMasterList( )
-function NirnAuctionHouse:IsItemListedAlready(ItemID, stackCount )
---~ d("IsItemListedAlready: "..ItemID.." x "..stackCount);
-if(NirnAuctionHouse.list.MyListedTrades==nil) then d("MyListedTrades nil"); end
-for i,MyListedTrade in ipairs(NirnAuctionHouse.list.MyListedTrades) do
-	if (tonumber(MyListedTrade.ItemID)==tonumber(ItemID) and tonumber(MyListedTrade.stackCount)==tonumber(stackCount)) then
---~ 	d("Auction found: "..ItemID.." x "..stackCount);
-	return MyListedTrade.TradeID;
---~ 	else
---~ 	d("auction: "..MyListedTrade.ItemID.." x "..MyListedTrade.stackCount);	
-	end
-	end
+function NirnAuctionHouse:CheckIsItemListedAlready(MyListedTrade,ItemID, stackCount,itemQuality,sellPrice,requiredLevel,requiredChampPoints,Charges,enchant,ability,trait)
+	if (tonumber(MyListedTrade.ItemID)==tonumber(ItemID) and tonumber(MyListedTrade.stackCount)==tonumber(stackCount)) and (tonumber(MyListedTrade.ItemQuality)==tonumber(itemQuality)) and (tonumber(sellPrice)==tonumber(GetItemLinkValue(MyListedTrade.itemLink,true))) then
+		if (MyListedTrade.requiredLevel==requiredLevel) and  (MyListedTrade.requiredChampPoints==requiredChampPoints) and  (MyListedTrade.abilityHeader==ability) and (MyListedTrade.enchantHeader==enchant) and (MyListedTrade.traitType==trait) then
+		return MyListedTrade;
+		end
+	end	
 	return false;
+end
+
+function NirnAuctionHouse:IsItemListedAlready(ItemID, stackCount,itemQuality,sellPrice,requiredLevel,requiredChampPoints,Charges,enchant,ability,trait)
+	local result
+	if(NirnAuctionHouse.list.MyListedTrades~=nil) then
+		for i,MyListedTrade in ipairs(NirnAuctionHouse.list.MyListedTrades) do
+		result =NirnAuctionHouse:CheckIsItemListedAlready(MyListedTrade,ItemID, stackCount,itemQuality,sellPrice,requiredLevel,requiredChampPoints,Charges,enchant,ability,trait)
+		if(result~=nil and result~=false and result.TradeID~=nil and result.TradeID~=false)then	return result;	end
+		end
+	end		
+	return false;
+end
+
+function NirnAuctionHouse:CheckIsItemListedCnt(MyListedTrade,ItemID,itemQuality,sellPrice,requiredLevel,requiredChampPoints,Charges,enchant,ability,trait)
+local stackCount=0;
+	if (tonumber(MyListedTrade.ItemID)==tonumber(ItemID)) and (tonumber(MyListedTrade.ItemQuality)==tonumber(itemQuality)) and (tonumber(sellPrice)==tonumber(GetItemLinkValue(MyListedTrade.itemLink,true))) then
+		if (MyListedTrade.requiredLevel==requiredLevel) and  (MyListedTrade.requiredChampPoints==requiredChampPoints) and  (MyListedTrade.abilityHeader==ability) and (MyListedTrade.enchantHeader==enchant) and (MyListedTrade.traitType==trait) then
+		stackCount=tonumber(MyListedTrade.stackCount)
+		end
+	end
+	return stackCount;
+end
+
+function NirnAuctionHouse:IsItemListedCnt(ItemID,itemQuality,sellPrice,requiredLevel,requiredChampPoints,Charges,enchant,ability,trait)
+local stackCount=0;
+	if(NirnAuctionHouse.list.MyListedTrades~=nil) then
+		for i,MyListedTrade in ipairs(NirnAuctionHouse.list.MyListedTrades) do
+		stackCount=stackCount+NirnAuctionHouse:CheckIsItemListedCnt(MyListedTrade,ItemID,itemQuality,sellPrice,requiredLevel,requiredChampPoints,Charges,enchant,ability,trait)
+		end
+	end
+	return stackCount;
 end
 	
 function NAHAuctionList:BuildMasterList( )
@@ -541,19 +572,15 @@ function NAHAuctionList:BuildMasterList( )
 	NAH.currentAccount = GetDisplayName()
 	NAH.settings.ActiveAccount=NAH.currentAccount
 	end
-	
---~ 	d("my account name: "..NAH.settings.ActiveAccount);
-
-	if NirnAuctionHouse.GlobalTrades~= nil then
-	for i,GlobalTrade in ipairs(NirnAuctionHouse.GlobalTrades) do
-	local rowdata=NirnAuctionHouse.CreateEntryFromRaw(GlobalTrade);
-	table.insert(self.masterList, rowdata);
-	if (rowdata.source==NAH.settings.ActiveAccount) then
-	
---~ 	d("my Auction found name: "..rowdata.source);
-	table.insert(self.MyListedTrades, rowdata);
-	end
-	end
+		if NirnAuctionHouse.GlobalTrades~= nil then
+		for i,GlobalTrade in ipairs(NirnAuctionHouse.GlobalTrades) do
+		local rowdata=NirnAuctionHouse.CreateEntryFromRaw(GlobalTrade);
+		table.insert(self.masterList, rowdata);
+			if (rowdata.source==NAH.settings.ActiveAccount) then
+			rowdata.IsSoldItem=false
+			table.insert(self.MyListedTrades, rowdata);
+			end
+		end
 	end
 end
 
@@ -1444,6 +1471,11 @@ end
 
 
 
+ function NirnAuctionHouse_FillOrderData(controlData )
+	local control={}
+	control.data=controlData
+	NirnAuctionHouse_FillOrder(control )
+end	
 
  function NirnAuctionHouse_FillOrder(control )
   
@@ -1793,13 +1825,6 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYLISTINGS
 	
 	
 	
-
-local function NAH_InventorySlotUpdate(...)
-	NirnAuctionHouse:InventorySlotUpdate(...)
-end
-local function NAH_ActionLayerInventoryUpdate()
-	NirnAuctionHouse:ActionLayerInventoryUpdate()
-end
 
 
 
@@ -2380,9 +2405,9 @@ function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 	
 	NAHAuctionHouseOrdersPanel:SetHidden(true);  
 	
+	NirnAuctionHouse.list = NAHAuctionList:New(NirnAuctionHousePanel);	
 		NirnAuctionHouse.SoldItemList = NAHSoldItemList:New(NAHAuctionHouseOrdersPanel);
 	NirnAuctionHouse.TrackingItemList = NAHTrackedItemList:New(NAHAuctionHouseTrackingPanel);
-	NirnAuctionHouse.list = NAHAuctionList:New(NirnAuctionHousePanel);	
 	NirnAuctionHouse.GoldCostPanel = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmount");
 	
   EVENT_MANAGER:RegisterForEvent("NAH_EVENT_MAIL_INBOX_UPDATE", EVENT_MAIL_INBOX_UPDATE, function() NirnAuctionHouse:OnInboxUpdate() end)
@@ -2394,6 +2419,9 @@ function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 
 	EVENT_MANAGER:RegisterForEvent("NAH_PLAYER_UNLOADED_EVENTS", EVENT_PLAYER_DEACTIVATED, NAH_EventOnPlayerUnloaded)
 	EVENT_MANAGER:RegisterForEvent("NAH_EVENT_PLAYER_ACTIVATED", EVENT_PLAYER_ACTIVATED, NAH_SetAccountCharData)
+	
+	
+  
 	
 	ZO_PreHook('ZO_InventorySlot_ShowContextMenu', function(rowControl) self:NAH_OnRightClickUp(rowControl) end)
 	
@@ -2445,9 +2473,8 @@ function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 	
 	self.menu:InitAddonMenu()
 
+	NirnAuctionHouse:SetItemBadgeHooks()
 	
-
-
 	
 	
 end
@@ -2557,7 +2584,9 @@ function NirnAuctionHouse:COD(to,ItemLink,stackCount,amount)
 local locatedbagslot = nil
 			locatedbagslot = NirnAuctionHouse:SearchBag(1,ItemLink,stackCount)
 			if locatedbagslot~=nil then
-			
+			if CanItemBePlayerLocked(1, locatedbagslot) then
+			SetItemIsPlayerLocked(1, locatedbagslot, false)
+			end
  local codcost=10+math.floor(amount/20)
  SCENE_MANAGER:Hide("mailSend");
  SCENE_MANAGER:Show("mailSend");
@@ -2565,10 +2594,14 @@ local locatedbagslot = nil
 	zo_callLater(function()
 			QueueItemAttachment(1, locatedbagslot, 1)
 	d("Queued Attachment")
+	zo_callLater(function()
 	QueueCOD(amount)
+	zo_callLater(function()
 	SendMail(to, "Nirn Auction House Order", "Order for " .. to .. ", Containing: " .. ItemLink .. " x" .. stackCount .. " for " .. amount .. " |t18:18:esoui/art/currency/currency_gold_32.dds|t COD (postage: " .. codcost .. "|t18:18:esoui/art/currency/currency_gold_32.dds|t )")
 			d("Order Filled")
-		end, 600)
+		end, 800)
+		end, 200)
+		end, 900)
 	
 			else
 	d("Failed to find "..ItemLink)			
@@ -2692,26 +2725,52 @@ function NirnAuctionHouse:NAH_OnRightClickUp(rowControl)
 	
 function NirnAuctionHouse:ProcessRightClick(control)
 	if control == nil then
-	d("control is not set.")
+--~ 	d("control is not set.")
 		return
 	end
 
 	local bagId = control.bagId
 	local slotIndex = control.slotIndex
 	local ItemBound = IsItemBound(bagId,slotIndex)
-	local ItemStolen = IsItemStolen(bagId,slotIndex)	
+	local ItemStolen = IsItemStolen(bagId,slotIndex)
+	local ItemBoPTradable = IsItemBoPAndTradeable(bagId,slotIndex)	
+--~ 			
+				
 	local stackCount = control.stackCount
 	itemLink = GetItemLink(bagId, slotIndex, LINK_STYLE_BRACKETS)	
 	if itemLink == nil then
 		return
 	end
 	local _, _, _, itemId = ZO_LinkHandler_ParseLink(itemLink)
-	if ItemBound ~= true and ItemStolen ~= true then	
+	if ItemBound ~= true and ItemStolen ~= true and ItemBoPTradable ~= true then
+
+				
+		local Charges,_ =GetChargeInfoForItem(bagId, slotIndex)		
+		local itemQuality=GetItemLinkQuality(itemLink)
+		local sellPrice=GetItemLinkValue(itemLink,true)	
+	local _hasCharges,_enchantHeader,_enchantDescription = GetItemLinkEnchantInfo(itemLink)
+	local _hasAbility,_abilityHeader,_abilityDescription,_,_,_,_,_ = GetItemLinkOnUseAbilityInfo(itemLink)
+	local _traitType,_traitDescription,_traitSubtype,_traitSubtypeName,_traitSubtypeDescription = GetItemLinkTraitInfo(itemLink)
+	
+	
+	local requiredLevel=GetItemLinkRequiredLevel(itemLink)
+local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
+				
+									
 		zo_callLater(function()
-		local tmptradeID=NirnAuctionHouse:IsItemListedAlready(itemId, stackCount )
-			AddMenuItem("Auction Item", function() self:AuctionOffItem(control) end, MENU_ADD_OPTION_LABEL)
-			if ( tmptradeID ) then
-			AddMenuItem("Cancel Auction", function() NirnAuctionHouse_CancelListing_func(tmptradeID,itemLink ) end, MENU_ADD_OPTION_LABEL)
+		local tmpMyListedTrade=NirnAuctionHouse:IsItemListedAlready(itemId, stackCount ,itemQuality,sellPrice,requiredLevel,requiredChampPoints,Charges,_enchantHeader,_abilityHeader,_traitType)
+				
+		AddMenuItem(GetString(SI_NAH_STRING_AUCTIONITEM), function() self:AuctionOffItem(control) end, MENU_ADD_OPTION_LABEL)
+			
+			if ( tmpMyListedTrade~=nil and tmpMyListedTrade~=false  and tmpMyListedTrade.TradeID ) then			
+				if ( tmpMyListedTrade.IsSoldItem) then	
+				AddMenuItem(GetString(SI_NAH_STRING_FULFILLORDER), function() NirnAuctionHouse_ToggleOrders() end, MENU_ADD_OPTION_LABEL)
+--~ 				AddMenuItem("Fulfill Order", function() NirnAuctionHouse_FillOrderData(tmpMyListedTrade) end, MENU_ADD_OPTION_LABEL)--fills order withought openiong sold window-- better to show details first
+				else			
+				AddMenuItem(GetString(SI_NAH_STRING_CANCELAUCTION), function() NirnAuctionHouse_CancelListing_func(tmpMyListedTrade.TradeID,itemLink ) end, MENU_ADD_OPTION_LABEL)
+				end
+				else
+				
 			end
 			ShowMenu(control)
 			end, 70
@@ -2720,7 +2779,6 @@ function NirnAuctionHouse:ProcessRightClick(control)
 	end
 	
 end
-
 
 
 
@@ -2742,6 +2800,13 @@ local sellPrice=GetItemLinkValue(itemLink,true)
 local itemId=NirnAuctionHouse:GetItemID(itemLink)
 local ItemQuality=GetItemLinkQuality(itemLink)
 
+
+	local _hasCharges,_enchantHeader,_enchantDescription = GetItemLinkEnchantInfo(itemLink)
+	local _hasAbility,_abilityHeader,_abilityDescription,_,_,_,_,_ = GetItemLinkOnUseAbilityInfo(itemLink)
+	local _traitType,_traitDescription,_traitSubtype,_traitSubtypeName,_traitSubtypeDescription = GetItemLinkTraitInfo(itemLink)
+	local requiredLevel=GetItemLinkRequiredLevel(itemLink)
+local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
+
 --~ 	d("Searching for Copper: "..qty.." ["..sellPrice.."]["..itemId.."]["..ItemQuality.."]["..itemCharges.."]")
 		for slotNum=0, bagItems, 1 do
 				local bagslotdata=self:ProcBagSlot(itemId,bagId, slotNum)
@@ -2751,7 +2816,12 @@ local ItemQuality=GetItemLinkQuality(itemLink)
 				tonumber(bagslotdata.sellPrice) == tonumber(sellPrice) and
 				tonumber(bagslotdata.itemCharges) == tonumber(itemCharges) and
 				tonumber(bagslotdata.itemQuality) == tonumber(ItemQuality) and
-				tonumber(bagslotdata.stackCount) == tonumber(qty)) then		
+				bagslotdata.requiredLevel == requiredLevel and
+				bagslotdata.requiredChampPoints == requiredChampPoints and
+				bagslotdata._enchantHeader == _enchantHeader and
+				bagslotdata._abilityHeader == _abilityHeader and
+				bagslotdata._traitDescription == _traitDescription and
+				tonumber(bagslotdata.stackCount) == tonumber(qty)) then			
 --~ 			d("found Item: ".. itemName .. "x"..bagslotdata.stackCount)				
 					return slotNum	
 				
@@ -2774,6 +2844,13 @@ function NirnAuctionHouse:ProcBagSlot(SearchItemId,bagId, slotNum)
 		
 		itemQuality=GetItemLinkQuality(itemLink)
 		local sellPrice=GetItemLinkValue(itemLink,true)
+		
+	local _hasCharges,_enchantHeader,_enchantDescription = GetItemLinkEnchantInfo(itemLink)
+	local _hasAbility,_abilityHeader,_abilityDescription,_,_,_,_,_ = GetItemLinkOnUseAbilityInfo(itemLink)
+	local _traitType,_traitDescription,_traitSubtype,_traitSubtypeName,_traitSubtypeDescription = GetItemLinkTraitInfo(itemLink)	
+	local requiredLevel=GetItemLinkRequiredLevel(itemLink)
+local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
+
 		local results = {}
 		results.itemName=itemName
 		results.itemId=itemId
@@ -2782,6 +2859,11 @@ function NirnAuctionHouse:ProcBagSlot(SearchItemId,bagId, slotNum)
 		results.itemCharges=Charges
 		results.itemLink=itemLink
 		results.stackCount=tonumber(itemCount)
+		results._enchantHeader=_enchantHeader
+		results._abilityHeader=_abilityHeader
+		results._traitDescription=_traitDescription
+		results.requiredLevel=requiredLevel
+		results.requiredChampPoints=requiredChampPoints
 --~ 	d(itemName..": "..results.stackCount.." ["..results.sellPrice.."]["..results.itemId.."]["..results.itemQuality.."]["..results.itemCharges.."]")
 		return results;
 		end
@@ -3001,6 +3083,13 @@ if(NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].Listing.Buyo
 NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].Listing.IsBuyout=1;
 end
 
+
+	
+	if NirnAuctionHouse.ActivePostListingBag~=nil and NirnAuctionHouse.ActivePostListingSlot~=nil then
+	if CanItemBePlayerLocked(NirnAuctionHouse.ActivePostListingBag, NirnAuctionHouse.ActivePostListingSlot) then
+	SetItemIsPlayerLocked(NirnAuctionHouse.ActivePostListingBag, NirnAuctionHouse.ActivePostListingSlot, true)
+	end
+	end
 d("Queued Listing for: " .. NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.ItemLink .. " sync to post now")
 	NAH.settings.PostListings=true;-- tell the server link to post listings 
 	NirnAuctionHouse_CloseGoldCost();
@@ -3035,6 +3124,8 @@ end
 	local quality = GetItemLinkQuality(itemLink)
 	
 --~ 	NirnAuctionHouse.ActivePostListingId=itemId
+	NirnAuctionHouse.ActivePostListingBag=bagId
+	NirnAuctionHouse.ActivePostListingSlot=slotIndex
 	NirnAuctionHouse.ActivePostListingId=(1+(#NAH.settings.data.Listings))
 	
 	local itemLevel
@@ -3372,6 +3463,115 @@ end
 	function NirnAuctionHouse:ProcBids()
 		if NirnAuctionHouse.NewBids == nil then NirnAuctionHouse.NewBids={} end	 --clearlsit 
 	end
+	
+	
+
+	
+			function NirnAuctionHouse:SetItemBadgeHooks()
+			for bagId,inventory in pairs(PLAYER_INVENTORY.inventories) do
+			if inventory~=nil and inventory.listView and inventory.listView.dataTypes and inventory.listView.dataTypes[1] and inventory.listView.dataTypes[1].setupCallback then
+			    ZO_PreHook(inventory.listView.dataTypes[1], "setupCallback", function(control, slot)    
+			      if ( control.slotControlType~=nil and control.slotControlType == 'listSlot' and slot.stackCount~=nil  ) then
+				NirnAuctionHouse:SetItemBadges(control, slot)
+			      end
+			    end)
+		    end
+		    end
+		  end
+		  
+		  
+		  
+	  
+		  
+		  function NirnAuctionHouse:SetItemBadges(parentControl, slot)        
+			
+  local AuctionBadge,itemLink
+    
+     local AuctionBadgeName = "NAH_ActiveBadge_"..slot.bagId.."_"..slot.slotIndex
+   
+		if parentControl.ControlBadge==nil and slot.stackCount~=nil then
+		if NAH.AuctionBadges==nil then  NAH.AuctionBadges={} end
+		if NAH.AuctionBadges[slot.bagId]==nil then  NAH.AuctionBadges[slot.bagId]={} end
+		if NAH.AuctionBadges[slot.bagId][slot.slotIndex]==nil then  
+		NAH.AuctionBadges[slot.bagId][slot.slotIndex] = WINDOW_MANAGER:CreateControl(AuctionBadgeName,parentControl , CT_TEXTURE)
+		end
+		if NAH.AuctionBadgeLabels==nil then  NAH.AuctionBadgeLabels={} end
+		if NAH.AuctionBadgeLabels[slot.bagId]==nil then  NAH.AuctionBadgeLabels[slot.bagId]={} end
+		if NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]==nil then  
+		NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex] = WINDOW_MANAGER:CreateControl(AuctionBadgeName.."_qty",NAH.AuctionBadges[slot.bagId][slot.slotIndex] , CT_LABEL)
+		end
+			if(NAH.AuctionBadges[slot.bagId][slot.slotIndex]) then	
+			NAH.AuctionBadges[slot.bagId][slot.slotIndex]:SetDrawTier(DT_HIGH)
+			NAH.AuctionBadges[slot.bagId][slot.slotIndex]:SetHeight(parentControl:GetHeight()-20)
+			NAH.AuctionBadges[slot.bagId][slot.slotIndex]:SetWidth(parentControl:GetHeight()-20)
+			 parentControl.ControlBadge=NAH.AuctionBadges[slot.bagId][slot.slotIndex]
+			end	
+			if(NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]) then	
+			NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]:SetFont("ZoFontGame")
+			NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]:SetDrawTier(DT_HIGH)
+			NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]:ClearAnchors()
+			NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]:SetAnchor(center, AuctionBadge, center, 28, -10)
+			NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]:SetHeight(parentControl:GetHeight())
+			NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]:SetWidth(180)
+			 parentControl.ControlBadgeLabel=NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]
+			end		 
+		else
+		NAH.AuctionBadges[slot.bagId][slot.slotIndex]=parentControl.ControlBadge
+		NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]= parentControl.ControlBadgeLabel
+		end
+			if(NAH.AuctionBadges[slot.bagId][slot.slotIndex]) then--~ 	
+
+--~ 			
+			local ItemBound = IsItemBound(slot.bagId,slot.slotIndex)
+			local ItemStolen = IsItemStolen(slot.bagId,slot.slotIndex)	
+			local ItemBoPTradable = IsItemBoPAndTradeable(slot.bagId,slot.slotIndex)	
+--~ 			
+			if ItemBound ~= true and ItemStolen ~= true and ItemBoPTradable ~= true then
+				local stackCount = slot.stackCount
+				itemLink = GetItemLink(slot.bagId, slot.slotIndex, LINK_STYLE_BRACKETS)	
+				if itemLink == nil then
+				NAH.AuctionBadges[slot.bagId][slot.slotIndex]:SetHidden(true)	
+				NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]:SetHidden(true)	
+					return
+				end
+				local _, _, _, itemId = ZO_LinkHandler_ParseLink(itemLink)
+				
+				
+				
+		local Charges,_ =GetChargeInfoForItem(slot.bagId, slot.slotIndex)		
+		local itemQuality=GetItemLinkQuality(itemLink)
+		local sellPrice=GetItemLinkValue(itemLink,true)		
+	local _hasCharges,_enchantHeader,_enchantDescription = GetItemLinkEnchantInfo(itemLink)
+	local _hasAbility,_abilityHeader,_abilityDescription,_,_,_,_,_ = GetItemLinkOnUseAbilityInfo(itemLink)
+	local _traitType,_traitDescription,_traitSubtype,_traitSubtypeName,_traitSubtypeDescription = GetItemLinkTraitInfo(itemLink)
+	
+	local requiredLevel=GetItemLinkRequiredLevel(itemLink)
+local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
+
+		
+				local tmptradeCnt=NirnAuctionHouse:IsItemListedCnt(itemId,itemQuality,sellPrice,requiredLevel,requiredChampPoints,Charges,_enchantHeader,_abilityHeader,_traitType)		
+				if(tmptradeCnt>0) then--~ 		
+				NAH.AuctionBadges[slot.bagId][slot.slotIndex]:ClearAnchors()
+				NAH.AuctionBadges[slot.bagId][slot.slotIndex]:SetAnchor(LEFT, parentControl, LEFT,0, 0)
+					NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]:SetText(tmptradeCnt)
+					NAH.AuctionBadges[slot.bagId][slot.slotIndex]:SetTexture([[NirnAuctionHouse\media\SaleIcon.dds]])
+					NAH.AuctionBadges[slot.bagId][slot.slotIndex]:SetHidden(false)
+					NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]:SetHidden(false)
+				else
+				NAH.AuctionBadges[slot.bagId][slot.slotIndex]:SetHidden(true)
+				NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]:SetHidden(true)
+				
+				end
+			else
+			NAH.AuctionBadges[slot.bagId][slot.slotIndex]:SetHidden(true)	
+			NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]:SetHidden(true)	
+			end
+			
+					
+			end
+		
+		end
+	
 	
 EVENT_MANAGER:RegisterForEvent("NirnAuctionHouseLoaded", EVENT_ADD_ON_LOADED, function(...) NirnAuctionHouse:OnLoad(...) end)
 

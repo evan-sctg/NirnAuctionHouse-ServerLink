@@ -1124,7 +1124,7 @@ namespace GlobalAuctionHouse
 
                             UUIDContent = client.DownloadString(this.APIEndpoint + "/proc/uuid/" + ActiveAccount);
                             UUIDContent = rgx.Replace(UUIDContent, "");
-                            if (!UUIDContent.Contains("Attempt Detected"))
+                            if (!UUIDContent.Contains("Attempt Detected") && !UUIDContent.Contains("Contact an admin") && UUIDContent != "" && !UUIDContent.Contains(" error") && !UUIDContent.Contains(" Error"))
                             {
                                 File.WriteAllText(AccountUUIDFile, UUIDContent);
                                 ActiveAccountUUID = UUIDContent;
@@ -1138,11 +1138,37 @@ namespace GlobalAuctionHouse
                             this.StatusText = "Updated UUID";
                             //  label1.Text = this.StatusText;
                         }
-                    }else
+                    } else
                     {
-                        UUIDContent=File.ReadAllText(AccountUUIDFile);
+                        UUIDContent = File.ReadAllText(AccountUUIDFile);
+                        if (UUIDContent.Contains("Contact an admin") || UUIDContent== "" || UUIDContent.Contains(" error") || UUIDContent.Contains(" Error"))
+                        {
+                            using (WebClient client = new WebClient())
+                            {
+
+                                UUIDContent = client.DownloadString(this.APIEndpoint + "/proc/uuid/" + ActiveAccount);
+                                UUIDContent = rgx.Replace(UUIDContent, "");
+                                if (!UUIDContent.Contains("Attempt Detected") && !UUIDContent.Contains("Contact an admin"))
+                                {
+                                    File.WriteAllText(AccountUUIDFile, UUIDContent);
+                                    ActiveAccountUUID = UUIDContent;
+                                }
+                                else
+                                {
+                                    this.ToLog("Your Account is inaccessible, Please Contact the Admin Author");
+                                }
+
+
+                                this.StatusText = "Updated UUID";
+                                //  label1.Text = this.StatusText;
+                            }
+                        }
+                        else
+                        {
                         UUIDContent = rgx.Replace(UUIDContent, "");
                         ActiveAccountUUID = UUIDContent;
+
+                        }
 
                     }
 

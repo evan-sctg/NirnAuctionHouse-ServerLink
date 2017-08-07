@@ -3,6 +3,16 @@ Latest Version: https://nirnah.com/NirnAuctionHouse(beta).zip
 Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 
 
+
+v0.0.16 "beta" @Elo
+ - Added Visual Marker in inventory for items that are listed for sale (displays Quantity for sale)
+ - When auctioning an item it will be locked if that item is lockable (helps to prevent selling / dismantling / destroying)
+ - Added option to fulfill order from your inventory (right click context menu)
+ - Translated right click context menu
+ - Bugfix for cross region players connecting to server / sending mail (EU -> NA or NA -> EU)
+ - Bugfix playername restrictions players with "-" will no longer be rejected
+ - Bugfix connection issues
+
 v0.0.15 "beta" @Elo
  - Added Cancel Auction option to right click menu in inventory (cancel your listings from your bank, inventory, or crafting bag)
  - Added icons for auction listings

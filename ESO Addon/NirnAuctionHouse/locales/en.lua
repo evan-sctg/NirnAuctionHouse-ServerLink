@@ -4,6 +4,10 @@ ZO_CreateStringId("SI_NAH_STRING_SHOWING"     , "showing");
 ZO_CreateStringId("SI_NAH_STRING_TOTAL"     , "total");
 ZO_CreateStringId("SI_NAH_STRING_PAGE"     , "page");
 
+ZO_CreateStringId("SI_NAH_STRING_AUCTIONITEM"     , "Auction Item");--new
+ZO_CreateStringId("SI_NAH_STRING_FULFILLORDER"     , "Fulfill Order");--new
+ZO_CreateStringId("SI_NAH_STRING_CANCELAUCTION"     , "Cancel Auction");--new
+
 
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_LISTING"     , "Successfully Listed Item(s) for sale - processing may take up to 60 seconds");
 ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING"     , "Failed to List Item(s) for sale");

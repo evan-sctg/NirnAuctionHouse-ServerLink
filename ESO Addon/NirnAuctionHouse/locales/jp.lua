@@ -4,6 +4,13 @@ ZO_CreateStringId("SI_NAH_STRING_SHOWING"     , "表示する");--new
 ZO_CreateStringId("SI_NAH_STRING_TOTAL"     , "合計");--new
 ZO_CreateStringId("SI_NAH_STRING_PAGE"     , "ページ");--new
 
+
+
+ZO_CreateStringId("SI_NAH_STRING_AUCTIONITEM"     , "オークションアイテム");--new
+ZO_CreateStringId("SI_NAH_STRING_FULFILLORDER"     , "注文を送る");--new
+ZO_CreateStringId("SI_NAH_STRING_CANCELAUCTION"     , "オークションをキャンセルする");--new
+
+
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_LISTING"     , "売り上げに成功した商品 - 処理には最大60秒かかる場合があります");--new
 ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING"     , "販売アイテムを一覧表示できませんでした");--new
 ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING_TRADELIMIT"     , "販売アイテムの一覧表示に失敗しました：取引限度額に達しました");--new

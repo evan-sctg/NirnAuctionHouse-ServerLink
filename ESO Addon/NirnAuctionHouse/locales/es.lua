@@ -1,25 +1,31 @@
 ZO_CreateStringId("SI_NAH_TITLE"           , "Casa de Subastas Nirn");
 
-ZO_CreateStringId("SI_NAH_STRING_SHOWING"     , "Mostrando");--new
-ZO_CreateStringId("SI_NAH_STRING_TOTAL"     , "total");--new
-ZO_CreateStringId("SI_NAH_STRING_PAGE"     , "página");--new
-
-ZO_CreateStringId("SI_NAH_STRING_SUCCESS_LISTING"     , "Listados con éxito Artículos para la venta: el procesamiento puede tardar hasta 60 segundos");--new
-ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING"     , "No se pudo registrar los artículos a la venta");--new
-ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING_TRADELIMIT"     , "No se pudo registrar los artículos a la venta: Límite comercial alcanzado");--new
+ZO_CreateStringId("SI_NAH_STRING_SHOWING"     , "Mostrando");
+ZO_CreateStringId("SI_NAH_STRING_TOTAL"     , "total");
+ZO_CreateStringId("SI_NAH_STRING_PAGE"     , "página");
 
 
-ZO_CreateStringId("SI_NAH_STRING_SUCCESS_CANCELED"     , "Artículos cancelados con éxito - El procesamiento puede tardar hasta 60 segundos");--new
-ZO_CreateStringId("SI_NAH_STRING_FAILED_CANCELED"     , "No se pudo cancelar artículos para la venta");--new
+ZO_CreateStringId("SI_NAH_STRING_AUCTIONITEM"     , "Artículo de subasta");--new
+ZO_CreateStringId("SI_NAH_STRING_FULFILLORDER"     , "Cumplir con la Orden");--new
+ZO_CreateStringId("SI_NAH_STRING_CANCELAUCTION"     , "Cancelar subasta");--new
 
-ZO_CreateStringId("SI_NAH_STRING_SUCCESS_FILLED"     , "Orden llenado correctamente");--new
-ZO_CreateStringId("SI_NAH_STRING_FAILED_FILLED"     , "Error al registrar el pedido lleno");--new
 
-ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "Lance con éxito en o compró artículos");--new
-ZO_CreateStringId("SI_NAH_STRING_FAILED_BID"     , "Error al pujar o comprar artículos, consultar el archivo de registro para obtener más información");--new
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_LISTING"     , "Listados con éxito Artículos para la venta: el procesamiento puede tardar hasta 60 segundos");
+ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING"     , "No se pudo registrar los artículos a la venta");
+ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING_TRADELIMIT"     , "No se pudo registrar los artículos a la venta: Límite comercial alcanzado");
 
-ZO_CreateStringId("SI_NAH_STRING_SUCCESS_PAID"     , "Artículos comprados con éxito para la venta");--new
-ZO_CreateStringId("SI_NAH_STRING_FAILED_PAID"     , "Error al registrar la compra de artículos");--new
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_CANCELED"     , "Artículos cancelados con éxito - El procesamiento puede tardar hasta 60 segundos");
+ZO_CreateStringId("SI_NAH_STRING_FAILED_CANCELED"     , "No se pudo cancelar artículos para la venta");
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_FILLED"     , "Orden llenado correctamente");
+ZO_CreateStringId("SI_NAH_STRING_FAILED_FILLED"     , "Error al registrar el pedido lleno");
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "Lance con éxito en o compró artículos");
+ZO_CreateStringId("SI_NAH_STRING_FAILED_BID"     , "Error al pujar o comprar artículos, consultar el archivo de registro para obtener más información");
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_PAID"     , "Artículos comprados con éxito para la venta");
+ZO_CreateStringId("SI_NAH_STRING_FAILED_PAID"     , "Error al registrar la compra de artículos");
 
 ZO_CreateStringId("SI_NAH_HEADER_NAME"     , "Nombre");
 ZO_CreateStringId("SI_NAH_HEADER_TYPE"     , "Tipo");
@@ -61,8 +67,8 @@ ZO_CreateStringId("SI_NAH_SERVERLINKNOTFOUND"   , "Enlace del servidor no encont
 ZO_CreateStringId("SI_NAH_SERVERLINKLOC"   , "(Lanzamiento Documents\Elder Scrolls Online\live\AddOns\NirnAuctionHouse\NirnAuctionHouse.exe)");
 ZO_CreateStringId("SI_NAH_RECHECKSERVERLINK"   , "Vuelva a comprobar el enlace del servidor");
 
-ZO_CreateStringId("SI_NAH_SERVERLINKUPDATE"   , "Error de coincidencia de versión de servidor");--new
-ZO_CreateStringId("SI_NAH_SERVERLINKUPDATE_DIRECTIONS"   , "(Cierre el enlace de servidor NirnAuctionHouse.exe y vuelva a instalar el complemento o la actualización Server Link)");--new
+ZO_CreateStringId("SI_NAH_SERVERLINKUPDATE"   , "Error de coincidencia de versión de servidor");
+ZO_CreateStringId("SI_NAH_SERVERLINKUPDATE_DIRECTIONS"   , "(Cierre el enlace de servidor NirnAuctionHouse.exe y vuelva a instalar el complemento o la actualización Server Link)");
 
 
 ZO_CreateStringId("SI_NAH_TYPE_CRAFTED"    , GetString(SI_ITEM_FORMAT_STR_CRAFTED));

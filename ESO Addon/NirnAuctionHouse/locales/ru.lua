@@ -5,6 +5,12 @@ ZO_CreateStringId("SI_NAH_STRING_SHOWING"     , "отображение");--new
 ZO_CreateStringId("SI_NAH_STRING_TOTAL"     , "Всего");--new
 ZO_CreateStringId("SI_NAH_STRING_PAGE"     , "страница");--new
 
+
+ZO_CreateStringId("SI_NAH_STRING_AUCTIONITEM"     , "Аукцион");--new
+ZO_CreateStringId("SI_NAH_STRING_FULFILLORDER"     , "Отправить заказ");--new
+ZO_CreateStringId("SI_NAH_STRING_CANCELAUCTION"     , "Отменить аукцион");--new
+
+
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_LISTING"     , "Успешно перечисленные товары для продажи - обработка может занять до 60 секунд");--new
 ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING"     , "Не удалось просмотреть список товаров для продажи");--new
 ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING_TRADELIMIT"     , "Не удалось выполнить список товаров для продажи: достигнут торговый предел");--new

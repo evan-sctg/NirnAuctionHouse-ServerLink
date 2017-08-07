@@ -1,26 +1,29 @@
 ZO_CreateStringId("SI_NAH_TITLE"           , "Nirn Auktionshaus");
 
-ZO_CreateStringId("SI_NAH_STRING_SHOWING"     , "Anzeigen");--new
-ZO_CreateStringId("SI_NAH_STRING_TOTAL"     , "gesamt");--new
-ZO_CreateStringId("SI_NAH_STRING_PAGE"     , "Seite");--new
+ZO_CreateStringId("SI_NAH_STRING_SHOWING"     , "Anzeigen");
+ZO_CreateStringId("SI_NAH_STRING_TOTAL"     , "Gesamt");
+ZO_CreateStringId("SI_NAH_STRING_PAGE"     , "Seite");
+
+ZO_CreateStringId("SI_NAH_STRING_AUCTIONITEM"     , "Auktionsartikel");--new
+ZO_CreateStringId("SI_NAH_STRING_FULFILLORDER"     , "Erfüllung bestellen");--new
+ZO_CreateStringId("SI_NAH_STRING_CANCELAUCTION"     , "Auktion abbrechen");--new
+
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_LISTING"     , "Erfolgreich eingestellte Artikel - Verarbeitung kann bis zu 60 Sekunden dauern");
+ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING"     , "Fehler beim Anzeigen der eingestellten Artikel");
+ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING_TRADELIMIT"     , "Artikel konnte(n) nicht eingestellt werden: Handelsgrenze erreicht");
 
 
-ZO_CreateStringId("SI_NAH_STRING_SUCCESS_LISTING"     , "Erfolgreich gelistete Artikel zum Verkauf - Verarbeitung kann bis zu 60 Sekunden dauern");--new
-ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING"     , "Fehler beim Anzeigen von Artikeln zum Verkauf");--new
-ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING_TRADELIMIT"     , "Konnte nicht auflisten Zu verkaufen: Handelsgrenze erreicht");--new
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_CANCELED"     , "Erfolgreich abgebrochene Auktionen - Die Bearbeitung kann bis zu 60 Sekunden dauern");
+ZO_CreateStringId("SI_NAH_STRING_FAILED_CANCELED"     , "Fehler beim Abbrechen der Auktion(en)");
 
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_FILLED"     , "Erfolgreich erstellter Auftrag");
+ZO_CreateStringId("SI_NAH_STRING_FAILED_FILLED"     , "Fehler beim Registrieren des Auftrags");
 
-ZO_CreateStringId("SI_NAH_STRING_SUCCESS_CANCELED"     , "Erfolgreich abgebrochene Artikel zum Verkauf - Die Bearbeitung kann bis zu 60 Sekunden dauern");--new
-ZO_CreateStringId("SI_NAH_STRING_FAILED_CANCELED"     , "Fehler beim Abbrechen von Artikeln zum Verkauf");--new
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "Erfolgreich gesetzte Gebote und Käufe");
+ZO_CreateStringId("SI_NAH_STRING_FAILED_BID"     , "Fehler beim Bieten oder Kaufen von Artikeln. Überprüfen Sie die Protokolldatei für weitere Informationen");
 
-ZO_CreateStringId("SI_NAH_STRING_SUCCESS_FILLED"     , "Erfolgreich gefüllter Auftrag");--new
-ZO_CreateStringId("SI_NAH_STRING_FAILED_FILLED"     , "Fehler beim Registrieren der gefüllten Bestellung");--new
-
-ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "Erfolgreich anbieten oder kaufte Gegenstände");--new
-ZO_CreateStringId("SI_NAH_STRING_FAILED_BID"     , "Fehler beim Bieten oder Kauf von Artikeln, Überprüfen Sie die Protokolldatei für weitere Informationen");--new
-
-ZO_CreateStringId("SI_NAH_STRING_SUCCESS_PAID"     , "Erfolgreich erworbene Artikel zum Verkauf");--new
-ZO_CreateStringId("SI_NAH_STRING_FAILED_PAID"     , "Fehler beim Registrieren für Artikel");--new
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_PAID"     , "Erfolgreich erworbene Artikel");
+ZO_CreateStringId("SI_NAH_STRING_FAILED_PAID"     , "Fehler beim Registrieren erworbener Artikel");
 
 
 
@@ -64,8 +67,8 @@ ZO_CreateStringId("SI_NAH_SERVERLINKNOTFOUND"   , "Serverlink nicht gefunden");
 ZO_CreateStringId("SI_NAH_SERVERLINKLOC"   , "(Starte Dokumente\Elder Scrolls Online\live\AddOns\NirnAuctionHouse\NirnAuctionHouse.exe)");
 ZO_CreateStringId("SI_NAH_RECHECKSERVERLINK"   , "Serverlink prüfen");
 
-ZO_CreateStringId("SI_NAH_SERVERLINKUPDATE"   , "Server Link Versionskonflikt");--new
-ZO_CreateStringId("SI_NAH_SERVERLINKUPDATE_DIRECTIONS"   , "(Schließen Sie den Server Link NirnAuctionHouse.exe und installieren Sie Addon erneut oder aktualisieren Sie Server Link)");--new
+ZO_CreateStringId("SI_NAH_SERVERLINKUPDATE"   , "Serverlink Versionskonflikt");
+ZO_CreateStringId("SI_NAH_SERVERLINKUPDATE_DIRECTIONS"   , "(Schließen Sie den NirnAuctionHouse.exe und installieren Sie das AddOn erneut.)");
 
 
 
