@@ -1,4 +1,4 @@
-# --BETA VERSION-- Current Version:0.0.16 (See the full patch note list here: https://nirnah.com/Changelog)
+# --BETA VERSION-- Current Version:0.0.17 (See the full patch note list here: https://nirnah.com/Changelog)
 *PC Only for now
 
 
@@ -10,7 +10,7 @@ https://nirnah.com/NirnAuctionHouse(beta).zip
 
 ### Upcoming Changes/Features 
 -- MAC version
--- global auction price history
+-- More price tracking details and history
 -- more seller security, buyer history, troll protection
 
 ### FEATURES 
@@ -25,6 +25,7 @@ NAH is a global auction system, unlike the guild store you will be able to list,
 - Ability to post an auction with only starting bid, no buyout price. (Auction Length: 24 hours)
 - Ability to post an auction with starting bid and buyout price. (Auction Length: 7 days)
 - Ability to post auction with only a buyout price. (Auction Length: 7 days)
+- Price history using verified sale prices
 - Can't auction bound or stolen items!
 
 
@@ -68,7 +69,7 @@ NAH is a global auction system, unlike the guild store you will be able to list,
 
 ### Integrations 
 
-- Integration to Master Merchant - tooltips show Master Merchant price tracking data in auction house including the Sales History Scatter Chart.
+- Integration to Master Merchant - tooltips show Master Merchant price tracking data in auction house including the Sales History Scatter Chart.- *optional in settings
 - Integration to Master Merchant - Track auctions and store the price data in master merchant - *optional in settings
 
 
@@ -78,6 +79,7 @@ NAH is a global auction system, unlike the guild store you will be able to list,
 - Listings with no buyout price will last 24 hours
 - Listing limit 80 - you can only have 80 auctions at a time
 - Setting to Only show active trades (Hide trades where the seller does not have Server Link active)
+- Price checks to chat (right click menu)
 - Translated for all languages (need feedback)
 - Server link required to communicate with server (NirnAuctionHouse.exe) *PC Only for now
 

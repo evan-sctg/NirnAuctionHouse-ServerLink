@@ -30,20 +30,12 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 		name = "Nirn Auction House",
 		displayName = NirnAuctionHouse.colors.title .. "Nirn Auction House|r",
 		author = "Elo",
-		version = "0.0.16",
+		version = "0.0.17",
 		slashCommand = "/ahsetup",
 		registerForRefresh = true
 	}
 
 	local optionsData = {
-		{
-			type = "dropdown",
-			name = "Add Listings To Master Merchant",
-			choices = self.EnabledTable,
-			getFunc = function() if NAH.settings.AddListingsToMasterMerchant ==true then return "Enabled" else return "Disabled" end end,
-			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.AddListingsToMasterMerchant = true else NAH.settings.AddListingsToMasterMerchant = false end  end,
-			default = self.EnabledTable[2]
-		},
 		{
 			type = "checkbox",
 			name = "Only show listings from active sellers",
@@ -83,7 +75,24 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 			getFunc = function() return NAH.settings.PlaySounds_success_cancel end,
 			setFunc = function(DoPlaySounds) NAH.settings.PlaySounds_success_cancel = DoPlaySounds end,
 			default = false
+		},
+		{
+			type = "dropdown",
+			name = "Show Master Merchant price In auction window",
+			choices = self.EnabledTable,
+			getFunc = function() if NAH.settings.ShowMasterMerchantPrice ==true then return "Enabled" else return "Disabled" end end,
+			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.ShowMasterMerchantPrice = true else NAH.settings.ShowMasterMerchantPrice = false end  end,
+			default = self.EnabledTable[2]
+		},
+		{
+			type = "dropdown",
+			name = "Add Listings To Master Merchant",
+			choices = self.EnabledTable,
+			getFunc = function() if NAH.settings.AddListingsToMasterMerchant ==true then return "Enabled" else return "Disabled" end end,
+			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.AddListingsToMasterMerchant = true else NAH.settings.AddListingsToMasterMerchant = false end  end,
+			default = self.EnabledTable[2]
 		}
+		
 	}
 
 	local LAM2 = LibStub:GetLibrary("LibAddonMenu-2.0")

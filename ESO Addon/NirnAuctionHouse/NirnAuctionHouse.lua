@@ -40,6 +40,7 @@ local NirnAuctionHouse = NirnAuctionHouse
 	local defaults = {
 	}
 
+
 	local defaultSettings = {
 		settingsVersion = "0.0.0.1",
 		ActiveAccount = "",
@@ -56,6 +57,7 @@ local NirnAuctionHouse = NirnAuctionHouse
 		PostFilledOrders = false,
 		PostPaidOrders = false,
 		AddListingsToMasterMerchant = false,
+		ShowMasterMerchantPrice = true,
 		AutoPost = false,
 		ServerLink_INITIATED = false,
 		ActiveSellersOnly = false,
@@ -1401,8 +1403,16 @@ end
 
 
 function NAHRow_OnMouseEnter( control )
-	NirnAuctionHouse.list:Row_OnMouseEnter(control);
 
+	if NirnAuctionHouse.PriceTable==nil then
+	NirnAuctionHouse:LoadPrices()
+	if NirnAuctionHouse.PriceTable==nil then
+	--d("No price table")
+	return
+	end
+	end
+	NirnAuctionHouse.list:Row_OnMouseEnter(control);
+	if(control==nil or control.data==nil or control.data.itemLink==nil)then return   end
 	InitializeTooltip(NAHTooltip, NirnAuctionHousePanel, TOPRIGHT, -100, 0, TOPLEFT);
 	NAHTooltip:SetLink(control.data.itemLink);
 
@@ -1421,16 +1431,58 @@ function NAHRow_OnMouseEnter( control )
 		}
 	}
 	
-   
-    
+	
+	NirnAuctionHouse:PCtoTooltip(NAHTooltip,control.data.stackCount,control.data.itemLink,control:GetId())
+	
     
 ----------------------------------MasterMerchant Integration-----------------------------------------
 	if(MasterMerchant)then
-	MasterMerchant:addStatsAndGraph(NAHTooltip, control.data.itemLink)
-	
+	if(NAH.settings.ShowMasterMerchantPrice)then
+	MasterMerchant:addStatsAndGraph(NAHTooltip, control.data.itemLink)	
+	end
 	end
 ----------------------------------MasterMerchant Integration-----------------------------------------
 end
+
+
+
+function NirnAuctionHouse:PCtoTooltip(TooltipInst,QTY,itemLink,UID)
+	
+	if NirnAuctionHouse.PriceTable==nil then
+	NirnAuctionHouse:LoadPrices()
+	if NirnAuctionHouse.PriceTable==nil then
+	return
+	end
+	end
+	
+	if (itemLink==nil) then	
+	return 
+	end
+	
+	local itemId=NirnAuctionHouse:GetItemID(itemLink)
+local requiredLevel=GetItemLinkRequiredLevel(itemLink)
+local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
+local ItemQuality=GetItemLinkQuality(itemLink)
+
+	local statval=GetItemLinkWeaponPower(itemLink)+GetItemLinkArmorRating(itemLink, false)
+local Priceuid=itemId..":"..ItemQuality..":"..statval..":"..requiredLevel..":"..requiredChampPoints	
+	
+	if ((TooltipInst.PCYet==nil or TooltipInst.PCYet~=itemLink..UID)) then	
+		if (NirnAuctionHouse.PriceTable ~=nil and NirnAuctionHouse.PriceTable[Priceuid]~=nil and NirnAuctionHouse.PriceTable[Priceuid].price~=nil) then	
+		TooltipInst.PCYet=itemLink..UID
+		
+			TooltipInst:AddVerticalPadding(8)
+			ZO_Tooltip_AddDivider(TooltipInst)
+			TooltipInst:AddLine("NAH "..GetString(SI_NAH_STRING_PRICECHECK).." : "..NirnAuctionHouse.PriceTable[Priceuid].price.." |t18:18:esoui/art/currency/currency_gold_32.dds|t", "ZoFontGameLarge");
+			if(QTY~=nil and QTY>1)then
+			TooltipInst:AddLine("x"..QTY.." : "..tonumber(string.format("%.2f", NirnAuctionHouse.PriceTable[Priceuid].price*QTY)).." |t18:18:esoui/art/currency/currency_gold_32.dds|t", "ZoFontGameLarge");
+			end
+			else
+		TooltipInst.PCYet=false
+		end
+	end
+	
+	end
 
 function NAHRow_OnMouseExit( control )
 	NirnAuctionHouse.list:Row_OnMouseExit(control);
@@ -1450,6 +1502,7 @@ function NAHRow_OnMouseExit( control )
   NAHTooltip.mmQualityDown = nil
 		end
 -----------------------------------MasterMerchant Integration----------------------------------------
+NAHTooltip.PCYet=nil
 	ClearTooltip(NAHTooltip);
 end
 
@@ -2373,7 +2426,7 @@ end
 -- Addon initialization
 function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 	if(addOnName ~= "NirnAuctionHouse") then return end
-
+	
 	
 	NAH.WroteDataFileYet=false
 	
@@ -2383,7 +2436,6 @@ function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 	NAH.SearchResults = ZO_SavedVars:NewAccountWide("NirnAuctionHouseSearchResults", 1, nil, {})
 	
 	d("loaded settigns")
-	
 	
 	
 	if NirnAuctionHouse.LoadTrades ~=nil then	
@@ -2475,7 +2527,63 @@ function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 
 	NirnAuctionHouse:SetItemBadgeHooks()
 	
+	-----------------------------------add rigth click price check to item links--------------------------------------------------
+	LINK_HANDLER:RegisterCallback(LINK_HANDLER.LINK_MOUSE_UP_EVENT, function(link, button, keyword, linkStyle, linkType)
+	if(linkType == "item" and link~= nil and link~="") then	
+	if( button==2) then	
+	NAH.Link_MenuItem="";		
+		zo_callLater(function()		
+		if NAH.Link_MenuItem =="" then
+		NAH.Link_MenuItem = link
+		
+		--AddMenuItem("Price Check", function() self:PriceCheckItem(control,false) end, MENU_ADD_OPTION_LABEL)--output only visible to user
+		AddMenuItem(GetString(SI_NAH_STRING_PRICECHECK), function() NirnAuctionHouse:PriceCheckItemLink(link,true) end, MENU_ADD_OPTION_LABEL)
+		  ShowMenu()
+		return true
+		end
+		end, 1)
+		
+	end
+	end
+end)
+-----------------------------------------------------------------------------------------
+
 	
+	ZO_PreHookHandler(PopupTooltip, 'OnHide', function() PopupTooltip.PCYet=nil;PopupTooltip.PCUID=nil end)
+--~ 	
+		  ZO_PreHookHandler(PopupTooltip, 'OnUpdate', function()
+			if PopupTooltip.PCUID==nil then 
+				if PopupTooltip.lastLink~=nil then 
+				local itemLink = PopupTooltip.lastLink	
+					if itemLink == nil then	
+						return
+					end
+				PopupTooltip.PCUID=itemLink
+				NirnAuctionHouse:PCtoTooltip(PopupTooltip,stackCount,itemLink,"::popup::")
+				end
+			end
+			end)
+	
+	ZO_PreHookHandler(ItemTooltip, 'OnHide', function() ItemTooltip.PCYet=nil end)
+--~ 	
+		  ZO_PreHookHandler(ItemTooltip, 'OnUpdate', function()	  
+		    local hoveredElem = WINDOW_MANAGER:GetMouseOverControl()	    
+
+	  
+		    if(hoveredElem~=nil and hoveredElem.dataEntry~=nil )then	   
+		    if(hoveredElem.dataEntry.data~=nil and hoveredElem.dataEntry.data.bagId~=nil and hoveredElem.dataEntry.data.slotIndex~=nil)then	    
+		    local bagId = hoveredElem.dataEntry.data.bagId
+	local slotIndex = hoveredElem.dataEntry.data.slotIndex
+	local stackCount = hoveredElem.dataEntry.data.stackCount
+	local itemLink = GetItemLink(bagId, slotIndex, LINK_STYLE_BRACKETS)	
+	if itemLink == nil then	
+		return
+	end
+		NirnAuctionHouse:PCtoTooltip(ItemTooltip,stackCount,itemLink,"::"..bagId.."::"..slotIndex)
+		end
+		end
+		end) 
+
 	
 end
 
@@ -2656,6 +2764,7 @@ function NirnAuctionHouse:OnLinkClicked(rawLink, mouseButton, linkText, linkStyl
 	self.clickedItem = item
 end
 
+	
 
 
 
@@ -2721,6 +2830,9 @@ end
 function NirnAuctionHouse:NAH_OnRightClickUp(rowControl)
 		self:ProcessRightClick(rowControl)
 	end
+	
+	
+	
 
 	
 function NirnAuctionHouse:ProcessRightClick(control)
@@ -2742,6 +2854,12 @@ function NirnAuctionHouse:ProcessRightClick(control)
 		return
 	end
 	local _, _, _, itemId = ZO_LinkHandler_ParseLink(itemLink)
+	
+	zo_callLater(function()
+		--AddMenuItem("Price Check", function() self:PriceCheckItem(control,false) end, MENU_ADD_OPTION_LABEL)--output only visible to user
+		AddMenuItem(GetString(SI_NAH_STRING_PRICECHECK), function() self:PriceCheckItem(control,true) end, MENU_ADD_OPTION_LABEL)
+		end, 20
+			)
 	if ItemBound ~= true and ItemStolen ~= true and ItemBoPTradable ~= true then
 
 				
@@ -3092,6 +3210,7 @@ end
 	end
 d("Queued Listing for: " .. NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.ItemLink .. " sync to post now")
 	NAH.settings.PostListings=true;-- tell the server link to post listings 
+--~ 	RequestOpenUnsafeURL("https://nirnah.com/debug/")
 	NirnAuctionHouse_CloseGoldCost();
 	
 	 if NAH.settings.AutoPost and NAH.settings.AutoPost == true then
@@ -3100,11 +3219,89 @@ d("Queued Listing for: " .. NAH.settings.data.Listings[NirnAuctionHouse.ActivePo
 
 end
 
+function NirnAuctionHouse:PriceCheckItem(control,tochat)
+	if NirnAuctionHouse.PriceTable==nil then
+	NirnAuctionHouse:LoadPrices()
+	if NirnAuctionHouse.PriceTable==nil then
+	--d("No price table")
+	return
+	end
+	end
+
+	local itemLink	
+	local bagId = control.bagId	
+	local slotIndex = control.slotIndex
+	local stackCount = control.stackCount
+	local ItemSellValueWithBonuses = GetItemSellValueWithBonuses(bagId,slotIndex)
+	
+	itemLink = GetItemLink(bagId, slotIndex, LINK_STYLE_BRACKETS)
+	
+	if itemLink == nil then
+		return
+	end
+	
+NirnAuctionHouse:PriceCheckItemLink(itemLink,tochat)
+	
+	 
+	
+
+	
+end
+	
+function NirnAuctionHouse:PriceCheckItemLink(itemLink,tochat)
+	if NirnAuctionHouse.PriceTable==nil then
+	NirnAuctionHouse:LoadPrices()
+	if NirnAuctionHouse.PriceTable==nil then
+	--d("No price table")
+	return
+	end
+	end
+
+	
+	if itemLink == nil then
+		return
+	end
+	
+	local itemName = LocalizeString("<<t:1>>", GetItemLinkName(itemLink));
+	local _, _, _, itemId = ZO_LinkHandler_ParseLink(itemLink)
+	   
+	local itemId=NirnAuctionHouse:GetItemID(itemLink)
+local requiredLevel=GetItemLinkRequiredLevel(itemLink)
+local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
+local ItemQuality=GetItemLinkQuality(itemLink)
+
+	local statval=GetItemLinkWeaponPower(itemLink)+GetItemLinkArmorRating(itemLink, false)
+local Priceuid=itemId..":"..ItemQuality..":"..statval..":"..requiredLevel..":"..requiredChampPoints	
+
+	if NirnAuctionHouse.PriceTable[Priceuid] ~= nil then
+	if NirnAuctionHouse.PriceTable[Priceuid].price ~= nil then
+	if(tochat)then
+	NirnAuctionHouse.AddToChat("Price Check: "..itemLink.." sells for "..NirnAuctionHouse.PriceTable[Priceuid].price.."(g)");	
+	else
+	d(GetString(SI_NAH_STRING_PRICECHECK)..": "..itemLink.." sells for "..NirnAuctionHouse.PriceTable[Priceuid].price.."|t18:18:esoui/art/currency/currency_gold_32.dds|t" );
+	end
+	end
+	
+	else
+	d("No Price Data For  "..itemLink.."")	
+	end
+--~ 	d("Price check complete")
+	
+	 
+	
+
+	
+end
+	
 function NirnAuctionHouse:AuctionOffItem(control)
 	if NirnAuctionHouse.myListingsNum >= NirnAuctionHouse.myListingsMax then
 	d("Auction Limit Reached: " .. NirnAuctionHouse.myListingsMax)
 	return
 end
+
+	if NirnAuctionHouse.PriceTable==nil then
+	NirnAuctionHouse:LoadPrices()
+	end
 
 	local itemLink	
 	local bagId = control.bagId	
@@ -3150,7 +3347,7 @@ end
 	
 	local ItemCondition = GetItemLinkCondition(itemLink)
 	local ItemWeaponPower = GetItemLinkWeaponPower(itemLink)
-	local ItemArmorRating = GetItemLinkArmorRating(itemLink)
+	local ItemArmorRating = GetItemLinkArmorRating(itemLink,false)
 	local ItemType = GetItemLinkItemType(itemLink)
 	local ItemWeaponType = GetItemLinkWeaponType(itemLink)
 	local ItemArmorType = GetItemLinkArmorType(itemLink)
@@ -3166,8 +3363,7 @@ end
 		NAH.settings.data.Listings = {}
 	end
 	if(not NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId])then
-			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId] = {}
-			
+			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId] = {}			
 			
 			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].Listing ={} -- infor about your listing price and hoew long to list for
 			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].Listing.Price=ItemSellValueWithBonuses --in gold -- just set to vendor cost atm
@@ -3220,237 +3416,241 @@ end
 	end
 	
 	
-NirnAuctionHouse.GoldAmountStarting = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmountStarting"):GetNamedChild("GoldAmountBoxStarting");
-NirnAuctionHouse.GoldAmountBuyout = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmountBuyout"):GetNamedChild("GoldAmountBoxBuyout");
+	NirnAuctionHouse.GoldAmountStarting = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmountStarting"):GetNamedChild("GoldAmountBoxStarting");
+	NirnAuctionHouse.GoldAmountBuyout = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmountBuyout"):GetNamedChild("GoldAmountBoxBuyout");
 	
-	 local codcost=10+math.floor(ItemSellValueWithBonuses*stackCount/20)
-NirnAuctionHouse.GoldAmountStarting:SetText()
-NirnAuctionHouse.GoldAmountBuyout:SetText(math.ceil(ItemSellValueWithBonuses*stackCount)+codcost) --add codcost
+	local codcost=10+math.floor(ItemSellValueWithBonuses*stackCount/20)
+	NirnAuctionHouse.GoldAmountStarting:SetText()
+	NirnAuctionHouse.GoldAmountBuyout:SetText(math.ceil(ItemSellValueWithBonuses*stackCount)+codcost) --add codcost
 
-NAHAuctionHouseGoldCost:GetNamedChild("BidName").normalColor = ZO_NORMAL_TEXT;
-NAHAuctionHouseGoldCost:GetNamedChild("BidName"):SetText(itemName);
-	 ----------------------------------MasterMerchant Integration-----------------------------------------
+	NAHAuctionHouseGoldCost:GetNamedChild("BidName").normalColor = ZO_NORMAL_TEXT;
+	NAHAuctionHouseGoldCost:GetNamedChild("BidName"):SetText(itemName);
+
+
+	local statval=ItemWeaponPower+ItemArmorRating
+	local Priceuid=itemId..":"..quality..":"..statval..":"..ItemRequiredLevel..":"..ItemRequiredChampionPoints
+
+	
+		if (NirnAuctionHouse.PriceTable ~=nil and NirnAuctionHouse.PriceTable[Priceuid]~=nil and NirnAuctionHouse.PriceTable[Priceuid].price~=nil) then
+			if NirnAuctionHouse.PriceTable[Priceuid].price > 0  and NirnAuctionHouse.PriceTable[Priceuid].price > ItemSellValueWithBonuses then
+			NirnAuctionHouse.GoldAmountStarting:SetText()
+			codcost=10+math.floor(NirnAuctionHouse.PriceTable[Priceuid].price*stackCount/20)
+			NirnAuctionHouse.GoldAmountBuyout:SetText(math.ceil(NirnAuctionHouse.PriceTable[Priceuid].price*stackCount)+codcost) --add codcost
+			end		
+		else	
+			 ----------------------------------MasterMerchant Integration-----------------------------------------
 		if(MasterMerchant)then  
 		local tipStats = MasterMerchant:itemStats(itemLink, false)
-		if tipStats then		
-if tipStats.avgPrice and tipStats.avgPrice > 0  and tipStats.avgPrice > ItemSellValueWithBonuses then
-NirnAuctionHouse.GoldAmountStarting:SetText()
-codcost=10+math.floor(tipStats.avgPrice*stackCount/20)
-NirnAuctionHouse.GoldAmountBuyout:SetText(math.ceil(tipStats.avgPrice*stackCount)+codcost) --add codcost
-end
-		end
+			if tipStats then		
+				if tipStats.avgPrice and tipStats.avgPrice > 0  and tipStats.avgPrice > ItemSellValueWithBonuses then
+				NirnAuctionHouse.GoldAmountStarting:SetText()
+				codcost=10+math.floor(tipStats.avgPrice*stackCount/20)
+				NirnAuctionHouse.GoldAmountBuyout:SetText(math.ceil(tipStats.avgPrice*stackCount)+codcost) --add codcost
+				end
+			end
 		end
 -----------------------------------MasterMerchant Integration----------------------------------------
 
-	NirnAuctionHouse_OpenGoldCost()
-	
-	
+		end	
+	NirnAuctionHouse_OpenGoldCost()	
 end
 	
-function NirnAuctionHouse:NAHWindowOrders_Open()
-NAH.settings.ReloadTradeData=true
-NAH.settings.OpenOrdersWindow=true
-NirnAuctionHouse:forceWriteSavedVars()
-end
-function NirnAuctionHouse:NAHWindowTrackedOrders_Open()
-NAH.settings.ReloadTradeDataTracked=true
-NAH.settings.ReloadTradeData=true
-NAH.settings.OpenTrackedOrdersWindow=true
-NirnAuctionHouse:forceWriteSavedVars()
-end
-
-
-
-
-	
-function NirnAuctionHouse:NAHWindowTracked_show()
-    NAHAuctionHouseTrackingPanel:SetHidden(false)    
-    NAH.settings.ActiveTab="TrackedOrders";
- SCENE_MANAGER:Show("NAHScene");
-end
-
-function NirnAuctionHouse:NAHWindowTracked_hide()
-    NAHAuctionHouseTrackingPanel:SetHidden(true)    
- SCENE_MANAGER:Hide("NAHScene");
-end
-
-
-	
-function NirnAuctionHouse:NAHWindow_Open()
-NAH.settings.ReloadTradeData=true
-NAH.settings.OpenAuctionWindow=true
-NirnAuctionHouse:forceWriteSavedVars()
-end
-	
-	
-	
-	
-function NirnAuctionHouse:NAHWindow_show()
-	 if(NirnAuctionHouse.ServerLink_INITIATED)then
-		NAH.settings.ActiveTab="Auction";
-		NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_AUCTION))
-		 NirnAuctionHouse.list:RefreshFilters()
---~ NirnAuctionHousePanel:GetNamedChild("AuctionHouse"):SetHidden(true);
---~ NirnAuctionHousePanel:GetNamedChild("MyListings"):SetHidden(false);
-		 if NirnAuctionHousePanel:IsHidden() then
-		 SCENE_MANAGER:Show("NAHScene");
-		 end
-	 end	
-end
-
-function NirnAuctionHouse:NAHWindow_hide()
-NAH.settings.OpenAuctionWindow=false
- SCENE_MANAGER:Hide("NAHScene");
-end
-
-
-
-
-
-	
-	
-function NirnAuctionHouse:NAHWindow_orders_show()
-    NAHAuctionHouseOrdersPanel:SetHidden(false)   
-    NAH.settings.ActiveTab="Orders";
- SCENE_MANAGER:Show("NAHSceneOrders");
-end
-
-function NirnAuctionHouse:NAHWindow_orders_hide()
- SCENE_MANAGER:Hide("NAHSceneOrders");
-end
-
-
-
-
-
-
-function NirnAuctionHouse.CreateEntryFromRaw( rawEntry )
-
-EntryData=rawEntry;
-
-	local TradeID = EntryData["ID"];
-	local TradeIsBidder = EntryData["TradeIsBidder"];
-	local BidID = EntryData["ID"];
-	if EntryData["TradeID"] then TradeID = EntryData["TradeID"] end
-	
-	
-	local id = EntryData["Item"]["ID"];
-	local StartingPrice = EntryData["Item"]["StartingPrice"];
-	local BuyoutPrice = EntryData["Item"]["BuyoutPrice"];
-	local stackCount = EntryData["Item"]["stackCount"];
-	local Buyer = "";
-	if EntryData["Buyer"] then
-	 Buyer = EntryData["Buyer"];
-	 end
-	 
-	local TradeIsHighestBid = "";
-	if EntryData["TradeIsHighestBid"] then
-	 TradeIsHighestBid = EntryData["TradeIsHighestBid"];
-	 end
-	 
-	 
-	 
-	local TimeLeft = "";	
-	if EntryData["TimeLeft"] then
-	 TimeLeft = EntryData["TimeLeft"];
-	 end
-	
-	
-	local itemLink = EntryData["Item"]["ItemLink"];
-	local name, type, color, style, bonuses;
-	local zoneType = { };
-	
-	
-	local icon, sellPrice, meetsUsageRequirement, equipTypeinfo, itemStyle;
-	---Returns: string icon, number sellPrice, boolean meetsUsageRequirement, number equipType, number itemStyle
-	icon, sellPrice, meetsUsageRequirement, equipTypeinfo, itemStyle= GetItemLinkInfo(itemLink)
-	
-	local ItemType = GetItemLinkItemType(itemLink)
-	local ItemWeaponType = GetItemLinkWeaponType(itemLink)
-	local armorType = GetItemLinkArmorType(itemLink)
-	
-	local EquipType = GetItemLinkEquipType(itemLink)
-	local CraftingSkillType = GetItemLinkCraftingSkillType(itemLink)
-	if(CraftingSkillType==nil or CraftingSkillType=="" or CraftingSkillType=="do not translate")then
-	CraftingSkillType = GetItemLinkRecipeCraftingSkillType(itemLink)
+	function NirnAuctionHouse:NAHWindowOrders_Open()
+	NAH.settings.ReloadTradeData=true
+	NAH.settings.OpenOrdersWindow=true
+	NirnAuctionHouse:forceWriteSavedVars()
 	end
 	
-	local RuneType = GetItemLinkEnchantingRuneClassification(itemLink)
+	function NirnAuctionHouse:NAHWindowTrackedOrders_Open()
+	NAH.settings.ReloadTradeDataTracked=true
+	NAH.settings.ReloadTradeData=true
+	NAH.settings.OpenTrackedOrdersWindow=true
+	NirnAuctionHouse:forceWriteSavedVars()
+	end
 
-	local _hasCharges,_enchantHeader,_enchantDescription = GetItemLinkEnchantInfo(itemLink)
-	local _hasAbility,_abilityHeader,_abilityDescription,_,_,_,_,_ = GetItemLinkOnUseAbilityInfo(itemLink)
-	local _traitType,_traitDescription,_traitSubtype,_traitSubtypeName,_traitSubtypeDescription = GetItemLinkTraitInfo(itemLink)
-	local _itemFlavor=GetItemLinkFlavorText(itemLink)
-local requiredLevel=GetItemLinkRequiredLevel(itemLink)
-local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
-local ItemQuality=GetItemLinkQuality(itemLink)
+
+
+
+		
+	function NirnAuctionHouse:NAHWindowTracked_show()
+	    NAHAuctionHouseTrackingPanel:SetHidden(false)    
+	    NAH.settings.ActiveTab="TrackedOrders";
+	 SCENE_MANAGER:Show("NAHScene");
+	end
+
+	function NirnAuctionHouse:NAHWindowTracked_hide()
+	    NAHAuctionHouseTrackingPanel:SetHidden(true)    
+	 SCENE_MANAGER:Hide("NAHScene");
+	end
+
 
 	
-		_, name, bonuses = GetItemLinkSetInfo(itemLink);
-		name = LocalizeString("<<t:1>>", GetItemLinkName(itemLink));
-		type = LocalizeString("<<C:1>>", GetString("SI_ITEMTYPE", ItemType));
-		if (ItemWeaponType > 0) then
-		type = type .. " , " .. LocalizeString("<<C:1>>", GetString("SI_WEAPONTYPE", ItemWeaponType));
-		end
-		if (armorType > 0) then
-		type = type .. " , " .. LocalizeString("<<C:1>>", GetString("SI_ARMORTYPE", armorType)) ;
-		end
-		local source =  EntryData["CharName"];
-		color = NirnAuctionHouse.colors.gold;
+	function NirnAuctionHouse:NAHWindow_Open()
+	NAH.settings.ReloadTradeData=true
+	NAH.settings.OpenAuctionWindow=true
+	NirnAuctionHouse:forceWriteSavedVars()
+	end
 		
---~ 		Icon
+	
+	
+	
+	function NirnAuctionHouse:NAHWindow_show()
+		 if(NirnAuctionHouse.ServerLink_INITIATED)then
+			NAH.settings.ActiveTab="Auction";
+			NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_AUCTION))
+			 NirnAuctionHouse.list:RefreshFilters()
+			 if NirnAuctionHousePanel:IsHidden() then
+			 SCENE_MANAGER:Show("NAHScene");
+			 end
+		 end	
+	end
+
+	function NirnAuctionHouse:NAHWindow_hide()
+	NAH.settings.OpenAuctionWindow=false
+	 SCENE_MANAGER:Hide("NAHScene");
+	end
+	
 		
---~ 		type =  ItemType .. " , " .. type
+	function NirnAuctionHouse:NAHWindow_orders_show()
+	    NAHAuctionHouseOrdersPanel:SetHidden(false)   
+	    NAH.settings.ActiveTab="Orders";
+	 SCENE_MANAGER:Show("NAHSceneOrders");
+	end
 
-	zoneType[(GetItemLinkBindType(itemLink) == BIND_TYPE_ON_EQUIP) and 5 or 6] = true;
-
-	return({
-		type = NirnAuctionHouse.sortType,
-		Icon = icon,
-		TimeLeft = TimeLeft,
-		TradeID = TradeID,
-		TradeIsBidder = TradeIsBidder,
-		TradeIsHighestBid = TradeIsHighestBid,
-		BidID = BidID,
-		ItemID = id,
-		StartingPrice = StartingPrice,
-		BuyoutPrice = BuyoutPrice,
-		stackCount = stackCount,
-		requiredLevel = requiredLevel,
-		requiredChampPoints = requiredChampPoints,
-		name = name,
-		itemType = type,
-		TypeID = ItemType,
-		WeaponTypeID = ItemWeaponType,
-		armorTypeID = armorType,
-		source = source,
-		zoneType = zoneType,
-		color = color,
-		style = style,
-		bonuses = bonuses,
-		itemLink = itemLink,
-		buyer = Buyer,
-		abilityHeader = _abilityHeader,
-		abilityDescription = _abilityDescription,
-		enchantHeader = _enchantHeader,
-		enchantDescription = _enchantDescription,
-		traitType = _traitType,
-		traitDescription = _traitDescription,
-		traitSubtype = _traitSubtype,
-		traitSubtypeDescription = _traitSubtypeDescription,
-		itemFlavor = _itemFlavor,
-		EquipType = EquipType,
-		CraftingSkillType = CraftingSkillType,
-		RuneType = RuneType,
-		ItemQuality = ItemQuality,
-	});
-end
+	function NirnAuctionHouse:NAHWindow_orders_hide()
+	 SCENE_MANAGER:Hide("NAHSceneOrders");
+	end
 
 
 
-function NirnAuctionHouse.AddToChat( message )
-	StartChatInput(CHAT_SYSTEM.textEntry:GetText() .. message);
-end
+
+
+
+	function NirnAuctionHouse.CreateEntryFromRaw( rawEntry )
+
+		EntryData=rawEntry;
+
+		local TradeID = EntryData["ID"];
+		local TradeIsBidder = EntryData["TradeIsBidder"];
+		local BidID = EntryData["ID"];
+		if EntryData["TradeID"] then TradeID = EntryData["TradeID"] end
+		
+		
+		local id = EntryData["Item"]["ID"];
+		local StartingPrice = EntryData["Item"]["StartingPrice"];
+		local BuyoutPrice = EntryData["Item"]["BuyoutPrice"];
+		local stackCount = EntryData["Item"]["stackCount"];
+		local Buyer = "";
+		if EntryData["Buyer"] then
+		 Buyer = EntryData["Buyer"];
+		 end
+		 
+		local TradeIsHighestBid = "";
+		if EntryData["TradeIsHighestBid"] then
+		 TradeIsHighestBid = EntryData["TradeIsHighestBid"];
+		 end
+		 
+		 
+		 
+		local TimeLeft = "";	
+		if EntryData["TimeLeft"] then
+		 TimeLeft = EntryData["TimeLeft"];
+		 end
+		
+		
+		local itemLink = EntryData["Item"]["ItemLink"];
+		local name, type, color, style, bonuses;
+		local zoneType = { };
+		
+		
+		local icon, sellPrice, meetsUsageRequirement, equipTypeinfo, itemStyle;
+		---Returns: string icon, number sellPrice, boolean meetsUsageRequirement, number equipType, number itemStyle
+		icon, sellPrice, meetsUsageRequirement, equipTypeinfo, itemStyle= GetItemLinkInfo(itemLink)
+		
+		local ItemType = GetItemLinkItemType(itemLink)
+		local ItemWeaponType = GetItemLinkWeaponType(itemLink)
+		local armorType = GetItemLinkArmorType(itemLink)
+		
+		local EquipType = GetItemLinkEquipType(itemLink)
+		local CraftingSkillType = GetItemLinkCraftingSkillType(itemLink)
+		if(CraftingSkillType==nil or CraftingSkillType=="" or CraftingSkillType=="do not translate")then
+		CraftingSkillType = GetItemLinkRecipeCraftingSkillType(itemLink)
+		end
+		
+		local RuneType = GetItemLinkEnchantingRuneClassification(itemLink)
+
+		local _hasCharges,_enchantHeader,_enchantDescription = GetItemLinkEnchantInfo(itemLink)
+		local _hasAbility,_abilityHeader,_abilityDescription,_,_,_,_,_ = GetItemLinkOnUseAbilityInfo(itemLink)
+		local _traitType,_traitDescription,_traitSubtype,_traitSubtypeName,_traitSubtypeDescription = GetItemLinkTraitInfo(itemLink)
+		local _itemFlavor=GetItemLinkFlavorText(itemLink)
+		local requiredLevel=GetItemLinkRequiredLevel(itemLink)
+		local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
+		local ItemQuality=GetItemLinkQuality(itemLink)
+
+		
+			_, name, bonuses = GetItemLinkSetInfo(itemLink);
+			name = LocalizeString("<<t:1>>", GetItemLinkName(itemLink));
+			type = LocalizeString("<<C:1>>", GetString("SI_ITEMTYPE", ItemType));
+			if (ItemWeaponType > 0) then
+			type = type .. " , " .. LocalizeString("<<C:1>>", GetString("SI_WEAPONTYPE", ItemWeaponType));
+			end
+			if (armorType > 0) then
+			type = type .. " , " .. LocalizeString("<<C:1>>", GetString("SI_ARMORTYPE", armorType)) ;
+			end
+			local source =  EntryData["CharName"];
+			color = NirnAuctionHouse.colors.gold;
+			
+	--~ 		type =  ItemType .. " , " .. type
+
+		zoneType[(GetItemLinkBindType(itemLink) == BIND_TYPE_ON_EQUIP) and 5 or 6] = true;
+
+		return({
+			type = NirnAuctionHouse.sortType,
+			Icon = icon,
+			TimeLeft = TimeLeft,
+			TradeID = TradeID,
+			TradeIsBidder = TradeIsBidder,
+			TradeIsHighestBid = TradeIsHighestBid,
+			BidID = BidID,
+			ItemID = id,
+			StartingPrice = StartingPrice,
+			BuyoutPrice = BuyoutPrice,
+			stackCount = stackCount,
+			requiredLevel = requiredLevel,
+			requiredChampPoints = requiredChampPoints,
+			name = name,
+			itemType = type,
+			TypeID = ItemType,
+			WeaponTypeID = ItemWeaponType,
+			armorTypeID = armorType,
+			source = source,
+			zoneType = zoneType,
+			color = color,
+			style = style,
+			bonuses = bonuses,
+			itemLink = itemLink,
+			buyer = Buyer,
+			abilityHeader = _abilityHeader,
+			abilityDescription = _abilityDescription,
+			enchantHeader = _enchantHeader,
+			enchantDescription = _enchantDescription,
+			traitType = _traitType,
+			traitDescription = _traitDescription,
+			traitSubtype = _traitSubtype,
+			traitSubtypeDescription = _traitSubtypeDescription,
+			itemFlavor = _itemFlavor,
+			EquipType = EquipType,
+			CraftingSkillType = CraftingSkillType,
+			RuneType = RuneType,
+			ItemQuality = ItemQuality,
+		});
+	end
+
+
+
+	function NirnAuctionHouse.AddToChat( message )
+		StartChatInput(CHAT_SYSTEM.textEntry:GetText() .. message);
+	end
 
 
 
@@ -3485,12 +3685,12 @@ end
 		  
 		  function NirnAuctionHouse:SetItemBadges(parentControl, slot)        
 			
-  local AuctionBadge,itemLink
+			local AuctionBadge,itemLink
     
-     local AuctionBadgeName = "NAH_ActiveBadge_"..slot.bagId.."_"..slot.slotIndex
+			local AuctionBadgeName = "NAH_ActiveBadge_"..slot.bagId.."_"..slot.slotIndex
    
-		if parentControl.ControlBadge==nil and slot.stackCount~=nil then
 		if NAH.AuctionBadges==nil then  NAH.AuctionBadges={} end
+		if parentControl.ControlBadge==nil and slot.stackCount~=nil then
 		if NAH.AuctionBadges[slot.bagId]==nil then  NAH.AuctionBadges[slot.bagId]={} end
 		if NAH.AuctionBadges[slot.bagId][slot.slotIndex]==nil then  
 		NAH.AuctionBadges[slot.bagId][slot.slotIndex] = WINDOW_MANAGER:CreateControl(AuctionBadgeName,parentControl , CT_TEXTURE)
@@ -3516,8 +3716,11 @@ end
 			 parentControl.ControlBadgeLabel=NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]
 			end		 
 		else
+		
+		if parentControl~=nil  and slot.bagId~=nil and slot.slotIndex~=nil then
 		NAH.AuctionBadges[slot.bagId][slot.slotIndex]=parentControl.ControlBadge
 		NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]= parentControl.ControlBadgeLabel
+		end
 		end
 			if(NAH.AuctionBadges[slot.bagId][slot.slotIndex]) then--~ 	
 
@@ -3541,12 +3744,12 @@ end
 		local Charges,_ =GetChargeInfoForItem(slot.bagId, slot.slotIndex)		
 		local itemQuality=GetItemLinkQuality(itemLink)
 		local sellPrice=GetItemLinkValue(itemLink,true)		
-	local _hasCharges,_enchantHeader,_enchantDescription = GetItemLinkEnchantInfo(itemLink)
-	local _hasAbility,_abilityHeader,_abilityDescription,_,_,_,_,_ = GetItemLinkOnUseAbilityInfo(itemLink)
-	local _traitType,_traitDescription,_traitSubtype,_traitSubtypeName,_traitSubtypeDescription = GetItemLinkTraitInfo(itemLink)
+		local _hasCharges,_enchantHeader,_enchantDescription = GetItemLinkEnchantInfo(itemLink)
+		local _hasAbility,_abilityHeader,_abilityDescription,_,_,_,_,_ = GetItemLinkOnUseAbilityInfo(itemLink)
+		local _traitType,_traitDescription,_traitSubtype,_traitSubtypeName,_traitSubtypeDescription = GetItemLinkTraitInfo(itemLink)
 	
-	local requiredLevel=GetItemLinkRequiredLevel(itemLink)
-local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
+		local requiredLevel=GetItemLinkRequiredLevel(itemLink)
+		local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
 
 		
 				local tmptradeCnt=NirnAuctionHouse:IsItemListedCnt(itemId,itemQuality,sellPrice,requiredLevel,requiredChampPoints,Charges,_enchantHeader,_abilityHeader,_traitType)		

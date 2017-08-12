@@ -2,7 +2,13 @@ Changelog
 Latest Version: https://nirnah.com/NirnAuctionHouse(beta).zip
 Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 
-
+v0.0.17 "beta" @Elo
+ - Added price history 
+ - Pricing calculated from verified sale prices
+ - Added right click to chat price checks
+ - New way of price check grouping
+ - Added option to hide master merchant pricing in auction window
+ - bugfixes for visual markers
 
 v0.0.16 "beta" @Elo
  - Added Visual Marker in inventory for items that are listed for sale (displays Quantity for sale)

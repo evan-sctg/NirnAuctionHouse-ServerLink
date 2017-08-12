@@ -9,6 +9,8 @@ ZO_CreateStringId("SI_NAH_STRING_AUCTIONITEM"     , "Artículo de subasta");--ne
 ZO_CreateStringId("SI_NAH_STRING_FULFILLORDER"     , "Cumplir con la Orden");--new
 ZO_CreateStringId("SI_NAH_STRING_CANCELAUCTION"     , "Cancelar subasta");--new
 
+ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "Comprobación de precio");--new
+
 
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_LISTING"     , "Listados con éxito Artículos para la venta: el procesamiento puede tardar hasta 60 segundos");
 ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING"     , "No se pudo registrar los artículos a la venta");

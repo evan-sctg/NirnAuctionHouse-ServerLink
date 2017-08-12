@@ -59,12 +59,13 @@ namespace GlobalAuctionHouse
         public string SavedVariableDirectory = Path.GetFullPath("../../SavedVariables");
         public const string SavedVariableFileName = "NirnAuctionHouse.lua";
         public GameServer CurGameServer;
+
+
+
+
+
         
-
-           
-
-
-
+        public string PricingPath;
         public string TradeListPath;
         public string BidListPath;
         public string TrackedBidListPath;
@@ -116,7 +117,8 @@ namespace GlobalAuctionHouse
             
              Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
 
-
+            
+            this.PricingPath = Path.Combine(this.AddonDirectory, "Pricing.lua");
             this.TradeListPath = Path.Combine(this.AddonDirectory, "Trades.lua");
             this.BidListPath = Path.Combine(this.AddonDirectory, "Bids.lua");
             this.TrackedBidListPath = Path.Combine(this.AddonDirectory, "Tracked.lua");
@@ -1038,11 +1040,53 @@ namespace GlobalAuctionHouse
         }
 
 
+        private void UpdatePricing()
+        {
+            try
+            {
+                using (WebClient client = new WebClient())
+                {
+
+                    string PricingContent;
+
+                    PricingContent = client.DownloadString(this.APIEndpoint + "/proc/pricing");
+                
+
+
+                    string Verifycontent = PricingContent.Replace("function NirnAuctionHouse:LoadPrices()", "");
+                    Verifycontent = Verifycontent.Replace("\"]={[\"price\"]=", "");
+                    Verifycontent = Verifycontent.Replace("self.PriceTable={[", "");
+                    Verifycontent = Verifycontent.Replace("self.PriceTable={}", "");
+
+                    if (!Verifycontent.Contains("function") && !Verifycontent.Contains("(") && !Verifycontent.Contains(")") && !Verifycontent.Contains("--") && !Verifycontent.Contains("="))
+                    {
+                        File.WriteAllText(this.PricingPath, PricingContent);
+                    }
+                    else
+                    {
+                        this.ToLog("Unknown content recieved for Pricing: "+ Verifycontent);
+                    }
+
+
+                }
+
+            }
+            catch (Exception exception)
+            {
+                this.ToLog(exception);
+            }
+
+        }
+
+
+
+
         private void UpdateTradeList()
         {
             try
             {
-              using (WebClient client = new WebClient()) {
+                using (WebClient client = new WebClient())
+                {
 
                     string TradeListContent;
                     if (DoActiveSellersOnly)
@@ -1068,8 +1112,8 @@ namespace GlobalAuctionHouse
                     Verifycontent = Verifycontent.Replace(",[\"stackCount\"]=", "");
                     Verifycontent = Verifycontent.Replace(",[\"ItemLink\"]=\"", "");
                     Verifycontent = Verifycontent.Replace("self.GlobalTrades={[", "");
-                    
-                     if (!Verifycontent.Contains("function") && !Verifycontent.Contains("(") && !Verifycontent.Contains(")") && !Verifycontent.Contains("--") && !Verifycontent.Contains("="))
+
+                    if (!Verifycontent.Contains("function") && !Verifycontent.Contains("(") && !Verifycontent.Contains(")") && !Verifycontent.Contains("--") && !Verifycontent.Contains("="))
                     {
                         File.WriteAllText(this.TradeListPath, TradeListContent);
                     }
@@ -1078,8 +1122,8 @@ namespace GlobalAuctionHouse
                         this.ToLog("Unknown content recieved for Trade list");
                     }
 
-                    
-            }
+
+                }
 
             }
             catch (Exception exception)
@@ -1090,9 +1134,9 @@ namespace GlobalAuctionHouse
         }
 
 
-        
 
-             private void UpdateUUID()
+
+        private void UpdateUUID()
         {
 
             this.StatusText = "Updating UUID";
@@ -1351,7 +1395,7 @@ namespace GlobalAuctionHouse
 
         public void StartWatchingSavedVars()
         {
-            
+            this.UpdatePricing();
             this.UpdateTradeList();
             this.UpdateBidList();
             this.UpdateTrackedBidList();
@@ -1914,7 +1958,7 @@ namespace GlobalAuctionHouse
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            //RemoveStartup();
+            UpdatePricing();
         }
 
 

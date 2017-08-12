@@ -9,6 +9,7 @@ ZO_CreateStringId("SI_NAH_STRING_AUCTIONITEM"     , "Enchères");--new
 ZO_CreateStringId("SI_NAH_STRING_FULFILLORDER"     , "Envoyer l'ordre");--new
 ZO_CreateStringId("SI_NAH_STRING_CANCELAUCTION"     , "Annuler l'enchère");--new
 
+ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "Vérification du prix");--new
 
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_LISTING"     , "Éléments listés avec succès pour la vente - le traitement peut prendre jusqu'à 60 secondes");
 ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING"     , "Échec de la liste des articles à vendre");

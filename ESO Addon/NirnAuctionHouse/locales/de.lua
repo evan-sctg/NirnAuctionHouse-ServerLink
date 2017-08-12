@@ -4,9 +4,11 @@ ZO_CreateStringId("SI_NAH_STRING_SHOWING"     , "Anzeigen");
 ZO_CreateStringId("SI_NAH_STRING_TOTAL"     , "Gesamt");
 ZO_CreateStringId("SI_NAH_STRING_PAGE"     , "Seite");
 
-ZO_CreateStringId("SI_NAH_STRING_AUCTIONITEM"     , "Auktionsartikel");--new
-ZO_CreateStringId("SI_NAH_STRING_FULFILLORDER"     , "Erfüllung bestellen");--new
-ZO_CreateStringId("SI_NAH_STRING_CANCELAUCTION"     , "Auktion abbrechen");--new
+ZO_CreateStringId("SI_NAH_STRING_AUCTIONITEM"     , "Auktionsartikel");
+ZO_CreateStringId("SI_NAH_STRING_FULFILLORDER"     , "Bestellung abwickeln");
+ZO_CreateStringId("SI_NAH_STRING_CANCELAUCTION"     , "Auktion abbrechen");
+
+ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "Preischeck");--new
 
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_LISTING"     , "Erfolgreich eingestellte Artikel - Verarbeitung kann bis zu 60 Sekunden dauern");
 ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING"     , "Fehler beim Anzeigen der eingestellten Artikel");
