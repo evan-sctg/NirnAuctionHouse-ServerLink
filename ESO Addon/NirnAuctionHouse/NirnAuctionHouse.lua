@@ -1459,6 +1459,8 @@ function NirnAuctionHouse:PCtoTooltip(TooltipInst,QTY,itemLink,UID)
 	return 
 	end
 	
+	if(QTY~=nil )then  QTY=tonumber(QTY) end
+	
 	local itemId=NirnAuctionHouse:GetItemID(itemLink)
 local requiredLevel=GetItemLinkRequiredLevel(itemLink)
 local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
