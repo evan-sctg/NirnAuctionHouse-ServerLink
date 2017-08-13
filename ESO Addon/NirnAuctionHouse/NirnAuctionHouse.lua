@@ -1465,6 +1465,7 @@ local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
 local ItemQuality=GetItemLinkQuality(itemLink)
 
 	local statval=GetItemLinkWeaponPower(itemLink)+GetItemLinkArmorRating(itemLink, false)
+	if(itemId==nil or ItemQuality==nil or statval==nil or requiredLevel==nil or requiredChampPoints==nil )then  return end
 local Priceuid=itemId..":"..ItemQuality..":"..statval..":"..requiredLevel..":"..requiredChampPoints	
 	
 	if ((TooltipInst.PCYet==nil or TooltipInst.PCYet~=itemLink..UID)) then	
@@ -3271,6 +3272,8 @@ local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
 local ItemQuality=GetItemLinkQuality(itemLink)
 
 	local statval=GetItemLinkWeaponPower(itemLink)+GetItemLinkArmorRating(itemLink, false)
+	
+	if(itemId==nil or ItemQuality==nil or statval==nil or requiredLevel==nil or requiredChampPoints==nil )then  return end
 local Priceuid=itemId..":"..ItemQuality..":"..statval..":"..requiredLevel..":"..requiredChampPoints	
 
 	if NirnAuctionHouse.PriceTable[Priceuid] ~= nil then
@@ -3428,6 +3431,8 @@ end
 
 
 	local statval=ItemWeaponPower+ItemArmorRating
+	
+	if(itemId==nil or quality==nil or statval==nil or ItemRequiredLevel==nil or ItemRequiredChampionPoints==nil )then  return end
 	local Priceuid=itemId..":"..quality..":"..statval..":"..ItemRequiredLevel..":"..ItemRequiredChampionPoints
 
 	

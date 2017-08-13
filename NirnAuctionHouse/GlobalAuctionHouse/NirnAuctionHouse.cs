@@ -8,6 +8,7 @@ using System.Web.Script.Serialization;
 using System.Diagnostics;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 
 using File=System.IO.File;
@@ -1387,11 +1388,16 @@ namespace GlobalAuctionHouse
         private void OnChangedSavedVars(object source, FileSystemEventArgs e)
         {
 
-
+            try { 
             this.StatusText = "OnChangedSavedVars";
             label1.Text = this.StatusText;
                 this.parseSavedVars();
-        }
+        } catch (Exception exception)
+                {
+                    this.ToLog("parse saved variable error");
+                    this.ToLog(exception);
+              }
+}
 
         public void StartWatchingSavedVars()
         {
@@ -1433,6 +1439,7 @@ namespace GlobalAuctionHouse
 
         public void parseSavedVars()
         {
+            try { 
             bool oktoSync = false;
 
             if (LastParseTime == null)
@@ -1591,12 +1598,16 @@ namespace GlobalAuctionHouse
             label1.Text = this.StatusText;
             this.LastParseTime = DateTime.Now;
 
-           // if (!foundAccount) {
+            // if (!foundAccount) {
 
-           // }
+            // }
 
-
-        }
+        } catch (Exception exception)
+                {
+                    this.ToLog("parse saved variable error");
+                    this.ToLog(exception);
+    }
+}
 
 
         public void ModDeactivate()
@@ -2150,9 +2161,24 @@ namespace GlobalAuctionHouse
         public Dictionary<string, LsonValue> ReadSavedVariableFile()
         {
 
-            LsonVars.Parse(File.ReadAllText(Path.Combine(SavedVariableDirectory, "NirnAuctionHouse.lua")));
+            string LUAsavedvarContent="";
 
-            Dictionary<string,LsonValue> SavedVariableFileData = LsonVars.Parse(File.ReadAllText(Path.Combine(SavedVariableDirectory, "NirnAuctionHouse.lua"))); ;
+            int NumberOfRetries = 8;
+        int DelayOnRetry = 200;
+            
+            for (int i = 1; i <= NumberOfRetries; ++i) {
+                try {
+                    LUAsavedvarContent = File.ReadAllText(Path.Combine(SavedVariableDirectory, "NirnAuctionHouse.lua"));
+                  break; 
+                }
+                catch (IOException e) {
+                    if (i == NumberOfRetries)
+                        throw;
+                                Task.Delay(DelayOnRetry);
+                            }
+            }
+
+            Dictionary<string,LsonValue> SavedVariableFileData = LsonVars.Parse(LUAsavedvarContent); ;
            
             
             return SavedVariableFileData;

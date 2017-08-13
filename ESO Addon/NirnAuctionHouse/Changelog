@@ -2,6 +2,9 @@ Changelog
 Latest Version: https://nirnah.com/NirnAuctionHouse(beta).zip
 Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 
+v0.0.17.01 "beta" @Elo
+ - Bugfix crash on sync
+
 v0.0.17 "beta" @Elo
  - Added price history 
  - Pricing calculated from verified sale prices
