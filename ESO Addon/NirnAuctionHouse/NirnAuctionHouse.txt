@@ -2,7 +2,7 @@
 ## Author: Elo
 ## Version: 0.0.17
 ## Description: addon that allows you to buy and sell items using the in-game mail COD system
-## APIVersion: 100019
+## APIVersion: 100020
 ## SavedVariables: NirnAuctionHouseData NirnAuctionHouseSearchData NirnAuctionHouseSearchResults
 ## OptionalDependsOn: LibAddonMenu-2.0
 
