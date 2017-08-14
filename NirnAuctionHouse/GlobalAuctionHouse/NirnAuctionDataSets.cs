@@ -472,7 +472,13 @@ namespace GlobalAuctionHouse
 
             this.traitDescription = (string)curTrait["traitDescription"];
             this.traitType = (string)curTrait["traitType"];
-            this.traitSubtypeDescription = (string)curTrait["traitSubtypeDescription"];
+            if (curTrait.ContainsKey("traitSubtypeDescription"))
+            {
+                this.traitSubtypeDescription = (string)curTrait["traitSubtypeDescription"];
+            }else
+            {
+                this.traitSubtypeDescription = "";
+            }
             this.traitSubtype = (string)curTrait["traitSubtype"];
 
             this.setName = (string)curAttributes["setName"];

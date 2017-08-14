@@ -265,12 +265,12 @@ namespace GlobalAuctionHouse
                             {
                                 LsonValue item = SavedVariableFileData["NirnAuctionHouseData"]["Default"];
                             
-                                    
+                            if (!item.ContainsKey(ActiveAccount)) { this.ToLog("ParseNPostListings does not item.ContainsKey(ActiveAccount)"); return; }
+                            AuctionTradeData FirstAuctionTradeData = AuctionTradeData.LoadFromSavedVars(item[ActiveAccount], ActiveAccount + "~" + ActiveAccountUUID);
 
-                                    AuctionTradeData FirstAuctionTradeData = AuctionTradeData.LoadFromSavedVars(item[ActiveAccount], ActiveAccount + "~" + ActiveAccountUUID);
+                            
 
-
-                                if (FirstAuctionTradeData.AuctionEntries == null)
+                            if (FirstAuctionTradeData.AuctionEntries == null)
                                 {
                                     this.StatusText = "No Trades Found for " + FirstAuctionTradeData.Name;
                                         label1.Text = this.StatusText;
