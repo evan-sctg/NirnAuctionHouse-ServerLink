@@ -201,7 +201,7 @@ ZO_CreateStringId("SI_NAH_FILTERDROPSUB_1_1"     , "");
 
 ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_1"     , "Tous les enchantements d'armes");
 ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_2"     , "Absorber la santé");
-ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_3"     , "Absorber Magicka");
+ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_3"     , "Absorption de Magie");
 ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_4"     , "Arme blanchie");
 ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_5"     , "Berserker");
 ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_6"     , "Arme chargée");
@@ -217,8 +217,8 @@ ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_2_15"     , "Autre");
 
 ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_3_1"     , "Tous les enchantements d'armure");
 ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_3_2"     , "Santé");
-ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_3_3"     , "Magicka");
-ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_3_4"     , "Endurance");
+ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_3_3"     , "Magie");
+ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_3_4"     , "Vigueur");
 ZO_CreateStringId("SI_NAH_FILTERDROP_ENCH_3_5"     , "Autre");
 
 
@@ -245,12 +245,41 @@ ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_4"     , "Infusé");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_5"     , "Complexe");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_6"     , "Nirnhoned");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_7"     , "Ornée");
-ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_8"     , "Prospère");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_8"     , "Revigorant");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_9"     , "Renforcé");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_10"     , "Entraînement");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_11"     , "Bien équipé");
 
 
+
+
+
+
+
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_1"     , "");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_2"     , "2");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_3"     , "8");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_4"     , "5");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_5"     , "4");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_6"     , "9");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_7"     , "26");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_8"     , "10");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_9"     , "1");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_10"     , "3");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_11"     , "7");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_12"     , "6");
+
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_1"     , "");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_2"     , "18");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_3"     , "12");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_4"     , "16");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_5"     , "20");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_6"     , "25");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_7"     , "19");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_8"     , "17");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_9"     , "13");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_10"     , "15");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_11"     , "14");
 
 
 
@@ -294,7 +323,7 @@ ZO_CreateStringId("SI_NAH_FILTERDROP_WPNTYPE_3_9"     , "Personnel de la flamme"
 ZO_CreateStringId("SI_NAH_FILTERDROP_SLOT_3_1"     , "Toutes les machines à sous Armor");
 ZO_CreateStringId("SI_NAH_FILTERDROP_SLOT_3_2"     , "Poitrine");
 ZO_CreateStringId("SI_NAH_FILTERDROP_SLOT_3_3"     , "Pieds");
-ZO_CreateStringId("SI_NAH_FILTERDROP_SLOT_3_4"     , "Main");
+ZO_CreateStringId("SI_NAH_FILTERDROP_SLOT_3_4"     , "Mains");
 ZO_CreateStringId("SI_NAH_FILTERDROP_SLOT_3_5"     , "Tête");
 ZO_CreateStringId("SI_NAH_FILTERDROP_SLOT_3_6"     , "Jambes");
 ZO_CreateStringId("SI_NAH_FILTERDROP_SLOT_3_7"     , "Épaules");

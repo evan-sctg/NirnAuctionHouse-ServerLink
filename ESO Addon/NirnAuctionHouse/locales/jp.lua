@@ -246,11 +246,40 @@ ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_4"     , "注入");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_5"     , "複雑な");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_6"     , "ニールン");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_7"     , "華やかな");
-ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_8"     , "繁栄した");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_8"     , "活力を与える");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_9"     , "強化された");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_10"     , "トレーニング");
 ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_3_11"     , "よくフィットする");
 
+
+
+
+
+
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_1"     , "");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_2"     , "2");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_3"     , "8");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_4"     , "5");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_5"     , "4");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_6"     , "9");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_7"     , "26");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_8"     , "10");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_9"     , "1");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_10"     , "3");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_11"     , "7");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_2_12"     , "6");
+
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_1"     , "");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_2"     , "18");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_3"     , "12");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_4"     , "16");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_5"     , "20");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_6"     , "25");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_7"     , "19");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_8"     , "17");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_9"     , "13");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_10"     , "15");
+ZO_CreateStringId("SI_NAH_FILTERDROP_TRAIT_NUM_3_11"     , "14");
 
 
 

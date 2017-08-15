@@ -1026,9 +1026,9 @@ if data.TypeID==19 or data.TypeID==20 or data.TypeID==21 or data.TypeID==26 then
 --Furnishings
 if(data.TypeID==61)then isOther=false; end--Furnishing
 --weapons
-if filterId==2 then isOther=false; end --weapons
+if data.TypeID==1 then isOther=false; end --weapons
 --Apparel
-if filterId==3 then isOther=false; end --Apparel
+if data.TypeID==2 then isOther=false; end --Apparel
 
 	if addedyet~=true then
 	if isOther then
@@ -1047,12 +1047,12 @@ end
 
 if filterId==2 then--Weapon
 	if addedyet~=true then
-	if typename=="Weapon" then
+	if data.TypeID==1 then --Weapon
 		if filterSubId==1 or (filterId==2 and ((filterSubId==2 and isOnehand) or (filterSubId==3 and isOnehand==false)) ) then
 		if filterSLOTId==1 or (wpntypename==GetString("SI_NAH_FILTERDROP_WPNTYPE_" .. filterSubId .. "_" , filterSLOTId) ) then
 --~ 		d(data.enchantHeader.." - "..GetString("SI_NAH_FILTERDROP_ENCH_" .. filterId .. "_" , filterENCHId).." Enchantment")
 		if filterENCHId==1 
-		or (data.enchantHeader==GetString("SI_NAH_FILTERDROP_ENCH_" .. filterId .. "_" , filterENCHId).." Enchantment" ) 
+		or (zo_plainstrfind(data.enchantHeader:lower(), GetString("SI_NAH_FILTERDROP_ENCH_" .. filterId .. "_" , filterENCHId):lower() )) 
 		or (data.enchantHeader== "Fiery Weapon Enchantment" and  filterENCHId==9 ) 
 		or (data.enchantHeader== "Frozen Weapon Enchantment" and  filterENCHId==10 ) 
 		or ("Other"== GetString("SI_NAH_FILTERDROP_ENCH_" .. filterId .. "_" , filterENCHId)  and data.enchantHeader~="" and (
@@ -1072,7 +1072,7 @@ if filterId==2 then--Weapon
 		and zo_plainstrfind(data.enchantHeader:lower(), "stamina regen" )==false
 		) ) 
 		then
-			if  filterTRAITId==1 or ( NirnAuctionHouse_ReadableTraitTypeNorm(data.traitType)==GetString("SI_NAH_FILTERDROP_TRAIT_"..filterId.."_", filterTRAITId) ) then
+			if  filterTRAITId==1 or ( tonumber(data.traitType)==tonumber(GetString("SI_NAH_FILTERDROP_TRAIT_NUM_"..filterId.."_", filterTRAITId)) ) then
 			if ( (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab~="MyListings")) and
 			(searchInput == "" or self:CheckForMatch(data, searchInput))  then
 				addedyet=true
@@ -1088,8 +1088,7 @@ end
 
 
 
-
-if filterId==3 then--Furnishings
+if filterId==3 then--armor
 	if addedyet~=true then
 		if data.TypeID==2 then --Apparel
 		if filterSubId==1 
@@ -1102,12 +1101,11 @@ if filterId==3 then--Furnishings
 			if  filterSLOTId==1 or ( equiptype==GetString("SI_NAH_FILTERDROP_SLOT_"..filterId.."_", filterSLOTId) ) then
 			if  filterENCHId==1 
 			or ( zo_plainstrfind(data.enchantHeader:lower(), GetString("SI_NAH_FILTERDROP_ENCH_"..filterId.."_", filterENCHId):lower() )  )  
-			or  (filterENCHId==5  and (zo_plainstrfind(data.enchantHeader:lower(), "health" )==false and zo_plainstrfind(data.enchantHeader:lower(), "magicka" ) == false and zo_plainstrfind(data.enchantHeader:lower(), "stamina" )==false and data.enchantHeader~=""  ) ) 
+			or  (filterENCHId==5  and (zo_plainstrfind(data.enchantHeader:lower(), GetString("SI_NAH_FILTERDROP_ENCH_3_2"):lower() )==false and zo_plainstrfind(data.enchantHeader:lower(), GetString("SI_NAH_FILTERDROP_ENCH_3_3"):lower() ) == false and zo_plainstrfind(data.enchantHeader:lower(), GetString("SI_NAH_FILTERDROP_ENCH_3_4"):lower() )==false and data.enchantHeader~=""  ) ) 
 			then 
-			if  filterTRAITId==1 or ( NirnAuctionHouse_ReadableTraitTypeNorm(data.traitType)==GetString("SI_NAH_FILTERDROP_TRAIT_"..filterId.."_", filterTRAITId) ) then
+			if  filterTRAITId==1 or ( tonumber(data.traitType)==tonumber(GetString("SI_NAH_FILTERDROP_TRAIT_NUM_"..filterId.."_", filterTRAITId)) ) then
 				if ( (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab~="MyListings")) and
 				(searchInput == "" or self:CheckForMatch(data, searchInput)) then
---~ 				d(GetString("SI_NAH_FILTERDROP_SLOT_"..filterId.."_", filterSLOTId).."-"..equiptype)
 					addedyet=true
 					DoAddRow=true
 				end
@@ -1345,7 +1343,6 @@ if (self.searchType == 1) then
 		zo_plainstrfind(data.abilityDescription:lower(), searchTerm) or
 		zo_plainstrfind(data.enchantHeader:lower(), searchTerm) or
 		zo_plainstrfind(data.traitDescription:lower(), searchTerm) or
-		zo_plainstrfind(data.traitSubtypeDescription:lower(), searchTerm) or
 		zo_plainstrfind(data.itemFlavor:lower(), searchTerm) or
 		zo_plainstrfind(NirnAuctionHouse_ReadableTraitType(data.traitType):lower(), searchTerm) or
 		zo_plainstrfind(NirnAuctionHouse_ReadableTraitType(data.traitSubtype):lower(), searchTerm) or
@@ -2871,7 +2868,7 @@ function NirnAuctionHouse:ProcessRightClick(control)
 		local sellPrice=GetItemLinkValue(itemLink,true)	
 	local _hasCharges,_enchantHeader,_enchantDescription = GetItemLinkEnchantInfo(itemLink)
 	local _hasAbility,_abilityHeader,_abilityDescription,_,_,_,_,_ = GetItemLinkOnUseAbilityInfo(itemLink)
-	local _traitType,_traitDescription,_traitSubtype,_traitSubtypeName,_traitSubtypeDescription = GetItemLinkTraitInfo(itemLink)
+	local _traitType,_traitDescription = GetItemLinkTraitInfo(itemLink)
 	
 	
 	local requiredLevel=GetItemLinkRequiredLevel(itemLink)
@@ -2924,7 +2921,7 @@ local ItemQuality=GetItemLinkQuality(itemLink)
 
 	local _hasCharges,_enchantHeader,_enchantDescription = GetItemLinkEnchantInfo(itemLink)
 	local _hasAbility,_abilityHeader,_abilityDescription,_,_,_,_,_ = GetItemLinkOnUseAbilityInfo(itemLink)
-	local _traitType,_traitDescription,_traitSubtype,_traitSubtypeName,_traitSubtypeDescription = GetItemLinkTraitInfo(itemLink)
+	local _traitType,_traitDescription = GetItemLinkTraitInfo(itemLink)
 	local requiredLevel=GetItemLinkRequiredLevel(itemLink)
 local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
 
@@ -2968,7 +2965,7 @@ function NirnAuctionHouse:ProcBagSlot(SearchItemId,bagId, slotNum)
 		
 	local _hasCharges,_enchantHeader,_enchantDescription = GetItemLinkEnchantInfo(itemLink)
 	local _hasAbility,_abilityHeader,_abilityDescription,_,_,_,_,_ = GetItemLinkOnUseAbilityInfo(itemLink)
-	local _traitType,_traitDescription,_traitSubtype,_traitSubtypeName,_traitSubtypeDescription = GetItemLinkTraitInfo(itemLink)	
+	local _traitType,_traitDescription = GetItemLinkTraitInfo(itemLink)	
 	local requiredLevel=GetItemLinkRequiredLevel(itemLink)
 local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
 
@@ -3339,7 +3336,7 @@ end
 
 	local statVal = GetItemStatValue(bagId,slotIndex)
 	local hasCharges,enchantHeader,enchantDescription = GetItemLinkEnchantInfo(itemLink)
-	local traitType,traitDescription,traitSubtype,traitSubtypeName,traitSubtypeDescription = GetItemLinkTraitInfo(itemLink)
+	local traitType,traitDescription = GetItemLinkTraitInfo(itemLink)
 	
 	local ItemCharge = GetItemLinkNumEnchantCharges(bagId,slotIndex)
 	local ItemChargeMax = GetItemLinkMaxEnchantCharges(itemLink)
@@ -3396,9 +3393,9 @@ end
 			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.Trait ={}
 			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.Trait.traitType = self:ReadableTraitType(traitType)
 			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.Trait.traitDescription = traitDescription
-			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.Trait.traitSubtype = self:ReadableTraitType(traitSubtype)
-			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.Trait.traitSubtypeName = traitSubtypeName
-			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.Trait.traitSubtypeDescription = traitSubtypeDescription
+			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.Trait.traitSubtype = ""
+			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.Trait.traitSubtypeName = ""
+			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.Trait.traitSubtypeDescription = ""
 			
 			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.ItemRequiredLevel = ItemRequiredLevel
 			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.ItemRequiredChampionPoints = ItemRequiredChampionPoints
@@ -3588,7 +3585,7 @@ end
 
 		local _hasCharges,_enchantHeader,_enchantDescription = GetItemLinkEnchantInfo(itemLink)
 		local _hasAbility,_abilityHeader,_abilityDescription,_,_,_,_,_ = GetItemLinkOnUseAbilityInfo(itemLink)
-		local _traitType,_traitDescription,_traitSubtype,_traitSubtypeName,_traitSubtypeDescription = GetItemLinkTraitInfo(itemLink)
+		local _traitType,_traitDescription = GetItemLinkTraitInfo(itemLink)
 		local _itemFlavor=GetItemLinkFlavorText(itemLink)
 		local requiredLevel=GetItemLinkRequiredLevel(itemLink)
 		local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
@@ -3607,7 +3604,7 @@ end
 			local source =  EntryData["CharName"];
 			color = NirnAuctionHouse.colors.gold;
 			
-	--~ 		type =  ItemType .. " , " .. type
+--~ 		type =  _traitType .. " , " .. type
 
 		zoneType[(GetItemLinkBindType(itemLink) == BIND_TYPE_ON_EQUIP) and 5 or 6] = true;
 
@@ -3644,7 +3641,6 @@ end
 			traitType = _traitType,
 			traitDescription = _traitDescription,
 			traitSubtype = _traitSubtype,
-			traitSubtypeDescription = _traitSubtypeDescription,
 			itemFlavor = _itemFlavor,
 			EquipType = EquipType,
 			CraftingSkillType = CraftingSkillType,
@@ -3753,7 +3749,7 @@ end
 		local sellPrice=GetItemLinkValue(itemLink,true)		
 		local _hasCharges,_enchantHeader,_enchantDescription = GetItemLinkEnchantInfo(itemLink)
 		local _hasAbility,_abilityHeader,_abilityDescription,_,_,_,_,_ = GetItemLinkOnUseAbilityInfo(itemLink)
-		local _traitType,_traitDescription,_traitSubtype,_traitSubtypeName,_traitSubtypeDescription = GetItemLinkTraitInfo(itemLink)
+		local _traitType,_traitDescription = GetItemLinkTraitInfo(itemLink)
 	
 		local requiredLevel=GetItemLinkRequiredLevel(itemLink)
 		local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
