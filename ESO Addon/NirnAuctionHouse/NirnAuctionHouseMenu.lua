@@ -78,6 +78,24 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 		},
 		{
 			type = "dropdown",
+			name = "Set default price to sell price + COD cost when listing auctions",
+			tooltip = "Prefill buyout with sell price + COD",
+			choices = self.EnabledTable,
+			getFunc = function() if NAH.settings.AddCODCost ==true then return "Enabled" else return "Disabled" end end,
+			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.AddCODCost = true else NAH.settings.AddCODCost = false end  end,
+			default = self.EnabledTable[2]
+		},
+		{
+			type = "dropdown",
+			name = "Auto Post fulfilled orders",
+			tooltip = "Disable to manually sync fulfilled orders(queue multiple)",
+			choices = self.EnabledTable,
+			getFunc = function() if NAH.settings.AutoPostFilled ==true then return "Enabled" else return "Disabled" end end,
+			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.AutoPostFilled = true else NAH.settings.AutoPostFilled = false end  end,
+			default = self.EnabledTable[2]
+		},
+		{
+			type = "dropdown",
 			name = "Show Master Merchant price In auction window",
 			choices = self.EnabledTable,
 			getFunc = function() if NAH.settings.ShowMasterMerchantPrice ==true then return "Enabled" else return "Disabled" end end,

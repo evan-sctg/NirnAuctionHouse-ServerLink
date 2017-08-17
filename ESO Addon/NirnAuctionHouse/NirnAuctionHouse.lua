@@ -59,6 +59,8 @@ local NirnAuctionHouse = NirnAuctionHouse
 		AddListingsToMasterMerchant = false,
 		ShowMasterMerchantPrice = true,
 		AutoPost = false,
+		AutoPostFilled = true,
+		AddCODCost = true,
 		ServerLink_INITIATED = false,
 		ActiveSellersOnly = false,
 		PlaySounds = true,
@@ -155,9 +157,9 @@ function NAHTrackedItemList:Setup( )
 	self.masterList = { };
 
 	local sortKeys = {
-		["name"]     = { caseInsensitive = true, tiebreaker = "price" },
-		["BuyoutPrice"] = { caseInsensitive = true },
-		["TimeLeft"] = { caseInsensitive = true },
+		["name"]     = { caseInsensitive = true },
+		["BuyoutPrice"] = { caseInsensitive = true, tiebreaker = "name" },
+		["TimeLeft"] = { caseInsensitive = true, tiebreaker = "name" },
 		["stackCount"] = { caseInsensitive = true, tiebreaker = "name" },
 		["TradeIsBidder"] = { caseInsensitive = true, tiebreaker = "name" },
 	};
@@ -257,7 +259,8 @@ function NAHSoldItemList:New( control )
 	local list = ZO_SortFilterList.New(self, control);
 	list.frame = control;
 	list:Setup();
-	return(self);
+--~ 	return(self);
+	return(list);
 end
 function NAHSoldItemList:BuildMasterList( )
 	self.masterList = { };
@@ -280,9 +283,13 @@ function NAHSoldItemList:FilterScrollList( )
 	ZO_ClearNumericallyIndexedTable(scrollData);
 	for i = 1, #self.masterList do
 		local data = self.masterList[i];
-	table.insert(scrollData, ZO_ScrollList_CreateDataEntry(1, data));		
+		if(NAH.settings.data.FilledOrders==nil or NAH.settings.data.FilledOrders[data.TradeID]==nil or NAH.settings.data.FilledOrders[data.TradeID].Order.TradeID~=data.TradeID )then
+		table.insert(scrollData, ZO_ScrollList_CreateDataEntry(1, data));		
+		end
+			
 	end
 
+	
 	if (#scrollData ~= #self.masterList) then
 		self.frame:GetNamedChild("Counter"):SetText(string.format("%d / %d", #scrollData, #self.masterList));
 	else
@@ -300,9 +307,9 @@ function NAHSoldItemList:Setup( )
 	self.masterList = { };
 
 	local sortKeys = {
-		["name"]     = { caseInsensitive = true, tiebreaker = "price" },
-		["TimeLeft"] = { caseInsensitive = true },
-		["BuyoutPrice"] = { caseInsensitive = true },
+		["name"]     = { caseInsensitive = true },
+		["TimeLeft"] = { caseInsensitive = true, tiebreaker = "name" },
+		["BuyoutPrice"] = { caseInsensitive = true, tiebreaker = "name" },
 		["stackCount"] = { caseInsensitive = true, tiebreaker = "name" },
 		["TradeIsBidder"] = { caseInsensitive = true, tiebreaker = "name" },
 	};
@@ -430,11 +437,11 @@ function NAHAuctionList:Setup( )
 
 	local sortKeys = {
 		["name"]     = { caseInsensitive = true },
-		["stackCount"]     = { caseInsensitive = true },
-		["TimeLeft"]     = { caseInsensitive = true },
-		["StartingPrice"] = { caseInsensitive = true},
-		["BuyoutPrice"] = { caseInsensitive = true },
-		["itemType"] = { caseInsensitive = true },
+		["stackCount"]     = { caseInsensitive = true, tiebreaker = "name" },
+		["TimeLeft"]     = { caseInsensitive = true, tiebreaker = "name" },
+		["StartingPrice"] = { caseInsensitive = true, tiebreaker = "name"},
+		["BuyoutPrice"] = { caseInsensitive = true, tiebreaker = "name" },
+		["itemType"] = { caseInsensitive = true, tiebreaker = "name" },
 	};
 
 	self.currentSortKey = "name";
@@ -1882,6 +1889,10 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYLISTINGS
 
 
 
+
+
+
+
 function NirnAuctionHouse:MailSent()
 	if(NirnAuctionHouse.FillingOrderID)then
 	if(not NAH.settings.data.FilledOrders)then
@@ -1899,8 +1910,18 @@ NAH.settings.PostFilledOrders=true;
 NirnAuctionHouse.FillingOrderID=nil
 NirnAuctionHouse.FillingOrderBidID=nil
 
- d("EVENT_MAIL_SEND_SUCCESS")
+--~  d("EVENT_MAIL_SEND_SUCCESS")
+ 
+	if(NAH.settings.AutoPostFilled)then
 	NirnAuctionHouse:NAHWindowOrders_Open()
+	else
+	d("Marked trade as filled sync to recieve seller credits")
+	if(NirnAuctionHouse.SoldItemList~=nil) then 
+	NirnAuctionHouse.SoldItemList:RefreshFilters()
+	end
+	NAH.settings.ActiveTab="Orders";
+	SCENE_MANAGER:Show("NAHSceneOrders"); 
+	end
 end
 end
 
@@ -2260,6 +2281,9 @@ if(NirnAuctionHouse.list~=nil)then
 	end
 	
 	NirnAuctionHouse:setActiveAccount()
+	zo_callLater(function()
+	NirnAuctionHouse.list:RefreshFilters()
+	end, 100)
 	
 end
 
@@ -2535,13 +2559,11 @@ function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 		zo_callLater(function()		
 		if NAH.Link_MenuItem =="" then
 		NAH.Link_MenuItem = link
-		
-		--AddMenuItem("Price Check", function() self:PriceCheckItem(control,false) end, MENU_ADD_OPTION_LABEL)--output only visible to user
 		AddMenuItem(GetString(SI_NAH_STRING_PRICECHECK), function() NirnAuctionHouse:PriceCheckItemLink(link,true) end, MENU_ADD_OPTION_LABEL)
 		  ShowMenu()
 		return true
 		end
-		end, 1)
+		end, 45)
 		
 	end
 	end
@@ -2552,12 +2574,14 @@ end)
 	ZO_PreHookHandler(PopupTooltip, 'OnHide', function() PopupTooltip.PCYet=nil;PopupTooltip.PCUID=nil end)
 --~ 	
 		  ZO_PreHookHandler(PopupTooltip, 'OnUpdate', function()
-			if PopupTooltip.PCUID==nil then 
 				if PopupTooltip.lastLink~=nil then 
+			 
 				local itemLink = PopupTooltip.lastLink	
 					if itemLink == nil then	
 						return
 					end
+					
+				if PopupTooltip.PCUID==nil or PopupTooltip.PCUID~=itemLink then
 				PopupTooltip.PCUID=itemLink
 				NirnAuctionHouse:PCtoTooltip(PopupTooltip,stackCount,itemLink,"::popup::")
 				end
@@ -2568,18 +2592,33 @@ end)
 --~ 	
 		  ZO_PreHookHandler(ItemTooltip, 'OnUpdate', function()	  
 		    local hoveredElem = WINDOW_MANAGER:GetMouseOverControl()	    
-
+			local itemLink=nil
 	  
 		    if(hoveredElem~=nil and hoveredElem.dataEntry~=nil )then	   
 		    if(hoveredElem.dataEntry.data~=nil and hoveredElem.dataEntry.data.bagId~=nil and hoveredElem.dataEntry.data.slotIndex~=nil)then	    
 		    local bagId = hoveredElem.dataEntry.data.bagId
 	local slotIndex = hoveredElem.dataEntry.data.slotIndex
 	local stackCount = hoveredElem.dataEntry.data.stackCount
-	local itemLink = GetItemLink(bagId, slotIndex, LINK_STYLE_BRACKETS)	
+	 itemLink = GetItemLink(bagId, slotIndex, LINK_STYLE_BRACKETS)	
 	if itemLink == nil then	
 		return
 	end
 		NirnAuctionHouse:PCtoTooltip(ItemTooltip,stackCount,itemLink,"::"..bagId.."::"..slotIndex)
+		
+		
+		else
+	--~ 		/script d("Scenename: "..SCENE_MANAGER.currentScene.name)
+			if(SCENE_MANAGER.currentScene.name=="tradinghouse")then 
+			if hoveredElem.dataEntry~=nil and hoveredElem.dataEntry.data~=nil and hoveredElem.dataEntry.data.slotIndex~=nil  then 
+			itemLink = GetTradingHouseSearchResultItemLink(hoveredElem.dataEntry.data.slotIndex)	
+						
+				if itemLink == nil then	
+					return
+				end
+			NirnAuctionHouse:PCtoTooltip(ItemTooltip,stackCount,itemLink,"::tradinghouse::"..hoveredElem.index)		
+			end
+			end	
+		
 		end
 		end
 		end) 
@@ -2849,17 +2888,19 @@ function NirnAuctionHouse:ProcessRightClick(control)
 --~ 			
 				
 	local stackCount = control.stackCount
-	itemLink = GetItemLink(bagId, slotIndex, LINK_STYLE_BRACKETS)	
-	if itemLink == nil then
-		return
-	end
-	local _, _, _, itemId = ZO_LinkHandler_ParseLink(itemLink)
 	
 	zo_callLater(function()
 		--AddMenuItem("Price Check", function() self:PriceCheckItem(control,false) end, MENU_ADD_OPTION_LABEL)--output only visible to user
 		AddMenuItem(GetString(SI_NAH_STRING_PRICECHECK), function() self:PriceCheckItem(control,true) end, MENU_ADD_OPTION_LABEL)
-		end, 20
+		ShowMenu(control)
+		end, 60
 			)
+			
+	itemLink = GetItemLink(bagId, slotIndex, LINK_STYLE_BRACKETS)	
+	if itemLink == nil or  itemLink == "" then
+		return
+	end
+	local _, _, _, itemId = ZO_LinkHandler_ParseLink(itemLink)
 	if ItemBound ~= true and ItemStolen ~= true and ItemBoPTradable ~= true then
 
 				
@@ -3229,14 +3270,23 @@ function NirnAuctionHouse:PriceCheckItem(control,tochat)
 	end
 
 	local itemLink	
+	
+	
+	
+	
+			
+	
 	local bagId = control.bagId	
 	local slotIndex = control.slotIndex
-	local stackCount = control.stackCount
-	local ItemSellValueWithBonuses = GetItemSellValueWithBonuses(bagId,slotIndex)
+--~ 	local stackCount = control.stackCount
+--~ 	local ItemSellValueWithBonuses = GetItemSellValueWithBonuses(bagId,slotIndex)
+	if(SCENE_MANAGER.currentScene.name=="tradinghouse")then 
+	itemLink = GetTradingHouseSearchResultItemLink(slotIndex)		
+	else
+	itemLink = GetItemLink(bagId, slotIndex, LINK_STYLE_BRACKETS)	
+	end
 	
-	itemLink = GetItemLink(bagId, slotIndex, LINK_STYLE_BRACKETS)
-	
-	if itemLink == nil then
+	if itemLink == nil or itemLink == "" then
 		return
 	end
 	
@@ -3258,7 +3308,7 @@ function NirnAuctionHouse:PriceCheckItemLink(itemLink,tochat)
 	end
 
 	
-	if itemLink == nil then
+	if itemLink == nil or itemLink == "" then
 		return
 	end
 	
@@ -3292,6 +3342,45 @@ local Priceuid=itemId..":"..ItemQuality..":"..statval..":"..requiredLevel..":"..
 	 
 	
 
+	
+end
+	
+function NirnAuctionHouse:hasPriceCheckItemLink(itemLink)
+	if NirnAuctionHouse.PriceTable==nil then
+	NirnAuctionHouse:LoadPrices()
+	if NirnAuctionHouse.PriceTable==nil then
+	return false
+	end
+	end
+
+	
+	if itemLink == nil or itemLink == "" then
+		return false
+	end
+	
+	local _, _, _, itemId = ZO_LinkHandler_ParseLink(itemLink)
+	   
+	local itemId=NirnAuctionHouse:GetItemID(itemLink)
+local requiredLevel=GetItemLinkRequiredLevel(itemLink)
+local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
+local ItemQuality=GetItemLinkQuality(itemLink)
+
+	local statval=GetItemLinkWeaponPower(itemLink)+GetItemLinkArmorRating(itemLink, false)
+	
+	if(itemId==nil or ItemQuality==nil or statval==nil or requiredLevel==nil or requiredChampPoints==nil )then  return end
+local Priceuid=itemId..":"..ItemQuality..":"..statval..":"..requiredLevel..":"..requiredChampPoints	
+
+	if NirnAuctionHouse.PriceTable[Priceuid] ~= nil then
+	if NirnAuctionHouse.PriceTable[Priceuid].price ~= nil then	
+	return true;
+	end
+	
+	else
+return false;	
+	end
+	 
+	
+return false;
 	
 end
 	
@@ -3423,7 +3512,12 @@ end
 	
 	local codcost=10+math.floor(ItemSellValueWithBonuses*stackCount/20)
 	NirnAuctionHouse.GoldAmountStarting:SetText()
-	NirnAuctionHouse.GoldAmountBuyout:SetText(math.ceil(ItemSellValueWithBonuses*stackCount)+codcost) --add codcost
+	
+	if NAH.settings.AddCODCost then 
+	NirnAuctionHouse.GoldAmountBuyout:SetText(math.ceil(ItemSellValueWithBonuses*stackCount)+codcost) --add codcost	
+	else
+	NirnAuctionHouse.GoldAmountBuyout:SetText(math.ceil(ItemSellValueWithBonuses*stackCount))
+	end
 
 	NAHAuctionHouseGoldCost:GetNamedChild("BidName").normalColor = ZO_NORMAL_TEXT;
 	NAHAuctionHouseGoldCost:GetNamedChild("BidName"):SetText(itemName);
@@ -3439,7 +3533,11 @@ end
 			if NirnAuctionHouse.PriceTable[Priceuid].price > 0  and NirnAuctionHouse.PriceTable[Priceuid].price > ItemSellValueWithBonuses then
 			NirnAuctionHouse.GoldAmountStarting:SetText()
 			codcost=10+math.floor(NirnAuctionHouse.PriceTable[Priceuid].price*stackCount/20)
+			if NAH.settings.AddCODCost then 
 			NirnAuctionHouse.GoldAmountBuyout:SetText(math.ceil(NirnAuctionHouse.PriceTable[Priceuid].price*stackCount)+codcost) --add codcost
+			else
+			NirnAuctionHouse.GoldAmountBuyout:SetText(math.ceil(NirnAuctionHouse.PriceTable[Priceuid].price*stackCount))
+			end
 			end		
 		else	
 			 ----------------------------------MasterMerchant Integration-----------------------------------------
@@ -3449,7 +3547,12 @@ end
 				if tipStats.avgPrice and tipStats.avgPrice > 0  and tipStats.avgPrice > ItemSellValueWithBonuses then
 				NirnAuctionHouse.GoldAmountStarting:SetText()
 				codcost=10+math.floor(tipStats.avgPrice*stackCount/20)
+				if NAH.settings.AddCODCost then 
 				NirnAuctionHouse.GoldAmountBuyout:SetText(math.ceil(tipStats.avgPrice*stackCount)+codcost) --add codcost
+				else
+				NirnAuctionHouse.GoldAmountBuyout:SetText(math.ceil(tipStats.avgPrice*stackCount))
+				end
+				
 				end
 			end
 		end

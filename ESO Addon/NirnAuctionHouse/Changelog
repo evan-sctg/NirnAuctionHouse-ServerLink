@@ -3,6 +3,14 @@ Latest Version: https://nirnah.com/NirnAuctionHouse(beta).zip
 Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 
 
+v0.0.17.06 "beta" @Elo
+ - Added pricing to guild store
+ - Added option to set default price to sell price + COD cost when listing auctions
+ - Added option to manually sync fulfilled orders(queue multiple)
+ - Bugfix search filter on sync
+ - Bugfix pricing on popup tooltip
+ - Bugfix item listing sorting
+
 v0.0.17.05 "beta" @Elo
  - Bugfix item search for non-english clients
  - Removed Prosperous trait
