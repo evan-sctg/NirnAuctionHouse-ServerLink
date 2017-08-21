@@ -87,6 +87,15 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 		},
 		{
 			type = "dropdown",
+			name = "Show My Player Name on ordres to fulfill",
+			tooltip = "display what player sold the item on fulfill window",
+			choices = self.EnabledTable,
+			getFunc = function() if NAH.settings.ShowMyCharName ==true then return "Enabled" else return "Disabled" end end,
+			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.ShowMyCharName = true else NAH.settings.ShowMyCharName = false end  end,
+			default = self.EnabledTable[2]
+		},
+		{
+			type = "dropdown",
 			name = "Auto Post fulfilled orders",
 			tooltip = "Disable to manually sync fulfilled orders(queue multiple)",
 			choices = self.EnabledTable,

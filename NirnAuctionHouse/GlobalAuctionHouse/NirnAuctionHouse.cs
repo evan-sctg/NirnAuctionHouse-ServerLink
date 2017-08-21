@@ -86,7 +86,7 @@ namespace GlobalAuctionHouse
         public bool DoPlaySounds_success_cancel = false;
 
         bool DoActiveSellersOnly = false;
-
+        bool DoShowMyCharName = false;
 
         bool foundAccount = false;
 
@@ -1265,8 +1265,19 @@ namespace GlobalAuctionHouse
 
                     using (WebClient client = new WebClient())
                     {
-                        
-                        string BidListContent = client.DownloadString(this.APIEndpoint + "/proc/bidlist/" + ActiveAccount+ "~" + ActiveAccountUUID);
+
+                        string BidListContent = "";
+                        if (DoShowMyCharName)
+                        {
+                            BidListContent = client.DownloadString(this.APIEndpoint + "/proc/bidlistdetailed/" + ActiveAccount + "~" + ActiveAccountUUID);
+                        }
+                        else
+                        {
+                            BidListContent = client.DownloadString(this.APIEndpoint + "/proc/bidlist/" + ActiveAccount + "~" + ActiveAccountUUID);
+                        }
+
+
+                         
                         string Verifycontent = BidListContent.Replace("function NirnAuctionHouse:LoadBids()", "");
                         Verifycontent = Verifycontent.Replace("]={[\"ID\"]=\"", "");
                         Verifycontent = Verifycontent.Replace(",[\"TradeID\"]=\"", "");
@@ -1274,6 +1285,7 @@ namespace GlobalAuctionHouse
                         Verifycontent = Verifycontent.Replace(",[\"TradeIsBidder\"]=\"", "");
                         Verifycontent = Verifycontent.Replace(",[\"Seller\"]=\"@", "");
                         Verifycontent = Verifycontent.Replace(",[\"Buyer\"]=\"@", "");
+                        Verifycontent = Verifycontent.Replace(",[\"Player\"]=\"", "");
                         Verifycontent = Verifycontent.Replace(",[\"Item\"]={[\"ID\"]=", "");
                         Verifycontent = Verifycontent.Replace(",[\"BuyoutPrice\"]=", "");
                         Verifycontent = Verifycontent.Replace(",[\"stackCount\"]=", "");
@@ -1516,9 +1528,11 @@ namespace GlobalAuctionHouse
 
 
 
-                                        DoActiveSellersOnly = (bool)acctdata["ActiveSellersOnly"];
+                                            DoActiveSellersOnly = (bool)acctdata["ActiveSellersOnly"];
 
-                                        DoReloadTradeData = (bool)acctdata["ReloadTradeData"];
+                                            DoShowMyCharName = (bool)acctdata["ShowMyCharName"];
+
+                                            DoReloadTradeData = (bool)acctdata["ReloadTradeData"];
                                         DoPostListings = (bool)acctdata["PostListings"];
                                      DoPostBids = (bool)acctdata["PostBids"];
                                      ReloadTradeDataTracked = false;

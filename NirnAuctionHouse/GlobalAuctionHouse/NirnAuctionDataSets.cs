@@ -85,6 +85,14 @@ namespace GlobalAuctionHouse
     [DataContract]
     public class AuctionItemData
     {
+
+        [DataMember]
+        public string CharName
+        {
+            get;
+            set;
+        }
+
         [DataMember]
         public int itemId
         {
@@ -151,9 +159,14 @@ namespace GlobalAuctionHouse
 
                     if (!int.TryParse((string)curAttributes["itemId"], out i)) i = 0;
                     this.itemId = i;
-                   // this.itemId = (int)curAttributes["itemId"];
+                    // this.itemId = (int)curAttributes["itemId"];
 
-                    
+                    if (curListing.ContainsKey("Player"))
+                    {
+                        
+                            this.CharName = (string)curListing["Player"];
+                    }
+
 
                     if (curListing.ContainsKey("BuyoutPrice"))
                     {

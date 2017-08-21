@@ -3,6 +3,13 @@ Latest Version: https://nirnah.com/NirnAuctionHouse(beta).zip
 Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 
 
+v0.0.18 "beta" @Elo
+ - Added quantity to the Create Auction window
+ - Added current buyout postage to the Create Auction window (red if postage is as much as buyout)
+ - Increased number of Auctions you can list to 100
+ - Added option to display which player(alt) sold the items on fulfill window
+ - Bugfix playername restrictions players with "'" will no longer be rejected
+
 v0.0.17.06 "beta" @Elo
  - Added pricing to guild store
  - Added option to set default price to sell price + COD cost when listing auctions

@@ -841,9 +841,57 @@
 					<Anchor point="TOP" relativePoint="TOP" offsetX=""  offsetY="" />
 				</Label>
 				<Texture name="$(parent)BG" inherits="ZO_InsetTexture" textureFile="esoui/art/chatwindow/chat_bg_center.dds"  />
-					<Button name="$(parent)CancelListing" inherits="ZO_DefaultButton" text="Cancel" hidden="false">
+					
+		
+		
+			<Backdrop name="$(parent)GoldAmountQty" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">					
+					<Anchor point="CENTER" relativePoint="CENTER" offsetX="0" offsetY="-95" />
+					<Dimensions x="250" />
+					<Controls>
+						<EditBox name="$(parent)GoldAmountBoxQty" inherits="ZO_DefaultEditForBackdrop ZO_EditDefaultText" />
+					</Controls>
+				</Backdrop>
+				<Label name="$(parent)Qtylabel" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Qty">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmountQty" relativePoint="TOPLEFT" offsetY="-25" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_HEADER_QTY))
+					</OnInitialized>
+				</Label>
+		
+			<Backdrop name="$(parent)GoldAmountStarting" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">					
+					<Anchor point="CENTER" relativePoint="CENTER" relativeTo="$(parent)GoldAmountQty" offsetX="0" offsetY="70" />
+					<Dimensions x="250" />
+					<Controls>
+						<EditBox name="$(parent)GoldAmountBoxStarting" inherits="ZO_DefaultEditForBackdrop ZO_EditDefaultText" />
+					</Controls>
+				</Backdrop>
+				<Label name="$(parent)startinglabel" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Starting Price">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmountStarting" relativePoint="TOPLEFT" offsetY="-25" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_STARTINGPRICE))
+					</OnInitialized>
+				</Label>
+		
+			<Backdrop name="$(parent)GoldAmountBuyout" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">					
+					<Anchor point="CENTER" relativePoint="CENTER" relativeTo="$(parent)GoldAmountStarting" offsetX="0" offsetY="70" />
+					<Dimensions x="250" />
+					<Controls>
+						<EditBox name="$(parent)GoldAmountBoxBuyout" inherits="ZO_DefaultEditForBackdrop ZO_EditDefaultText" />
+					</Controls>
+				</Backdrop>
+				<Label name="$(parent)buyoutlabel" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Buyout Price">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmountBuyout" relativePoint="TOPLEFT" offsetY="-25" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_BUYOUTPRICE))
+					</OnInitialized>
+				</Label>
 				
-					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmount" relativePoint="LEFT"  offsetX="0"offsetY="60" />
+				
+				
+				
+				<Button name="$(parent)CancelListing" inherits="ZO_DefaultButton" text="Cancel" hidden="false">
+				
+					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmountBuyout" relativePoint="LEFT"  offsetX="-30"offsetY="50" />
 					<Dimensions x="150" y="30" />
 					<OnInitialized>
 						self:SetText(GetString(SI_NAH_CANCEL))
@@ -855,7 +903,7 @@
 				
 				<Button name="$(parent)PostListing" inherits="ZO_DefaultButton" text="Post Listing" hidden="false">
 				
-					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmount" relativePoint="LEFT"  offsetX="160"offsetY="60" />
+					<Anchor point="TOPLEFT" relativeTo="$(parent)CancelListing" relativePoint="TOPLEFT"  offsetX="160"offsetY="0" />
 					<Dimensions x="150" y="30" />
 					<OnInitialized>
 						self:SetText(GetString(SI_NAH_POSTLISTING))
@@ -872,38 +920,16 @@
 						self:SetText(GetString(SI_NAH_SELLERPAYSCOD))
 					</OnInitialized>
 				</Label>
-		
-				<Label name="$(parent)startinglabel" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Starting Price">
-					<Anchor point="TOP" relativeTo="$(parent)GoldAmountStarting" relativePoint="TOP" offsetY="25" />
+				
+				<Label name="$(parent)Postage" font="ZoFontGameSmall" horizontalAlignment="LEFT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Buyout Postage: 11(g)">
+					<Anchor point="BOTTOMLEFT" relativeTo="$(parent)sellercodnotice" relativePoint="BOTTOMLEFT" offsetX="0" offsetY="15" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_STARTINGPRICE))
 					</OnInitialized>
 				</Label>
-			<Backdrop name="$(parent)GoldAmountStarting" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">					
-					<Anchor point="CENTER" relativePoint="CENTER" offsetX="0" offsetY="-60" />
-					<Dimensions x="250" />
-					<Controls>
-						<EditBox name="$(parent)GoldAmountBoxStarting" inherits="ZO_DefaultEditForBackdrop ZO_EditDefaultText" />
-					</Controls>
-				</Backdrop>
-		
-				<Label name="$(parent)buyoutlabel" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Buyout Price">
-					<Anchor point="TOP" relativeTo="$(parent)GoldAmountBuyout" relativePoint="TOP" offsetY="100" />
-					<OnInitialized>
-						self:SetText(GetString(SI_NAH_BUYOUTPRICE))
-					</OnInitialized>
-				</Label>
-			<Backdrop name="$(parent)GoldAmountBuyout" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">					
-					<Anchor point="CENTER" relativePoint="CENTER" offsetX="0" offsetY="10" />
-					<Dimensions x="250" />
-					<Controls>
-						<EditBox name="$(parent)GoldAmountBoxBuyout" inherits="ZO_DefaultEditForBackdrop ZO_EditDefaultText" />
-					</Controls>
-				</Backdrop>
 				
 			</Controls>
 			<Anchor point="CENTER" relativePoint="CENTER" offsetX="0" offsetY="0" />
-			<Dimensions x="300" y="260" />
+			<Dimensions x="300" y="390" />
 		</TopLevelControl>
 		
 		

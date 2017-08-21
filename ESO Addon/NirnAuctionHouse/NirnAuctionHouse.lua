@@ -16,7 +16,7 @@ NirnAuctionHouse = {
 	isSearching = false,
 	sortType = 1,
 	myListingsNum = 0,
-	myListingsMax = 80,
+	myListingsMax = 100,
 	--settingsVersion = "0.0.0.1",
 	colors = {
 		default = "|c" .. ZO_TOOLTIP_DEFAULT_COLOR:ToHex(),
@@ -30,6 +30,8 @@ NirnAuctionHouse = {
 		brown   = ZO_ColorDef:New("885533"),
 		teal    = ZO_ColorDef:New("66CCCC"),
 		pink    = ZO_ColorDef:New("FF99CC"),
+		green    = ZO_ColorDef:New("008000"),
+		red    = ZO_ColorDef:New("FF0000"),
 	},
 	selectedItem = {},
 }
@@ -63,6 +65,7 @@ local NirnAuctionHouse = NirnAuctionHouse
 		AddCODCost = true,
 		ServerLink_INITIATED = false,
 		ActiveSellersOnly = false,
+		ShowMyCharName = false,
 		PlaySounds = true,
 		PlaySounds_success_listing = false,
 		PlaySounds_success_buy = false,
@@ -355,11 +358,14 @@ function NAHSoldItemList:SetupItemRow( control, data )
 		control:GetNamedChild("IsBuyout"):SetText("BUYOUT");	
 	end
 	
-	
 		local codcost=10+math.floor(data.BuyoutPrice/20)
 	control:GetNamedChild("TimeLeft").normalColor = ZO_DEFAULT_TEXT;
 	control:GetNamedChild("TimeLeft"):SetText(codcost);
 	
+		if NAH.settings.ShowMyCharName == true and data.Player~=null then
+		control:GetNamedChild("IsBuyout"):SetText(data.Player.." "..control:GetNamedChild("IsBuyout"):GetText());	
+		end
+		
 	control:GetNamedChild("Name"):SetText(data.name);	
 
 	control:GetNamedChild("Qty").normalColor = ZO_DEFAULT_TEXT;
@@ -578,7 +584,7 @@ function NAHAuctionList:BuildMasterList( )
 	self.masterList = { };
 	self.MyListedTrades = { };
 	if NAH.settings.ActiveAccount== nil or NAH.settings.ActiveAccount=="" then
-	NAH.currentAccount = GetDisplayName()
+	NAH.currentAccount = string.gsub(GetDisplayName(), "'", "1sSsS1QqQq1")
 	NAH.settings.ActiveAccount=NAH.currentAccount
 	end
 		if NirnAuctionHouse.GlobalTrades~= nil then
@@ -1954,7 +1960,7 @@ end
 
 local function NAH_SetAccountCharData()
 	NAH.currentCharacterId = GetCurrentCharacterId()
-	NAH.currentAccount = GetDisplayName()
+	NAH.currentAccount = string.gsub(GetDisplayName(), "'", "1sSsS1QqQq1")
 	NAH.settings.ActiveAccount=NAH.currentAccount
 	NAH.settings.ActiveCharacterId=NAH.currentCharacterId
 	NAH.settings.CurCharacterId=NAH.currentCharacterId
@@ -2728,6 +2734,7 @@ end
 
 
 function NirnAuctionHouse:COD(to,ItemLink,stackCount,amount)
+to=string.gsub(to, "1sSsS1QqQq1", "'")--put sigle quotes back as single quotes
 local locatedbagslot = nil
 			locatedbagslot = NirnAuctionHouse:SearchBag(1,ItemLink,stackCount)
 			if locatedbagslot~=nil then
@@ -3200,6 +3207,32 @@ d("Queued Bid for: " .. NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListing
 	end
 
 end
+
+
+function NirnAuctionHouse:UpdateAuctionCODCost()
+
+NirnAuctionHouse.GoldAmountBuyout = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmountBuyout"):GetNamedChild("GoldAmountBoxBuyout");
+NirnAuctionHouse.GoldAmountBuyoutVal = tonumber(NirnAuctionHouse.GoldAmountBuyout:GetText());
+NirnAuctionHouse.GoldPostage = NAHAuctionHouseGoldCost:GetNamedChild("Postage");
+ if (NirnAuctionHouse.GoldAmountBuyoutVal ==nil or NirnAuctionHouse.GoldAmountBuyoutVal > 2100000000 or NirnAuctionHouse.GoldAmountBuyoutVal < 1 ) then 
+NirnAuctionHouse.GoldPostage:SetText("Buyout Postage: NA");
+else
+local codcost=10+math.floor(NirnAuctionHouse.GoldAmountBuyoutVal/20)
+if(codcost>=NirnAuctionHouse.GoldAmountBuyoutVal)then
+NirnAuctionHouse.GoldPostage:SetText("Buyout Postage: |cFF0000"..codcost.."(g)|r");
+else
+NirnAuctionHouse.GoldPostage:SetText("Buyout Postage: |c008000"..codcost.."(g)|r");
+end
+
+ end 
+ 
+ 
+
+
+
+end
+
+
 function NirnAuctionHouse_DocancelListing()
 	if(not NAH.settings.data.Listings)then
 		NAH.settings.data.Listings = {}
@@ -3222,13 +3255,15 @@ function NirnAuctionHouse_DoPostListing(GoldAmountPanel)
 			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].Listing ={}
 	end
 
+NirnAuctionHouse.GoldAmountQty = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmountQty"):GetNamedChild("GoldAmountBoxQty");
 NirnAuctionHouse.GoldAmountStarting = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmountStarting"):GetNamedChild("GoldAmountBoxStarting");
 NirnAuctionHouse.GoldAmountBuyout = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmountBuyout"):GetNamedChild("GoldAmountBoxBuyout");
 
 
-
+NirnAuctionHouse.GoldAmountQtyVal = tonumber(NirnAuctionHouse.GoldAmountQty:GetText());
 NirnAuctionHouse.GoldAmountStartingVal = tonumber(NirnAuctionHouse.GoldAmountStarting:GetText());
 NirnAuctionHouse.GoldAmountBuyoutVal = tonumber(NirnAuctionHouse.GoldAmountBuyout:GetText());
+ if (not NirnAuctionHouse.GoldAmountQtyVal or NirnAuctionHouse.GoldAmountQtyVal < 1 or NirnAuctionHouse.GoldAmountQtyVal > NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.stackCount ) then   d("Please Enter at Valid Quantity ( 1 - "..NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.stackCount.." )") return;  end
  if (not NirnAuctionHouse.GoldAmountStartingVal or NirnAuctionHouse.GoldAmountStartingVal < 1 ) then   if not NirnAuctionHouse.GoldAmountBuyoutVal or NirnAuctionHouse.GoldAmountBuyoutVal < 1 then  d("Please Enter at least Valid Starting Bid or a Valid Buyout Bid") return; end end
  if (NirnAuctionHouse.GoldAmountStartingVal ~=nil and NirnAuctionHouse.GoldAmountStartingVal > 2099999999) then d("Please Enter at least Valid Starting Bid (2,099,999,999 Max)") return; end 
  if (NirnAuctionHouse.GoldAmountBuyoutVal ~=nil and NirnAuctionHouse.GoldAmountBuyoutVal > 2100000000) then d("Please Enter at least Valid Buyout Bid (2,100,000,000 Max)") return; end 
@@ -3236,6 +3271,8 @@ NirnAuctionHouse.GoldAmountBuyoutVal = tonumber(NirnAuctionHouse.GoldAmountBuyou
 
 NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].Listing.StartingPrice=NirnAuctionHouse.GoldAmountStarting:GetText();
 NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].Listing.BuyoutPrice=NirnAuctionHouse.GoldAmountBuyout:GetText();
+
+NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.stackCount=NirnAuctionHouse.GoldAmountQtyVal;
 
 
 if(NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].Listing.BuyoutPrice)then
@@ -3249,7 +3286,7 @@ end
 	SetItemIsPlayerLocked(NirnAuctionHouse.ActivePostListingBag, NirnAuctionHouse.ActivePostListingSlot, true)
 	end
 	end
-d("Queued Listing for: " .. NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.ItemLink .. " sync to post now")
+d("Queued Listing for: "..NirnAuctionHouse.GoldAmountQtyVal.." x " .. NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.ItemLink .. " sync to post now")
 	NAH.settings.PostListings=true;-- tell the server link to post listings 
 --~ 	RequestOpenUnsafeURL("https://nirnah.com/debug/")
 	NirnAuctionHouse_CloseGoldCost();
@@ -3459,6 +3496,7 @@ end
 			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].Listing ={} -- infor about your listing price and hoew long to list for
 			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].Listing.Price=ItemSellValueWithBonuses --in gold -- just set to vendor cost atm
 			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].Listing.Expire=30 --in days
+			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].Listing.Player=GetUnitName("player")--not the acount but the player 
 			
 			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes ={}
 			NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.ItemLink = itemLink
@@ -3509,6 +3547,14 @@ end
 	
 	NirnAuctionHouse.GoldAmountStarting = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmountStarting"):GetNamedChild("GoldAmountBoxStarting");
 	NirnAuctionHouse.GoldAmountBuyout = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmountBuyout"):GetNamedChild("GoldAmountBoxBuyout");
+	NirnAuctionHouse.GoldAmountQty = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmountQty"):GetNamedChild("GoldAmountBoxQty");
+	
+	
+
+	NirnAuctionHouse.GoldAmountBuyout:SetHandler("OnTextChanged", function() NirnAuctionHouse:UpdateAuctionCODCost() end);
+	
+	
+	NirnAuctionHouse.GoldAmountQty:SetText(stackCount) --set max qty	
 	
 	local codcost=10+math.floor(ItemSellValueWithBonuses*stackCount/20)
 	NirnAuctionHouse.GoldAmountStarting:SetText()
@@ -3651,6 +3697,10 @@ end
 		if EntryData["Buyer"] then
 		 Buyer = EntryData["Buyer"];
 		 end
+		local PlayerName = "";
+		if EntryData["Player"] then
+		 PlayerName = EntryData["Player"];
+		 end
 		 
 		local TradeIsHighestBid = "";
 		if EntryData["TradeIsHighestBid"] then
@@ -3731,6 +3781,7 @@ end
 			WeaponTypeID = ItemWeaponType,
 			armorTypeID = armorType,
 			source = source,
+			Player = PlayerName,
 			zoneType = zoneType,
 			color = color,
 			style = style,

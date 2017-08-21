@@ -35,7 +35,7 @@ ZO_CreateStringId("SI_NAH_HEADER_NAME"     , "Name");
 ZO_CreateStringId("SI_NAH_HEADER_TYPE"     , "Type");
 ZO_CreateStringId("SI_NAH_HEADER_SOURCE"   , "Source");
 ZO_CreateStringId("SI_NAH_HEADER_CODCOST"   , "COD Cost");
-ZO_CreateStringId("SI_NAH_HEADER_QTY"   , "qty");
+ZO_CreateStringId("SI_NAH_HEADER_QTY"   , "Qty");
 ZO_CreateStringId("SI_NAH_HEADER_PRICE"   , "price");
 ZO_CreateStringId("SI_NAH_HEADER_STATUS"   , "Status");
 ZO_CreateStringId("SI_NAH_HEADER_TIMELEFT"   , "TimeLeft");
