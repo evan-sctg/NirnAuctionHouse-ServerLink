@@ -30,7 +30,7 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 		name = "Nirn Auction House",
 		displayName = NirnAuctionHouse.colors.title .. "Nirn Auction House|r",
 		author = "Elo",
-		version = "0.0.17",
+		version = "0.0.18",
 		slashCommand = "/ahsetup",
 		registerForRefresh = true
 	}
@@ -87,7 +87,7 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 		},
 		{
 			type = "dropdown",
-			name = "Show My Player Name on ordres to fulfill",
+			name = "Show My Player Name on orders to fulfill",
 			tooltip = "display what player sold the item on fulfill window",
 			choices = self.EnabledTable,
 			getFunc = function() if NAH.settings.ShowMyCharName ==true then return "Enabled" else return "Disabled" end end,
