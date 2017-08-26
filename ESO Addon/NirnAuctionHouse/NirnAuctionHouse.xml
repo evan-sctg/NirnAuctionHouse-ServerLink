@@ -225,6 +225,9 @@
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)AuctionHouse" offsetY="60" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_ORDERS))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ShowWTBListings(self:GetParent())
 			</OnClicked>
@@ -249,6 +252,9 @@
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)MyListings" offsetY="60" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_MYORDERS))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ShowMyWTBListings(self:GetParent())
 			</OnClicked>
@@ -720,6 +726,9 @@
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)AuctionHouse" offsetY="60" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_ORDERS))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ShowWTBListings(self:GetParent())
 			</OnClicked>
@@ -744,6 +753,9 @@
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)MyListings" offsetY="60" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_MYORDERS))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ShowMyWTBListings(self:GetParent())
 			</OnClicked>
@@ -915,6 +927,9 @@
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)AuctionHouse" offsetY="60" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_ORDERS))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ShowWTBListings(self:GetParent())
 			</OnClicked>
@@ -939,6 +954,9 @@
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)MyListings" offsetY="60" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_MYORDERS))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ShowMyWTBListings(self:GetParent())
 			</OnClicked>
