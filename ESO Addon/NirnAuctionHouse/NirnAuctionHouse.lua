@@ -2307,6 +2307,7 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYLISTINGS
 	if NAH.settings.OpenAuctionWindow == false then
 	else
 	NAH.settings.OpenAuctionWindow= false	
+	NAH.settings.ActiveTab="Auction";
 	SCENE_MANAGER:Show("NAHScene");	
 	end
 	

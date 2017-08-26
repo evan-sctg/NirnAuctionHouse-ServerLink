@@ -3,6 +3,11 @@ Latest Version: https://nirnah.com/NirnAuctionHouse(beta).zip
 Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 
 
+v0.0.19.01 "beta" @Elo
+ - bugfix transted buttons
+ - Update transtations
+ - bugfix refresh hotkey
+
 v0.0.19 "beta" @Elo
  - Added buy orders 
  - Made hide Nirn Auction House button persistent(also hides server link message)
