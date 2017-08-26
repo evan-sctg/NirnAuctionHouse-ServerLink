@@ -5,6 +5,7 @@ Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 
 v0.0.19 "beta" @Elo
  - Added buy orders 
+ - Made hide Nirn Auction House button persistent(also hides server link message)
  - Added Expired listings window (allows you to quickly relist)
  - Added alternate Visual Marker in inventory for locked items
  - Rearranged and renamed auction buttons
