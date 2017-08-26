@@ -8,7 +8,7 @@ ZO_CreateStringId("SI_NAH_STRING_AUCTIONITEM"     , "Auktionsartikel");
 ZO_CreateStringId("SI_NAH_STRING_FULFILLORDER"     , "Bestellung abwickeln");
 ZO_CreateStringId("SI_NAH_STRING_CANCELAUCTION"     , "Auktion abbrechen");
 
-ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "Preischeck");--new
+ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "Preischeck");
 
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_LISTING"     , "Erfolgreich eingestellte Artikel - Verarbeitung kann bis zu 60 Sekunden dauern");
 ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING"     , "Fehler beim Anzeigen der eingestellten Artikel");
@@ -48,15 +48,15 @@ ZO_CreateStringId("SI_NAH_BID"   , "Bieten");
 ZO_CreateStringId("SI_NAH_BUYOUT"   , "Kaufen");
 ZO_CreateStringId("SI_NAH_CANCEL"   , "Stornieren");
 ZO_CreateStringId("SI_NAH_CONFIRM"   , "Bestätigen");
-ZO_CreateStringId("SI_NAH_RELIST"   , "Relist");--new
-ZO_CreateStringId("SI_NAH_BROWSE"   , "Durchsuchen");--new
+ZO_CreateStringId("SI_NAH_RELIST"   , "Wiedereinstellen");
+ZO_CreateStringId("SI_NAH_BROWSE"   , "Durchsuchen");
 
-ZO_CreateStringId("SI_NAH_EXPIRED"   , "Abgelaufen");--new
-ZO_CreateStringId("SI_NAH_ORDERS"   , "Aufträge");--new
-ZO_CreateStringId("SI_NAH_MYORDERS"   , "Meine Befehle");--new
-ZO_CreateStringId("SI_NAH_TRACKING"   , "Verfolgung");--new
-ZO_CreateStringId("SI_NAH_POSTORDER"   , "Senden");--new
-ZO_CreateStringId("SI_NAH_PURCHASEPRICE"   , "Kaufpreis");--new
+ZO_CreateStringId("SI_NAH_EXPIRED"   , "Abgelaufen");
+ZO_CreateStringId("SI_NAH_ORDERS"   , "Aufträge");
+ZO_CreateStringId("SI_NAH_MYORDERS"   , "Meine Aufträge");
+ZO_CreateStringId("SI_NAH_TRACKING"   , "Verfolgung");
+ZO_CreateStringId("SI_NAH_POSTORDER"   , "Bestellung aufgeben");
+ZO_CreateStringId("SI_NAH_PURCHASEPRICE"   , "Kaufpreis");
 
 ZO_CreateStringId("SI_NAH_AUCTION"   , "Auktion");
 ZO_CreateStringId("SI_NAH_SOLDITEMS"   , "Verkäufe");
