@@ -522,7 +522,53 @@ namespace GlobalAuctionHouse
 
 
     }
+    
 
+
+    [DataContract]
+    public class AuctionFilledwtbOrderEntry
+    {
+
+        [DataMember(EmitDefaultValue = false)]
+        public int? WTBID
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public string ActiveAccountData
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public string Player
+        {
+            get;
+            set;
+        }
+
+
+        public AuctionFilledwtbOrderEntry()
+        {
+        }
+
+        public AuctionFilledwtbOrderEntry(LsonValue luaObject, string ActiveAccountcreds)
+        {
+          
+            this.ActiveAccountData = ActiveAccountcreds;
+            int i = 0;
+            if (!int.TryParse((string)luaObject["WTBID"], out i)) i = 0;
+            this.WTBID = i;
+
+            
+            this.Player = (string)luaObject["Player"];
+        }
+
+
+    }
 
 
     [DataContract]
@@ -565,8 +611,8 @@ namespace GlobalAuctionHouse
         {
             // try{
 
-                this.ActiveAccountData = ActiveAccountcreds;
-                luaObject = luaObject["Order"];
+            this.ActiveAccountData = ActiveAccountcreds;
+            luaObject = luaObject["Order"];
             int i = 0;
             if (!int.TryParse((string)luaObject["TradeID"], out i)) i = 0;
             this.TradeID = i;
@@ -587,6 +633,163 @@ namespace GlobalAuctionHouse
 
 
 
+
+
+    [DataContract]
+    public class AuctionWtbOrderEntry
+    {
+
+        [DataMember(EmitDefaultValue = false)]
+        public int? TradeID
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public string ActiveAccountData
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public string Player
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public int? Price
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public int? itemId
+        {
+            get;
+            set;
+        }
+
+
+        [DataMember]
+        public int? stackCount
+        {
+            get;
+            set;
+        }
+
+
+
+        [DataMember]
+        public string ItemLink
+        {
+            get;
+            set;
+        }
+
+
+
+        [DataMember]
+        public string Name
+        {
+            get;
+            set;
+        }
+
+
+
+        [DataMember]
+        public int? Quality
+        {
+            get;
+            set;
+        }
+
+
+        [DataMember]
+        public int? sellValue
+        {
+            get;
+            set;
+        }
+        
+
+        public AuctionWtbOrderEntry()
+        {
+        }
+
+        public AuctionWtbOrderEntry(LsonValue luaObject, string ActiveAccountcreds)
+        {
+            // try{
+
+            this.ActiveAccountData = ActiveAccountcreds;
+            int i = 0;
+            if (!int.TryParse((string)luaObject["BuyoutPrice"], out i)) i = 0;
+            this.Price = i;
+
+            
+            this.stackCount = (int)luaObject["stackCount"];
+           
+            this.sellValue = (int)luaObject["Price"];
+
+            i = 0;
+            if (!int.TryParse((string)luaObject["itemId"], out i)) i = 0;
+            this.itemId = i;
+            
+            this.Quality = (int)luaObject["itemQuality"];
+
+
+            this.Name = (string)luaObject["itemName"];
+            this.ItemLink = (string)luaObject["ItemLink"];
+            this.Player = (string)luaObject["Player"];
+        }
+
+
+    }
+
+
+
+
+
+    [DataContract]
+    public class AuctionRelistOrderEntry
+    {
+
+        [DataMember(EmitDefaultValue = false)]
+        public int? TradeID
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public string ActiveAccountData
+        {
+            get;
+            set;
+        }
+
+
+        public AuctionRelistOrderEntry()
+        {
+        }
+
+        public AuctionRelistOrderEntry(LsonValue luaObject, string ActiveAccountcreds)
+        {
+            // try{
+
+            this.ActiveAccountData = ActiveAccountcreds;
+            int i = 0;
+            if (!int.TryParse((string)luaObject["TradeID"], out i)) i = 0;
+            this.TradeID = i;
+        }
+
+
+    }
 
 
 

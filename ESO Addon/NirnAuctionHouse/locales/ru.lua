@@ -48,6 +48,15 @@ ZO_CreateStringId("SI_NAH_BID"   , "предложение");
 ZO_CreateStringId("SI_NAH_BUYOUT"   , "выкуп");
 ZO_CreateStringId("SI_NAH_CANCEL"   , "Отмена");
 ZO_CreateStringId("SI_NAH_CONFIRM"   , "подтвердить");
+ZO_CreateStringId("SI_NAH_RELIST"   , "повторно выставляю");--new
+ZO_CreateStringId("SI_NAH_BROWSE"   , "просматривать");--new
+ZO_CreateStringId("SI_NAH_EXPIRED"   , "Истекший");--new
+ZO_CreateStringId("SI_NAH_ORDERS"   , "распоряжения");--new
+ZO_CreateStringId("SI_NAH_MYORDERS"   , "мои заказы");--new
+ZO_CreateStringId("SI_NAH_TRACKING"   , "отслеживание");--new
+ZO_CreateStringId("SI_NAH_POSTORDER"   , "Отправить заказ");--new
+ZO_CreateStringId("SI_NAH_PURCHASEPRICE"   , "Цена");--new
+
 
 ZO_CreateStringId("SI_NAH_AUCTION"   , "Аукцион");
 ZO_CreateStringId("SI_NAH_SOLDITEMS"   , "Проданные товары");

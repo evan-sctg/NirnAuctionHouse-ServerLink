@@ -3,12 +3,22 @@ Latest Version: https://nirnah.com/NirnAuctionHouse(beta).zip
 Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 
 
+v0.0.19 "beta" @Elo
+ - Added buy orders 
+ - Added Expired listings window (allows you to quickly relist)
+ - Added alternate Visual Marker in inventory for locked items
+ - Rearranged and renamed auction buttons
+ - Added visual seller ratings(1-5)
+ - Added visual buyer ratings(1-5)
+ - Categorized some item types for search
+
+
 v0.0.18 "beta" @Elo
  - Added quantity to the Create Auction window
  - Added current buyout postage to the Create Auction window (red if postage is as much as buyout)
  - Increased number of Auctions you can list to 100
- - Added option to display which player(alt) sold the items on fulfill window
- - Bugfix playername restrictions players with "'" will no longer be rejected
+ - Added option to display which player(alt) sold the items on Sold Items window
+ - Bugfix player-name restrictions players with "'" will no longer be rejected
 
 v0.0.17.06 "beta" @Elo
  - Added pricing to guild store

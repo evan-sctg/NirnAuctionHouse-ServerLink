@@ -50,6 +50,17 @@ ZO_CreateStringId("SI_NAH_BID"   , "Bid");
 ZO_CreateStringId("SI_NAH_BUYOUT"   , "Buyout");
 ZO_CreateStringId("SI_NAH_CANCEL"   , "Cancel");
 ZO_CreateStringId("SI_NAH_CONFIRM"   , "Confirm");
+ZO_CreateStringId("SI_NAH_RELIST"   , "Relist");--new
+ZO_CreateStringId("SI_NAH_BROWSE"   , "Browse");--new
+ZO_CreateStringId("SI_NAH_EXPIRED"   , "Expired");--new
+ZO_CreateStringId("SI_NAH_ORDERS"   , "Orders");--new
+ZO_CreateStringId("SI_NAH_MYORDERS"   , "My Orders");--new
+ZO_CreateStringId("SI_NAH_TRACKING"   , "Tracking");--new
+ZO_CreateStringId("SI_NAH_POSTORDER"   , "Post Order");--new
+ZO_CreateStringId("SI_NAH_PURCHASEPRICE"   , "Purchase Price");--new
+
+
+				
 
 ZO_CreateStringId("SI_NAH_AUCTION"   , "Auction");
 ZO_CreateStringId("SI_NAH_SOLDITEMS"   , "Sold Items");

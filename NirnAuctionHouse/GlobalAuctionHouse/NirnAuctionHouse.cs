@@ -44,7 +44,9 @@ namespace GlobalAuctionHouse
         private DateTime LastSyncTimeBid;
         private DateTime LastSyncTimeFOs;
         private DateTime LastSyncTimePaidOrder;
-
+        private DateTime LastSyncTimeEXs;
+        private DateTime LastSyncTimewtbs;
+        
 
 
 
@@ -66,6 +68,8 @@ namespace GlobalAuctionHouse
 
 
         
+        public string WtbListPath;
+        public string ExpiredListPath;
         public string PricingPath;
         public string TradeListPath;
         public string BidListPath;
@@ -119,6 +123,8 @@ namespace GlobalAuctionHouse
              Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
 
             
+            this.WtbListPath = Path.Combine(this.AddonDirectory, "PurchaseOrders.lua");
+            this.ExpiredListPath = Path.Combine(this.AddonDirectory, "Expired.lua");
             this.PricingPath = Path.Combine(this.AddonDirectory, "Pricing.lua");
             this.TradeListPath = Path.Combine(this.AddonDirectory, "Trades.lua");
             this.BidListPath = Path.Combine(this.AddonDirectory, "Bids.lua");
@@ -331,24 +337,24 @@ namespace GlobalAuctionHouse
 
 
 
-
-
-        private void ParseNPostFilledOrders()
+        //
+        
+        private void ParseNPostWTBOrders()
         {
 
             bool oktoSync = false;
 
-            if (LastSyncTimeFOs == null)
+            if (LastSyncTimewtbs == null)
             {
                 oktoSync = true;
             }
             else
             {
-                TimeSpan totalTimeTaken = DateTime.Now.Subtract(LastSyncTimeFOs);
+                TimeSpan totalTimeTaken = DateTime.Now.Subtract(LastSyncTimewtbs);
                 if (totalTimeTaken.TotalMilliseconds > 5000)
                 {
-                  //  this.StatusText = "bid totalTimeTaken.TotalMilliseconds: " + totalTimeTaken.TotalMilliseconds;
-                 //   label1.Text = this.StatusText;
+                    //  this.StatusText = "bid totalTimeTaken.TotalMilliseconds: " + totalTimeTaken.TotalMilliseconds;
+                    //   label1.Text = this.StatusText;
                     oktoSync = true;
                 }
 
@@ -360,7 +366,7 @@ namespace GlobalAuctionHouse
             if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"")
             {
                 this.StatusText = "Loading Active Account";
-               // label1.Text = this.StatusText;
+                // label1.Text = this.StatusText;
                 this.LoadActiveAccount();
             }
 
@@ -384,7 +390,524 @@ namespace GlobalAuctionHouse
             string str = Path.Combine(SavedVariableDirectory, "NirnAuctionHouse.lua");
             if (!File.Exists(str))
             {
-               // this.ToLog("Auction House Saved File doesnt exist yet: " + str);
+                // this.ToLog("Auction House Saved File doesnt exist yet: " + str);
+                this.StatusText = "Auction House Trade File doesnt exist yet";
+                label1.Text = this.StatusText;
+                return;
+            }
+
+
+
+            this.StatusText = "Starting wtb Order Upload";
+            label1.Text = this.StatusText;
+
+
+            try
+            {
+
+
+
+                this.StatusText = "Loading wtb Orders";
+                label1.Text = this.StatusText;
+
+                Dictionary<string, LsonValue> SavedVariableFileData = ReadSavedVariableFile();
+                if (SavedVariableFileData != null)
+                {
+
+                    this.StatusText = "Loaded wtb Orders";
+                    label1.Text = this.StatusText;
+
+                    if (SavedVariableFileData.ContainsKey("NirnAuctionHouseData"))
+                    {
+                        LsonValue item = SavedVariableFileData["NirnAuctionHouseData"]["Default"];
+
+                        LsonValue activeaccountLUAOBJ = item[ActiveAccount];
+
+                        List<AuctionWtbOrderEntry> TmpRelistOrders = new List<AuctionWtbOrderEntry>();
+                        LsonValue items = activeaccountLUAOBJ;
+                        LsonValue Bitem = items["$AccountWide"]["data"]["WTBOrders"];
+                        
+                        foreach (int key in Bitem.Keys)
+                        {
+                            if (Bitem[key].ContainsKey("WTBOrder"))
+                            {
+                                if (Bitem[key]["WTBOrder"].ContainsKey("stackCount"))
+                                {
+                                AuctionWtbOrderEntry TmpRelistOrder = new AuctionWtbOrderEntry(Bitem[key]["WTBOrder"], ActiveAccount + "~" + ActiveAccountUUID);
+                                if (TmpRelistOrder.itemId > 0)
+                            {
+                                TmpRelistOrders.Add(TmpRelistOrder);
+                                    }
+                                }
+                            }
+                        }
+
+                        
+
+
+
+
+
+                        AuctionWtbOrderEntry TmpRelistOrderFirst = TmpRelistOrders.FirstOrDefault<AuctionWtbOrderEntry>((AuctionWtbOrderEntry x) => x.itemId > 0);
+
+
+                        if (TmpRelistOrderFirst == null)
+                        {
+                            this.StatusText = "No wtb Orders Found for " + ActiveAccount;
+                            label1.Text = this.StatusText;
+                            return;
+                        }
+
+                        this.StatusText = "Loaded wtb Orders for " + ActiveAccount;
+                        label1.Text = this.StatusText;
+
+
+                        if (TmpRelistOrderFirst != null)
+                        {
+
+                            if (TmpRelistOrderFirst.itemId > 0)
+                            {
+                                this.StatusText = "Loaded First wtb Order for " + ActiveAccount + " [ " + TmpRelistOrderFirst.itemId + " ]";
+                                label1.Text = this.StatusText;
+
+                            }
+                            else
+                            {
+                                this.StatusText = "No wtb Orders found for " + ActiveAccount;
+                                label1.Text = this.StatusText;
+                            }
+
+                        }
+                        else
+                        {
+                            this.StatusText = "No wtb Orders found for " + ActiveAccount;
+                            label1.Text = this.StatusText;
+                        }
+
+
+                        this.PostWtbOrders(TmpRelistOrders);
+
+
+
+
+                        this.LastSyncTimewtbs = DateTime.Now;
+                        this.UpdateWTBList();
+                        this.UpdateTradeList();
+
+                    }
+                    return;
+                }
+
+            }
+            finally
+            {
+                //done
+            }
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+        private void ParseNPostRelistOrders()
+        {
+
+            bool oktoSync = false;
+
+            if (LastSyncTimeEXs == null)
+            {
+                oktoSync = true;
+            }
+            else
+            {
+                TimeSpan totalTimeTaken = DateTime.Now.Subtract(LastSyncTimeEXs);
+                if (totalTimeTaken.TotalMilliseconds > 5000)
+                {
+                    //  this.StatusText = "bid totalTimeTaken.TotalMilliseconds: " + totalTimeTaken.TotalMilliseconds;
+                    //   label1.Text = this.StatusText;
+                    oktoSync = true;
+                }
+
+            }
+
+            if (!oktoSync) { return; }
+
+
+            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"")
+            {
+                this.StatusText = "Loading Active Account";
+                // label1.Text = this.StatusText;
+                this.LoadActiveAccount();
+            }
+
+            if (ActiveAccountUUID == null || ActiveAccountUUID == "")
+            {
+                this.StatusText = "Loading Active Account UUID";
+                // label1.Text = this.StatusText;
+                this.UpdateUUID();
+            }
+
+
+
+            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"" || ActiveAccountUUID == null || ActiveAccountUUID == "") { return; }
+
+            //for debugging
+            //this.LastSyncTime = DateTime.Now;
+            //return;
+
+            this.StatusText = "Preparing Upload";
+            label1.Text = this.StatusText;
+            string str = Path.Combine(SavedVariableDirectory, "NirnAuctionHouse.lua");
+            if (!File.Exists(str))
+            {
+                // this.ToLog("Auction House Saved File doesnt exist yet: " + str);
+                this.StatusText = "Auction House Trade File doesnt exist yet";
+                label1.Text = this.StatusText;
+                return;
+            }
+
+
+
+            this.StatusText = "Starting relist Order Upload";
+            label1.Text = this.StatusText;
+
+
+            try
+            {
+
+
+
+                this.StatusText = "Loading relist Orders";
+                label1.Text = this.StatusText;
+
+                Dictionary<string, LsonValue> SavedVariableFileData = ReadSavedVariableFile();
+                if (SavedVariableFileData != null)
+                {
+
+                    this.StatusText = "Loaded Relist Orders";
+                    label1.Text = this.StatusText;
+
+                    if (SavedVariableFileData.ContainsKey("NirnAuctionHouseData"))
+                    {
+                        LsonValue item = SavedVariableFileData["NirnAuctionHouseData"]["Default"];
+
+                        LsonValue activeaccountLUAOBJ = item[ActiveAccount];
+
+                        List<AuctionRelistOrderEntry> TmpRelistOrders = new List<AuctionRelistOrderEntry>();
+                        LsonValue items = activeaccountLUAOBJ;
+                        LsonValue Bitem = items["$AccountWide"]["data"]["RelistOrders"];
+                        foreach (string key in Bitem.Keys)
+                        {
+                            AuctionRelistOrderEntry TmpRelistOrder = new AuctionRelistOrderEntry(Bitem[key], ActiveAccount + "~" + ActiveAccountUUID);
+                            if (TmpRelistOrder.TradeID > 0)
+                            {
+                                TmpRelistOrders.Add(TmpRelistOrder);
+                            }
+                        }
+
+
+
+
+
+                        AuctionRelistOrderEntry TmpRelistOrderFirst = TmpRelistOrders.FirstOrDefault<AuctionRelistOrderEntry>((AuctionRelistOrderEntry x) => x.TradeID > 0);
+
+
+                        if (TmpRelistOrderFirst == null)
+                        {
+                            this.StatusText = "No relist Orders Found for " + ActiveAccount;
+                            label1.Text = this.StatusText;
+                            return;
+                        }
+
+                        this.StatusText = "Loaded relsit Orders for " + ActiveAccount;
+                        label1.Text = this.StatusText;
+
+
+                        if (TmpRelistOrderFirst != null)
+                        {
+
+                            if (TmpRelistOrderFirst.TradeID > 0)
+                            {
+                                this.StatusText = "Loaded First relist Order for " + ActiveAccount + " [ " + TmpRelistOrderFirst.TradeID + " ]";
+                                label1.Text = this.StatusText;
+
+                            }
+                            else
+                            {
+                                this.StatusText = "No relist Orders found for " + ActiveAccount;
+                                label1.Text = this.StatusText;
+                            }
+
+                        }
+                        else
+                        {
+                            this.StatusText = "No relist Orders found for " + ActiveAccount;
+                            label1.Text = this.StatusText;
+                        }
+
+
+                        this.PostRelistOrders(TmpRelistOrders);
+
+
+
+
+                        this.LastSyncTimeEXs = DateTime.Now;
+                        this.UpdateExpiredList();
+                        this.UpdateTradeList();
+                        this.UpdateWTBList();
+
+                    }
+                    return;
+                }
+
+            }
+            finally
+            {
+                //done
+            }
+
+
+
+
+        }
+
+
+
+
+
+        
+
+
+
+
+
+        private void ParseNPostFilledWTBOrders()
+        {
+
+            bool oktoSync = false;
+
+            if (LastSyncTimeFOs == null)
+            {
+                oktoSync = true;
+            }
+            else
+            {
+                TimeSpan totalTimeTaken = DateTime.Now.Subtract(LastSyncTimeFOs);
+                if (totalTimeTaken.TotalMilliseconds > 5000)
+                {
+                    //  this.StatusText = "bid totalTimeTaken.TotalMilliseconds: " + totalTimeTaken.TotalMilliseconds;
+                    //   label1.Text = this.StatusText;
+                    oktoSync = true;
+                }
+
+            }
+
+            if (!oktoSync) { return; }
+
+            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"")
+            {
+                this.StatusText = "Loading Active Account";
+                // label1.Text = this.StatusText;
+                this.LoadActiveAccount();
+            }
+
+            if (ActiveAccountUUID == null || ActiveAccountUUID == "")
+            {
+                this.StatusText = "Loading Active Account UUID";
+                // label1.Text = this.StatusText;
+                this.UpdateUUID();
+            }
+
+
+
+            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"" || ActiveAccountUUID == null || ActiveAccountUUID == "") { return; }
+            
+            //for debugging
+            //this.LastSyncTime = DateTime.Now;
+            //return;
+
+            this.StatusText = "Preparing Upload";
+            label1.Text = this.StatusText;
+            string str = Path.Combine(SavedVariableDirectory, "NirnAuctionHouse.lua");
+            if (!File.Exists(str))
+            {
+                // this.ToLog("Auction House Saved File doesnt exist yet: " + str);
+                this.StatusText = "Auction House Trade File doesnt exist yet";
+                label1.Text = this.StatusText;
+                return;
+            }
+
+
+
+            this.StatusText = "Starting Filled wtb Order Upload";
+            label1.Text = this.StatusText;
+
+
+            try
+            {
+
+
+
+                this.StatusText = "Loading Filled wtb Orders";
+                label1.Text = this.StatusText;
+
+                Dictionary<string, LsonValue> SavedVariableFileData = ReadSavedVariableFile();
+                if (SavedVariableFileData != null)
+                {
+
+                    this.StatusText = "Loaded Filled wtb Orders";
+                    label1.Text = this.StatusText;
+
+                    if (SavedVariableFileData.ContainsKey("NirnAuctionHouseData"))
+                    {
+                        LsonValue item = SavedVariableFileData["NirnAuctionHouseData"]["Default"];
+
+                        LsonValue activeaccountLUAOBJ = item[ActiveAccount];
+
+                        List<AuctionFilledwtbOrderEntry> TmpFilledOrders = new List<AuctionFilledwtbOrderEntry>();
+                        LsonValue items = activeaccountLUAOBJ;
+                        LsonValue Bitem = items["$AccountWide"]["data"]["FilledWTBOrders"];
+                        foreach (string key in Bitem.Keys)
+                        {
+                            AuctionFilledwtbOrderEntry TmpFilledOrder = new AuctionFilledwtbOrderEntry(Bitem[key], ActiveAccount + "~" + ActiveAccountUUID);
+                            if (TmpFilledOrder.WTBID > 0)
+                            {
+                                TmpFilledOrders.Add(TmpFilledOrder);
+                            }
+                        }
+
+
+
+
+
+                        AuctionFilledwtbOrderEntry TmpFilledOrderFirst = TmpFilledOrders.FirstOrDefault<AuctionFilledwtbOrderEntry>((AuctionFilledwtbOrderEntry x) => x.WTBID > 0);
+
+
+                        if (TmpFilledOrderFirst == null)
+                        {
+                            this.StatusText = "No Filled wtb Orders Found for " + ActiveAccount;
+                            label1.Text = this.StatusText;
+                            return;
+                        }
+
+                        this.StatusText = "Loaded Filled wtb Orders for " + ActiveAccount;
+                        label1.Text = this.StatusText;
+
+
+                        if (TmpFilledOrderFirst != null)
+                        {
+
+                            if (TmpFilledOrderFirst.WTBID > 0)
+                            {
+                                this.StatusText = "Loaded First Filled wtb Order for " + ActiveAccount + " [ " + TmpFilledOrderFirst.WTBID + " ]";
+                                label1.Text = this.StatusText;
+
+                            }
+                            else
+                            {
+                                this.StatusText = "No Filled wtb Orders found for " + ActiveAccount;
+                                label1.Text = this.StatusText;
+                            }
+
+                        }
+                        else
+                        {
+                            this.StatusText = "No Filled wtb Orders found for " + ActiveAccount;
+                            label1.Text = this.StatusText;
+                        }
+
+
+                        this.PostFilledWTBOrders(TmpFilledOrders);
+
+
+
+
+                        this.LastSyncTimeFOs = DateTime.Now;
+                        this.UpdateBidList();
+                        this.UpdateTradeList();
+                        this.UpdateWTBList();
+
+                    }
+                    return;
+                }
+
+            }
+            finally
+            {
+                //done
+            }
+
+
+
+
+        }
+
+
+
+
+
+
+
+        private void ParseNPostFilledOrders()
+        {
+
+            bool oktoSync = false;
+
+            if (LastSyncTimeFOs == null)
+            {
+                oktoSync = true;
+            }
+            else
+            {
+                TimeSpan totalTimeTaken = DateTime.Now.Subtract(LastSyncTimeFOs);
+                if (totalTimeTaken.TotalMilliseconds > 5000)
+                {
+                    //  this.StatusText = "bid totalTimeTaken.TotalMilliseconds: " + totalTimeTaken.TotalMilliseconds;
+                    //   label1.Text = this.StatusText;
+                    oktoSync = true;
+                }
+
+            }
+
+            if (!oktoSync) { return; }
+
+
+            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"")
+            {
+                this.StatusText = "Loading Active Account";
+                // label1.Text = this.StatusText;
+                this.LoadActiveAccount();
+            }
+
+            if (ActiveAccountUUID == null || ActiveAccountUUID == "")
+            {
+                this.StatusText = "Loading Active Account UUID";
+                // label1.Text = this.StatusText;
+                this.UpdateUUID();
+            }
+
+
+
+            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"" || ActiveAccountUUID == null || ActiveAccountUUID == "") { return; }
+
+            //for debugging
+            //this.LastSyncTime = DateTime.Now;
+            //return;
+
+            this.StatusText = "Preparing Upload";
+            label1.Text = this.StatusText;
+            string str = Path.Combine(SavedVariableDirectory, "NirnAuctionHouse.lua");
+            if (!File.Exists(str))
+            {
+                // this.ToLog("Auction House Saved File doesnt exist yet: " + str);
                 this.StatusText = "Auction House Trade File doesnt exist yet";
                 label1.Text = this.StatusText;
                 return;
@@ -395,100 +918,101 @@ namespace GlobalAuctionHouse
             this.StatusText = "Starting Filled Order Upload";
             label1.Text = this.StatusText;
 
-            
-                try
+
+            try
+            {
+
+
+
+                this.StatusText = "Loading Filled Orders";
+                label1.Text = this.StatusText;
+
+                Dictionary<string, LsonValue> SavedVariableFileData = ReadSavedVariableFile();
+                if (SavedVariableFileData != null)
                 {
-                  
 
-                  
-                        this.StatusText = "Loading Filled Orders";
-                        label1.Text = this.StatusText;
+                    this.StatusText = "Loaded Filled Orders";
+                    label1.Text = this.StatusText;
 
-                    Dictionary<string, LsonValue> SavedVariableFileData = ReadSavedVariableFile();
-                        if (SavedVariableFileData != null)
+                    if (SavedVariableFileData.ContainsKey("NirnAuctionHouseData"))
+                    {
+                        LsonValue item = SavedVariableFileData["NirnAuctionHouseData"]["Default"];
+
+                        LsonValue activeaccountLUAOBJ = item[ActiveAccount];
+
+                        List<AuctionFilledOrderEntry> TmpFilledOrders = new List<AuctionFilledOrderEntry>();
+                        LsonValue items = activeaccountLUAOBJ;
+                        LsonValue Bitem = items["$AccountWide"]["data"]["FilledOrders"];
+                        foreach (string key in Bitem.Keys)
                         {
-
-                            this.StatusText = "Loaded Filled Orders";
-                            label1.Text = this.StatusText;
-
-                            if (SavedVariableFileData.ContainsKey("NirnAuctionHouseData"))
+                            AuctionFilledOrderEntry TmpFilledOrder = new AuctionFilledOrderEntry(Bitem[key], ActiveAccount + "~" + ActiveAccountUUID);
+                            if (TmpFilledOrder.TradeID > 0)
                             {
-                            LsonValue item = SavedVariableFileData["NirnAuctionHouseData"]["Default"];
-                           
-                                LsonValue activeaccountLUAOBJ = item[ActiveAccount];
-
-                                List<AuctionFilledOrderEntry> TmpFilledOrders = new List<AuctionFilledOrderEntry>();
-                                LsonValue items = activeaccountLUAOBJ;
-                                LsonValue Bitem = items["$AccountWide"]["data"]["FilledOrders"];
-                                    foreach (string key in Bitem.Keys)
-                                    {
-                                        AuctionFilledOrderEntry TmpFilledOrder = new AuctionFilledOrderEntry(Bitem[key], ActiveAccount + "~" + ActiveAccountUUID);
-                                        if (TmpFilledOrder.TradeID > 0)
-                                        {
-                                        TmpFilledOrders.Add(TmpFilledOrder);
-                                        }
-                                    }
-
-
-
-
-
-                                    AuctionFilledOrderEntry TmpFilledOrderFirst = TmpFilledOrders.FirstOrDefault<AuctionFilledOrderEntry>((AuctionFilledOrderEntry x) => x.TradeID > 0);
-
-
-                                if (TmpFilledOrderFirst == null)
-                                {
-                                    this.StatusText = "No Filled Orders Found for " + ActiveAccount;
-                                    label1.Text = this.StatusText;
-                                    return;
-                                }
-
-                                this.StatusText = "Loaded Filled Orders for " + ActiveAccount;
-                                label1.Text = this.StatusText;
-
-
-                                if (TmpFilledOrderFirst != null)
-                                {
-
-                                    if (TmpFilledOrderFirst.TradeID > 0)
-                                    {
-                                        this.StatusText = "Loaded First Filled Order for " + ActiveAccount + " [ " + TmpFilledOrderFirst.TradeID + " ]";
-                                        label1.Text = this.StatusText;
-
-                                    }
-                                    else
-                                    {
-                                        this.StatusText = "No Filled Orders found for " + ActiveAccount;
-                                        label1.Text = this.StatusText;
-                                    }
-
-                                }
-                                else
-                                {
-                                    this.StatusText = "No Filled Orders found for " + ActiveAccount;
-                                    label1.Text = this.StatusText;
-                                }
-
-
-                                this.PostFilledOrders(TmpFilledOrders);
-
-                            
-
-
-                            this.LastSyncTimeFOs = DateTime.Now;
-                            this.UpdateBidList();
-                            this.UpdateTradeList();
-
+                                TmpFilledOrders.Add(TmpFilledOrder);
+                            }
                         }
+
+
+
+
+
+                        AuctionFilledOrderEntry TmpFilledOrderFirst = TmpFilledOrders.FirstOrDefault<AuctionFilledOrderEntry>((AuctionFilledOrderEntry x) => x.TradeID > 0);
+
+
+                        if (TmpFilledOrderFirst == null)
+                        {
+                            this.StatusText = "No Filled Orders Found for " + ActiveAccount;
+                            label1.Text = this.StatusText;
                             return;
                         }
-                    
+
+                        this.StatusText = "Loaded Filled Orders for " + ActiveAccount;
+                        label1.Text = this.StatusText;
+
+
+                        if (TmpFilledOrderFirst != null)
+                        {
+
+                            if (TmpFilledOrderFirst.TradeID > 0)
+                            {
+                                this.StatusText = "Loaded First Filled Order for " + ActiveAccount + " [ " + TmpFilledOrderFirst.TradeID + " ]";
+                                label1.Text = this.StatusText;
+
+                            }
+                            else
+                            {
+                                this.StatusText = "No Filled Orders found for " + ActiveAccount;
+                                label1.Text = this.StatusText;
+                            }
+
+                        }
+                        else
+                        {
+                            this.StatusText = "No Filled Orders found for " + ActiveAccount;
+                            label1.Text = this.StatusText;
+                        }
+
+
+                        this.PostFilledOrders(TmpFilledOrders);
+
+
+
+
+                        this.LastSyncTimeFOs = DateTime.Now;
+                        this.UpdateBidList();
+                        this.UpdateTradeList();
+                        this.UpdateWTBList();
+
+                    }
+                    return;
                 }
-                finally
-                {
-                    //done
-                }
-            
+
+            }
+            finally
+            {
+                //done
+            }
+
 
 
 
@@ -884,7 +1408,157 @@ namespace GlobalAuctionHouse
 
 
 
-        
+
+        private void PostWtbOrders(IEnumerable<AuctionWtbOrderEntry> tradeModels)
+        {
+            if (tradeModels.Count<AuctionWtbOrderEntry>() == 0)
+            {
+                return;
+            }
+            this.StatusText = "Msg Posting wtb";
+            label1.Text = this.StatusText;
+
+            try
+            {
+                AuctionWtbOrderEntry firstFilledOrder = tradeModels.FirstOrDefault<AuctionWtbOrderEntry>();
+                if (firstFilledOrder == null) { return; }
+
+                string ServerResponse = this.SendPackage(this.APIEndpoint + "/proc/wtb/new", tradeModels.ToList<AuctionWtbOrderEntry>());
+                if (ServerResponse == "The resource is created successfully!" || ServerResponse == "Done!")
+                {
+                    ModNotification("SI_NAH_STRING_SUCCESS_LISTING");
+                    this.StatusText = "Successfully wtb Order";
+                }
+                else
+                {
+                    ModNotification("SI_NAH_STRING_FAILED_LISTING");
+                    this.StatusText = "Failed to list wtb order: " + ServerResponse;
+                }
+
+                label1.Text = this.StatusText;
+                return;
+
+            }
+            catch (Exception exception)
+            {
+                this.ToLog("PostWTBOrders Error");
+                this.ToLog(exception);
+            }
+            this.StatusText = "Ready";
+            label1.Text = this.StatusText;
+        }
+
+
+
+
+
+        private void PostRelistOrders(IEnumerable<AuctionRelistOrderEntry> tradeModels)
+        {
+            if (tradeModels.Count<AuctionRelistOrderEntry>() == 0)
+            {
+                return;
+            }
+            this.StatusText = "Msg Posting relist";
+            label1.Text = this.StatusText;
+
+            try
+            {
+                AuctionRelistOrderEntry firstFilledOrder = tradeModels.FirstOrDefault<AuctionRelistOrderEntry>();
+                if (firstFilledOrder == null) { return; }
+
+                string ServerResponse = this.SendPackage(this.APIEndpoint + "/proc/trade/relist", tradeModels.ToList<AuctionRelistOrderEntry>());
+                if (ServerResponse == "The resource is created successfully!" || ServerResponse == "Done!")
+                {                  
+                        ModNotification("SI_NAH_STRING_SUCCESS_LISTING");
+                        this.StatusText = "Successfully Relisted Order";                    
+                }
+                else
+                {            
+                        ModNotification("SI_NAH_STRING_FAILED_LISTING");
+                        this.StatusText = "Failed to list relist order: " + ServerResponse;
+                }
+
+                label1.Text = this.StatusText;
+                return;
+
+            }
+            catch (Exception exception)
+            {
+                this.ToLog("PostRelistOrders Error");
+                this.ToLog(exception);
+            }
+            this.StatusText = "Ready";
+            label1.Text = this.StatusText;
+        }
+
+
+
+
+        private void PostFilledWTBOrders(IEnumerable<AuctionFilledwtbOrderEntry> tradeModels)
+        {
+            if (tradeModels.Count<AuctionFilledwtbOrderEntry>() == 0)
+            {
+                return;
+            }
+            this.StatusText = "MsgPostingBid";
+            label1.Text = this.StatusText;
+
+            try
+            {
+                AuctionFilledwtbOrderEntry firstFilledOrder = tradeModels.FirstOrDefault<AuctionFilledwtbOrderEntry>();
+                if (firstFilledOrder == null) { return; }
+
+                string ServerResponse = this.SendPackage(this.APIEndpoint + "/proc/wtb/filled", tradeModels.ToList<AuctionFilledwtbOrderEntry>());
+                if (ServerResponse == "The resource is created successfully!" || ServerResponse == "Done!")
+                {
+                    if (firstFilledOrder.Player == "1")
+                    {
+                        ModNotification("SI_NAH_STRING_SUCCESS_CANCELED");
+                        this.StatusText = "Successfully Canceled Item(s) for sale";
+                        if (DoPlaySounds_success_cancel)
+                        {
+                            PlaySuccessSound();
+                        }
+
+
+                    }
+                    else
+                    {
+                        ModNotification("SI_NAH_STRING_SUCCESS_FILLED");
+                        this.StatusText = "Successfully Filled Order";
+                    }
+                }
+                else
+                {
+                    //failed sound is already played by sendpackage function should the request fail
+                    if (firstFilledOrder.Player == "1")
+                    {
+                        ModNotification("SI_NAH_STRING_FAILED_CANCELED");
+                        this.StatusText = "Failed to Cancel Item(s) for sale: " + ServerResponse;
+
+                    }
+                    else
+                    {
+                        ModNotification("SI_NAH_STRING_FAILED_FILLED");
+                        this.StatusText = "Failed to list filled order: " + ServerResponse;
+                    }
+                }
+
+                label1.Text = this.StatusText;
+                return;
+
+            }
+            catch (Exception exception)
+            {
+                this.ToLog("PostFilledwtbOrders Error");
+                this.ToLog(exception);
+            }
+            this.StatusText = "Ready";
+            label1.Text = this.StatusText;
+        }
+
+
+
 
         private void PostFilledOrders(IEnumerable<AuctionFilledOrderEntry> tradeModels)
         {
@@ -1082,6 +1756,183 @@ namespace GlobalAuctionHouse
 
 
 
+
+        private void UpdateWTBList()
+        {
+
+            this.StatusText = "Updating WTB List";
+            // label1.Text = this.StatusText;
+
+            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"")
+            {
+                this.StatusText = "Loading Active Account";
+                // label1.Text = this.StatusText;
+                this.LoadActiveAccount();
+            }
+
+
+            if (ActiveAccountUUID == null || ActiveAccountUUID == "")
+            {
+                this.StatusText = "Loading Active Account UUID";
+                // label1.Text = this.StatusText;
+                this.UpdateUUID();
+            }
+
+            if (ActiveAccount != "" && ActiveAccount != "@" && ActiveAccount != "\"\"" && ActiveAccountUUID != null && ActiveAccountUUID != "")
+            {
+
+
+
+                try
+                {
+
+                    using (WebClient client = new WebClient())
+                    {
+                        
+                        string WtbListContent = "";
+                        if (DoActiveSellersOnly)
+                        {
+                            WtbListContent = client.DownloadString(this.APIEndpoint + "/proc/wtblist/active");
+                        }
+                        else
+                        {
+                            WtbListContent = client.DownloadString(this.APIEndpoint + "/proc/wtblist");
+                        }
+
+
+
+
+                        string Verifycontent = WtbListContent.Replace("function NirnAuctionHouse:LoadWtbs()", "");
+                        Verifycontent = Verifycontent.Replace("]={[\"ID\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace(",[\"TimeLeft\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace(",[\"Rating\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace(",[\"CharName\"]=\"@", "");
+                        Verifycontent = Verifycontent.Replace(",[\"Item\"]={[\"ID\"]=", "");
+                        Verifycontent = Verifycontent.Replace(",[\"Name\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace(",[\"StartingPrice\"]=", "");
+                        Verifycontent = Verifycontent.Replace(",[\"BuyoutPrice\"]=", "");
+                        Verifycontent = Verifycontent.Replace(",[\"stackCount\"]=", "");
+                        Verifycontent = Verifycontent.Replace(",[\"ItemLink\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace("self.GlobalWtbs={[", "");
+                        Verifycontent = Verifycontent.Replace("self.GlobalWtbs={}", "");
+
+                        if (!Verifycontent.Contains("function") && !Verifycontent.Contains("(") && !Verifycontent.Contains(")") && !Verifycontent.Contains("--") && !Verifycontent.Contains("="))
+                        {
+                            File.WriteAllText(this.WtbListPath, WtbListContent);
+                        }
+                        else
+                        {
+                            this.ToLog("Unknown content recieved for wtb List");
+                        }
+
+
+                        this.StatusText = "Updated wtb List";
+                        //  label1.Text = this.StatusText;
+                    }
+
+                }
+                catch (Exception exception)
+                {
+                    this.ToLog(exception);
+                }
+
+            }
+            else
+            {
+
+                // this.ToLog("UpdateBidList no account found");
+
+            }
+        }
+
+
+
+
+
+        private void UpdateExpiredList()
+        {
+
+            this.StatusText = "Updating Expired List";
+            // label1.Text = this.StatusText;
+
+            if (ActiveAccount == "" || ActiveAccount == "@" || ActiveAccount == "\"\"")
+            {
+                this.StatusText = "Loading Active Account";
+                // label1.Text = this.StatusText;
+                this.LoadActiveAccount();
+            }
+
+
+            if (ActiveAccountUUID == null || ActiveAccountUUID == "")
+            {
+                this.StatusText = "Loading Active Account UUID";
+                // label1.Text = this.StatusText;
+                this.UpdateUUID();
+            }
+
+            if (ActiveAccount != "" && ActiveAccount != "@" && ActiveAccount != "\"\"" && ActiveAccountUUID != null && ActiveAccountUUID != "")
+            {
+
+
+
+                try
+                {
+
+                    using (WebClient client = new WebClient())
+                    {
+
+                        string ExpiredListContent = "";
+                        ExpiredListContent = client.DownloadString(this.APIEndpoint + "/proc/expired/" + ActiveAccount + "~" + ActiveAccountUUID);
+                      
+
+
+
+                        string Verifycontent = ExpiredListContent.Replace("function NirnAuctionHouse:LoadExpiredTrades()", "");
+                        Verifycontent = Verifycontent.Replace("]={[\"ID\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace(",[\"TimeLeft\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace(",[\"CharName\"]=\"@", "");
+                        Verifycontent = Verifycontent.Replace(",[\"Item\"]={[\"ID\"]=", "");
+                        Verifycontent = Verifycontent.Replace(",[\"Name\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace(",[\"StartingPrice\"]=", "");
+                        Verifycontent = Verifycontent.Replace(",[\"BuyoutPrice\"]=", "");
+                        Verifycontent = Verifycontent.Replace(",[\"stackCount\"]=", "");
+                        Verifycontent = Verifycontent.Replace(",[\"ItemLink\"]=\"", "");
+                        Verifycontent = Verifycontent.Replace("self.ExpiredTrades={[", "");
+                        Verifycontent = Verifycontent.Replace("self.ExpiredTrades={}", "");
+
+                        if (!Verifycontent.Contains("function") && !Verifycontent.Contains("(") && !Verifycontent.Contains(")") && !Verifycontent.Contains("--") && !Verifycontent.Contains("="))
+                        {
+                            File.WriteAllText(this.ExpiredListPath, ExpiredListContent);
+                        }
+                        else
+                        {
+                            this.ToLog("Unknown content recieved for Expired List");
+                        }
+
+
+                        this.StatusText = "Updated Expired List";
+                        //  label1.Text = this.StatusText;
+                    }
+
+                }
+                catch (Exception exception)
+                {
+                    this.ToLog(exception);
+                }
+
+            }
+            else
+            {
+
+                // this.ToLog("UpdateBidList no account found");
+
+            }
+        }
+
+
+
+
+
         private void UpdateTradeList()
         {
             try
@@ -1092,12 +1943,10 @@ namespace GlobalAuctionHouse
                     string TradeListContent;
                     if (DoActiveSellersOnly)
                     {
-
                         TradeListContent = client.DownloadString(this.APIEndpoint + "/proc/tradelist/active");
                     }
                     else
                     {
-
                         TradeListContent = client.DownloadString(this.APIEndpoint + "/proc/tradelist");
                     }
 
@@ -1105,6 +1954,7 @@ namespace GlobalAuctionHouse
                     string Verifycontent = TradeListContent.Replace("function NirnAuctionHouse:LoadTrades()", "");
                     Verifycontent = Verifycontent.Replace("]={[\"ID\"]=\"", "");
                     Verifycontent = Verifycontent.Replace(",[\"TimeLeft\"]=\"", "");
+                    Verifycontent = Verifycontent.Replace(",[\"Rating\"]=\"", "");
                     Verifycontent = Verifycontent.Replace(",[\"CharName\"]=\"@", "");
                     Verifycontent = Verifycontent.Replace(",[\"Item\"]={[\"ID\"]=", "");
                     Verifycontent = Verifycontent.Replace(",[\"Name\"]=\"", "");
@@ -1113,6 +1963,7 @@ namespace GlobalAuctionHouse
                     Verifycontent = Verifycontent.Replace(",[\"stackCount\"]=", "");
                     Verifycontent = Verifycontent.Replace(",[\"ItemLink\"]=\"", "");
                     Verifycontent = Verifycontent.Replace("self.GlobalTrades={[", "");
+                    Verifycontent = Verifycontent.Replace("self.GlobalTrades={}", "");
 
                     if (!Verifycontent.Contains("function") && !Verifycontent.Contains("(") && !Verifycontent.Contains(")") && !Verifycontent.Contains("--") && !Verifycontent.Contains("="))
                     {
@@ -1413,8 +2264,10 @@ namespace GlobalAuctionHouse
 
         public void StartWatchingSavedVars()
         {
+            this.UpdateExpiredList();
             this.UpdatePricing();
             this.UpdateTradeList();
+            this.UpdateWTBList();
             this.UpdateBidList();
             this.UpdateTrackedBidList();
             this.CheckNewBids();
@@ -1514,8 +2367,14 @@ namespace GlobalAuctionHouse
                                     bool ReloadTradeDataTracked = false;
                                     bool DoPostFilledOrders = false;
                                     bool DoPostPaidOrders = false;
+                                    bool DoPostRelistOrders = false;
+                                    bool DoPostWTBOrders = false;
+                                    bool DoPostFilledWTBOrders = false;
 
-                                    try {
+
+
+
+                                        try {
                                         
 
                                             string GameWorldName = (string)acctdata["WorldName"];
@@ -1539,14 +2398,27 @@ namespace GlobalAuctionHouse
                                         if (acctdata.ContainsKey("ReloadTradeDataTracked")) { ReloadTradeDataTracked = (bool)acctdata["ReloadTradeDataTracked"]; }
                                         DoPostFilledOrders = (bool)acctdata["PostFilledOrders"];
                                         DoPostPaidOrders = (bool)acctdata["PostPaidOrders"];
+                                            if (acctdata.ContainsKey("PostRelistOrders")) { DoPostRelistOrders = (bool)acctdata["PostRelistOrders"]; }
+                                            if (acctdata.ContainsKey("PostWTBOrders")) { DoPostWTBOrders = (bool)acctdata["PostWTBOrders"]; }
+                                            if (acctdata.ContainsKey("PostFilledWTBOrders")) { DoPostFilledWTBOrders = (bool)acctdata["PostFilledWTBOrders"]; }
+
+                                            
 
 
-                                    }
+
+                                        }
                                   catch (Exception exception)
                                 {
                                     this.ToLog(exception);
                                 }
+                                        
+                                if (DoPostFilledWTBOrders)
+                                {
+                                     this.StatusText = "Posting wtb Orders";
+                                    label1.Text = this.StatusText;
+                                            this.ParseNPostFilledWTBOrders();
 
+                                }
                                 if (DoPostFilledOrders)
                                 {
                                      this.StatusText = "Posting Filled Orders";
@@ -1569,24 +2441,48 @@ namespace GlobalAuctionHouse
 
                                 }
 
-                                    if (ReloadTradeDataTracked)
+
+                                        if (DoPostRelistOrders)
+                                        {
+                                            this.StatusText = "Posting Relist Orders";
+                                            label1.Text = this.StatusText;
+                                            this.ParseNPostRelistOrders();
+
+                                        }
+
+
+
+                                        if (DoPostWTBOrders)
+                                        {
+                                            this.StatusText = "Posting WTB Orders";
+                                            label1.Text = this.StatusText;
+                                            this.ParseNPostWTBOrders();
+
+                                        }
+
+                                        
+                                        if (ReloadTradeDataTracked)
                                     {
 
                                         this.UpdateTrackedBidList();
                                         this.UpdateTradeList();
+                                        this.UpdateWTBList();
                                         this.UpdateBidList();
+                                        this.UpdateExpiredList();
 
-                                    }
+                                        }
 
                                     if (DoReloadTradeData )
                                     {
                                         this.StatusText = "Reloading Trade Data";
                                         label1.Text = this.StatusText;
                                         this.UpdateTradeList();
+                                        this.UpdateWTBList();
                                         this.UpdateBidList();
                                         this.UpdateTrackedBidList();
+                                        this.UpdateExpiredList();
 
-                                    }
+                                        }
 
 
                                     if (DoPostPaidOrders)
@@ -1698,6 +2594,7 @@ namespace GlobalAuctionHouse
         private void button2_Click(object sender, EventArgs e)
         {
             this.UpdateTradeList();
+            this.UpdateWTBList();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -1758,10 +2655,12 @@ namespace GlobalAuctionHouse
             this.GetAPIEndpoint();
             this.UpdateBidList();
             this.UpdateTradeList();
+            this.UpdateWTBList();
             this.UpdateTrackedBidList();
+            this.UpdateExpiredList();
 
 
-            bool newBidsFound = this.CheckNewBids();
+                bool newBidsFound = this.CheckNewBids();
             if (newBidsFound)
             {
                 this.ReloadGameBids();//alert mod that there are new bids waiting for it                
@@ -2095,8 +2994,26 @@ namespace GlobalAuctionHouse
             {
             }
         }
-        
 
+        
+        public string SendPackage(string Endpoint, List<AuctionFilledwtbOrderEntry> Package)
+        {
+            JavaScriptSerializer jsonSerialiser = new JavaScriptSerializer();
+            string jsonPackage = jsonSerialiser.Serialize(Package);
+            return SendPackage(Endpoint, jsonPackage);
+        }
+        public string SendPackage(string Endpoint, List<AuctionWtbOrderEntry> Package)
+        {
+            JavaScriptSerializer jsonSerialiser = new JavaScriptSerializer();
+            string jsonPackage = jsonSerialiser.Serialize(Package);
+            return SendPackage(Endpoint, jsonPackage);
+        }
+        public string SendPackage(string Endpoint, List<AuctionRelistOrderEntry> Package)
+        {
+            JavaScriptSerializer jsonSerialiser = new JavaScriptSerializer();
+            string jsonPackage = jsonSerialiser.Serialize(Package);
+            return SendPackage(Endpoint, jsonPackage);
+        }
         public string SendPackage(string Endpoint, List<AuctionPaidOrdersEntry> Package)
         {
             JavaScriptSerializer jsonSerialiser = new JavaScriptSerializer();

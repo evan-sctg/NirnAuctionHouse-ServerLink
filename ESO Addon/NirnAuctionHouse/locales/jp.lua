@@ -48,6 +48,15 @@ ZO_CreateStringId("SI_NAH_BID"   , "入札");
 ZO_CreateStringId("SI_NAH_BUYOUT"   , "バイアウト");
 ZO_CreateStringId("SI_NAH_CANCEL"   , "キャンセル");
 ZO_CreateStringId("SI_NAH_CONFIRM"   , "確認");
+ZO_CreateStringId("SI_NAH_RELIST"   , "リリスト");--new
+ZO_CreateStringId("SI_NAH_BROWSE"   , "ブラウズ");--new
+ZO_CreateStringId("SI_NAH_EXPIRED"   , "期限切れ");--new
+ZO_CreateStringId("SI_NAH_ORDERS"   , "注文");--new
+ZO_CreateStringId("SI_NAH_MYORDERS"   , "私の注文");--new
+ZO_CreateStringId("SI_NAH_TRACKING"   , "追跡");--new
+ZO_CreateStringId("SI_NAH_POSTORDER"   , "注文を送る");--new
+ZO_CreateStringId("SI_NAH_PURCHASEPRICE"   , "購入金額");--new
+
 
 ZO_CreateStringId("SI_NAH_AUCTION"   , "オークション");
 ZO_CreateStringId("SI_NAH_SOLDITEMS"   , "販売アイテム");

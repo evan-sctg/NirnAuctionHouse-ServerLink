@@ -56,6 +56,9 @@ local NirnAuctionHouse = NirnAuctionHouse
 		ReloadTradeDataTracked = false,
 		PostListings = false,
 		PostBids = false,
+		PostFilledWTBOrders = false,
+		PostWTBOrders = false,
+		PostRelistOrders = false,
 		PostFilledOrders = false,
 		PostPaidOrders = false,
 		AddListingsToMasterMerchant = false,
@@ -75,6 +78,9 @@ local NirnAuctionHouse = NirnAuctionHouse
 		NAHBTN_TOP = false,
 		
 	data = {
+		FilledWTBOrders = {},
+		WTBOrders = {},
+		RelistOrders = {},
 		PaidOrders = {},
 		ReceivedOrders = {},
 		FilledOrders = {},
@@ -181,7 +187,7 @@ function NAHTrackedItemList:Setup( )
 	NirnAuctionHouse.scene:AddFragment(ZO_SetTitleFragment:New(""));
 	NirnAuctionHouse.scene:AddFragment(ZO_FadeSceneFragment:New(NAHAuctionHouseTrackingPanel));
 	NirnAuctionHouse.scene:AddFragment(TITLE_FRAGMENT);
-	NirnAuctionHouse.scene:AddFragment(RIGHT_BG_FRAGMENT);
+--~ 	NirnAuctionHouse.scene:AddFragment(RIGHT_BG_FRAGMENT);
 	NirnAuctionHouse.scene:AddFragment(FRAME_EMOTE_FRAGMENT_JOURNAL);
 	NirnAuctionHouse.scene:AddFragment(CODEX_WINDOW_SOUNDS);
 	NirnAuctionHouse.scene:AddFragmentGroup(FRAGMENT_GROUP.MOUSE_DRIVEN_UI_WINDOW);
@@ -329,7 +335,7 @@ function NAHSoldItemList:Setup( )
 	NirnAuctionHouse.scene:AddFragment(ZO_SetTitleFragment:New(""));
 	NirnAuctionHouse.scene:AddFragment(ZO_FadeSceneFragment:New(NAHAuctionHouseOrdersPanel));
 	NirnAuctionHouse.scene:AddFragment(TITLE_FRAGMENT);
-	NirnAuctionHouse.scene:AddFragment(RIGHT_BG_FRAGMENT);
+--~ 	NirnAuctionHouse.scene:AddFragment(RIGHT_BG_FRAGMENT);
 	NirnAuctionHouse.scene:AddFragment(FRAME_EMOTE_FRAGMENT_JOURNAL);
 	NirnAuctionHouse.scene:AddFragment(CODEX_WINDOW_SOUNDS);
 	NirnAuctionHouse.scene:AddFragmentGroup(FRAGMENT_GROUP.MOUSE_DRIVEN_UI_WINDOW);
@@ -355,7 +361,7 @@ function NAHSoldItemList:SetupItemRow( control, data )
 	control:GetNamedChild("TimeLeft").normalColor = ZO_DEFAULT_TEXT;
 	control:GetNamedChild("TimeLeft"):SetText(data.TimeLeft); 
 	else
-		control:GetNamedChild("IsBuyout"):SetText("BUYOUT");	
+		control:GetNamedChild("IsBuyout"):SetText(GetString(SI_NAH_BUYOUT));	
 	end
 	
 		local codcost=10+math.floor(data.BuyoutPrice/20)
@@ -447,6 +453,7 @@ function NAHAuctionList:Setup( )
 		["TimeLeft"]     = { caseInsensitive = true, tiebreaker = "name" },
 		["StartingPrice"] = { caseInsensitive = true, tiebreaker = "name"},
 		["BuyoutPrice"] = { caseInsensitive = true, tiebreaker = "name" },
+		["Rating"] = { caseInsensitive = true, tiebreaker = "name" },
 		["itemType"] = { caseInsensitive = true, tiebreaker = "name" },
 	};
 
@@ -583,6 +590,9 @@ end
 function NAHAuctionList:BuildMasterList( )
 	self.masterList = { };
 	self.MyListedTrades = { };
+	self.ExpiredTrades = { };
+	self.GlobalWtbs = { };
+	
 	if NAH.settings.ActiveAccount== nil or NAH.settings.ActiveAccount=="" then
 	NAH.currentAccount = string.gsub(GetDisplayName(), "'", "1sSsS1QqQq1")
 	NAH.settings.ActiveAccount=NAH.currentAccount
@@ -590,11 +600,32 @@ function NAHAuctionList:BuildMasterList( )
 		if NirnAuctionHouse.GlobalTrades~= nil then
 		for i,GlobalTrade in ipairs(NirnAuctionHouse.GlobalTrades) do
 		local rowdata=NirnAuctionHouse.CreateEntryFromRaw(GlobalTrade);
+		rowdata.IsExpiredItem=false
+		rowdata.IsWTBItem=false
 		table.insert(self.masterList, rowdata);
 			if (rowdata.source==NAH.settings.ActiveAccount) then
 			rowdata.IsSoldItem=false
 			table.insert(self.MyListedTrades, rowdata);
 			end
+		end
+	end
+	
+	
+		if NirnAuctionHouse.ExpiredTrades~= nil then
+		for i,ExpiredTrade in ipairs(NirnAuctionHouse.ExpiredTrades) do
+		local rowdata=NirnAuctionHouse.CreateEntryFromRaw(ExpiredTrade);
+		rowdata.IsExpiredItem=true
+		rowdata.IsWTBItem=false
+		table.insert(self.ExpiredTrades, rowdata);			
+		end
+	end
+	
+		if NirnAuctionHouse.GlobalWtbs~= nil then
+		for i,GlobalWtb in ipairs(NirnAuctionHouse.GlobalWtbs) do
+		local rowdata=NirnAuctionHouse.CreateEntryFromRaw(GlobalWtb);
+		rowdata.IsExpiredItem=false
+		rowdata.IsWTBItem=true
+		table.insert(self.GlobalWtbs, rowdata);			
 		end
 	end
 end
@@ -779,11 +810,17 @@ function NAHAuctionList:FilterScrollList( )
 	
 	end
 --~ 	
-		     
---loop through each item and choose if we should show it or not
-	for i = 1, #self.masterList do
-		local data = self.masterList[i];
+	 
+	local currList=self.masterList;	    
 
+if( NAH.settings.ActiveTab=="Expired" )then currList=self.ExpiredTrades;  end
+if( NAH.settings.ActiveTab=="WTB" )then currList=self.GlobalWtbs;  end
+if( NAH.settings.ActiveTab=="MyWTB" )then currList=self.GlobalWtbs;  end
+
+if( currList==nil )then return;  end
+--loop through each item and choose if we should show it or not
+	for i = 1, #currList do
+		local data = currList[i];
 
 local equiptype=GetString("SI_EQUIPTYPE", data.EquipType)
 local typename=GetString("SI_ITEMTYPE", data.TypeID);
@@ -909,21 +946,31 @@ end
 if filterId==5 then--crafting
 if(data.TypeID==8)then isCrafting=true; end--motif
 if(data.TypeID==10)then isCrafting=true; end--ingredient
+if(data.TypeID==17)then isCrafting=true; end--raw material
 if(data.TypeID==31)then isCrafting=true; end--reagent
 if(data.TypeID==33)then isCrafting=true; end--potion solvent
 if(data.TypeID==35)then isCrafting=true; end--raw material
 if(data.TypeID==36)then isCrafting=true; end--material
+if(data.TypeID==37)then isCrafting=true; end--raw material
 if(data.TypeID==38)then isCrafting=true; end--material
 if(data.TypeID==39)then isCrafting=true; end--raw material
 if(data.TypeID==40)then isCrafting=true; end--material
 if(data.TypeID==41)then isCrafting=true; end--temper
 if(data.TypeID==42)then isCrafting=true; end--temper
+if(data.TypeID==43)then isCrafting=true; end--tannin
+if(data.TypeID==44)then isCrafting=true; end--style material
+if(data.TypeID==45)then isCrafting=true; end--armor trait
 if(data.TypeID==46)then isCrafting=true; end--weapon trait
 if(data.TypeID==51)then isCrafting=true; end--potency runestone
 if(data.TypeID==52)then isCrafting=true; end--aspect runestone
 if(data.TypeID==53)then isCrafting=true; end--essence runestone
+if(data.TypeID==54)then isCrafting=true; end--fish
 if(data.TypeID==58)then isCrafting=true; end--poison solvent
+if(data.TypeID==60)then isCrafting=true; end--master writ
 if(data.TypeID==62)then isCrafting=true; end--furnishing material
+
+
+
 
 
 	if addedyet~=true then
@@ -944,7 +991,7 @@ if(data.TypeID==62)then isCrafting=true; end--furnishing material
 		or (filterSubId==6 and filterCraftingId==4 and (data.itemFlavor=="Used in crafting decorative food or finishing touches." ) )--Rare Ingredients
 		then
 		
-			if ( (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab~="MyListings")) and
+			if (  (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyWTB") or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab=="WTB") or  (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="Expired")  or (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab=="Auction")) and
 			(searchInput == "" or self:CheckForMatch(data, searchInput)) then
 			addedyet=true
 			DoAddRow=true
@@ -967,7 +1014,7 @@ if(data.TypeID==29)then isConsumable=true; end--recipe
 	if addedyet~=true then
 		if isConsumable then--~ 			
 			if filterSubId==1 or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == typename) then
-				if ( (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab~="MyListings")) and
+				if ( (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyWTB") or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab=="WTB") or (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="Expired")  or (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab=="Auction")) and
 				(searchInput == "" or self:CheckForMatch(data, searchInput))  then
 					addedyet=true
 					DoAddRow=true
@@ -984,7 +1031,7 @@ if filterId==4 then--Soul Gems & Glyphs
 --~ 		if typename=="Soul Gem" or typename=="Weapon Glyph" or typename=="Armor Glyph" or typename=="Jewlery Glyph" then
 		if data.TypeID==19 or data.TypeID==20 or data.TypeID==21 or data.TypeID==26 then
 			if filterSubId==1 or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == typename) then
-				if ( (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab~="MyListings")) and
+				if (  (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyWTB") or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab=="WTB") or  (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="Expired")  or (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab=="Auction")) and
 				(searchInput == "" or self:CheckForMatch(data, searchInput))  then
 					addedyet=true
 					DoAddRow=true
@@ -999,7 +1046,7 @@ if filterId==7 then--Furnishings
 if(data.TypeID==61)then isFurnishing=true; end--Furnishing
 	if addedyet~=true then
 	if isFurnishing then
-	if ( (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab~="MyListings")) and
+	if (  (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyWTB") or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab=="WTB") or  (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="Expired")  or (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab=="Auction")) and
 	(searchInput == "" or self:CheckForMatch(data, searchInput))  then
 		addedyet=true
 		DoAddRow=true
@@ -1012,21 +1059,29 @@ if filterId==8 then--Other
 --crafting
 if(data.TypeID==8)then isOther=false; end--motif
 if(data.TypeID==10)then isOther=false; end--ingredient
+if(data.TypeID==17)then isOther=false; end--raw material
 if(data.TypeID==31)then isOther=false; end--reagent
 if(data.TypeID==33)then isOther=false; end--potion solvent
 if(data.TypeID==35)then isOther=false; end--raw material
 if(data.TypeID==36)then isOther=false; end--material
+if(data.TypeID==37)then isOther=false; end--raw material
 if(data.TypeID==38)then isOther=false; end--material
 if(data.TypeID==39)then isOther=false; end--raw material
 if(data.TypeID==40)then isOther=false; end--material
 if(data.TypeID==41)then isOther=false; end--temper
 if(data.TypeID==42)then isOther=false; end--temper
+if(data.TypeID==43)then isOther=false; end--tannin
+if(data.TypeID==44)then isOther=false; end--style material
+if(data.TypeID==45)then isOther=false; end--armor trait
 if(data.TypeID==46)then isOther=false; end--weapon trait
 if(data.TypeID==51)then isOther=false; end--potency runestone
 if(data.TypeID==52)then isOther=false; end--aspect runestone
 if(data.TypeID==53)then isOther=false; end--essence runestone
+if(data.TypeID==54)then isOther=false; end--fish
 if(data.TypeID==58)then isOther=false; end--poison solvent
+if(data.TypeID==60)then isOther=false; end--master writ
 if(data.TypeID==62)then isOther=false; end--furnishing material
+
 --Consumable
 
 if(data.TypeID==4)then isOther=false; end--Food
@@ -1046,7 +1101,7 @@ if data.TypeID==2 then isOther=false; end --Apparel
 	if addedyet~=true then
 	if isOther then
 		if filterSubId==1 or (GetString("SI_NAH_FILTERDROPSUB_"..filterId.."_", filterSubId) == typename) or (filterId==8 and filterSubId==2 and data.TypeID==16) then--bait or lure
-			if ( (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab~="MyListings")) and
+			if (  (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyWTB") or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab=="WTB") or  (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="Expired")  or (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab=="Auction")) and
 			(searchInput == "" or self:CheckForMatch(data, searchInput))  then
 				addedyet=true
 				DoAddRow=true
@@ -1086,7 +1141,7 @@ if filterId==2 then--Weapon
 		) ) 
 		then
 			if  filterTRAITId==1 or ( tonumber(data.traitType)==tonumber(GetString("SI_NAH_FILTERDROP_TRAIT_NUM_"..filterId.."_", filterTRAITId)) ) then
-			if ( (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab~="MyListings")) and
+			if (  (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyWTB") or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab=="WTB") or  (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="Expired")  or (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab=="Auction")) and
 			(searchInput == "" or self:CheckForMatch(data, searchInput))  then
 				addedyet=true
 				DoAddRow=true
@@ -1117,7 +1172,7 @@ if filterId==3 then--armor
 			or  (filterENCHId==5  and (zo_plainstrfind(data.enchantHeader:lower(), GetString("SI_NAH_FILTERDROP_ENCH_3_2"):lower() )==false and zo_plainstrfind(data.enchantHeader:lower(), GetString("SI_NAH_FILTERDROP_ENCH_3_3"):lower() ) == false and zo_plainstrfind(data.enchantHeader:lower(), GetString("SI_NAH_FILTERDROP_ENCH_3_4"):lower() )==false and data.enchantHeader~=""  ) ) 
 			then 
 			if  filterTRAITId==1 or ( tonumber(data.traitType)==tonumber(GetString("SI_NAH_FILTERDROP_TRAIT_NUM_"..filterId.."_", filterTRAITId)) ) then
-				if ( (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab~="MyListings")) and
+				if (  (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyWTB") or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab=="WTB") or  (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="Expired")  or (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab=="Auction")) and
 				(searchInput == "" or self:CheckForMatch(data, searchInput)) then
 					addedyet=true
 					DoAddRow=true
@@ -1133,7 +1188,7 @@ end
 
 if filterId==1  then--All Items
 	if addedyet~=true then
-	if ( (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab~="MyListings")) and
+	if (  (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyWTB") or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab=="WTB") or  (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="Expired")  or (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab=="Auction")) and
 	(searchInput == "" or self:CheckForMatch(data, searchInput)) then
 		addedyet=true
 		DoAddRow=true
@@ -1193,9 +1248,19 @@ end--end function
 function NAHAuctionList:SortScrollList( )
 	if (self.currentSortKey ~= nil and self.currentSortOrder ~= nil) then
 
-		table.sort(self.masterList, self.masterListSortFunction);
+		local currList=self.masterList;	    
+		
+		
+if  NAH.settings~=nil and  NAH.settings.ActiveTab~=nil then
+if( NAH.settings.ActiveTab=="Expired" )then currList=self.ExpiredTrades;  end
+if( NAH.settings.ActiveTab=="WTB" )then currList=self.GlobalWtbs;  end
+if( NAH.settings.ActiveTab=="MyWTB" )then currList=self.GlobalWtbs;  end
+end
+if currList~=nil then
+		table.sort(currList, self.masterListSortFunction);
 		NAH.settings.data.SearchSettings.PageChange=true;
 		self:FilterScrollList();
+		end
 	end
 
 end
@@ -1236,38 +1301,72 @@ zo_callLater(function()
 --~ d("creating item row for: " .. data.name)
 	control:GetNamedChild("Icon"):SetTexture(data.Icon)
 	control:GetNamedChild("DoBuyout"):SetHidden(true);
+	control:GetNamedChild("DoSellItem"):SetHidden(true);
 	
 	control:GetNamedChild("DoBid"):SetHidden(true);
 	
-	if(data.StartingPrice ~= data.BuyoutPrice and data.StartingPrice > 0)then	
+	if(data.StartingPrice ~= nil and data.StartingPrice ~= "" and data.StartingPrice ~= data.BuyoutPrice and data.StartingPrice > 0)then	
 	control:GetNamedChild("DoBid"):SetHidden(false);
 	end
 	
 	control:GetNamedChild("Bid"):SetText("-");
-	if(data.StartingPrice > 0 and data.StartingPrice ~= "0" and data.StartingPrice ~= "")then
+	if(data.StartingPrice ~= nil and data.StartingPrice ~= "" and data.StartingPrice ~= "0" and data.StartingPrice > 0)then
 	control:GetNamedChild("Bid").normalColor = ZO_DEFAULT_TEXT;
 	control:GetNamedChild("Bid"):SetText(data.StartingPrice);
 	end
 	
 	control:GetNamedChild("Buyout"):SetText("-");
-	if(data.BuyoutPrice > 0 and data.BuyoutPrice ~= "0" and data.BuyoutPrice ~= "")then
+	if( data.BuyoutPrice ~= "0" and data.BuyoutPrice ~= "" and data.BuyoutPrice > 0)then
 	control:GetNamedChild("Buyout").normalColor = ZO_DEFAULT_TEXT;
 	control:GetNamedChild("Buyout"):SetText(data.BuyoutPrice);
 	control:GetNamedChild("DoBuyout"):SetHidden(false);
 	end
 	
 	control:GetNamedChild("DoCancel"):SetHidden(true);
+	control:GetNamedChild("DoRelist"):SetHidden(true);
+	control:GetNamedChild("DoCancelWTB"):SetHidden(true);
+	
+	
+	control:GetNamedChild("Rating"):SetText(data.Rating);
+	local tmpratingcolor={1, 0, 0, 1}
+	if data.Rating=="3" then tmpratingcolor={1, 1, 0, 1} end
+	if data.Rating=="4" then tmpratingcolor={1, 1, 1, 1} end
+	if data.Rating=="5" then tmpratingcolor={0, 1, 0, 1} end
+	
+	control:GetNamedChild("Rating").nonRecolorable = true;
+	control:GetNamedChild("Rating"):SetColor(unpack(tmpratingcolor));
+	
+	
 	if data.source==NAH.currentAccount then
 	control:GetNamedChild("DoBuyout"):SetHidden(true);	
 	control:GetNamedChild("DoBid"):SetHidden(true);
-	control:GetNamedChild("DoCancel"):SetHidden(false);
+	control:GetNamedChild("DoSellItem"):SetHidden(true);
+	
+	if data.IsExpiredItem then
+	control:GetNamedChild("DoRelist"):SetHidden(false);	
+	else	
+		if data.IsWTBItem then
+		control:GetNamedChild("DoCancelWTB"):SetHidden(false);			
+		else
+		control:GetNamedChild("DoCancel"):SetHidden(false);
+		end
+	end
+	
+	else
+	
+	if data.IsWTBItem then
+	control:GetNamedChild("DoRelist"):SetHidden(true);
+	control:GetNamedChild("DoBid"):SetHidden(true);
+	control:GetNamedChild("DoBuyout"):SetHidden(true);
+	control:GetNamedChild("DoSellItem"):SetHidden(false);	
+	end
 	
 	end
 	
 
 	local itemqualColor=GetItemQualityColor(data.ItemQuality);
-	control:GetNamedChild("Name").normalColor = itemqualColor;
-	control:GetNamedChild("Name").mouseOverColor = itemqualColor;
+	control:GetNamedChild("Name").nonRecolorable = true;
+	control:GetNamedChild("Name"):SetColor(itemqualColor:UnpackRGBA());
 	control:GetNamedChild("Name"):SetText(data.name);
 	control:GetNamedChild("Qty").normalColor = ZO_DEFAULT_TEXT;
 	control:GetNamedChild("Qty"):SetText(data.stackCount);
@@ -1588,6 +1687,53 @@ NirnAuctionHouse_OpenGoldCostBid();
 	
 end	
 
+
+
+
+
+
+ 
+ function NirnAuctionHouse_RelistListing(control )
+local TradeID=control.data.TradeID
+local itemLink=control.data.itemLink
+		if(not NAH.settings.data.RelistOrders)then
+		NAH.settings.data.RelistOrders = {}
+	end
+	if(not NAH.settings.data.RelistOrders[TradeID])then
+		NAH.settings.data.RelistOrders[TradeID] = {}		
+	end
+
+		NAH.settings.data.RelistOrders[TradeID].TradeID =TradeID
+		
+	NAH.settings.PostRelistOrders=true;
+	
+d("Queued Trade for: " .. itemLink .. " For relist sync to Relist now")
+	
+end	
+
+
+
+
+ 
+ function NirnAuctionHouse_CancelListingWTB(control )
+local TradeID=control.data.TradeID
+local itemLink=control.data.itemLink
+
+		if(not NAH.settings.data.FilledWTBOrders)then
+		NAH.settings.data.FilledWTBOrders = {}
+	end
+	if(not NAH.settings.data.FilledWTBOrders[TradeID])then
+		NAH.settings.data.FilledWTBOrders[TradeID] = {}		
+	end
+
+		NAH.settings.data.FilledWTBOrders[TradeID].WTBID =TradeID
+		NAH.settings.data.FilledWTBOrders[TradeID].Player ="1"
+		
+	NAH.settings.PostFilledWTBOrders=true;
+	
+d("Queued Purchase Order for: " .. itemLink .. " For Removal sync to Remove now")
+	
+end	
  
  function NirnAuctionHouse_CancelListing(control )
 NirnAuctionHouse_CancelListing_func(control.data.TradeID,control.data.itemLink )
@@ -1616,6 +1762,30 @@ end
 
 
 
+function NirnAuctionHouse_CloseGoldCostFilledwtb()
+    NAHAuctionHouseGoldCostFilledwtb:SetHidden(true)
+end
+
+function NirnAuctionHouse_OpenGoldCostFilledwtb()
+    NAHAuctionHouseGoldCostFilledwtb:SetHidden(false)
+end
+
+
+
+ function NirnAuctionHouse_Docancel_FilledwtbOrder( )
+
+	
+	NAH.settings.data.FilledWTBOrders[NirnAuctionHouse.ActiveWTBListingId] = {}	
+	NirnAuctionHouse_CloseGoldCostFilledwtb()
+end	
+
+ function NirnAuctionHouse_DoPost_FilledwtbOrder( )	
+	NAH.settings.PostFilledWTBOrders=true;-- tell the server link to post FilledWTBOrders 	
+	NirnAuctionHouse:forceWriteSavedVars()
+	
+end	
+
+
 function NirnAuctionHouse_CloseGoldCostBuyout()
     NAHAuctionHouseGoldCostBuyout:SetHidden(true)
 end
@@ -1637,6 +1807,30 @@ end
  function NirnAuctionHouse_DoPost_BuyoutOrder( )	
 	NAH.settings.PostBids=true;-- tell the server link to post bids 	
 	NirnAuctionHouse:forceWriteSavedVars()
+	
+end	
+
+
+ function NirnAuctionHouse_SellItemToWTB(control )
+ 
+	
+	NirnAuctionHouse.ActiveWTBListingId=control.data.TradeID
+	
+	
+	
+	if(not NAH.settings.data.FilledWTBOrders)then
+		NAH.settings.data.FilledWTBOrders = {}
+	end
+	if(not NAH.settings.data.FilledWTBOrders[NirnAuctionHouse.ActiveWTBListingId])then
+			NAH.settings.data.FilledWTBOrders[NirnAuctionHouse.ActiveWTBListingId] = {}	
+	end
+
+NAH.settings.data.FilledWTBOrders[NirnAuctionHouse.ActiveWTBListingId].WTBID=control.data.TradeID;
+NAH.settings.data.FilledWTBOrders[NirnAuctionHouse.ActiveWTBListingId].Player=GetUnitName("player")--not the acount but the player 
+
+
+NAHAuctionHouseGoldCostFilledwtb:GetNamedChild("buyoutlabel"):SetText("Are You Sure Your Want to Sell \n".. control.data.name .." (x".. control.data.stackCount ..") for ".. control.data.BuyoutPrice .." Gold?");
+NirnAuctionHouse_OpenGoldCostFilledwtb()
 	
 end	
 
@@ -1689,13 +1883,36 @@ end
 	 end
  end
  
- 
+ --hide interface buttons hotkey
  function NirnAuctionHouse_ToggleAHButtons( )
  if(NirnAuctionHouse.ServerLink_INITIATED)then
+ --need to set a variable here to make this persistant
  if NAHAuctionHouseBtn:IsHidden() then
+ NAH.settings.HideInterface=false
 NirnAuctionHouse_ShowBtns( );
  else
+ NAH.settings.HideInterface=true
 NirnAuctionHouse_HideBtns();
+ end
+ 
+ 
+  else
+ if NAH.settings.HideInterface ~=nil and  NAH.settings.HideInterface==true then
+  NAH.settings.HideInterface=false  
+
+	if(NirnAuctionHouse.ServerLink_VersionConflict)then
+	NirnAuctionHouse_ShowServerLinkVersion( );
+	else
+	NAHAuctionHouse_ServerLink:SetHidden(false);  
+	end
+
+  else
+   NAH.settings.HideInterface=true
+	if(NirnAuctionHouse.ServerLink_VersionConflict)then
+	NirnAuctionHouse_HideServerLinkVersion();
+	else
+	NirnAuctionHouse_HideServerLink( )
+	end
  end
  end
 
@@ -1706,7 +1923,7 @@ NirnAuctionHouse_HideBtns();
  function NirnAuctionHouse_ToggleNAH( )
  if(NirnAuctionHouse.ServerLink_INITIATED)then
  if NAH.settings.ActiveTab=="" then 
-NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_AUCTION))
+NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_BROWSE))
 --~ NirnAuctionHousePanel:GetNamedChild("AuctionHouse"):SetHidden(true);
 --~ NirnAuctionHousePanel:GetNamedChild("MyListings"):SetHidden(false);
  NAH.settings.ActiveTab="Auction";
@@ -1729,7 +1946,7 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_AUCTION))
  function NirnAuctionHouse_ToggleAH( )
  if(NirnAuctionHouse.ServerLink_INITIATED)then
  if NirnAuctionHousePanel:IsHidden() then 
-NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_AUCTION))
+NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_BROWSE))
 --~ NirnAuctionHousePanel:GetNamedChild("AuctionHouse"):SetHidden(true);
 --~ NirnAuctionHousePanel:GetNamedChild("MyListings"):SetHidden(false);
  NAH.settings.ActiveTab="Auction";
@@ -1753,15 +1970,21 @@ NirnAuctionHouse:forceWriteSavedVars()
 if(not NAH.settings.ServerLink_INITIATED or not NirnAuctionHouse.ServerLink_INITIATED)then
 if ( NAH.ServerLinkVersionRequired==versionnum ) then
 
+NirnAuctionHouse.ServerLink_VersionConflict=false;
 NirnAuctionHouse.ServerLink_INITIATED=true;
 NAH.settings.ServerLink_INITIATED=true;
 --~   d("Nirn Auction House ServerLink INITIATED")
 NirnAuctionHouse_HideServerLink( );
 NirnAuctionHouse_HideServerLinkVersion( );
+if(NAH.settings.HideInterface==nil or NAH.settings.HideInterface==false)then
 NirnAuctionHouse_ShowBtns( );
+end
 else
+NirnAuctionHouse.ServerLink_VersionConflict=true;
 NirnAuctionHouse_HideServerLink( );
+if(NAH.settings.HideInterface==nil or NAH.settings.HideInterface==false)then
 NirnAuctionHouse_ShowServerLinkVersion( );
+end
 
 end
 end
@@ -1843,6 +2066,39 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYLISTINGS
 --~ NirnAuctionHousePanel:GetNamedChild("AuctionHouse"):SetHidden(false);
 --~ NirnAuctionHousePanel:GetNamedChild("MyListings"):SetHidden(true);
 	    NAH.settings.ActiveTab="MyListings";	
+	 NirnAuctionHouse.list:RefreshFilters()
+	if NirnAuctionHousePanel:IsHidden() then
+	 SCENE_MANAGER:Show("NAHScene"); 
+	end
+ end	
+		
+ function NirnAuctionHouse_ShowWTBListings( )
+--~ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_EXPIRED))
+NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_ORDERS))
+	    NAH.settings.ActiveTab="WTB";	
+	 NirnAuctionHouse.list:RefreshFilters()
+	if NirnAuctionHousePanel:IsHidden() then
+	 SCENE_MANAGER:Show("NAHScene"); 
+	end
+ end	
+ 
+ 
+		
+ function NirnAuctionHouse_ShowMyWTBListings( )
+--~ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_EXPIRED))
+NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYORDERS))
+	    NAH.settings.ActiveTab="MyWTB";	
+	 NirnAuctionHouse.list:RefreshFilters()
+	if NirnAuctionHousePanel:IsHidden() then
+	 SCENE_MANAGER:Show("NAHScene"); 
+	end
+ end	
+ 
+ function NirnAuctionHouse_ShowExpiredListings( )
+NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_EXPIRED))
+--~ NirnAuctionHousePanel:GetNamedChild("AuctionHouse"):SetHidden(false);
+--~ NirnAuctionHousePanel:GetNamedChild("MyListings"):SetHidden(true);
+	    NAH.settings.ActiveTab="Expired";	
 	 NirnAuctionHouse.list:RefreshFilters()
 	if NirnAuctionHousePanel:IsHidden() then
 	 SCENE_MANAGER:Show("NAHScene"); 
@@ -1998,6 +2254,7 @@ local function NAH_SetAccountCharData()
 	NAH.settings.data.Listings = {}
 	NAH.settings.data.Bids = {}
 	NAH.settings.data.FilledOrders = {}
+	NAH.settings.data.RelistOrders = {}
 	NAH.settings.data.ReceivedOrders = {}
 	NAH.settings.data.PaidOrders = {}
 	NAH.settings.data.OfferedBids = {}
@@ -2018,6 +2275,19 @@ local function NAH_SetAccountCharData()
 NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYLISTINGS))
 --~ NirnAuctionHousePanel:GetNamedChild("AuctionHouse"):SetHidden(false);
 --~ NirnAuctionHousePanel:GetNamedChild("MyListings"):SetHidden(true);
+	end
+	
+	if (NAH.settings.ActiveTab=="Expired") then  
+	NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_EXPIRED))
+	end
+	
+	
+	if (NAH.settings.ActiveTab=="WTB") then  
+	NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_ORDERS))
+	end
+	
+	if (NAH.settings.ActiveTab=="MyWTB") then  
+	NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYORDERS))
 	end
 	
 	if NAH.settings.OpenTrackedOrdersWindow == false then
@@ -2042,6 +2312,11 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYLISTINGS
 	
  NAHAuctionHouseOrdersBtnNEW:SetHidden(true);  
 	NirnAuctionHouse_HideBtns( );
+	
+	if(NAH.settings.HideInterface~=nil and NAH.settings.HideInterface==true)then
+	NirnAuctionHouse_HideServerLink( )
+	end
+	
 	
 	NirnAuctionHouse:CheckServerLinkInitiated()
 	NirnAuctionHouse:CheckNotifications()
@@ -2266,6 +2541,21 @@ if(NirnAuctionHouse.list~=nil)then
 	NAH.settings.data.FilledOrders = {}
 	end
 	
+	if NAH.settings.PostFilledWTBOrders then
+	NAH.settings.PostFilledWTBOrders=false;
+	NAH.settings.data.FilledWTBOrders = {}
+	end
+	
+	if NAH.settings.PostWTBOrders then
+	NAH.settings.PostWTBOrders=false;
+	NAH.settings.data.WTBOrders = {}
+	end
+	
+	if NAH.settings.PostRelistOrders then
+	NAH.settings.PostRelistOrders=false;
+	NAH.settings.data.RelistOrders = {}
+	end
+	
 	if NAH.settings.PostListings then
 	NAH.settings.PostListings=false;
 	NAH.settings.data.Listings = {}
@@ -2469,7 +2759,13 @@ function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 	
 	
 	if NirnAuctionHouse.LoadTrades ~=nil then	
-	NirnAuctionHouse:LoadTrades()	
+	NirnAuctionHouse:LoadTrades()
+	end
+	if NirnAuctionHouse.LoadExpiredTrades ~=nil then	
+	NirnAuctionHouse:LoadExpiredTrades()	
+	end
+	if NirnAuctionHouse.LoadWtbs ~=nil then	
+	NirnAuctionHouse:LoadWtbs()	
 	end
 	
 	if NirnAuctionHouse.LoadBids ~=nil then	
@@ -2564,7 +2860,8 @@ function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 	NAH.Link_MenuItem="";		
 		zo_callLater(function()		
 		if NAH.Link_MenuItem =="" then
-		NAH.Link_MenuItem = link
+		NAH.Link_MenuItem = link		 
+		AddMenuItem("WTB", function() self:WTBItemItemLink(link) end, MENU_ADD_OPTION_LABEL)
 		AddMenuItem(GetString(SI_NAH_STRING_PRICECHECK), function() NirnAuctionHouse:PriceCheckItemLink(link,true) end, MENU_ADD_OPTION_LABEL)
 		  ShowMenu()
 		return true
@@ -2898,6 +3195,7 @@ function NirnAuctionHouse:ProcessRightClick(control)
 	
 	zo_callLater(function()
 		--AddMenuItem("Price Check", function() self:PriceCheckItem(control,false) end, MENU_ADD_OPTION_LABEL)--output only visible to user
+		AddMenuItem("WTB", function() self:WTBItem(control) end, MENU_ADD_OPTION_LABEL)
 		AddMenuItem(GetString(SI_NAH_STRING_PRICECHECK), function() self:PriceCheckItem(control,true) end, MENU_ADD_OPTION_LABEL)
 		ShowMenu(control)
 		end, 60
@@ -3141,6 +3439,87 @@ if TraitType==ITEM_TRAIT_TYPE_WEAPON_TRAINING then return "Training" end
 end
 
 
+
+function NirnAuctionHouse_CloseGoldCostWTB()
+    NAHAuctionHouseGoldCostWTB:SetHidden(true)
+end
+
+function NirnAuctionHouse_OpenGoldCostWTB()
+    NAHAuctionHouseGoldCostWTB:SetHidden(false)
+end
+
+
+function NirnAuctionHouse_DocancelListingWTB()
+	if(not NAH.settings.data.WTBOrders)then
+		NAH.settings.data.WTBOrders = {}
+	end
+	if(NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostListingId])then
+			NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostListingId] = {}			
+			NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostListingId].WTBOrder ={}
+	end
+NirnAuctionHouse_CloseGoldCostWTB()
+end
+
+function NirnAuctionHouse_DoPostListingWTB(GoldAmountPanel)
+
+
+	if(not NAH.settings.data.WTBOrders)then
+		NAH.settings.data.WTBOrders = {}
+	end
+	if(not NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId])then
+			NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId] = {}			
+			NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId].WTBOrder ={}
+	end
+
+	if NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId].WTBOrder.ItemLink==nil then  
+	return 
+	end
+	
+local itemstacks=IsItemLinkStackable(NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId].WTBOrder.ItemLink)
+
+NirnAuctionHouse.GoldAmountQty = NAHAuctionHouseGoldCostWTB:GetNamedChild("GoldAmountQty"):GetNamedChild("GoldAmountBoxQty");
+NirnAuctionHouse.GoldAmountBuyout = NAHAuctionHouseGoldCostWTB:GetNamedChild("GoldAmountBuyout"):GetNamedChild("GoldAmountBoxBuyout");
+
+
+
+
+NirnAuctionHouse.GoldAmountQtyVal = tonumber(NirnAuctionHouse.GoldAmountQty:GetText());
+NirnAuctionHouse.GoldAmountBuyoutVal = tonumber(NirnAuctionHouse.GoldAmountBuyout:GetText());
+
+local maxstack=200
+if(itemstacks==false)then maxstack=1 end
+
+ if (not NirnAuctionHouse.GoldAmountQtyVal or NirnAuctionHouse.GoldAmountQtyVal < 1 or (itemstacks==false and NirnAuctionHouse.GoldAmountQtyVal > 1) ) then   d("Please Enter at Valid Quantity ( 1 - "..maxstack.." )") return;  end
+if not NirnAuctionHouse.GoldAmountBuyoutVal or NirnAuctionHouse.GoldAmountBuyoutVal < 1 then  d("Please Enter at a Valid Price") return; end 
+ if (NirnAuctionHouse.GoldAmountBuyoutVal ~=nil and NirnAuctionHouse.GoldAmountBuyoutVal > 2100000000) then d("Please Enter at least Valid Price (2,100,000,000 Max)") return; end 
+
+
+NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId].WTBOrder.BuyoutPrice=NirnAuctionHouse.GoldAmountBuyout:GetText();
+
+NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId].WTBOrder.stackCount=NirnAuctionHouse.GoldAmountQtyVal;
+
+
+d("Queued WTB Order for: "..NirnAuctionHouse.GoldAmountQtyVal.." x " .. NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId].WTBOrder.ItemLink .. " sync to post now")
+	NAH.settings.PostWTBOrders=true;-- tell the server link to post WTBs 
+	NirnAuctionHouse_CloseGoldCostWTB();
+	
+	 if NAH.settings.AutoPost and NAH.settings.AutoPost == true then
+	NirnAuctionHouse:forceWriteSavedVars()
+	end
+
+end
+
+
+
+
+
+
+
+
+
+
+
+
 function NirnAuctionHouse_CloseGoldCostBid()
     NAHAuctionHouseGoldCostBid:SetHidden(true)
 end
@@ -3156,6 +3535,8 @@ end
 function NirnAuctionHouse_OpenGoldCost()
     NAHAuctionHouseGoldCost:SetHidden(false)
 end
+
+
 
 function NirnAuctionHouse_Docancel_BidOrder()
 
@@ -3333,6 +3714,95 @@ NirnAuctionHouse:PriceCheckItemLink(itemLink,tochat)
 	
 
 	
+end
+	
+	
+	function NirnAuctionHouse:WTBItem(control)	
+	if control == nil then
+		return
+	end
+	local itemLink			
+	local bagId = control.bagId	
+	local slotIndex = control.slotIndex
+	if(SCENE_MANAGER.currentScene.name=="tradinghouse")then 
+	itemLink = GetTradingHouseSearchResultItemLink(slotIndex)		
+	else
+	itemLink = GetItemLink(bagId, slotIndex, LINK_STYLE_BRACKETS)	
+	end
+	
+	if itemLink == nil or itemLink == "" then
+		return
+	end
+	
+NirnAuctionHouse:WTBItemItemLink(itemLink)
+end
+	
+function NirnAuctionHouse:WTBItemItemLink(itemLink)
+	if itemLink == nil or itemLink == "" then
+		return
+	end
+	
+	local itemName = LocalizeString("<<t:1>>", GetItemLinkName(itemLink));
+	local _, _, _, itemId = ZO_LinkHandler_ParseLink(itemLink)
+	   
+	local itemId=NirnAuctionHouse:GetItemID(itemLink)
+local requiredLevel=GetItemLinkRequiredLevel(itemLink)
+local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
+local ItemQuality=GetItemLinkQuality(itemLink)
+
+	local statval=GetItemLinkWeaponPower(itemLink)+GetItemLinkArmorRating(itemLink, false)
+	
+	if(itemId==nil or ItemQuality==nil or statval==nil or requiredLevel==nil or requiredChampPoints==nil )then  return end
+local Priceuid=itemId..":"..ItemQuality..":"..statval..":"..requiredLevel..":"..requiredChampPoints	
+
+NirnAuctionHouse.ActivePostWTBId=(1+(#NAH.settings.data.WTBOrders))
+
+
+		local sellPrice=GetItemLinkValue(itemLink,true)	
+
+	if(not NAH.settings.data.WTBOrders)then	
+		NAH.settings.data.WTBOrders = {}
+	end
+	if(not NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId])then
+			NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId] = {}			
+	end
+			NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId].WTBOrder ={} -- infor about your listing price and hoew long to list for
+			NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId].WTBOrder.Price=sellPrice --in gold -- just set to vendor cost atm
+			NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId].WTBOrder.Player=GetUnitName("player")--not the account but the player 			
+			NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId].WTBOrder.ItemLink = itemLink
+			NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId].WTBOrder.itemId = itemId
+			NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId].WTBOrder.itemQuality = ItemQuality
+			NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId].WTBOrder.itemName = itemName
+			
+			
+			
+			
+				NAHAuctionHouseGoldCostWTB:GetNamedChild("GoldAmountQty"):GetNamedChild("GoldAmountBoxQty"):SetText("1")
+				NAHAuctionHouseGoldCostWTB:GetNamedChild("GoldAmountBuyout"):GetNamedChild("GoldAmountBoxBuyout"):SetText("")
+			
+				if (NirnAuctionHouse.PriceTable ~=nil and NirnAuctionHouse.PriceTable[Priceuid]~=nil and NirnAuctionHouse.PriceTable[Priceuid].price~=nil) then
+			if NirnAuctionHouse.PriceTable[Priceuid].price > 0  and NirnAuctionHouse.PriceTable[Priceuid].price > sellPrice then
+			NAHAuctionHouseGoldCostWTB:GetNamedChild("GoldAmountBuyout"):GetNamedChild("GoldAmountBoxBuyout"):SetText(math.ceil(NirnAuctionHouse.PriceTable[Priceuid].price))
+			end		
+		else	
+			 ----------------------------------MasterMerchant Integration-----------------------------------------
+		if(MasterMerchant)then  
+		local tipStats = MasterMerchant:itemStats(itemLink, false)
+			if tipStats then		
+				if tipStats.avgPrice and tipStats.avgPrice > 0  and tipStats.avgPrice > sellPrice then
+				NAHAuctionHouseGoldCostWTB:GetNamedChild("GoldAmountBuyout"):GetNamedChild("GoldAmountBoxBuyout"):SetText(math.ceil(tipStats.avgPrice))
+				end
+			end
+		end
+-----------------------------------MasterMerchant Integration----------------------------------------
+
+		end
+			
+			
+			
+	NAHAuctionHouseGoldCostWTB:GetNamedChild("BidName").normalColor = ZO_NORMAL_TEXT;
+	NAHAuctionHouseGoldCostWTB:GetNamedChild("BidName"):SetText(itemName);
+		NirnAuctionHouse_OpenGoldCostWTB()	
 end
 	
 function NirnAuctionHouse:PriceCheckItemLink(itemLink,tochat)
@@ -3650,7 +4120,7 @@ end
 	function NirnAuctionHouse:NAHWindow_show()
 		 if(NirnAuctionHouse.ServerLink_INITIATED)then
 			NAH.settings.ActiveTab="Auction";
-			NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_AUCTION))
+			NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_BROWSE))
 			 NirnAuctionHouse.list:RefreshFilters()
 			 if NirnAuctionHousePanel:IsHidden() then
 			 SCENE_MANAGER:Show("NAHScene");
@@ -3693,6 +4163,18 @@ end
 		local StartingPrice = EntryData["Item"]["StartingPrice"];
 		local BuyoutPrice = EntryData["Item"]["BuyoutPrice"];
 		local stackCount = EntryData["Item"]["stackCount"];
+		
+		
+		local Rating =  "";		
+		if EntryData["Name"] then--set the user rating
+		Rating =  EntryData["Name"];
+		end	
+		if EntryData["Rating"] then--set the user rating
+		Rating =  EntryData["Rating"];
+		end
+		
+		
+		
 		local Buyer = "";
 		if EntryData["Buyer"] then
 		 Buyer = EntryData["Buyer"];
@@ -3757,7 +4239,7 @@ end
 			local source =  EntryData["CharName"];
 			color = NirnAuctionHouse.colors.gold;
 			
---~ 		type =  _traitType .. " , " .. type
+--~ 		type =  ItemType .. " , " .. type
 
 		zoneType[(GetItemLinkBindType(itemLink) == BIND_TYPE_ON_EQUIP) and 5 or 6] = true;
 
@@ -3800,6 +4282,7 @@ end
 			CraftingSkillType = CraftingSkillType,
 			RuneType = RuneType,
 			ItemQuality = ItemQuality,
+			Rating = Rating,
 		});
 	end
 
@@ -3875,6 +4358,8 @@ end
 		else
 		
 		if parentControl~=nil  and slot.bagId~=nil and slot.slotIndex~=nil then
+		if NAH.AuctionBadges[slot.bagId]==nil then  NAH.AuctionBadges[slot.bagId]={} end
+		if NAH.AuctionBadgeLabels[slot.bagId]==nil then  NAH.AuctionBadgeLabels[slot.bagId]={} end
 		NAH.AuctionBadges[slot.bagId][slot.slotIndex]=parentControl.ControlBadge
 		NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]= parentControl.ControlBadgeLabel
 		end
@@ -3914,7 +4399,13 @@ end
 				NAH.AuctionBadges[slot.bagId][slot.slotIndex]:ClearAnchors()
 				NAH.AuctionBadges[slot.bagId][slot.slotIndex]:SetAnchor(LEFT, parentControl, LEFT,0, 0)
 					NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]:SetText(tmptradeCnt)
-					NAH.AuctionBadges[slot.bagId][slot.slotIndex]:SetTexture([[NirnAuctionHouse\media\SaleIcon.dds]])
+					
+					if IsItemPlayerLocked(slot.bagId, slot.slotIndex) then 
+					NAH.AuctionBadges[slot.bagId][slot.slotIndex]:SetTexture([[NirnAuctionHouse\media\SaleIconLock.dds]])					
+					else
+					NAH.AuctionBadges[slot.bagId][slot.slotIndex]:SetTexture([[NirnAuctionHouse\media\SaleIcon.dds]])					
+					end
+					
 					NAH.AuctionBadges[slot.bagId][slot.slotIndex]:SetHidden(false)
 					NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]:SetHidden(false)
 				else

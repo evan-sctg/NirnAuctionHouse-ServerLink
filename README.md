@@ -1,8 +1,8 @@
-# --BETA VERSION-- Current Version:0.0.18 (See the full patch note list here: https://nirnah.com/Changelog)
+# --BETA VERSION-- Current Version:0.0.19 (See the full patch note list here: https://nirnah.com/Changelog)
 *PC Only for now
 
 
-Hosted Download Link: [MD5:fd81b29eda8c99f6ce6fb4a6e49e6136]
+Hosted Download Link: [MD5:b5102d840dc4aa7047c20a685d9c0209]
 
 https://nirnah.com/NirnAuctionHouse(beta).zip
 
@@ -25,6 +25,7 @@ NAH is a global auction system, unlike the guild store you will be able to list,
 - Ability to post an auction with only starting bid, no buyout price. (Auction Length: 24 hours)
 - Ability to post an auction with starting bid and buyout price. (Auction Length: 7 days)
 - Ability to post auction with only a buyout price. (Auction Length: 7 days)
+- Ability to post buy orders 
 - Price history using verified sale prices
 - Can't auction bound or stolen items!
 
@@ -77,8 +78,9 @@ NAH is a global auction system, unlike the guild store you will be able to list,
 
 - Listings with a buyout price will last 7 days
 - Listings with no buyout price will last 24 hours
-- Listing limit 80 - you can only have 100 auctions at a time
+- Listing limit 100 - you can only have 100 auctions at a time
 - Setting to Only show active trades (Hide trades where the seller does not have Server Link active)
+- Buy Orders WTB (right click menu)
 - Price checks to chat (right click menu)
 - Translated for all languages (need feedback)
 - Server link required to communicate with server (NirnAuctionHouse.exe) *PC Only for now
