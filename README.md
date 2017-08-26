@@ -96,7 +96,7 @@ NAH is a global auction system, unlike the guild store you will be able to list,
 
 
 ### FAQ
-http://www.esoui.com/portal.php?id=250&a=faq
+https://nirnah.com/faq
 
 
 ### Statements from ESO Devs about Trusting COD sales.
