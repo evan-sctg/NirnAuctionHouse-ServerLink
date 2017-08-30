@@ -3,6 +3,23 @@ Latest Version: https://nirnah.com/NirnAuctionHouse(beta).zip
 Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 
 
+
+
+
+v0.0.19.02 "beta" @Elo
+ - Added when fulfilling an order nirn auction house can now split stacks
+ - Added when fulfilling an order if the item is not in your inventory you will be notified if its in your bank or your crafting bag
+ - You can only fulfill a buy order if the item is in your inventory, bank, or your crafting bag
+ - Added WTB to chat click on your buy order in the buy order window- populates to chat
+ - Added WTS to chat click on your listing in the listings window- populates to chat
+ - Added Buy orders with no price will have a contact player button
+ - Added gamepad support (Mailbox)
+ - bugfix toggle NAH hotkey
+ - bugfix eu relist
+ - bugfix eu fulfilling buy orders
+ - bugfix on sync
+
+
 v0.0.19.01 "beta" @Elo
  - bugfix translated buttons
  - Update translations

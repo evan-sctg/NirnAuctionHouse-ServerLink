@@ -102,6 +102,13 @@
 				NirnAuctionHouse_SellItemToWTB(self:GetParent())
 			</OnClicked>
 		</Button>
+		<Button name="$(parent)DoContact" inherits="ZO_DefaultButton" text="Contact" hidden="true">
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)DoBid" />
+					<Dimensions x="100" y="30" />
+			<OnClicked>
+				NirnAuctionHouse_ContactWTB(self:GetParent())
+			</OnClicked>
+		</Button>
 		<Button name="$(parent)DoRelist" inherits="ZO_DefaultButton" text="Relist" hidden="true">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)DoBid" />
 					<Dimensions x="100" y="30" />
