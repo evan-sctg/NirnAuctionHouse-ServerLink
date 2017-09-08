@@ -96,6 +96,24 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 		},
 		{
 			type = "dropdown",
+			name = "Auto Post buyout orders",
+			tooltip = "Disable to manually sync buyout orders(queue multiple)",
+			choices = self.EnabledTable,
+			getFunc = function() if NAH.settings.AutoPostBuyouts ==true then return "Enabled" else return "Disabled" end end,
+			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.AutoPostBuyouts = true else NAH.settings.AutoPostBuyouts = false end  end,
+			default = self.EnabledTable[2]
+		},
+		{
+			type = "dropdown",
+			name = "Auto Post Paid COD orders",
+			tooltip = "Disable to manually sync paid cod orders(queue multiple)",
+			choices = self.EnabledTable,
+			getFunc = function() if NAH.settings.AutoPostPaid ==true then return "Enabled" else return "Disabled" end end,
+			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.AutoPostPaid = true else NAH.settings.AutoPostPaid = false end  end,
+			default = self.EnabledTable[2]
+		},
+		{
+			type = "dropdown",
 			name = "Auto Post fulfilled orders",
 			tooltip = "Disable to manually sync fulfilled orders(queue multiple)",
 			choices = self.EnabledTable,

@@ -4,6 +4,12 @@ Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 
 
 
+v0.0.19.03 "beta" @Elo
+ - Added option to manually sync buyout orders (queue multiple)
+ - Added option to manually sync paid COD orders (queue multiple)
+ - Changes to mailbox integrations
+ - Changes to user ratings
+ - More pricing data
 
 
 v0.0.19.02 "beta" @Elo

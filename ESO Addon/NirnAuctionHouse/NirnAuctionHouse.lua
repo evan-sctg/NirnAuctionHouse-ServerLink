@@ -64,7 +64,9 @@ local NirnAuctionHouse = NirnAuctionHouse
 		AddListingsToMasterMerchant = false,
 		ShowMasterMerchantPrice = true,
 		AutoPost = false,
+		AutoPostPaid = true,
 		AutoPostFilled = true,
+		AutoPostBuyouts = true,
 		AddCODCost = true,
 		ServerLink_INITIATED = false,
 		ActiveSellersOnly = false,
@@ -1835,7 +1837,15 @@ end
 
  function NirnAuctionHouse_DoPost_BuyoutOrder( )	
 	NAH.settings.PostBids=true;-- tell the server link to post bids 	
+	 if NAH.settings.AutoPostBuyouts and NAH.settings.AutoPostBuyouts == true then
 	NirnAuctionHouse:forceWriteSavedVars()
+	else	
+	if(NirnAuctionHouse.ActiveBidListingId~=nil and NAH.settings.data.Bids~=nil and NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId] ~=nil)then
+	d("Queued Buyout ".. NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.ItemLink .."x".. NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.stackCount.." for ".. NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.Price.."(g)  sync to buyout now")
+	NirnAuctionHouse_CloseGoldCostBuyout()
+	end
+	end
+	
 	
 end	
 
@@ -2641,9 +2651,12 @@ local NumMailItems=GetNumMailItems()
 	   mailId=GetNextMailId(mailId)
 	   if mailId ~= nil and lastMailId ~= mailId then
 	   lastMailId=mailId
-	   local senderDisplayName,_,subject,_,_,fromSystem,fromCustomerService,returned,numAttachments,attachedMoney,codAmount,_,_ =GetMailItemInfo(mailId)
+	   local senderDisplayName,_,subject,_,unread,fromSystem,fromCustomerService,returned,numAttachments,attachedMoney,codAmount,_,_ =GetMailItemInfo(mailId)
 	    if returned==false and fromSystem==false and fromCustomerService==false and subject=="Nirn Auction House Order" and codAmount > 0 and numAttachments > 0 then
+	    if unread==false then
+	    RequestReadMail(mailId) -- opend mail  (changes mail from unread to read after closing inbox )
 		mailinfo(mailId,codAmount)
+		end
 	   end
 	   end
 	end
@@ -2651,31 +2664,21 @@ local NumMailItems=GetNumMailItems()
    end
 
 
-
-function NirnAuctionHouse:OnInboxUpdate()
-	if IsInGamepadPreferredMode() then 
-	NirnAuctionHouse.MailScene ="mailManagerGamePad"
-	else
-	NirnAuctionHouse.MailScene ="mailInbox"
-	end
---~ 		zo_callLater(function()
-			NAH.settings.ActiveTab="";
-			SCENE_MANAGER:Show(NirnAuctionHouse.MailScene);
-			NirnAuctionHouse:ProcInbox()
---~ 		end, 50)
+function NAH.OnMailMessageOpen(eventCode, mailId)
+--~ d("OnMailMessageOpen")
+	   if mailId ~= nil and NAH.lastMailId ~= mailId then
+	   NAH.lastMailId=mailId
+	   local senderDisplayName,_,subject,_,unread,fromSystem,fromCustomerService,returned,numAttachments,attachedMoney,codAmount,_,_ =GetMailItemInfo(mailId)
+	    if returned==false and fromSystem==false and fromCustomerService==false and subject=="Nirn Auction House Order" and codAmount > 0 and numAttachments > 0 then
+	    RequestReadMail(mailId) -- opend mail  (changes mail from unread to read after closing inbox )
+		mailinfo(mailId,codAmount)		
+	   end
+	   end
 end
 
-function NirnAuctionHouse:OnMailNumUnreadChanged(numUnread)
-   if numUnread > 0 then        
---~ 		zo_callLater(function()
-			NirnAuctionHouse:ProcInbox()
---~ 		end, 500)
-   end
-end
 
 function mailinfo(mailId,codAmount)
 zo_callLater(function()
-		
 		
 	local itemLink=GetAttachedItemLink(mailId,1,LINK_STYLE_DEFAULT)
 	if itemLink~=nil and itemLink~="" then
@@ -2692,18 +2695,18 @@ zo_callLater(function()
 			itemLink=GetAttachedItemLink(mailId,1,LINK_STYLE_DEFAULT)
 			if itemLink~=nil and itemLink~="" then
 			CacheFilledOrderInMail(mailId,itemLink,codAmount)
-			else			
+			else	
 					zo_callLater(function()
 				itemLink=GetAttachedItemLink(mailId,1,LINK_STYLE_DEFAULT)
 				if itemLink~=nil and itemLink~="" then
 				CacheFilledOrderInMail(mailId,itemLink,codAmount)
-				else			
+				else	
 					itemLink=GetAttachedItemLink(mailId,1,LINK_STYLE_DEFAULT)
 					if itemLink~=nil and itemLink~="" then
 					CacheFilledOrderInMail(mailId,itemLink,codAmount)
 					end
 				end
-				end, 800)
+				end, 1800)
 			end
 			end, 800)
 		
@@ -2750,6 +2753,7 @@ zo_callLater(function()
 		NAH.settings.data.ReceivedOrders[mailId].itemQuality =ItemQuality
 		NAH.settings.data.ReceivedOrders[mailId].sellPrice =sellPrice
 		NAH.settings.data.ReceivedOrders[mailId].codAmount =codAmount
+		
 	end
 	
 	
@@ -2772,19 +2776,25 @@ zo_callLater(function()
 	if(not NAH.settings.data.PaidOrders)then
 		NAH.settings.data.PaidOrders = {}
 	end
-	if(not NAH.settings.data.PaidOrders[mailId])then
-		NAH.settings.data.PaidOrders[mailId] = {}			
+	if(not NAH.settings.data.PaidOrders[Maildata.itemId.."-"..mailId])then
+		NAH.settings.data.PaidOrders[Maildata.itemId.."-"..mailId] = {}			
 	end
-		NAH.settings.data.PaidOrders[mailId].Seller =Maildata.senderDisplayName
-		NAH.settings.data.PaidOrders[mailId].Buyer =NAH.settings.ActiveAccount
-		NAH.settings.data.PaidOrders[mailId].ItemID =Maildata.itemId
-		NAH.settings.data.PaidOrders[mailId].stack =Maildata.stack
-		NAH.settings.data.PaidOrders[mailId].itemQuality =Maildata.itemQuality
-		NAH.settings.data.PaidOrders[mailId].sellPrice =Maildata.sellPrice
-		NAH.settings.data.PaidOrders[mailId].codAmount =Maildata.codAmount
-		NAH.settings.data.PaidOrders[mailId].mailId =mailId
+		NAH.settings.data.PaidOrders[Maildata.itemId.."-"..mailId].Seller =Maildata.senderDisplayName
+		NAH.settings.data.PaidOrders[Maildata.itemId.."-"..mailId].Buyer =NAH.settings.ActiveAccount
+		NAH.settings.data.PaidOrders[Maildata.itemId.."-"..mailId].ItemID =Maildata.itemId
+		NAH.settings.data.PaidOrders[Maildata.itemId.."-"..mailId].stack =Maildata.stack
+		NAH.settings.data.PaidOrders[Maildata.itemId.."-"..mailId].itemQuality =Maildata.itemQuality
+		NAH.settings.data.PaidOrders[Maildata.itemId.."-"..mailId].sellPrice =Maildata.sellPrice
+		NAH.settings.data.PaidOrders[Maildata.itemId.."-"..mailId].codAmount =Maildata.codAmount
+		NAH.settings.data.PaidOrders[Maildata.itemId.."-"..mailId].mailId =mailId
 		NAH.settings.PostPaidOrders=true;-- tell the server link to post PaidOrders 
+		
+		 if NAH.settings.AutoPostPaid and NAH.settings.AutoPostPaid == true then
 		NirnAuctionHouse:forceWriteSavedVars()
+		else		
+		d("Queued Paid for order sync to recieve buyer credit")
+		end
+		
 		end
 		end
 			end,2000)
@@ -2846,12 +2856,7 @@ function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 	NirnAuctionHouse.MailScene ="mailInbox"
 	end
 	
-  EVENT_MANAGER:RegisterForEvent("NAH_EVENT_MAIL_INBOX_UPDATE", EVENT_MAIL_INBOX_UPDATE, function() NirnAuctionHouse:OnInboxUpdate() end)
-  EVENT_MANAGER:RegisterForEvent("NAH_EVENT_MAIL_NUM_UNREAD_CHANGED", EVENT_MAIL_NUM_UNREAD_CHANGED, function(_, numUnread) NirnAuctionHouse:OnMailNumUnreadChanged(numUnread) end)
-  EVENT_MANAGER:RegisterForEvent("NAH_EVENT_MAIL_OPEN_MAILBOX", EVENT_MAIL_OPEN_MAILBOX, function(_) 	
-  if IsInGamepadPreferredMode() then NirnAuctionHouse.MailScene ="mailManagerGamePad"	else	NirnAuctionHouse.MailScene ="mailInbox"	end
-  NAH.settings.ActiveTab="";SCENE_MANAGER:Show(NirnAuctionHouse.MailScene);NirnAuctionHouse:ProcInbox() 
-  end)
+  EVENT_MANAGER:RegisterForEvent("NAH_EVENT_MAIL_MESSAGE_SELECTED", EVENT_MAIL_READABLE, NAH.OnMailMessageOpen)
   EVENT_MANAGER:RegisterForEvent("NAH_EVENT_MAIL_TAKE_ATTACHED_ITEM_SUCCESS", EVENT_MAIL_TAKE_ATTACHED_ITEM_SUCCESS, function(_, mailId) NirnAuctionHouse:OnTakeAttachedItemSuccess(mailId) end)
   EVENT_MANAGER:RegisterForEvent("NAH_EVENT_MAIL_SEND_SUCCESS", EVENT_MAIL_SEND_SUCCESS, function() NirnAuctionHouse:MailSent() end)
   EVENT_MANAGER:RegisterForEvent("NAH_EVENT_MAIL_SEND_FAILED", EVENT_MAIL_SEND_FAILED, function() NirnAuctionHouse:MailFailed() end)
