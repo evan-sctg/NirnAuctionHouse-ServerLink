@@ -34,24 +34,34 @@
 				</Label>
 				<Label name="$(parent)TimeLeft" inherits="NAHRowLabel">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Qty" />
-					<Dimensions x="135" y="30" />
+					<Dimensions x="115" y="30" />
 				</Label>
 				<Label name="$(parent)Type" inherits="NAHRowLabel">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)TimeLeft" />
-					<Dimensions x="125" y="30" />
+					<Dimensions x="95" y="30" />
 				</Label>
 				<Label name="$(parent)Bid" inherits="NAHRowLabel">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Type" />
 					<Dimensions x="80" y="30" />
 				</Label>
-				<Label name="$(parent)Buyout" inherits="NAHRowLabel">
+				
+				<Label name="$(parent)BidUnit" inherits="NAHRowLabel">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Bid" />
+					<Dimensions x="60" y="30" />
+				</Label>
+				<Label name="$(parent)Buyout" inherits="NAHRowLabel">
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)BidUnit" />
 					<Dimensions x="80" y="30" />
 				</Label>
 				
-				<Label name="$(parent)Rating" inherits="NAHRowLabel">
+				<Label name="$(parent)BuyUnit" inherits="NAHRowLabel">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Buyout" />
-					<Dimensions x="80" y="30" />
+					<Dimensions x="60" y="30" />
+				</Label>
+				
+				<Label name="$(parent)Rating" inherits="NAHRowLabel">
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)BuyUnit" />
+					<Dimensions x="30" y="30" />
 				</Label>
 				
 		<Button name="$(parent)DoBid" inherits="ZO_DefaultButton" text="Bid" hidden="false">
@@ -543,7 +553,7 @@
 							
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)TimeLeft" />
-							<Dimensions x="125" y="32" />
+							<Dimensions x="65" y="32" />
 						</Control>
 						<Control name="$(parent)Bid" inherits="ZO_SortHeader">
 							<OnInitialized>
@@ -554,14 +564,32 @@
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Type" />
 							<Dimensions x="80" y="32" />
 						</Control>
+						<Control name="$(parent)BidUnit" inherits="ZO_SortHeader">
+							<OnInitialized>
+							
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_UNIT), "UnitPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								
+							</OnInitialized>
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Bid" />
+							<Dimensions x="60" y="32" />
+						</Control>
 						<Control name="$(parent)Buyout" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_BUYOUT), "BuyoutPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 								
 							</OnInitialized>
-							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Bid" />
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)BidUnit" />
 							<Dimensions x="80" y="32" />
+						</Control>
+						<Control name="$(parent)BuyUnit" inherits="ZO_SortHeader">
+							<OnInitialized>
+							
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_UNIT), "UnitPriceBuy", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+								
+							</OnInitialized>
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Buyout" />
+							<Dimensions x="60" y="32" />
 						</Control>
 						<Control name="$(parent)Rating" inherits="ZO_SortHeader">
 							<OnInitialized>
@@ -569,7 +597,7 @@
 								ZO_SortHeader_Initialize(self, "Rating", "Rating", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 								
 							</OnInitialized>
-							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Buyout" />
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)BuyUnit" />
 							<Dimensions x="80" y="32" />
 						</Control>
 						<Control name="$(parent)DoBid">						

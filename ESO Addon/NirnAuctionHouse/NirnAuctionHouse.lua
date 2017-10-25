@@ -68,6 +68,7 @@ local NirnAuctionHouse = NirnAuctionHouse
 		AutoPostFilled = true,
 		AutoPostBuyouts = true,
 		AddCODCost = true,
+		ServerSideListingLimits = false,
 		ServerLink_INITIATED = false,
 		ActiveSellersOnly = false,
 		ShowMyCharName = false,
@@ -1313,15 +1314,27 @@ zo_callLater(function()
 	end
 	
 	control:GetNamedChild("Bid"):SetText("-");
+	control:GetNamedChild("BidUnit"):SetText("-");
 	if(data.StartingPrice ~= nil and data.StartingPrice ~= "" and data.StartingPrice ~= "0" and data.StartingPrice > 0)then
 	control:GetNamedChild("Bid").normalColor = ZO_DEFAULT_TEXT;
 	control:GetNamedChild("Bid"):SetText(data.StartingPrice);
+	
+	if(data.stackCount>1) then
+	control:GetNamedChild("BidUnit").normalColor = ZO_DEFAULT_TEXT;
+	control:GetNamedChild("BidUnit"):SetText(string.format("%.2f", data.StartingPrice/data.stackCount));
+	end
 	end
 	
 	control:GetNamedChild("Buyout"):SetText("-");
+	control:GetNamedChild("BuyUnit"):SetText("-");
 	if( data.BuyoutPrice ~= "0" and data.BuyoutPrice ~= "" and data.BuyoutPrice > 0)then
 	control:GetNamedChild("Buyout").normalColor = ZO_DEFAULT_TEXT;
 	control:GetNamedChild("Buyout"):SetText(data.BuyoutPrice);
+	
+	if(data.stackCount>1) then
+	control:GetNamedChild("BuyUnit").normalColor = ZO_DEFAULT_TEXT;
+	control:GetNamedChild("BuyUnit"):SetText(string.format("%.2f", data.BuyoutPrice/data.stackCount));
+	end
 	control:GetNamedChild("DoBuyout"):SetHidden(false);
 	end
 	
@@ -4036,8 +4049,10 @@ end
 	
 function NirnAuctionHouse:AuctionOffItem(control)
 	if NirnAuctionHouse.myListingsNum >= NirnAuctionHouse.myListingsMax then
-	d("Auction Limit Reached: " .. NirnAuctionHouse.myListingsMax)
+	if (NAH.settings.ServerSideListingLimits==nil or NAH.settings.ServerSideListingLimits==false) then
+	d("Auction Limit Reached: " .. NirnAuctionHouse.myListingsMax)	
 	return
+	end
 end
 
 	if NirnAuctionHouse.PriceTable==nil then
@@ -4539,7 +4554,8 @@ end
 
 		
 				local tmptradeCnt=NirnAuctionHouse:IsItemListedCnt(itemId,itemQuality,sellPrice,requiredLevel,requiredChampPoints,Charges,_enchantHeader,_abilityHeader,_traitType)		
-				if(tmptradeCnt>0) then--~ 		
+				if(tmptradeCnt>0) then--~ 	
+--~ 				d("showing badge "..slot.slotIndex)	
 				NAH.AuctionBadges[slot.bagId][slot.slotIndex]:ClearAnchors()
 				NAH.AuctionBadges[slot.bagId][slot.slotIndex]:SetAnchor(LEFT, parentControl, LEFT,0, 0)
 					NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]:SetText(tmptradeCnt)
@@ -4552,7 +4568,9 @@ end
 					
 					NAH.AuctionBadges[slot.bagId][slot.slotIndex]:SetHidden(false)
 					NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]:SetHidden(false)
+					
 				else
+--~ 				d("hiding badge "..slot.slotIndex)
 				NAH.AuctionBadges[slot.bagId][slot.slotIndex]:SetHidden(true)
 				NAH.AuctionBadgeLabels[slot.bagId][slot.slotIndex]:SetHidden(true)
 				

@@ -38,6 +38,7 @@ ZO_CreateStringId("SI_NAH_HEADER_STATUS"   , "Statut");
 ZO_CreateStringId("SI_NAH_HEADER_TIMELEFT"   , "Temps restant");
 ZO_CreateStringId("SI_NAH_HEADER_BUYOUT"   , "Acheter");
 ZO_CreateStringId("SI_NAH_HEADER_BID"   , "Offre");
+ZO_CreateStringId("SI_NAH_HEADER_UNIT"   , "Unit");--New
 
 
 ZO_CreateStringId("SI_NAH_LAST_PAGE"   , "Page précédente");

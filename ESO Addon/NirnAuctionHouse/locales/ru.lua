@@ -39,6 +39,7 @@ ZO_CreateStringId("SI_NAH_HEADER_STATUS"   , "Положение дел");
 ZO_CreateStringId("SI_NAH_HEADER_TIMELEFT"   , "Время вышло");
 ZO_CreateStringId("SI_NAH_HEADER_BUYOUT"   , "выкуп");
 ZO_CreateStringId("SI_NAH_HEADER_BID"   , "предложение");
+ZO_CreateStringId("SI_NAH_HEADER_UNIT"   , "Unit");--New
 
 
 ZO_CreateStringId("SI_NAH_LAST_PAGE"   , "Предыдущая страница");

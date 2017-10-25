@@ -41,9 +41,11 @@ ZO_CreateStringId("SI_NAH_HEADER_STATUS"   , "Status");
 ZO_CreateStringId("SI_NAH_HEADER_TIMELEFT"   , "TimeLeft");
 ZO_CreateStringId("SI_NAH_HEADER_BUYOUT"   , "Buyout");
 ZO_CreateStringId("SI_NAH_HEADER_BID"   , "Bid");
+ZO_CreateStringId("SI_NAH_HEADER_UNIT"   , "Unit");--New
 
 
-ZO_CreateStringId("SI_NAH_LAST_PAGE"   , "Last Page");
+
+ZO_CreateStringId("SI_NAH_LAST_PAGE"   , "Previous Page");
 ZO_CreateStringId("SI_NAH_NEXT_PAGE"   , "Next Page");
 ZO_CreateStringId("SI_NAH_SYNC"   , "Sync");
 ZO_CreateStringId("SI_NAH_BID"   , "Bid");

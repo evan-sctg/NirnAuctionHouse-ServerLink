@@ -39,6 +39,7 @@ ZO_CreateStringId("SI_NAH_HEADER_STATUS"   , "状態");
 ZO_CreateStringId("SI_NAH_HEADER_TIMELEFT"   , "残り時間");
 ZO_CreateStringId("SI_NAH_HEADER_BUYOUT"   , "バイアウト");
 ZO_CreateStringId("SI_NAH_HEADER_BID"   , "入札");
+ZO_CreateStringId("SI_NAH_HEADER_UNIT"   , "Unit");--New
 
 
 ZO_CreateStringId("SI_NAH_LAST_PAGE"   , "前のページ");

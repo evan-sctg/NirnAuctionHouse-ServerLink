@@ -1,14 +1,15 @@
-# --BETA VERSION-- Current Version:0.0.19.03 (See the full patch note list here: https://nirnah.com/Changelog)
+# --BETA VERSION-- Current Version:0.0.19.04 (See the full patch note list here: https://nirnah.com/Changelog)
 *PC Only for now
 
 
-Hosted Download Link: [MD5:c82ded8cfa7c060102495bd1c42ffe66]
+Hosted Download Link: [MD5:c9a2e3734f999b04c4640f42b320e85c]
 
 https://nirnah.com/NirnAuctionHouse(beta).zip
 
 
 
 ### Upcoming Changes/Features 
+-- Optional Email Notifications
 -- MAC version
 -- More price tracking details and history
 -- more seller security, buyer history, troll protection
@@ -62,6 +63,7 @@ NAH is a global auction system, unlike the guild store you will be able to list,
 - Item Level
 - Item Quality
 - Item Price
+- Item Unit Price
 - Item Categories
 - Item SubCategories
 - Item Slot
