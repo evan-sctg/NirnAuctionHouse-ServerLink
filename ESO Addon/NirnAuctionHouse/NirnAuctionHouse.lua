@@ -79,6 +79,10 @@ local NirnAuctionHouse = NirnAuctionHouse
 		ActiveTab = "",
 		NAHBTN_LEFT = false,
 		NAHBTN_TOP = false,
+		NotifySold = true,
+		NotifyOrderRecieved = true,
+		NotifyPaymentRecieved = true,
+		NotifyExpired = false,
 		
 	data = {
 		FilledWTBOrders = {},
@@ -2303,7 +2307,24 @@ local function NAH_SetAccountCharData()
 	NAH.settings.data.Listings = {}
 	NAH.settings.data.Bids = {}
 	
- 
+	
+		
+	
+ 	if( NAH.settings.NotifySold==nil and defaultSettings.NotifySold ~= nil)then
+	NAH.settings.NotifySold = defaultSettings.NotifySold
+	end
+	
+ 	if( NAH.settings.NotifyOrderRecieved==nil  and defaultSettings.NotifyOrderRecieved ~= nil)then
+	NAH.settings.NotifyOrderRecieved = defaultSettings.NotifyOrderRecieved
+	end
+	
+ 	if( NAH.settings.NotifyPaymentRecieved==nil  and defaultSettings.NotifyPaymentRecieved ~= nil)then
+	NAH.settings.NotifyPaymentRecieved = defaultSettings.NotifyPaymentRecieved
+	end
+	
+ 	if( NAH.settings.NotifyExpired==nil  and defaultSettings.NotifyExpired ~= nil)then
+	NAH.settings.NotifyExpired = defaultSettings.NotifyExpired
+	end
 	
 	if( NAH.settings.settingsVersion==nil or NAH.settings.settingsVersion~=NAH.ServerLinkVersionRequired)then
 	d("(your settigns for Nirn Auction House have been reset)")
@@ -2312,6 +2333,13 @@ local function NAH_SetAccountCharData()
 	
 	NAH.settings.AddListingsToMasterMerchant = false
 	NAH.settings.ActiveSellersOnly = defaultSettings.ActiveSellersOnly
+	
+	
+	NAH.settings.NotifySold = defaultSettings.NotifySold
+	NAH.settings.NotifyOrderRecieved = defaultSettings.NotifyOrderRecieved
+	NAH.settings.NotifyPaymentRecieved = defaultSettings.NotifyPaymentRecieved
+	NAH.settings.NotifyExpired = defaultSettings.NotifyExpired
+	
 	NAH.settings.PlaySounds = defaultSettings.PlaySounds
 	NAH.settings.PlaySounds_success_listing = defaultSettings.PlaySounds_success_listing
 	NAH.settings.PlaySounds_success_buy = defaultSettings.PlaySounds_success_buy

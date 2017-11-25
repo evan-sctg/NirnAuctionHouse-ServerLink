@@ -1,15 +1,14 @@
-# --BETA VERSION-- Current Version:0.0.19.04 (See the full patch note list here: https://nirnah.com/Changelog)
+# --BETA VERSION-- Current Version:0.0.19.05 (See the full patch note list here: https://nirnah.com/Changelog)
 *PC Only for now
 
 
-Hosted Download Link: [MD5:c9a2e3734f999b04c4640f42b320e85c]
+Hosted Download Link: [MD5:962ce110be9dc90a408a00bf0ebcd134]
 
 https://nirnah.com/NirnAuctionHouse(beta).zip
 
 
 
 ### Upcoming Changes/Features 
--- Optional Email Notifications
 -- MAC version
 -- More price tracking details and history
 -- more seller security, buyer history, troll protection
@@ -18,6 +17,8 @@ https://nirnah.com/NirnAuctionHouse(beta).zip
 Nirn Auction House allows you to trade with anyone across all of Nirn with no listing fees or tax.
 When using NAH you simply pay the ESO postage fee when you mail a sold item.
 NAH is a global auction system, unlike the guild store you will be able to list, watch, view, bid for items and buyout items.
+Option to get notified by email when you sell an item.
+
 
 
 
@@ -29,6 +30,10 @@ NAH is a global auction system, unlike the guild store you will be able to list,
 - Ability to post buy orders 
 - Price history using verified sale prices
 - Can't auction bound or stolen items!
+- Email notification - sold items
+- Email notification - payment received
+- Email notification - items received
+- Email notification - order expired
 
 
 ### Posting Auctions / Selling Items 

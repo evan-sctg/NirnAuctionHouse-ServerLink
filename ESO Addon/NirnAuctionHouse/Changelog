@@ -2,6 +2,13 @@ Changelog
 Latest Version: https://nirnah.com/NirnAuctionHouse(beta).zip
 Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 
+v0.0.19.05 "beta" @Elo
+ - Added optional email notifications (Verification Link sent via Email)
+ - Notification Sold Items
+ - Notification Payment Received
+ - Notification Items Received
+ - Notification Order Expired
+ - Updated LibAddonMenu
 
 v0.0.19.04 "beta" @Elo
  - Changes for clockwork city

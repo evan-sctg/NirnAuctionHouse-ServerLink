@@ -84,6 +84,8 @@ namespace GlobalAuctionHouse
 
         public string AddonDirectory = Path.GetFullPath("../NirnAuctionHouse");
 
+        public string NotificationEmail = "";
+
         public bool DoPlaySounds = true;
         public bool DoPlaySounds_success_listing = false;
         public bool DoPlaySounds_success_buy = false;
@@ -1344,7 +1346,40 @@ namespace GlobalAuctionHouse
 
         }
 
-  
+
+
+
+        
+        private void SetNotifyEmail(string NewEmail , bool Notification_NotifySold, bool Notification_NotifyOrderRecieved, bool Notification_NotifyPaymentRecieved, bool Notification_NotifyExpired)
+        {
+           
+            this.StatusText = "Setting Notification Email";
+            label1.Text = this.StatusText;
+            try
+            {
+
+                
+                string ServerResponse = this.SendPackage(this.APIEndpoint + "/proc/notifications/email", "{ \"Account\":\"" + ActiveAccount + "~" + ActiveAccountUUID + "\" , \"NotificationEmail\":\"" + NewEmail + "\" , \"NotifySold\":\"" + Notification_NotifySold + "\" , \"NotifyOrderRecieved\":\"" + Notification_NotifyOrderRecieved + "\" , \"NotifyPaymentRecieved\":\"" + Notification_NotifyPaymentRecieved + "\" , \"NotifyExpired\":\"" + Notification_NotifyExpired + "\" }");
+                 if (ServerResponse == "The resource is created successfully!" || ServerResponse == "Done!")
+                {
+                    this.StatusText = "Successfully updated Notification Email";
+                }
+                else
+                {
+                        this.StatusText = "Failed to Update Notification Email: " + ServerResponse;
+                }
+
+                label1.Text = this.StatusText;
+
+                return;
+
+            }
+            catch (Exception exception)
+            {
+                this.ToLog("Update Notification Email Error");
+                this.ToLog(exception);
+            }
+        }
 
 
 
@@ -2372,6 +2407,12 @@ namespace GlobalAuctionHouse
                                     bool DoPostFilledWTBOrders = false;
 
 
+                                        bool Notification_NotifySold = false;
+                                        bool Notification_NotifyOrderRecieved = false;
+                                        bool Notification_NotifyPaymentRecieved = false;
+                                        bool Notification_NotifyExpired = false;
+
+
 
 
                                         try {
@@ -2384,6 +2425,52 @@ namespace GlobalAuctionHouse
                                         DoPlaySounds_success_listing = (bool)acctdata["PlaySounds_success_listing"];
                                         DoPlaySounds_success_buy = (bool)acctdata["PlaySounds_success_buy"];
                                         DoPlaySounds_success_cancel = (bool)acctdata["PlaySounds_success_cancel"];
+
+                                            if (acctdata.ContainsKey("NotificationEmail"))
+                                            {
+                                                NotificationEmail = (string)acctdata["NotificationEmail"];
+                                            }else
+                                            {
+                                                NotificationEmail = "";
+                                            }
+
+
+                                            if (acctdata.ContainsKey("NotifySold"))
+                                            {
+                                                Notification_NotifySold = (bool)acctdata["NotifySold"];
+                                            }
+                                            else
+                                            {
+                                                Notification_NotifySold = false;
+                                            }
+
+                                            if (acctdata.ContainsKey("NotifyOrderRecieved"))
+                                            {
+                                                Notification_NotifyOrderRecieved = (bool)acctdata["NotifyOrderRecieved"];
+                                            }
+                                            else
+                                            {
+                                                Notification_NotifyOrderRecieved = false;
+                                            }
+
+                                            if (acctdata.ContainsKey("NotifyPaymentRecieved"))
+                                            {
+                                                Notification_NotifyPaymentRecieved = (bool)acctdata["NotifyPaymentRecieved"];
+                                            }
+                                            else
+                                            {
+                                                Notification_NotifyPaymentRecieved = false;
+                                            }
+
+
+                                            if (acctdata.ContainsKey("NotifyExpired"))
+                                            {
+                                                Notification_NotifyExpired = (bool)acctdata["NotifyExpired"];
+                                            }
+                                            else
+                                            {
+                                                Notification_NotifyExpired = false;
+                                            }
 
 
 
@@ -2494,10 +2581,12 @@ namespace GlobalAuctionHouse
                                     }
 
 
+                                     
+                                        SetNotifyEmail(NotificationEmail, Notification_NotifySold, Notification_NotifyOrderRecieved, Notification_NotifyPaymentRecieved, Notification_NotifyExpired);
 
 
 
-                                }
+                                    }
                         }
                     }
                 }
