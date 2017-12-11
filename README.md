@@ -1,8 +1,8 @@
-# --BETA VERSION-- Current Version:0.0.19.05 (See the full patch note list here: https://nirnah.com/Changelog)
+# --BETA VERSION-- Current Version:0.0.19.06 (See the full patch note list here: https://nirnah.com/Changelog)
 *PC Only for now
 
 
-Hosted Download Link: [MD5:962ce110be9dc90a408a00bf0ebcd134]
+Hosted Download Link: [MD5:4a36de7f33ae974ea4c86d5d9f807840]
 
 https://nirnah.com/NirnAuctionHouse(beta).zip
 
@@ -62,6 +62,7 @@ Option to get notified by email when you sell an item.
 - Basic Search Functionality (item name search)
 - Item Info Search Functionality (item details search)
 - Persistent search settings
+- Abilty to search for Unknown (traits, motifs, recipes)
 - Sort functionality ( bid / buyout / name / quantity / time left / item type) sorting across all pages
 - Full Search filter Functionality (based on guild store filters)
 - Item Type
