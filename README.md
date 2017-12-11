@@ -62,7 +62,7 @@ Option to get notified by email when you sell an item.
 - Basic Search Functionality (item name search)
 - Item Info Search Functionality (item details search)
 - Persistent search settings
-- Abilty to search for Unknown (traits, motifs, recipes)
+- Ability to search for Unknown (traits, motifs, recipes)
 - Sort functionality ( bid / buyout / name / quantity / time left / item type) sorting across all pages
 - Full Search filter Functionality (based on guild store filters)
 - Item Type
