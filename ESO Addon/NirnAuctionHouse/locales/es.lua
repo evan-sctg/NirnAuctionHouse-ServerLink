@@ -100,6 +100,9 @@ ZO_CreateStringId("SI_NAH_MYLISTINGS"     , "Mis listados");
 ZO_CreateStringId("SI_NAH_LEVELDROP1"     , "Rango de nivel");
 ZO_CreateStringId("SI_NAH_LEVELDROP2"     , "Rango de Puntos Campeón");
 
+ZO_CreateStringId("SI_NAH_UNKNOWNDROP1"     , "Conocido y Desconocido");
+ZO_CreateStringId("SI_NAH_UNKNOWNDROP2"     , "Solo Desconocido");
+
 
 ZO_CreateStringId("SI_NAH_QUALITYDROP1"     , "Cualquier cualidad");
 ZO_CreateStringId("SI_NAH_QUALITYDROP2"     , "Normal");

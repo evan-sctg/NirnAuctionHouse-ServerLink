@@ -101,6 +101,10 @@ ZO_CreateStringId("SI_NAH_LEVELDROP1"     , "Уровень");
 ZO_CreateStringId("SI_NAH_LEVELDROP2"     , "Чемпионат мира");
 
 
+ZO_CreateStringId("SI_NAH_UNKNOWNDROP1"     , "Известный и неизвестный");
+ZO_CreateStringId("SI_NAH_UNKNOWNDROP2"     , "Неизвестно только");
+
+
 ZO_CreateStringId("SI_NAH_QUALITYDROP1"     , "Любое качество");
 ZO_CreateStringId("SI_NAH_QUALITYDROP2"     , "Нормальный");
 ZO_CreateStringId("SI_NAH_QUALITYDROP3"     , "хорошо");

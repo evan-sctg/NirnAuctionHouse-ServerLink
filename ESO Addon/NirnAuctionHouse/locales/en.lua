@@ -107,6 +107,9 @@ ZO_CreateStringId("SI_NAH_LEVELDROP1"     , "Level Range");
 ZO_CreateStringId("SI_NAH_LEVELDROP2"     , "Champion Points Range");
 
 
+ZO_CreateStringId("SI_NAH_UNKNOWNDROP1"     , "Known and Unknown");
+ZO_CreateStringId("SI_NAH_UNKNOWNDROP2"     , "Only Unknown");
+
 ZO_CreateStringId("SI_NAH_QUALITYDROP1"     , "Any Quality");
 ZO_CreateStringId("SI_NAH_QUALITYDROP2"     , "Normal");
 ZO_CreateStringId("SI_NAH_QUALITYDROP3"     , "Fine");

@@ -2,6 +2,13 @@ Changelog
 Latest Version: https://nirnah.com/NirnAuctionHouse(beta).zip
 Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 
+v0.0.19.06 "beta" @Elo
+ - Added search filter Unknown (traits, motifs, recipies)
+ - bugfix failed mail send
+ - rating improvments
+ - formatted prices
+
+
 v0.0.19.05 "beta" @Elo
  - Added optional email notifications (Verification Link sent via Email)
  - Notification Sold Items

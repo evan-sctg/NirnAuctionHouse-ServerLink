@@ -103,6 +103,11 @@ ZO_CreateStringId("SI_NAH_LEVELDROP1"     , "Level");
 ZO_CreateStringId("SI_NAH_LEVELDROP2"     , "Championlevel");
 
 
+ZO_CreateStringId("SI_NAH_UNKNOWNDROP1"     , "Bekannt und unbekannt");--New
+ZO_CreateStringId("SI_NAH_UNKNOWNDROP2"     , "Nur Unbekannt");--New
+
+
+
 ZO_CreateStringId("SI_NAH_QUALITYDROP1"     , "Jede Qualität");
 ZO_CreateStringId("SI_NAH_QUALITYDROP2"     , "Normal");
 ZO_CreateStringId("SI_NAH_QUALITYDROP3"     , "Erlesen");

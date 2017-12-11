@@ -210,7 +210,7 @@ function NAHTrackedItemList:SetupItemRow( control, data )
 
 	control:GetNamedChild("Icon"):SetTexture(data.Icon)
 	control:GetNamedChild("Price").normalColor = ZO_DEFAULT_TEXT;
-	control:GetNamedChild("Price"):SetText(data.BuyoutPrice);
+	control:GetNamedChild("Price"):SetText(NirnAuctionHouse:formattedNum(data.BuyoutPrice));
 
 	local itemqualColor=GetItemQualityColor(data.ItemQuality);
 	control:GetNamedChild("Name").normalColor = itemqualColor;
@@ -358,7 +358,7 @@ function NAHSoldItemList:SetupItemRow( control, data )
 
 	control:GetNamedChild("Icon"):SetTexture(data.Icon)
 	control:GetNamedChild("Price").normalColor = ZO_DEFAULT_TEXT;
-	control:GetNamedChild("Price"):SetText(data.BuyoutPrice);
+	control:GetNamedChild("Price"):SetText(NirnAuctionHouse:formattedNum(data.BuyoutPrice));
 	local itemqualColor=GetItemQualityColor(data.ItemQuality);
 	control:GetNamedChild("Name").normalColor = itemqualColor;
 	control:GetNamedChild("Name").mouseOverColor = itemqualColor;
@@ -373,7 +373,7 @@ function NAHSoldItemList:SetupItemRow( control, data )
 	
 		local codcost=10+math.floor(data.BuyoutPrice/20)
 	control:GetNamedChild("TimeLeft").normalColor = ZO_DEFAULT_TEXT;
-	control:GetNamedChild("TimeLeft"):SetText(codcost);
+	control:GetNamedChild("TimeLeft"):SetText(NirnAuctionHouse:formattedNum(codcost));
 	
 		if NAH.settings.ShowMyCharName == true and data.Player~=null then
 		control:GetNamedChild("IsBuyout"):SetText(data.Player.." "..control:GetNamedChild("IsBuyout"):GetText());	
@@ -526,6 +526,9 @@ function NAHAuctionList:Setup( )
 	
 	self.QualityDrop = ZO_ComboBox_ObjectFromContainer(self.frame:GetNamedChild("QualityDrop"));
 	self:InitializeComboBox(self.QualityDrop, "SI_NAH_QUALITYDROP", 6);
+	
+	self.UnknownDrop = ZO_ComboBox_ObjectFromContainer(self.frame:GetNamedChild("UnknownDrop"));
+	self:InitializeComboBox(self.UnknownDrop, "SI_NAH_UNKNOWNDROP", 2);
 	
 	
 	
@@ -687,6 +690,9 @@ function NAHAuctionList:FilterScrollList( )
 	
 	if(self.QualityDrop~=nil)then  filterQualityId = self.QualityDrop:GetSelectedItemData().id; else filterQualityId = NAH.settings.data.SearchSettings.QualityId end
 	
+	
+	if(self.UnknownDrop~=nil)then  filterUnknownId = self.UnknownDrop:GetSelectedItemData().id; else filterUnknownId = NAH.settings.data.SearchSettings.UnknownId end
+	
 --
 	
 	
@@ -805,6 +811,7 @@ function NAHAuctionList:FilterScrollList( )
 	NAH.settings.data.SearchSettings.LevelMax=maxlevel;
 	NAH.settings.data.SearchSettings.LevelRangeTypeId=LevelRangeTypeId;
 	NAH.settings.data.SearchSettings.QualityId=filterQualityId;
+	NAH.settings.data.SearchSettings.UnknownId=filterUnknownId;
 	
 	
 	
@@ -949,6 +956,16 @@ end
 
 
 
+--cehck item Unknown
+if filterUnknownId~=1 and addedyet~=true then 
+	if data.Unknown ~= true then --
+	addedyet=true
+	end
+end
+
+
+
+
 
 if filterId==5 then--crafting
 if(data.TypeID==8)then isCrafting=true; end--motif
@@ -1017,6 +1034,7 @@ if(data.TypeID==12)then isConsumable=true; end--Drink
 if(data.TypeID==7)then isConsumable=true; end--Potion
 if(data.TypeID==30)then isConsumable=true; end--Poison
 if(data.TypeID==29)then isConsumable=true; end--recipe
+if(data.TypeID==8)then isConsumable=true; end--motif
 
 	if addedyet~=true then
 		if isConsumable then--~ 			
@@ -1096,6 +1114,7 @@ if(data.TypeID==12)then isOther=false; end--Drink
 if(data.TypeID==7)then isOther=false; end--Potion
 if(data.TypeID==30)then isOther=false; end--Poison
 if(data.TypeID==29)then isOther=false; end--recipe
+if(data.TypeID==8)then isOther=false; end--motif
 --Soul Gems
 if data.TypeID==19 or data.TypeID==20 or data.TypeID==21 or data.TypeID==26 then isOther=false; end 
 --Furnishings
@@ -1321,11 +1340,11 @@ zo_callLater(function()
 	control:GetNamedChild("BidUnit"):SetText("-");
 	if(data.StartingPrice ~= nil and data.StartingPrice ~= "" and data.StartingPrice ~= "0" and data.StartingPrice > 0)then
 	control:GetNamedChild("Bid").normalColor = ZO_DEFAULT_TEXT;
-	control:GetNamedChild("Bid"):SetText(data.StartingPrice);
+	control:GetNamedChild("Bid"):SetText(NirnAuctionHouse:formattedNum(data.StartingPrice));
 	
 	if(data.stackCount>1) then
 	control:GetNamedChild("BidUnit").normalColor = ZO_DEFAULT_TEXT;
-	control:GetNamedChild("BidUnit"):SetText(string.format("%.2f", data.StartingPrice/data.stackCount));
+	control:GetNamedChild("BidUnit"):SetText(NirnAuctionHouse:formattedNum(string.format("%.2f", data.StartingPrice/data.stackCount)));
 	end
 	end
 	
@@ -1333,11 +1352,11 @@ zo_callLater(function()
 	control:GetNamedChild("BuyUnit"):SetText("-");
 	if( data.BuyoutPrice ~= "0" and data.BuyoutPrice ~= "" and data.BuyoutPrice > 0)then
 	control:GetNamedChild("Buyout").normalColor = ZO_DEFAULT_TEXT;
-	control:GetNamedChild("Buyout"):SetText(data.BuyoutPrice);
+	control:GetNamedChild("Buyout"):SetText(NirnAuctionHouse:formattedNum(data.BuyoutPrice));
 	
 	if(data.stackCount>1) then
 	control:GetNamedChild("BuyUnit").normalColor = ZO_DEFAULT_TEXT;
-	control:GetNamedChild("BuyUnit"):SetText(string.format("%.2f", data.BuyoutPrice/data.stackCount));
+	control:GetNamedChild("BuyUnit"):SetText(NirnAuctionHouse:formattedNum(string.format("%.2f", data.BuyoutPrice/data.stackCount)));
 	end
 	control:GetNamedChild("DoBuyout"):SetHidden(false);
 	end
@@ -1616,9 +1635,9 @@ local Priceuid=itemId..":"..ItemQuality..":"..statval..":"..requiredLevel..":"..
 		
 			TooltipInst:AddVerticalPadding(8)
 			ZO_Tooltip_AddDivider(TooltipInst)
-			TooltipInst:AddLine("NAH "..GetString(SI_NAH_STRING_PRICECHECK).." : "..NirnAuctionHouse.PriceTable[Priceuid].price.." |t18:18:esoui/art/currency/currency_gold_32.dds|t", "ZoFontGameLarge");
+			TooltipInst:AddLine("NAH "..GetString(SI_NAH_STRING_PRICECHECK).." : "..NirnAuctionHouse:formattedNum(NirnAuctionHouse.PriceTable[Priceuid].price).." |t18:18:esoui/art/currency/currency_gold_32.dds|t", "ZoFontGameLarge");
 			if(QTY~=nil and QTY>1)then
-			TooltipInst:AddLine("x"..QTY.." : "..tonumber(string.format("%.2f", NirnAuctionHouse.PriceTable[Priceuid].price*QTY)).." |t18:18:esoui/art/currency/currency_gold_32.dds|t", "ZoFontGameLarge");
+			TooltipInst:AddLine("x"..QTY.." : "..NirnAuctionHouse:formattedNum(tonumber(string.format("%.2f", NirnAuctionHouse.PriceTable[Priceuid].price*QTY))).." |t18:18:esoui/art/currency/currency_gold_32.dds|t", "ZoFontGameLarge");
 			end
 			else
 		TooltipInst.PCYet=false
@@ -2265,6 +2284,8 @@ end
 function NirnAuctionHouse:MailFailed()
 NirnAuctionHouse.FillingOrderID=nil
 NirnAuctionHouse.FillingOrderBidID=nil
+NAH.settings.data.FilledOrders = {}
+NAH.settings.PostFilledOrders=false;
 d("EVENT_MAIL_SEND_FAILED")
 end
 	
@@ -2448,6 +2469,7 @@ if(NirnAuctionHouse.list~=nil)then
 	
 	
 	NirnAuctionHouse.list.QualityDrop = ZO_ComboBox_ObjectFromContainer(NirnAuctionHouse.list.frame:GetNamedChild("QualityDrop"));
+	NirnAuctionHouse.list.UnknownDrop = ZO_ComboBox_ObjectFromContainer(NirnAuctionHouse.list.frame:GetNamedChild("UnknownDrop"));
 	
 	
 	
@@ -2527,6 +2549,10 @@ if(NirnAuctionHouse.list~=nil)then
 	
 	if NAH.settings.data.SearchSettings.QualityId then
 	NirnAuctionHouse.list.QualityDrop:SelectItemByIndex(NAH.settings.data.SearchSettings.QualityId,true)
+	end
+	
+	if NAH.settings.data.SearchSettings.UnknownId then
+	NirnAuctionHouse.list.UnknownDrop:SelectItemByIndex(NAH.settings.data.SearchSettings.UnknownId,true)
 	end
 	
 		
@@ -3209,6 +3235,9 @@ local locatedbagslot = nil
 			end						 
 					 else					 
 			d("Failed to find "..stackCount.."x "..ItemLink)	
+			
+			NirnAuctionHouse.FillingOrderID=nil
+			NirnAuctionHouse.FillingOrderBidID=nil
 			return;
 					 end
 			
@@ -3239,7 +3268,10 @@ local locatedbagslot = nil
 		end, 900)
 	
 			else
-	d("Failed to find "..stackCount.."x "..ItemLink)			
+	d("Failed to find "..stackCount.."x "..ItemLink)	
+
+	NirnAuctionHouse.FillingOrderID=nil
+	NirnAuctionHouse.FillingOrderBidID=nil
 			end
 	--end
 	end
@@ -3988,7 +4020,18 @@ NirnAuctionHouse.ActivePostWTBId=(1+(#NAH.settings.data.WTBOrders))
 	NAHAuctionHouseGoldCostWTB:GetNamedChild("BidName"):SetText(itemName);
 		NirnAuctionHouse_OpenGoldCostWTB()	
 end
-	
+
+	function NirnAuctionHouse:formattedNum(amount)
+  local formatted = amount
+  while true do  
+    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+    if (k==0) then
+      break
+    end
+  end
+  return formatted
+end
+
 function NirnAuctionHouse:PriceCheckItemLink(itemLink,tochat)
 	if NirnAuctionHouse.PriceTable==nil then
 	NirnAuctionHouse:LoadPrices()
@@ -4019,9 +4062,9 @@ local Priceuid=itemId..":"..ItemQuality..":"..statval..":"..requiredLevel..":"..
 	if NirnAuctionHouse.PriceTable[Priceuid] ~= nil then
 	if NirnAuctionHouse.PriceTable[Priceuid].price ~= nil then
 	if(tochat)then
-	NirnAuctionHouse.AddToChat("(Nirn Auction House) Price Check: "..itemLink.." sells for "..NirnAuctionHouse.PriceTable[Priceuid].price.."(g)");	
+	NirnAuctionHouse.AddToChat("(Nirn Auction House) Price Check: "..itemLink.." sells for "..NirnAuctionHouse:formattedNum(NirnAuctionHouse.PriceTable[Priceuid].price).."(g)");	
 	else
-	d(GetString(SI_NAH_STRING_PRICECHECK)..": "..itemLink.." sells for "..NirnAuctionHouse.PriceTable[Priceuid].price.."|t18:18:esoui/art/currency/currency_gold_32.dds|t" );
+	d(GetString(SI_NAH_STRING_PRICECHECK)..": "..itemLink.." sells for "..NirnAuctionHouse:formattedNum(NirnAuctionHouse.PriceTable[Priceuid].price).."|t18:18:esoui/art/currency/currency_gold_32.dds|t" );
 	end
 	end
 	
@@ -4426,6 +4469,33 @@ end
 			local source =  EntryData["CharName"];
 			color = NirnAuctionHouse.colors.gold;
 			
+			local _CanResearch=CanItemLinkBeTraitResearched(itemLink)
+			local _knownMotif=IsItemLinkBookKnown(itemLink)
+			local _knownRecipie=IsItemLinkRecipeKnown(itemLink)
+			local _ISUnknown=false
+			
+			
+			if ItemWeaponType > 0 or  armorType > 0 then
+			if _CanResearch==true then 
+			_ISUnknown=true
+			end
+			else
+			if ItemType==29 or ItemType==8 then
+			_ISUnknown=true
+				if _knownMotif==true then 
+				_ISUnknown=false
+				end
+				if _knownRecipie==true then 
+				_ISUnknown=false
+				end
+			end
+			end
+			
+		
+			
+			
+			
+			
 --~ 		type =  ItemType .. " , " .. type
 
 		zoneType[(GetItemLinkBindType(itemLink) == BIND_TYPE_ON_EQUIP) and 5 or 6] = true;
@@ -4470,6 +4540,7 @@ end
 			RuneType = RuneType,
 			ItemQuality = ItemQuality,
 			Rating = Rating,
+			Unknown = _ISUnknown,
 		});
 	end
 
@@ -4498,8 +4569,11 @@ end
 			for bagId,inventory in pairs(PLAYER_INVENTORY.inventories) do
 			if inventory~=nil and inventory.listView and inventory.listView.dataTypes and inventory.listView.dataTypes[1] and inventory.listView.dataTypes[1].setupCallback then
 			    ZO_PreHook(inventory.listView.dataTypes[1], "setupCallback", function(control, slot)    
-			      if ( control.slotControlType~=nil and control.slotControlType == 'listSlot' and slot.stackCount~=nil  ) then
-				NirnAuctionHouse:SetItemBadges(control, slot)
+			    
+			      if ( control.slotControlType~=nil and control.slotControlType == 'listSlot' and slot.stackCount~=nil  ) then			      
+			zo_callLater(function()
+			NirnAuctionHouse:SetItemBadges(control, slot)
+			end, (50))					
 			      end
 			    end)
 		    end

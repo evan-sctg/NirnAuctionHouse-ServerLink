@@ -510,6 +510,11 @@
 					</Controls>
 				</Control>
 				
+				
+				<Control name="$(parent)UnknownDrop" inherits="ZO_ComboBox">
+				<Anchor point="LEFT" relativeTo="$(parent)LevelRangeType" relativePoint="LEFT" offsetX="0" offsetY="90" />
+				</Control>
+				
 
 			
 				<Control name="$(parent)Headers">

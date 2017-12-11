@@ -100,6 +100,10 @@ ZO_CreateStringId("SI_NAH_LEVELDROP1"     , "Gamme de niveau");
 ZO_CreateStringId("SI_NAH_LEVELDROP2"     , "Gamme de points de champion");
 
 
+ZO_CreateStringId("SI_NAH_UNKNOWNDROP1"     , "Connu et inconnu");
+ZO_CreateStringId("SI_NAH_UNKNOWNDROP2"     , "Inconnu seulement");
+
+
 ZO_CreateStringId("SI_NAH_QUALITYDROP1"     , "Toute qualité");
 ZO_CreateStringId("SI_NAH_QUALITYDROP2"     , "Normal");
 ZO_CreateStringId("SI_NAH_QUALITYDROP3"     , "Bien");

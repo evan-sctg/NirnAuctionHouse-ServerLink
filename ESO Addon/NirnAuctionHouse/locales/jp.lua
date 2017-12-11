@@ -101,6 +101,10 @@ ZO_CreateStringId("SI_NAH_LEVELDROP1"     , "レベル範囲");
 ZO_CreateStringId("SI_NAH_LEVELDROP2"     , "チャンピオンポイントの範囲");
 
 
+ZO_CreateStringId("SI_NAH_UNKNOWNDROP1"     , "既知および不明");
+ZO_CreateStringId("SI_NAH_UNKNOWNDROP2"     , "不明なもののみ");
+
+
 ZO_CreateStringId("SI_NAH_QUALITYDROP1"     , "任意の品質");
 ZO_CreateStringId("SI_NAH_QUALITYDROP2"     , "ノーマル");
 ZO_CreateStringId("SI_NAH_QUALITYDROP3"     , "ファイン");
