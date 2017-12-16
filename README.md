@@ -1,15 +1,15 @@
-# --BETA VERSION-- Current Version:0.0.19.06 (See the full patch note list here: https://nirnah.com/Changelog)
-*PC Only for now
+# --BETA VERSION-- Current Version:0.0.20 (See the full patch note list here: https://nirnah.com/Changelog)
+*NOW for PC and MAC
 
 
-Hosted Download Link: [MD5:4a36de7f33ae974ea4c86d5d9f807840]
+Hosted Download Link: [MD5:10957a54b3b411194c67438a15207065]
 
 https://nirnah.com/NirnAuctionHouse(beta).zip
 
 
 
 ### Upcoming Changes/Features 
--- MAC version
+-- MAC version ( Updates )
 -- More price tracking details and history
 -- more seller security, buyer history, troll protection
 
@@ -91,14 +91,15 @@ Option to get notified by email when you sell an item.
 - Buy Orders WTB (right click menu)
 - Price checks to chat (right click menu)
 - Translated for all languages (need feedback)
-- Server link required to communicate with server (NirnAuctionHouse.exe) *PC Only for now
+- Server link required to communicate with server  ( PC: NirnAuctionHouse.exe   MAC: NirnAuctionHouse.app )  
+
 
 
 
 ### Install Instructions: 
 
 1. Download and unzip the files into your ESO addon folder (default is Documents\Elder Scrolls Online\live\AddOns) Or you can install it with Minion
-2. When playing ESO, run the Server Link (NirnAuctionHouse.exe) if it's not already running 
+2. When playing ESO, run the Server Link  ( PC: NirnAuctionHouse.exe   MAC: NirnAuctionHouse.app ) if it's not already running 
 3. Sell More Items by reaching more people
 
 
