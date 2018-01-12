@@ -4,7 +4,6 @@
 
 
 
-
 if NAH == nil then NAH = {} end
 NAH.ServerLinkVersionRequired="0.0.0.21";
 NirnAuctionHouse = {
@@ -83,6 +82,10 @@ local NirnAuctionHouse = NirnAuctionHouse
 		NotifyOrderRecieved = true,
 		NotifyPaymentRecieved = true,
 		NotifyExpired = false,
+		HideInventoryBadges=false,
+		HideCraftBagBadges=false,
+		HideBankBadges=false,
+		HideGuildBankBadges=false,
 		
 	data = {
 		FilledWTBOrders = {},
@@ -200,6 +203,9 @@ function NAHTrackedItemList:Setup( )
 	NirnAuctionHouse.scene:AddFragmentGroup(FRAGMENT_GROUP.MOUSE_DRIVEN_UI_WINDOW);
 	NirnAuctionHouse.scene:AddFragmentGroup(FRAGMENT_GROUP.FRAME_TARGET_STANDARD_RIGHT_PANEL);
 	
+	---adds top menu  buttons
+	NirnAuctionHouse.scene:AddFragment(MAIN_MENU_KEYBOARD.categoryBarFragment)
+	NirnAuctionHouse.scene:AddFragment(TOP_BAR_FRAGMENT)
 
 	self:RefreshData();
 end
@@ -348,6 +354,9 @@ function NAHSoldItemList:Setup( )
 	NirnAuctionHouse.scene:AddFragmentGroup(FRAGMENT_GROUP.MOUSE_DRIVEN_UI_WINDOW);
 	NirnAuctionHouse.scene:AddFragmentGroup(FRAGMENT_GROUP.FRAME_TARGET_STANDARD_RIGHT_PANEL);
 	
+	---adds top menu  buttons
+	NirnAuctionHouse.scene:AddFragment(MAIN_MENU_KEYBOARD.categoryBarFragment)
+	NirnAuctionHouse.scene:AddFragment(TOP_BAR_FRAGMENT)
 
 	self:RefreshData();
 end
@@ -551,6 +560,11 @@ function NAHAuctionList:Setup( )
 	NirnAuctionHouse.scene:AddFragment(CODEX_WINDOW_SOUNDS);
 	NirnAuctionHouse.scene:AddFragmentGroup(FRAGMENT_GROUP.MOUSE_DRIVEN_UI_WINDOW);
 	NirnAuctionHouse.scene:AddFragmentGroup(FRAGMENT_GROUP.FRAME_TARGET_STANDARD_RIGHT_PANEL);
+	
+	
+	---adds top menu  buttons
+	NirnAuctionHouse.scene:AddFragment(MAIN_MENU_KEYBOARD.categoryBarFragment)
+	NirnAuctionHouse.scene:AddFragment(TOP_BAR_FRAGMENT)
 	
 
 	self:RefreshData();
@@ -932,23 +946,18 @@ if(LevelRangeTypeId==2)then checkchamppoints=true end
 
 --cehck item quality
 if filterQualityId ~=1  and addedyet~=true then 
---~ 	if filterQualityText =="Normal" and data.ItemQuality ~= 1 then --Normal
 	if filterQualityId ==2 and data.ItemQuality ~= 1 then --Normal
 	addedyet=true
 	end
---~ 	if filterQualityText =="Fine" and data.ItemQuality ~= 2 then --Fine
 	if filterQualityId ==3 and data.ItemQuality ~= 2 then --Fine
 	addedyet=true
 	end
---~ 	if filterQualityText =="Superior" and data.ItemQuality ~= 3 then --Superior
 	if filterQualityId ==4 and data.ItemQuality ~= 3 then --Superior
 	addedyet=true
 	end
---~ 	if filterQualityText =="Epic" and data.ItemQuality ~= 4 then --Epic
 	if filterQualityId ==5 and data.ItemQuality ~= 4 then --Epic
 	addedyet=true
 	end
---~ 	if filterQualityText =="Legendary" and data.ItemQuality ~= 5 then --Legendary
 	if filterQualityId ==6 and data.ItemQuality ~= 5 then --Legendary
 	addedyet=true
 	end
@@ -1436,45 +1445,7 @@ zo_callLater(function()
 	control:GetNamedChild("Buy")
 	
 
-----------------------------------MasterMerchant Integration-----------------------------------------
-if(MasterMerchant)then
-if(NAH.settings.AddListingsToMasterMerchant)then
-if(data.BuyoutPrice and data.BuyoutPrice > 0 and data.BuyoutPrice ~= "" and data.BuyoutPrice ~= "0")then
---~ d("adding item to MasterMerchant: " .. data.itemLink)
-if TrackedPriceHistoryYet == false then
-		--delay price tracking to be safe as to spamming limits
-		zo_callLater(function()
-			    local guildID = GetGuildId(1)
-			    if guildID then
-			    local guildName = GetGuildName(guildID)
-			    if guildName then
-				local theEvent = {}      
-			      theEvent.id = data.TradeID--eventid
-			      theEvent.itemName = data.itemLink--really item link
-			      theEvent.seller = data.source
-			      theEvent.buyer = data.source
-			      theEvent.guild = guildName
-			      theEvent.quant = data.stackCount
-			      theEvent.salePrice = data.BuyoutPrice
-			      theEvent.saleTime = GetTimeStamp()
-			      theEvent.kioskSale = false
-			      
-			MasterMerchant:addToHistoryTables(theEvent, true)
-			end
-			end
 
-			end, (TrackedPriceHistory_delay*1000)
-			)
-			TrackedPriceHistory_delay=TrackedPriceHistory_delay+TrackedPriceHistory_delayInt
-			
-			end
-
-
-
-end
-end
-end
-----------------------------------MasterMerchant Integration-----------------------------------------
 
 --~ 	ZO_SortFilterList.SetupRow(self, control, data);
 	NAHAuctionList.SetupRow(self, control, data);
@@ -2967,7 +2938,22 @@ function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 	end
 	---
 	
-
+	
+	NAH.MenuConfig =
+	{
+		binding = "NAH_TOGGLE_AUCTION_HOUSE",
+		categoryName = SI_NAH_TITLE,
+		normal = [[NirnAuctionHouse\media\marketplace_rustic.dds]],
+		highlight = [[NirnAuctionHouse\media\marketplace_glow.dds]],
+		pressed = [[NirnAuctionHouse\media\marketplace.dds]],
+		callback = function()
+			NirnAuctionHouse:NAHWindow_show()
+		end,
+	}
+	
+NAH.MenuButton = ZO_MenuBar_AddButton(MAIN_MENU_KEYBOARD.categoryBar, NAH.MenuConfig)
+	
+	
 	
 	
 	SLASH_COMMANDS["/ah"] = function(...) self:CommandHandler(...) end
@@ -3061,6 +3047,7 @@ end)
 
 	
 end
+
 
 
 
@@ -4566,18 +4553,31 @@ end
 
 	
 			function NirnAuctionHouse:SetItemBadgeHooks()
+						
+			if NAH.settings.HideInventoryBadges == nil then NAH.settings.HideInventoryBadges=false  end
+			if NAH.settings.HideCraftBagBadges == nil then NAH.settings.HideCraftBagBadges=false  end
+			if NAH.settings.HideBankBadges == nil then NAH.settings.HideBankBadges=false  end
+			if NAH.settings.HideGuildBankBadges == nil then NAH.settings.HideGuildBankBadges=false  end
+			
+			
 			for bagId,inventory in pairs(PLAYER_INVENTORY.inventories) do
+			if bagId~= 1 or ( bagId == 1 and NAH.settings.HideInventoryBadges ~= true) then 
+			if bagId~= 5 or ( bagId == 5 and NAH.settings.HideCraftBagBadges ~= true) then 
+			if bagId~= 3 or ( bagId == 3 and NAH.settings.HideBankBadges ~= true) then 
+			if bagId~= 4 or ( bagId == 4 and NAH.settings.HideGuildBankBadges ~= true) then 
 			if inventory~=nil and inventory.listView and inventory.listView.dataTypes and inventory.listView.dataTypes[1] and inventory.listView.dataTypes[1].setupCallback then
 			    ZO_PreHook(inventory.listView.dataTypes[1], "setupCallback", function(control, slot)    
 			    
-			      if ( control.slotControlType~=nil and control.slotControlType == 'listSlot' and slot.stackCount~=nil  ) then			      
-			zo_callLater(function()
+			      if ( control.slotControlType~=nil and control.slotControlType == 'listSlot' and slot.stackCount~=nil  ) then	
 			NirnAuctionHouse:SetItemBadges(control, slot)
-			end, (50))					
 			      end
 			    end)
 		    end
 		    end
+		    end
+		     end
+		     end
+		     end
 		  end
 		  
 		  

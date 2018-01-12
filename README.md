@@ -1,8 +1,8 @@
-# --BETA VERSION-- Current Version:0.0.22 (See the full patch note list here: https://nirnah.com/Changelog)
+# --BETA VERSION-- Current Version:0.0.23 (See the full patch note list here: https://nirnah.com/Changelog)
 *NOW for PC and MAC
 
 
-Hosted Download Link: [MD5:7697eff9f3cb0fc961bb75b8705de013]
+Hosted Download Link: [MD5:17f1424efe253f237716b7459f28bdb1]
 
 https://nirnah.com/NirnAuctionHouse(beta).zip
 
@@ -79,7 +79,6 @@ Option to get notified by email when you sell an item.
 ### Integrations 
 
 - Integration to Master Merchant - tooltips show Master Merchant price tracking data in auction house including the Sales History Scatter Chart.- *optional in settings
-- Integration to Master Merchant - Track auctions and store the price data in master merchant - *optional in settings
 
 
 ### General Information 

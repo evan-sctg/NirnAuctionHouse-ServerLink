@@ -78,6 +78,62 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 		},
 		{
 			type = "checkbox",
+			name = "Hide main NAH button",
+			tooltip = "Hides main Nirn Auction House button and serverlink warning",
+			getFunc = function() return NAH.settings.HideInterface end,
+			setFunc = function(IsHideInterface) 
+			 if IsHideInterface then
+			 NAH.settings.HideInterface=true
+			NirnAuctionHouse_HideBtns();
+			 else
+			NAH.settings.HideInterface=false
+			NirnAuctionHouse_ShowBtns( );
+			 end
+			end,
+			default = false
+		},
+		{
+			type = "checkbox",
+			name = "Hide NAH Inventory Badges",
+			tooltip = "Hides Nirn Auction House for sale Badges in Inventory",
+			getFunc = function() return NAH.settings.HideInventoryBadges end,
+			setFunc = function(IsHideInventoryBadges) 
+			NAH.settings.HideInventoryBadges=IsHideInventoryBadges 
+			end,
+			default = false
+		},
+		{
+			type = "checkbox",
+			name = "Hide NAH Craft Bag Badges",
+			tooltip = "Hides Nirn Auction House for sale Badges in Craft Bag",
+			getFunc = function() return NAH.settings.HideCraftBagBadges end,
+			setFunc = function(IsHideCraftBagBadges) 
+			NAH.settings.HideCraftBagBadges=IsHideCraftBagBadges 
+			end,
+			default = false
+		},
+		{
+			type = "checkbox",
+			name = "Hide NAH Bank Badges",
+			tooltip = "Hides Nirn Auction House for sale Badges in Bank",
+			getFunc = function() return NAH.settings.HideBankBadges end,
+			setFunc = function(IsHideBankBadges) 
+			NAH.settings.HideBankBadges=IsHideBankBadges 
+			end,
+			default = false
+		},
+		{
+			type = "checkbox",
+			name = "Hide NAH Guild Bank Badges",
+			tooltip = "Hides Nirn Auction House for sale Badges in Guild Bank",
+			getFunc = function() return NAH.settings.HideGuildBankBadges end,
+			setFunc = function(IsHideGuildBankBadges) 
+			NAH.settings.HideGuildBankBadges=IsHideGuildBankBadges 
+			end,
+			default = false
+		},
+		{
+			type = "checkbox",
 			name = "Only show listings from active sellers",
 			tooltip = "Hide trades where the seller does not have Server Link active",
 			getFunc = function() return NAH.settings.ActiveSellersOnly end,

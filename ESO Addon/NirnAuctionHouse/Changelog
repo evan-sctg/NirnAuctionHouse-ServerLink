@@ -3,6 +3,11 @@ Latest Version: https://nirnah.com/NirnAuctionHouse(beta).zip
 Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 Latest App: https://nirnah.com/NirnAuctionHouse.app.zip
 
+v0.0.23 "beta" @Elo
+ - Added setting to hide nirn auction house for sale badges (inventory, bank, guild bank, craft bag)
+ - Added setting to hide main nirn auction house button and serverlink warning
+ - Moved interface to Main Menu Bar
+ - Improved email notification system
 
 v0.0.22 "beta" @Elo
  - MAC Version Bugfix
