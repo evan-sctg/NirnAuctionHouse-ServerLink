@@ -16,47 +16,51 @@
 			<Controls>
 				<Texture name="$(parent)BG" inherits="ZO_ThinListBgStrip" />
 				
-				<Texture name="$(parent)ICONBG" inherits="ZO_ThinListBgStrip" textureFile="esoui/art/chatwindow/chat_bg_center.dds">
+				<Texture name="$(parent)ICONBG" inherits="ZO_ThinListBgStrip" textureFile="esoui/art/chatwindow/chat_bg_center.dds" hidden="true">
 					<Dimensions x="60" y="60" />
 					<Anchor point="LEFT" offsetX=""  />
 				</Texture>
 				<Texture name="$(parent)Icon">
-					<Dimensions x="50" y="50" />
-					<Anchor point="LEFT"  offsetX="5" offsetY="0"   />
+					<Dimensions x="40" y="40" />
+					<Anchor point="LEFT"  offsetX="10" offsetY="0"   />
 				</Texture>
 				<Label name="$(parent)Name" inherits="NAHRowLabel">
 					<Anchor point="LEFT" relativePoint="RIGHT" offsetX="10"  relativeTo="$(parent)Icon"/>
-					<Dimensions x="200" y="30" />
+					<Dimensions x="250" y="30" />
 				</Label>
 				<Label name="$(parent)Qty" inherits="NAHRowLabel">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Name" />
 					<Dimensions x="50" y="30" />
 				</Label>
-				<Label name="$(parent)TimeLeft" inherits="NAHRowLabel">
+				<Label name="$(parent)TimeLeft" inherits="NAHRowLabel" hidden="true">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Qty" />
 					<Dimensions x="115" y="30" />
 				</Label>
+				<Texture name="$(parent)TimeLeftIcon"  textureFile="NirnAuctionHouse\media\Timeleft_07.dds" mouseEnabled="true">
+					<Dimensions x="40" y="40" />
+					<Anchor point="LEFT" relativePoint="RIGHT"  offsetX="25" relativeTo="$(parent)Qty" />
+				</Texture>
 				<Label name="$(parent)Type" inherits="NAHRowLabel">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)TimeLeft" />
-					<Dimensions x="95" y="30" />
+					<Dimensions x="165" y="30" />
 				</Label>
 				<Label name="$(parent)Bid" inherits="NAHRowLabel">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Type" />
-					<Dimensions x="80" y="30" />
+					<Dimensions x="120" y="30" />
 				</Label>
 				
 				<Label name="$(parent)BidUnit" inherits="NAHRowLabel">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Bid" />
-					<Dimensions x="60" y="30" />
+					<Dimensions x="80" y="30" />
 				</Label>
 				<Label name="$(parent)Buyout" inherits="NAHRowLabel">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)BidUnit" />
-					<Dimensions x="80" y="30" />
+					<Dimensions x="120" y="30" />
 				</Label>
 				
 				<Label name="$(parent)BuyUnit" inherits="NAHRowLabel">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Buyout" />
-					<Dimensions x="60" y="30" />
+					<Dimensions x="80" y="30" />
 				</Label>
 				
 				<Label name="$(parent)Rating" inherits="NAHRowLabel">
@@ -64,70 +68,130 @@
 					<Dimensions x="30" y="30" />
 				</Label>
 				
-		<Button name="$(parent)DoBid" inherits="ZO_DefaultButton" text="Bid" hidden="false">
-					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Rating" />
-					<Dimensions x="100" y="30" />
-					<OnInitialized>
-						self:SetText(GetString(SI_NAH_BID))
+		<Button name="$(parent)DoBid" inherits="ZO_DefaultButton" text="Bid" hidden="false" endCapWidth="0">
+					<Anchor point="LEFT" relativePoint="RIGHT" offsetX="35" relativeTo="$(parent)Rating" />
+					<Dimensions x="35" y="35" />
+					<OnInitialized>						
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_BID))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_BidItem(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Coin.dds"  normal="NirnAuctionHouse\media\Coin.dds" />
 		</Button>
-		<Button name="$(parent)DoBuyout" inherits="ZO_DefaultButton" text="Buyout" hidden="false">
-					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)DoBid" />
-					<Dimensions x="100" y="30" />
+		<Button name="$(parent)DoBuyout" inherits="ZO_DefaultButton" text="Buyout" hidden="false" endCapWidth="0">
+					<Anchor point="LEFT" relativePoint="RIGHT" offsetX="35" relativeTo="$(parent)DoBid" />
+					<Dimensions x="35" y="35" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_BUYOUT))
+						
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_BUYOUT))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_BuyItem(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\SackOGold.dds"  normal="NirnAuctionHouse\media\SackOGold.dds" />
 		</Button>
 		
-		<Button name="$(parent)DoCancel" inherits="ZO_DefaultButton" text="Cancel" hidden="true">
+		<Button name="$(parent)DoCancel" inherits="ZO_DefaultButton" text="Cancel" hidden="true" endCapWidth="0">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)DoBid" />
-					<Dimensions x="100" y="30" />
+					<Dimensions x="35" y="35" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_CANCEL))
+						
+						self:SetText("")
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_CANCEL))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_CancelListing(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Cancel.dds"  normal="NirnAuctionHouse\media\Cancel.dds" />
 		</Button>
-		<Button name="$(parent)DoCancelWTB" inherits="ZO_DefaultButton" text="Cancel" hidden="true">
+		<Button name="$(parent)DoCancelWTB" inherits="ZO_DefaultButton" text="Cancel" hidden="true" endCapWidth="0">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)DoBid" />
-					<Dimensions x="100" y="30" />
+					<Dimensions x="35" y="35" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_CANCEL))
+						
+						self:SetText("")
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_CANCEL))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_CancelListingWTB(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Cancel.dds"  normal="NirnAuctionHouse\media\Cancel.dds" />
 		</Button>
-		<Button name="$(parent)DoSellItem" inherits="ZO_DefaultButton" text="Sell Item" hidden="true">
+		<Button name="$(parent)DoSellItem" inherits="ZO_DefaultButton" text="Sell Item" hidden="true" endCapWidth="0">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)DoBid" />
-					<Dimensions x="100" y="30" />
+					<Dimensions x="50" y="50" />
+					<OnInitialized>
+						self:SetText("")
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP,GetString(SI_NAH_SELLITEM))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_SellItemToWTB(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Package.dds"  normal="NirnAuctionHouse\media\Package.dds" />
 		</Button>
-		<Button name="$(parent)DoContact" inherits="ZO_DefaultButton" text="Contact" hidden="true">
+		<Button name="$(parent)DoContact" inherits="ZO_DefaultButton" text="Contact" hidden="true" endCapWidth="0">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)DoBid" />
-					<Dimensions x="100" y="30" />
+					<Dimensions x="35" y="35" />
+					<OnInitialized>
+						self:SetText("")
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_CONTACT))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ContactWTB(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Mail.dds"  normal="NirnAuctionHouse\media\Mail.dds" />
 		</Button>
-		<Button name="$(parent)DoRelist" inherits="ZO_DefaultButton" text="Relist" hidden="true">
+		<Button name="$(parent)DoRelist" inherits="ZO_DefaultButton" text="Relist" hidden="true" endCapWidth="0">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)DoBid" />
-					<Dimensions x="100" y="30" />
+					<Dimensions x="35" y="35" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_RELIST))
+						self:SetText("")
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_RELIST))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_RelistListing(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Relist.dds"  normal="NirnAuctionHouse\media\Relist.dds" />
 		</Button>
 			</Controls>
 		</Control>
@@ -153,7 +217,7 @@
 				</Texture>
 				<Texture name="$(parent)Icon">
 					<Dimensions x="50" y="50" />
-					<Anchor point="LEFT" offsetX="5" offsetY="0"    />
+					<Anchor point="LEFT" offsetX="10" offsetY="0"    />
 				</Texture>
 				<Label name="$(parent)Price" inherits="NAHRowLabel">
 					<Anchor point="LEFT" relativePoint="RIGHT" offsetX="10"  relativeTo="$(parent)Icon" />
@@ -161,7 +225,7 @@
 				</Label>
 				<Label name="$(parent)Name" inherits="NAHRowLabel">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Price" />
-					<Dimensions x="200" y="30" />
+					<Dimensions x="250" y="30" />
 				</Label>
 				<Label name="$(parent)Qty" inherits="NAHRowLabel">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)Name" />
@@ -173,7 +237,7 @@
 				</Label>
 				<Label name="$(parent)IsBuyout" inherits="NAHRowLabel">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)TimeLeft" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="200" y="30" />
 				</Label>
 		<Button name="$(parent)Confirm" inherits="ZO_DefaultButton" text="Confirm" hidden="false">
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$(parent)IsBuyout" />
@@ -191,124 +255,213 @@
     <TopLevelControl name="NirnAuctionHousePanel" inherits="ZO_RightPanelFootPrint">
       <Controls>
 				<Texture name="$(parent)BG" inherits="ZO_InsetTexture" textureFile="esoui/art/chatwindow/chat_bg_center.dds"  />
-			<Label name="$(parent)title"  horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Browse">
-					<Anchor point="TOP" relativePoint="TOP" offsetX="130"  offsetY="50" />
+			<Label name="$(parent)title"  horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Browse" hidden="true">
+					<Anchor point="TOP" relativePoint="TOP" offsetX="130"  offsetY="10" />
 					<OnInitialized>
 						self:SetText(GetString(SI_NAH_BROWSE))
 					</OnInitialized>
 				</Label>
 				
-				<Button name="$(parent)AuctionHouseRefresh" inherits="ZO_DefaultButton" text="Sync" hidden="false">
-					<OnInitialized>
-						self:SetText(GetString(SI_NAH_SYNC))
+				<Button name="$(parent)AuctionHouseRefresh" inherits="ZO_DefaultButton" text="Sync" hidden="false" endCapWidth="0">
+				<OnInitialized>
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_SYNC))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 				
-					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-45" offsetY="55" />
-					<Dimensions x="150" y="30" />
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-45" offsetY="40" />
+					<Dimensions x="40" y="40" />
 			<OnClicked>
 				NirnAuctionHouse_RefreshAH()
 			</OnClicked>
+		<Textures pressed="NirnAuctionHouse\media\Sync.dds"  normal="NirnAuctionHouse\media\Sync.dds" />
+		
 		</Button>
 		
 		
-		<Texture name="$(parent)ICONSepNav" inherits="ZO_ThinListBgStrip" textureFile="esoui/art/miscellaneous/verticaldivider_64.dds">
-					<Dimensions x="5" />
-					<Anchor point="TOPRIGHT" offsetX="-220" offsetY="50" />
-					<Anchor point="BOTTOMRIGHT" offsetX="-215" offsetY="-50" />
-				</Texture>
 		
 		
 		<Texture name="$(parent)ICONSepsync" inherits="ZO_ThinListBgStrip" textureFile="esoui/art/quest/questjournal_divider.dds">
-					<Dimensions x="160" y="5" />
+					<Dimensions x="40" y="5" />
 					<Anchor point="LEFT"  relativeTo="$(parent)AuctionHouseRefresh" offsetY="45"  />
 				</Texture>
 		
 		
-		<Button name="$(parent)AuctionHouse" inherits="ZO_DefaultButton" text="Browse" hidden="false">
+		<Button name="$(parent)AuctionHouse" inherits="ZO_DefaultButton" text="Browse" hidden="false" endCapWidth="0">
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-45" offsetY="145" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_BROWSE))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_BROWSE))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse:NAHWindow_show(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Browse.dds"  normal="NirnAuctionHouse\media\Browse.dds" />
+		
 		</Button>
 		
 		
 		
-		<Button name="$(parent)PurchaseOrders" inherits="ZO_DefaultButton" text="Orders" hidden="false">
+		<Button name="$(parent)PurchaseOrders" inherits="ZO_DefaultButton" text="Orders" hidden="false" endCapWidth="0">
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)AuctionHouse" offsetY="60" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_ORDERS))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_ORDERS))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ShowWTBListings(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Package.dds"  normal="NirnAuctionHouse\media\Package.dds" />
+		
 		</Button>
 		
 		<Texture name="$(parent)ICONSep" inherits="ZO_ThinListBgStrip" textureFile="esoui/art/quest/questjournal_divider.dds">
-					<Dimensions x="160" y="5" />
+					<Dimensions x="40" y="5" />
 					<Anchor point="LEFT"  relativeTo="$(parent)PurchaseOrders" offsetY="45"  />
 				</Texture>
-		<Button name="$(parent)MyListings" inherits="ZO_DefaultButton" text="My Listings" hidden="false">
+		<Button name="$(parent)MyListings" inherits="ZO_DefaultButton" text="My Listings" hidden="false" endCapWidth="0">
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)PurchaseOrders" offsetY="90" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_MYLISTINGS))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_MYLISTINGS))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ShowMyListings(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Items.dds"  normal="NirnAuctionHouse\media\Items.dds" />
+		
 		</Button>
-		<Button name="$(parent)MyPurchaseOrders" inherits="ZO_DefaultButton" text="My Orders" hidden="false">
+		<Button name="$(parent)MyPurchaseOrders" inherits="ZO_DefaultButton" text="My Orders" hidden="false" endCapWidth="0">
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)MyListings" offsetY="60" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_MYORDERS))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_MYORDERS))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ShowMyWTBListings(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Orders.dds"  normal="NirnAuctionHouse\media\Orders.dds" />
+		
 		</Button>
 		
 		
-		<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Sold Items" disabled="true">
+		<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Sold Items" disabled="true" endCapWidth="0">
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)MyPurchaseOrders" offsetY="60" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_SOLDITEMS))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_SOLDITEMS))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ToggleOrders(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Sold.dds"  normal="NirnAuctionHouse\media\Sold.dds" />
+		
 		</Button>
-		<Button name="$(parent)ViewTrackedOrders" inherits="ZO_DefaultButton" text="Tracking">
+		<Button name="$(parent)ViewTrackedOrders" inherits="ZO_DefaultButton" text="Tracking" endCapWidth="0">
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)ViewOrders" offsetY="60" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_TRACKING))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_TRACKING))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ToggleTrackedOrders(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Tracking.dds"  normal="NirnAuctionHouse\media\Tracking.dds" />
+		
 		</Button>
 		
-		<Button name="$(parent)Expired" inherits="ZO_DefaultButton" text="Expired" hidden="false">
+		<Button name="$(parent)Expired" inherits="ZO_DefaultButton" text="Expired" hidden="false" endCapWidth="0">
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)ViewTrackedOrders" offsetY="60" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_EXPIRED))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_EXPIRED))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ShowExpiredListings(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Expired.dds"  normal="NirnAuctionHouse\media\Expired.dds" />
+		
+		</Button>
+		
+		
+		<Button name="$(parent)Support" inherits="ZO_DefaultButton" text="Expired" hidden="false" endCapWidth="0">
+				
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)Expired" offsetY="160" />
+					<Dimensions x="40" y="40" />
+					<OnInitialized>
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_SUPPORT))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+					</OnInitialized>
+			<OnClicked>
+				NirnAuctionHouse_ShowContactSupport(self:GetParent())
+			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Support.dds"  normal="NirnAuctionHouse\media\Support.dds" />
+		
 		</Button>
 		
 		
@@ -320,33 +473,47 @@
 		
 		
 		
-				<Button name="$(parent)AuctionHouse_LastPage" inherits="ZO_DefaultButton" text="Last Page" hidden="false">
+				<Button name="$(parent)AuctionHouse_LastPage" inherits="ZO_DefaultButton" text="Last Page" hidden="false" endCapWidth="0">
 				
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_LAST_PAGE))
+						self:SetText("")
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_LAST_PAGE))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
-					<Anchor point="BOTTOM" relativePoint="BOTTOM" offsetX="-78" offsetY="-10" />
-					<Dimensions x="150" y="30" />
+					<Anchor point="BOTTOM" relativePoint="BOTTOM" offsetX="-78" offsetY="-7" />
+					<Dimensions x="40" y="40" />
 			<OnClicked>
 				NirnAuctionHouse_LastPage()
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Prev.dds"  normal="NirnAuctionHouse\media\Prev.dds" />
 		</Button>
 		
-				<Button name="$(parent)AuctionHouse_NextPage" inherits="ZO_DefaultButton" text="Next Page" hidden="false">
+				<Button name="$(parent)AuctionHouse_NextPage" inherits="ZO_DefaultButton" text="Next Page" hidden="false" endCapWidth="0">
 				
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_NEXT_PAGE))
+						self:SetText("")
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_NEXT_PAGE))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 				
-					<Anchor point="BOTTOM" relativePoint="BOTTOM" offsetX="78" offsetY="-10" />
-					<Dimensions x="150" y="30" />
+					<Anchor point="BOTTOM" relativePoint="BOTTOM" offsetX="78" offsetY="-7" />
+					<Dimensions x="40" y="40" />
 			<OnClicked>
 				NirnAuctionHouse_NextPage()
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Next.dds"  normal="NirnAuctionHouse\media\Next.dds" />
 		</Button>
 		
 		<Control name="$(parent)SearchDrop" resizeToFitDescendents="true" mouseEnabled="true">
-					<Anchor point="TOPLEFT" relativePoint="TOPLEFT" offsetX="10" offsetY="10" />
+					<Anchor point="TOPLEFT" relativePoint="TOPLEFT" offsetX="45" offsetY="15" />
 					<OnInitialized>
 						ZO_ComboBox:New(self)
 					</OnInitialized>
@@ -377,23 +544,82 @@
 				
 		
 				<Backdrop name="$(parent)Search" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">
-					<Anchor point="LEFT" relativeTo="$(parent)SearchDrop" relativePoint="LEFT" offsetX="0" offsetY="40" />
+					<Anchor point="LEFT" relativeTo="$(parent)SearchDrop" relativePoint="RIGHT" offsetX="10" offsetY="0" />
 					<Dimensions x="250" />
 					<Controls>
 						<EditBox name="$(parent)Box" inherits="ZO_DefaultEditForBackdrop ZO_EditDefaultText" />
 					</Controls>
 				</Backdrop>
 
+				
+				
+		<Button name="$(parent)ResetFilters" inherits="ZO_DefaultButton" text="" disabled="true" endCapWidth="0">
+					<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Search" offsetX="60"  offsetY="0" />
+					<Dimensions x="25" y="25" />
+					<OnInitialized>
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_CLEARFILTERS))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+					</OnInitialized>
+			<OnClicked>
+				NirnAuctionHouse_ClearSearchSettings(self:GetParent())
+			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\NewPage.dds"  normal="NirnAuctionHouse\media\NewPage.dds" />
+		
+		</Button>
+				
+				
+		<Button name="$(parent)ToggleADVsettings" inherits="ZO_DefaultButton" text="" disabled="true" endCapWidth="0">
+					<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Search" offsetX="10"  offsetY="0" />
+					<Dimensions x="25" y="25" />
+					<OnInitialized>
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_ADVANCEDSEARCH))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+					</OnInitialized>
+			<OnClicked>
+				NirnAuctionHouse_AdvancedSearchSettings(self:GetParent())
+			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Filter_grey.dds"  normal="NirnAuctionHouse\media\Filter.dds" />
+		
+		</Button>
+		
+
+				<Label name="$(parent)resultnum" font="ZoFontGameMedium" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)Search" relativePoint="TOPRIGHT" offsetX="100" />
+				</Label>
+
+
+		<Control name="$(parent)advancedSearchSettings" tier="HIGH"  mouseEnabled="true" movable="true" clampedToScreen="true" hidden="true">
+					<Anchor point="LEFT" relativeTo="$(parent)Search" relativePoint="LEFT" offsetX="-600" offsetY="60" />
+					<Dimensions x="400" y="250" />
+					<Controls>
+						
+				<Texture name="$(parent)BG" inherits="ZO_InsetTexture" textureFile="esoui/art/chatwindow/chat_bg_center.dds">
+				
+					<Anchor point="LEFT" relativeTo="$(parent)advancedSearchSettings" relativePoint="LEFT" offsetX="0" offsetY="" />
+					<Dimensions x="400" y="250" />
+					</Texture>
+				
 				<Control name="$(parent)FilterDrop" inherits="ZO_ComboBox">
-					<Anchor point="LEFT" relativeTo="$(parent)Search" relativePoint="LEFT" offsetX="0" offsetY="40" />
+					<Dimensions x="175" /><Anchor point="LEFT" relativeTo="$(parent)advancedSearchSettings" relativePoint="LEFT" offsetX="205" offsetY="-80" />
 				</Control>
 
-		
 			<Control name="$(parent)FilterDropSub" inherits="ZO_ComboBox">
 					<Dimensions x="175" /><Anchor  point="LEFT" relativeTo="$(parent)FilterDrop" relativePoint="LEFT" offsetX="0" offsetY="40" />
 				</Control>
-		
-			<Control name="$(parent)FilterDropCrafting" inherits="ZO_ComboBox"  hidden="true">
+				
+				<Control name="$(parent)FilterDropCrafting" inherits="ZO_ComboBox"  hidden="true">
 					<Dimensions x="175" /><Anchor  point="LEFT" relativeTo="$(parent)FilterDropSub" relativePoint="LEFT" offsetX="0" offsetY="40" />
 				</Control>
 		
@@ -408,17 +634,24 @@
 			<Control name="$(parent)FilterDropTrait" inherits="ZO_ComboBox">
 					<Dimensions x="175" /><Anchor  point="LEFT" relativeTo="$(parent)FilterDropEnch" relativePoint="LEFT" offsetX="0" offsetY="40" />
 				</Control>
-
-
-
-
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 				<Control name="$(parent)QualityDrop" inherits="ZO_ComboBox">
-				<Anchor point="LEFT" relativeTo="$(parent)FilterDrop" relativePoint="LEFT" offsetX="0" offsetY="290" />
+					<Anchor point="LEFT" relativeTo="$(parent)advancedSearchSettings" relativePoint="LEFT" offsetX="15" offsetY="-80" />
 				</Control>
 				
 				
 				<Backdrop name="$(parent)PriceMin" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">
-					<Anchor point="LEFT" relativeTo="$(parent)QualityDrop" relativePoint="LEFT" offsetX="0" offsetY="80" />
+					<Anchor point="LEFT" relativeTo="$(parent)QualityDrop" relativePoint="LEFT" offsetX="0" offsetY="60" />
 					<Dimensions x="70" />
 					<Controls>
 						<EditBox name="$(parent)Box" inherits="ZO_DefaultEditForBackdrop ZO_EditDefaultText" />
@@ -452,7 +685,7 @@
 				
 				
 				<Backdrop name="$(parent)LevelMin" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">
-					<Anchor point="LEFT" relativeTo="$(parent)FilterDrop" relativePoint="LEFT" offsetX="0" offsetY="435" />
+					<Anchor point="LEFT" relativeTo="$(parent)advancedSearchSettings" relativePoint="LEFT" offsetX="15" offsetY="50" />
 					<Dimensions x="70" />
 					<Controls>
 						<EditBox name="$(parent)Box" inherits="ZO_DefaultEditForBackdrop ZO_EditDefaultText" />
@@ -512,14 +745,29 @@
 				
 				
 				<Control name="$(parent)UnknownDrop" inherits="ZO_ComboBox">
-				<Anchor point="LEFT" relativeTo="$(parent)LevelRangeType" relativePoint="LEFT" offsetX="0" offsetY="90" />
+				<Anchor point="LEFT" relativeTo="$(parent)LevelRangeType" relativePoint="LEFT" offsetX="0" offsetY="70" />
 				</Control>
+				
+				
+				
+				
+				
+
+					</Controls>
+					
+				</Control>
+		
+			
+		
+			
+
+
+				
 				
 
 			
 				<Control name="$(parent)Headers">
-					<Anchor point="TOPLEFT" offsetX="30" offsetY="90" />
-					<Anchor point="TOPRIGHT" offsetY="90" />
+					<Anchor point="TOPLEFT" offsetX="30" offsetY="75" />
 					<Dimensions y="32" />
 					<Controls>
 					
@@ -529,8 +777,14 @@
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_NAME), "name", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 								
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_HEADER_NAME))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
-							<Anchor point="TOPLEFT" offsetX="270" />
+							<Anchor point="TOPLEFT" offsetX="85" />
 							<Dimensions x="200" y="32" />
 						</Control>
 						<Control name="$(parent)Qty" inherits="ZO_SortHeader">
@@ -538,69 +792,118 @@
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_QTY), "stackCount", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
 							
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_HEADER_QTY))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
-							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Name" />
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Name" offsetX="35" />
 							<Dimensions x="50" y="32" />
 						</Control>
 						<Control name="$(parent)TimeLeft" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_TIMELEFT), "TimeLeft", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
-							
+								
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_HEADER_TIMELEFT))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
-							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Qty" />
-							<Dimensions x="135" y="32" />
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Qty" offsetX="10" />
+							<Dimensions x="100" y="32" />
 						</Control>
 						<Control name="$(parent)Type" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_TYPE), "itemType", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
-							
+								
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_HEADER_TYPE))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
-							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)TimeLeft" />
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)TimeLeft" offsetX="25"/>
 							<Dimensions x="65" y="32" />
 						</Control>
 						<Control name="$(parent)Bid" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_BID), "StartingPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
-								
+									
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_HEADER_BID))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
-							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Type" />
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Type" offsetX="75" />
 							<Dimensions x="80" y="32" />
 						</Control>
 						<Control name="$(parent)BidUnit" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_UNIT), "UnitPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
-								
+									
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_HEADER_UNIT))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
-							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Bid" />
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Bid" offsetX="30" />
 							<Dimensions x="60" y="32" />
 						</Control>
 						<Control name="$(parent)Buyout" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_BUYOUT), "BuyoutPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
-								
+										
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_HEADER_BUYOUT))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
-							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)BidUnit" />
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)BidUnit" offsetX="25" />
 							<Dimensions x="80" y="32" />
 						</Control>
 						<Control name="$(parent)BuyUnit" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_UNIT), "UnitPriceBuy", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
-								
+											
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_HEADER_UNIT))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
-							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Buyout" />
+							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Buyout" offsetX="40" />
 							<Dimensions x="60" y="32" />
 						</Control>
 						<Control name="$(parent)Rating" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
-								ZO_SortHeader_Initialize(self, "Rating", "Rating", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
-								
+								ZO_SortHeader_Initialize(self, GetString(SI_NAH_RATING), "Rating", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
+										
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_RATING))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)BuyUnit" />
 							<Dimensions x="80" y="32" />
@@ -617,16 +920,24 @@
 					</Controls>
 				</Control>
 
-				<Control name="$(parent)List" inherits="ZO_ScrollList">
-					<Anchor point="TOPLEFT" relativeTo="$(parent)Headers" relativePoint="BOTTOMLEFT" offsetX="200" offsetY="3" />
-					<Anchor point="BOTTOMRIGHT" offsetX="-195" offsetY="-32" />
+				<Control name="$(parent)List" inherits="ZO_ScrollList"> 
+					<Anchor point="TOPLEFT" relativeTo="$(parent)Headers" relativePoint="BOTTOMLEFT" offsetX="10" offsetY="3" />
+					<Anchor point="BOTTOMRIGHT" offsetX="-110" offsetY="-58" />
+					<Controls>
+				<Backdrop name="$(parent)backdropedge" centerColor="000000">
+					<Anchor point="TOPLEFT" />
+					<Edge file="/EsoUI/Art/Tooltips/UI-SliderBackdrop.dds" edgeFileWidth="32" edgeFileHeight="4" edgeSize="10" />					
+					<Anchor point="TOPLEFT" relativeTo="$(parent)List" relativePoint="TOPLEFT" offsetX="-5" offsetY="-5" />
+					<Anchor point="BOTTOMRIGHT" offsetX="-22" offsetY="0" />
+						</Backdrop>
+						</Controls>
 				</Control>
 
-				<Label name="$(parent)Counter" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_DISABLED">
-					<Anchor point="TOPRIGHT" relativeTo="$(parent)List" relativePoint="BOTTOMRIGHT" offsetY="6" />
+				<Label name="$(parent)Counter" font="ZoFontGameMedium" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL">
+					<Anchor point="TOPRIGHT" relativeTo="$(parent)List" relativePoint="BOTTOM" offsetY="21" offsetX="53" />
 				</Label>
 			</Controls>
-			<Dimensions x="1480" y="775" />
+			<Dimensions x="1420" y="775" />
     </TopLevelControl>
     
 		<TopLevelControl name="NAHTooltipTopLevel" inherits="TooltipTopLevel">
@@ -711,8 +1022,8 @@
 		<Controls>
 		
 		<Texture name="$(parent)BG" inherits="ZO_InsetTexture" textureFile="esoui/art/chatwindow/chat_bg_center.dds"  />
-			<Label name="$(parent)lalel2" horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Tracked Orders">
-					<Anchor point="TOP" relativePoint="TOP" offsetX="10"  offsetY="50" />
+			<Label name="$(parent)lalel2" horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Tracked Orders" hidden="true">
+					<Anchor point="TOP" relativePoint="TOP" offsetX="10"  offsetY="10" />
 					<OnInitialized>
 						self:SetText(GetString(SI_NAH_TRACKEDORDERS))
 					</OnInitialized>
@@ -721,122 +1032,207 @@
 				
 		
 			
-				<Button name="$(parent)Sync" inherits="ZO_DefaultButton" text="Sync">
-				<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-45" offsetY="55" />
-					<Dimensions x="150" y="30" />
-					<OnInitialized>
-						self:SetText(GetString(SI_NAH_SYNC))
+				<Button name="$(parent)AuctionHouseRefresh" inherits="ZO_DefaultButton" text="Sync" hidden="false" endCapWidth="0">
+				<OnInitialized>
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_SYNC))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
+				
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-45" offsetY="40" />
+					<Dimensions x="40" y="40" />
 			<OnClicked>
-			
-				NirnAuctionHouse_RefreshAHTrackedBids(self:GetParent())
+				NirnAuctionHouse_RefreshAH()
 			</OnClicked>
+		<Textures pressed="NirnAuctionHouse\media\Sync.dds"  normal="NirnAuctionHouse\media\Sync.dds" />
+		
 		</Button>
 		
-		
-		
-		<Texture name="$(parent)ICONSepNav" inherits="ZO_ThinListBgStrip" textureFile="esoui/art/miscellaneous/verticaldivider_64.dds">
-					<Dimensions x="5" />
-					<Anchor point="TOPRIGHT" offsetX="-220" offsetY="50" />
-					<Anchor point="BOTTOMRIGHT" offsetX="-215" offsetY="-50" />
-				</Texture>
-		
+				
 		
 		<Texture name="$(parent)ICONSepsync" inherits="ZO_ThinListBgStrip" textureFile="esoui/art/quest/questjournal_divider.dds">
-					<Dimensions x="160" y="5" />
-					<Anchor point="LEFT"  relativeTo="$(parent)Sync" offsetY="45"  />
+					<Dimensions x="40" y="5" />
+					<Anchor point="LEFT"  relativeTo="$(parent)AuctionHouseRefresh" offsetY="45"  />
 				</Texture>
 		
 		
-		<Button name="$(parent)AuctionHouse" inherits="ZO_DefaultButton" text="Browse" hidden="false">
+		<Button name="$(parent)AuctionHouse" inherits="ZO_DefaultButton" text="Browse" hidden="false" endCapWidth="0">
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-45" offsetY="145" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_BROWSE))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_BROWSE))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse:NAHWindow_show(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Browse.dds"  normal="NirnAuctionHouse\media\Browse.dds" />
+		
 		</Button>
 		
 		
 		
-		<Button name="$(parent)PurchaseOrders" inherits="ZO_DefaultButton" text="Orders" hidden="false">
+		<Button name="$(parent)PurchaseOrders" inherits="ZO_DefaultButton" text="Orders" hidden="false" endCapWidth="0">
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)AuctionHouse" offsetY="60" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_ORDERS))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_ORDERS))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ShowWTBListings(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Package.dds"  normal="NirnAuctionHouse\media\Package.dds" />
+		
 		</Button>
 		
 		<Texture name="$(parent)ICONSep" inherits="ZO_ThinListBgStrip" textureFile="esoui/art/quest/questjournal_divider.dds">
-					<Dimensions x="160" y="5" />
+					<Dimensions x="40" y="5" />
 					<Anchor point="LEFT"  relativeTo="$(parent)PurchaseOrders" offsetY="45"  />
 				</Texture>
-		<Button name="$(parent)MyListings" inherits="ZO_DefaultButton" text="My Listings" hidden="false">
+		<Button name="$(parent)MyListings" inherits="ZO_DefaultButton" text="My Listings" hidden="false" endCapWidth="0">
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)PurchaseOrders" offsetY="90" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_MYLISTINGS))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_MYLISTINGS))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ShowMyListings(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Items.dds"  normal="NirnAuctionHouse\media\Items.dds" />
+		
 		</Button>
-		<Button name="$(parent)MyPurchaseOrders" inherits="ZO_DefaultButton" text="My Orders" hidden="false">
+		<Button name="$(parent)MyPurchaseOrders" inherits="ZO_DefaultButton" text="My Orders" hidden="false" endCapWidth="0">
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)MyListings" offsetY="60" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_MYORDERS))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_MYORDERS))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ShowMyWTBListings(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Orders.dds"  normal="NirnAuctionHouse\media\Orders.dds" />
+		
 		</Button>
 		
 		
-		<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Sold Items" disabled="true">
+		<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Sold Items" disabled="true" endCapWidth="0">
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)MyPurchaseOrders" offsetY="60" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_SOLDITEMS))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_SOLDITEMS))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ToggleOrders(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Sold.dds"  normal="NirnAuctionHouse\media\Sold.dds" />
+		
 		</Button>
-		<Button name="$(parent)ViewTrackedOrders" inherits="ZO_DefaultButton" text="Tracking">
+		<Button name="$(parent)ViewTrackedOrders" inherits="ZO_DefaultButton" text="Tracking" endCapWidth="0">
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)ViewOrders" offsetY="60" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_TRACKING))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_TRACKING))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
+			<Textures pressed="NirnAuctionHouse\media\Tracking.dds"  normal="NirnAuctionHouse\media\Tracking.dds" />
+		
 		</Button>
 		
-		<Button name="$(parent)Expired" inherits="ZO_DefaultButton" text="Expired" hidden="false">
+		<Button name="$(parent)Expired" inherits="ZO_DefaultButton" text="Expired" hidden="false" endCapWidth="0">
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)ViewTrackedOrders" offsetY="60" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_EXPIRED))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_EXPIRED))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ShowExpiredListings(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Expired.dds"  normal="NirnAuctionHouse\media\Expired.dds" />
+		
+		</Button>
+		<Button name="$(parent)Support" inherits="ZO_DefaultButton" text="Expired" hidden="false" endCapWidth="0">
+				
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)Expired" offsetY="160" />
+					<Dimensions x="40" y="40" />
+					<OnInitialized>
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_SUPPORT))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+					</OnInitialized>
+			<OnClicked>
+				NirnAuctionHouse_ShowContactSupport(self:GetParent())
+			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Support.dds"  normal="NirnAuctionHouse\media\Support.dds" />
+		
 		</Button>
 		
 		
 			
 				<Control name="$(parent)Headers">
-					<Anchor point="TOPLEFT" offsetX="30" offsetY="90" />
-					<Anchor point="TOPRIGHT" offsetY="90" />
+					<Anchor point="TOPLEFT" offsetX="30" offsetY="40" />
+					<Anchor point="TOPRIGHT" offsetY="40" />
 					<Dimensions y="32" />
 					<Controls>
 					
@@ -844,7 +1240,13 @@
 							<OnInitialized>
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_PRICE), "BuyoutPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
-								
+											
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_HEADER_PRICE))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
 							<Anchor point="TOPLEFT" offsetX="70" />
 							<Dimensions x="80" y="32" />
@@ -853,16 +1255,28 @@
 							<OnInitialized>
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_NAME), "name", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
-								
+											
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_HEADER_NAME))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Price" />
-							<Dimensions x="200" y="32" />
+							<Dimensions x="250" y="32" />
 						</Control>
 						<Control name="$(parent)Qty" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_QTY), "stackCount", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
-							
+											
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_HEADER_QTY))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Name" />
 							<Dimensions x="75" y="32" />
@@ -871,7 +1285,13 @@
 							<OnInitialized>
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_TIMELEFT), "TimeLeft", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
-							
+											
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_HEADER_TIMELEFT))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Qty" />
 							<Dimensions x="150" y="32" />
@@ -880,7 +1300,13 @@
 							<OnInitialized>
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_STATUS), "TradeIsBidder", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
-							
+											
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_HEADER_STATUS))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)TimeLeft" />
 							<Dimensions x="150" y="32" />
@@ -896,14 +1322,24 @@
 
 				<Control name="$(parent)List" inherits="ZO_ScrollList">
 					<Anchor point="TOPLEFT" relativeTo="$(parent)Headers" relativePoint="BOTTOMLEFT" offsetY="3" />
-					<Anchor point="BOTTOMRIGHT" offsetX="-195" offsetY="-32" />
+					<Anchor point="BOTTOMRIGHT" offsetX="-85" offsetY="-32" />
+					<Controls>
+				<Backdrop name="$(parent)backdropedge" centerColor="000000">
+					<Anchor point="TOPLEFT" />
+					<Edge file="/EsoUI/Art/Tooltips/UI-SliderBackdrop.dds" edgeFileWidth="32" edgeFileHeight="4" edgeSize="10" />					
+					<Anchor point="TOPLEFT" relativeTo="$(parent)List" relativePoint="TOPLEFT" offsetX="-5" offsetY="-5" />
+					<Anchor point="BOTTOMRIGHT" offsetX="-22" offsetY="0" />
+						</Backdrop>
+						</Controls>
 				</Control>
 
-				<Label name="$(parent)Counter" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_DISABLED">
-					<Anchor point="TOPRIGHT" relativeTo="$(parent)List" relativePoint="BOTTOMRIGHT" offsetY="6" />
+				<Label name="$(parent)Counter" font="ZoFontGameMedium" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL">
+					<Anchor point="TOPRIGHT" relativeTo="$(parent)List" relativePoint="BOTTOMRIGHT" offsetY="6" offsetX="40" />
 				</Label>
+				
+				
 			</Controls>
-			<Dimensions x="1150" y="775" />
+			<Dimensions x="1000" y="775" />
 		</TopLevelControl>
 		
 		
@@ -913,133 +1349,220 @@
 		<Controls> 
 		
 				<Texture name="$(parent)BG" inherits="ZO_InsetTexture" textureFile="esoui/art/chatwindow/chat_bg_center.dds"  />
-			<Label name="$(parent)lalel2"  horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Sold Items">
-					<Anchor point="TOP" relativePoint="TOP" offsetX="10"  offsetY="50" />
+			<Label name="$(parent)lalel2"  horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Sold Items" hidden="true">
+					<Anchor point="TOP" relativePoint="TOP" offsetX="10"  offsetY="10" />
 					<OnInitialized>
 						self:SetText(GetString(SI_NAH_SOLDITEMS))
 					</OnInitialized>
 				</Label>
+				
+				
+				
 			
-				<Button name="$(parent)Sync" inherits="ZO_DefaultButton" text="Sync">
-				<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-45" offsetY="55" />
-					<Dimensions x="150" y="30" />
-					<OnInitialized>
-						self:SetText(GetString(SI_NAH_SYNC))
+				<Button name="$(parent)AuctionHouseRefresh" inherits="ZO_DefaultButton" text="Sync" hidden="false" endCapWidth="0">
+				<OnInitialized>
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_SYNC))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
+				
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-45" offsetY="40" />
+					<Dimensions x="40" y="40" />
 			<OnClicked>
-			
-				NirnAuctionHouse_RefreshAHBids(self:GetParent())
+				NirnAuctionHouse_RefreshAH()
 			</OnClicked>
+		<Textures pressed="NirnAuctionHouse\media\Sync.dds"  normal="NirnAuctionHouse\media\Sync.dds" />
+		
 		</Button>
-		
-		
-		
-		
-		<Texture name="$(parent)ICONSepNav" inherits="ZO_ThinListBgStrip" textureFile="esoui/art/miscellaneous/verticaldivider_64.dds">
-					<Dimensions x="5" />
-					<Anchor point="TOPRIGHT" offsetX="-220" offsetY="50" />
-					<Anchor point="BOTTOMRIGHT" offsetX="-215" offsetY="-50" />
-				</Texture>
 		
 		
 		
 		<Texture name="$(parent)ICONSepsync" inherits="ZO_ThinListBgStrip" textureFile="esoui/art/quest/questjournal_divider.dds">
-					<Dimensions x="160" y="5" />
-					<Anchor point="LEFT"  relativeTo="$(parent)Sync" offsetY="45"  />
+					<Dimensions x="40" y="5" />
+					<Anchor point="LEFT"  relativeTo="$(parent)AuctionHouseRefresh" offsetY="45"  />
 				</Texture>
 		
 		
-		<Button name="$(parent)AuctionHouse" inherits="ZO_DefaultButton" text="Browse" hidden="false">
+		<Button name="$(parent)AuctionHouse" inherits="ZO_DefaultButton" text="Browse" hidden="false" endCapWidth="0">
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" offsetX="-45" offsetY="145" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_BROWSE))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_BROWSE))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse:NAHWindow_show(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Browse.dds"  normal="NirnAuctionHouse\media\Browse.dds" />
+		
 		</Button>
 		
 		
 		
-		<Button name="$(parent)PurchaseOrders" inherits="ZO_DefaultButton" text="Orders" hidden="false">
+		<Button name="$(parent)PurchaseOrders" inherits="ZO_DefaultButton" text="Orders" hidden="false" endCapWidth="0">
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)AuctionHouse" offsetY="60" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_ORDERS))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_ORDERS))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ShowWTBListings(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Package.dds"  normal="NirnAuctionHouse\media\Package.dds" />
+		
 		</Button>
 		
 		<Texture name="$(parent)ICONSep" inherits="ZO_ThinListBgStrip" textureFile="esoui/art/quest/questjournal_divider.dds">
-					<Dimensions x="160" y="5" />
+					<Dimensions x="40" y="5" />
 					<Anchor point="LEFT"  relativeTo="$(parent)PurchaseOrders" offsetY="45"  />
 				</Texture>
-		<Button name="$(parent)MyListings" inherits="ZO_DefaultButton" text="My Listings" hidden="false">
+		<Button name="$(parent)MyListings" inherits="ZO_DefaultButton" text="My Listings" hidden="false" endCapWidth="0">
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)PurchaseOrders" offsetY="90" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_MYLISTINGS))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_MYLISTINGS))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ShowMyListings(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Items.dds"  normal="NirnAuctionHouse\media\Items.dds" />
+		
 		</Button>
-		<Button name="$(parent)MyPurchaseOrders" inherits="ZO_DefaultButton" text="My Orders" hidden="false">
+		<Button name="$(parent)MyPurchaseOrders" inherits="ZO_DefaultButton" text="My Orders" hidden="false" endCapWidth="0">
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)MyListings" offsetY="60" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_MYORDERS))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_MYORDERS))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ShowMyWTBListings(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Orders.dds"  normal="NirnAuctionHouse\media\Orders.dds" />
+		
 		</Button>
 		
 		
-		<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Sold Items" disabled="true">
+		<Button name="$(parent)ViewOrders" inherits="ZO_DefaultButton" text="Sold Items" disabled="true" endCapWidth="0">
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)MyPurchaseOrders" offsetY="60" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_SOLDITEMS))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_SOLDITEMS))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
+			<Textures pressed="NirnAuctionHouse\media\Sold.dds"  normal="NirnAuctionHouse\media\Sold.dds" />
+		
 		</Button>
-		<Button name="$(parent)ViewTrackedOrders" inherits="ZO_DefaultButton" text="Tracking">
+		<Button name="$(parent)ViewTrackedOrders" inherits="ZO_DefaultButton" text="Tracking" endCapWidth="0">
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)ViewOrders" offsetY="60" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_TRACKING))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_TRACKING))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ToggleTrackedOrders(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Tracking.dds"  normal="NirnAuctionHouse\media\Tracking.dds" />
+		
 		</Button>
 		
-		<Button name="$(parent)Expired" inherits="ZO_DefaultButton" text="Expired" hidden="false">
+		<Button name="$(parent)Expired" inherits="ZO_DefaultButton" text="Expired" hidden="false" endCapWidth="0">
 				
 					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)ViewTrackedOrders" offsetY="60" />
-					<Dimensions x="150" y="30" />
+					<Dimensions x="40" y="40" />
 					<OnInitialized>
-						self:SetText(GetString(SI_NAH_EXPIRED))
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_EXPIRED))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_ShowExpiredListings(self:GetParent())
 			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Expired.dds"  normal="NirnAuctionHouse\media\Expired.dds" />
+		
 		</Button>
 		
+		
+		<Button name="$(parent)Support" inherits="ZO_DefaultButton" text="Expired" hidden="false" endCapWidth="0">
+				
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$(parent)Expired" offsetY="160" />
+					<Dimensions x="40" y="40" />
+					<OnInitialized>
+						self:SetText("")
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_SUPPORT))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+					</OnInitialized>
+			<OnClicked>
+				NirnAuctionHouse_ShowContactSupport(self:GetParent())
+			</OnClicked>
+			<Textures pressed="NirnAuctionHouse\media\Support.dds"  normal="NirnAuctionHouse\media\Support.dds" />
+		
+		</Button>
 		
 		
 		
 			
 				<Control name="$(parent)Headers">
-					<Anchor point="TOPLEFT" offsetX="30" offsetY="90" />
-					<Anchor point="TOPRIGHT" offsetY="90" />
+					<Anchor point="TOPLEFT" offsetX="30" offsetY="40" />
+					<Anchor point="TOPRIGHT" offsetY="40" />
 					<Dimensions y="32" />
 					<Controls>
 					
@@ -1047,7 +1570,13 @@
 							<OnInitialized>
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_PRICE), "BuyoutPrice", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
-								
+												
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_HEADER_PRICE))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
 							<Anchor point="TOPLEFT"  offsetX="70"/>
 							<Dimensions x="80" y="32" />
@@ -1056,16 +1585,28 @@
 							<OnInitialized>
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_NAME), "name", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
-								
+													
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_HEADER_NAME))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Price" />
-							<Dimensions x="200" y="32" />
+							<Dimensions x="250" y="32" />
 						</Control>
 						<Control name="$(parent)Qty" inherits="ZO_SortHeader">
 							<OnInitialized>
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_QTY), "stackCount", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
-							
+													
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_HEADER_QTY))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Name" />
 							<Dimensions x="75" y="32" />
@@ -1075,7 +1616,13 @@
 							<OnInitialized>
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_CODCOST), "TimeLeft", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
-							
+													
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_HEADER_CODCOST))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)Qty" />
 							<Dimensions x="155" y="32" />
@@ -1084,7 +1631,13 @@
 							<OnInitialized>
 							
 								ZO_SortHeader_Initialize(self, GetString(SI_NAH_HEADER_TYPE), "TradeIsBidder", ZO_SORT_ORDER_UP, TEXT_ALIGN_LEFT, "ZoFontGameLargeBold")
-							
+													
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_HEADER_TYPE))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
 							</OnInitialized>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$(parent)TimeLeft" />
 							<Dimensions x="150" y="32" />
@@ -1100,11 +1653,19 @@
 
 				<Control name="$(parent)List" inherits="ZO_ScrollList">
 					<Anchor point="TOPLEFT" relativeTo="$(parent)Headers" relativePoint="BOTTOMLEFT" offsetY="3" />
-					<Anchor point="BOTTOMRIGHT" offsetX="-195" offsetY="-32" />
+					<Anchor point="BOTTOMRIGHT" offsetX="-85" offsetY="-32" />
+					<Controls>
+				<Backdrop name="$(parent)backdropedge" centerColor="000000">
+					<Anchor point="TOPLEFT" />
+					<Edge file="/EsoUI/Art/Tooltips/UI-SliderBackdrop.dds" edgeFileWidth="32" edgeFileHeight="4" edgeSize="10" />					
+					<Anchor point="TOPLEFT" relativeTo="$(parent)List" relativePoint="TOPLEFT" offsetX="-5" offsetY="-5" />
+					<Anchor point="BOTTOMRIGHT" offsetX="-22" offsetY="0" />
+						</Backdrop>
+						</Controls>
 				</Control>
 
-				<Label name="$(parent)Counter" font="ZoFontGameSmall" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_DISABLED">
-					<Anchor point="TOPRIGHT" relativeTo="$(parent)List" relativePoint="BOTTOMRIGHT" offsetY="6" />
+				<Label name="$(parent)Counter" font="ZoFontGameMedium" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL">
+					<Anchor point="TOPRIGHT" relativeTo="$(parent)List" relativePoint="BOTTOMRIGHT" offsetY="6" offsetX="40" />
 				</Label>
 			</Controls>
 			<Dimensions x="1150" y="775" />
@@ -1122,6 +1683,13 @@
 				<Texture name="$(parent)BG" inherits="ZO_InsetTexture" textureFile="esoui/art/chatwindow/chat_bg_center.dds"  />
 					
 		
+					
+				<Backdrop name="$(parent)backdropedge" centerColor="000000">
+					<Anchor point="TOPLEFT" />
+					<Edge file="/EsoUI/Art/Tooltips/UI-SliderBackdrop.dds" edgeFileWidth="32" edgeFileHeight="4" edgeSize="10" />					
+					<Anchor point="TOPLEFT" relativeTo="$(parent)NAHAuctionHouseGoldCostWTB" relativePoint="TOPLEFT" offsetX="-10" offsetY="-10" />
+					<Anchor point="BOTTOMRIGHT" offsetX="10" offsetY="0" />
+						</Backdrop>
 		
 			<Backdrop name="$(parent)GoldAmountQty" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">					
 					<Anchor point="CENTER" relativePoint="CENTER" offsetX="0" offsetY="-40" />
@@ -1197,7 +1765,13 @@
 					<Anchor point="TOP" relativePoint="TOP" offsetX=""  offsetY="" />
 				</Label>
 				<Texture name="$(parent)BG" inherits="ZO_InsetTexture" textureFile="esoui/art/chatwindow/chat_bg_center.dds"  />
-					
+				
+					<Backdrop name="$(parent)backdropedge" centerColor="000000">
+					<Anchor point="TOPLEFT" />
+					<Edge file="/EsoUI/Art/Tooltips/UI-SliderBackdrop.dds" edgeFileWidth="32" edgeFileHeight="4" edgeSize="10" />					
+					<Anchor point="TOPLEFT" relativeTo="$(parent)NAHAuctionHouseGoldCost" relativePoint="TOPLEFT" offsetX="-10" offsetY="-10" />
+					<Anchor point="BOTTOMRIGHT" offsetX="10" offsetY="0" />
+						</Backdrop>
 		
 		
 			<Backdrop name="$(parent)GoldAmountQty" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">					
@@ -1299,6 +1873,15 @@
 				</Label>
 			
 				<Texture name="$(parent)BG" inherits="ZO_InsetTexture" textureFile="esoui/art/chatwindow/chat_bg_center.dds"  />
+				
+				
+					<Backdrop name="$(parent)backdropedge" centerColor="000000">
+					<Anchor point="TOPLEFT" />
+					<Edge file="/EsoUI/Art/Tooltips/UI-SliderBackdrop.dds" edgeFileWidth="32" edgeFileHeight="4" edgeSize="10" />					
+					<Anchor point="TOPLEFT" relativeTo="$(parent)NAHAuctionHouseGoldCostBid" relativePoint="TOPLEFT" offsetX="-10" offsetY="-10" />
+					<Anchor point="BOTTOMRIGHT" offsetX="10" offsetY="0" />
+						</Backdrop>
+				
 					<Button name="$(parent)CancelListing" inherits="ZO_DefaultButton" text="Cancel" hidden="false">
 				
 					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmount" relativePoint="LEFT"  offsetX="0"offsetY="40" />
@@ -1353,6 +1936,14 @@
 				</Label>
 			
 				<Texture name="$(parent)BG" inherits="ZO_InsetTexture" textureFile="esoui/art/chatwindow/chat_bg_center.dds"  />
+				
+				<Backdrop name="$(parent)backdropedge" centerColor="000000">
+					<Anchor point="TOPLEFT" />
+					<Edge file="/EsoUI/Art/Tooltips/UI-SliderBackdrop.dds" edgeFileWidth="32" edgeFileHeight="4" edgeSize="10" />					
+					<Anchor point="TOPLEFT" relativeTo="$(parent)NAHAuctionHouseGoldCostFilledwtb" relativePoint="TOPLEFT" offsetX="-10" offsetY="-10" />
+					<Anchor point="BOTTOMRIGHT" offsetX="10" offsetY="0" />
+						</Backdrop>
+				
 					<Button name="$(parent)CancelListing" inherits="ZO_DefaultButton" text="Cancel" hidden="false">
 				
 					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmount" relativePoint="LEFT"  offsetX="0"offsetY="40" />
@@ -1401,6 +1992,14 @@ ITEMNAME for ITEMCOST Gold?">
 				</Label>
 			
 				<Texture name="$(parent)BG" inherits="ZO_InsetTexture" textureFile="esoui/art/chatwindow/chat_bg_center.dds"  />
+				
+				<Backdrop name="$(parent)backdropedge" centerColor="000000">
+					<Anchor point="TOPLEFT" />
+					<Edge file="/EsoUI/Art/Tooltips/UI-SliderBackdrop.dds" edgeFileWidth="32" edgeFileHeight="4" edgeSize="10" />					
+					<Anchor point="TOPLEFT" relativeTo="$(parent)NAHAuctionHouseGoldCostBuyout" relativePoint="TOPLEFT" offsetX="-10" offsetY="-10" />
+					<Anchor point="BOTTOMRIGHT" offsetX="10" offsetY="0" />
+						</Backdrop>
+				
 					<Button name="$(parent)CancelListing" inherits="ZO_DefaultButton" text="Cancel" hidden="false">
 				
 					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmount" relativePoint="LEFT"  offsetX="0"offsetY="40" />
@@ -1497,6 +2096,230 @@ ITEMNAME for ITEMCOST Gold?">
 			</OnClicked>
 		</Button>
 			</Controls>
+		</TopLevelControl>
+		
+		
+		
+		
+		
+		
+		
+		<TopLevelControl name="NAHAuctionHouse_HUD"  inherits="ZO_RightPanelFootPrint" hidden="true"  mouseEnabled="true" movable="true" clampedToScreen="true">
+			<Controls>
+			<Texture name="$(parent)BG" inherits="ZO_InsetTexture" textureFile="esoui/art/chatwindow/chat_bg_center.dds"  />
+			
+			
+				
+				<Texture name="$(parent)stat_sold"  textureFile="NirnAuctionHouse\media\Sold.dds" mouseEnabled="true">
+					<Dimensions x="20" y="20" />
+					<Anchor point="TOPLEFT" relativeTo="$(parent)NAHAuctionHouse_HUD" relativePoint="TOPLEFT"  offsetX="20"offsetY="20" />
+					<OnInitialized>
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_SOLDITEMS))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+					</OnInitialized>
+				</Texture>
+				<Label name="$(parent)label_stat_sold"  horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" text="0" mouseEnabled="true">
+					<Anchor point="LEFT" relativeTo="$(parent)stat_sold" relativePoint="LEFT"  offsetX="30"offsetY="0" />
+					
+					<OnInitialized>
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP,GetString(SI_NAH_SOLDITEMS))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+					</OnInitialized>
+				</Label>
+				FindItem
+				
+				
+				<Texture name="$(parent)stat_listings"  textureFile="NirnAuctionHouse\media\Items.dds"  mouseEnabled="true">
+					<Dimensions x="20" y="20" />
+					<Anchor point="LEFT" relativeTo="$(parent)stat_sold" relativePoint="LEFT"  offsetX="0"offsetY="25" />
+					<OnInitialized>
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_MYLISTINGS))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+					</OnInitialized>
+				</Texture>
+				<Label name="$(parent)label_stat_listings"  horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" text="0"  mouseEnabled="true">
+					<Anchor point="LEFT" relativeTo="$(parent)stat_listings" relativePoint="LEFT"  offsetX="30"offsetY="0" />
+					<OnInitialized>
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_MYLISTINGS))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+					</OnInitialized>
+				</Label>
+				
+				
+				<Texture name="$(parent)stat_inmail"  textureFile="NirnAuctionHouse\media\Mail.dds"  mouseEnabled="true">
+					<Dimensions x="20" y="20" />
+					<Anchor point="LEFT" relativeTo="$(parent)stat_listings" relativePoint="LEFT"  offsetX="0"offsetY="25" />
+					<OnInitialized>
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_INMAIL))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+					</OnInitialized>
+				</Texture>
+				<Label name="$(parent)label_stat_inmail"  horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" text="0"  mouseEnabled="true">
+					<Anchor point="LEFT" relativeTo="$(parent)stat_inmail" relativePoint="LEFT"  offsetX="30"offsetY="0" />
+					<OnInitialized>
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_INMAIL))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+					</OnInitialized>
+				</Label>
+				
+				
+				<Texture name="$(parent)stat_expired"  textureFile="NirnAuctionHouse\media\Expired.dds"  mouseEnabled="true">
+					<Dimensions x="20" y="20" />
+					<Anchor point="LEFT" relativeTo="$(parent)stat_inmail" relativePoint="LEFT"  offsetX="0"offsetY="25" />
+					<OnInitialized>
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_EXPIRED))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+					</OnInitialized>
+				</Texture>
+				<Label name="$(parent)label_stat_expired"  horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" text="0"  mouseEnabled="true">
+					<Anchor point="LEFT" relativeTo="$(parent)stat_expired" relativePoint="LEFT"  offsetX="30"offsetY="0" />
+					<OnInitialized>
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_EXPIRED))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+					</OnInitialized>
+				</Label>
+				
+			
+				
+					<Button name="$(parent)BankWithdraw" inherits="ZO_DefaultButton" text="Withdraw From Bank" hidden="true" endCapWidth="0">
+				
+					<Anchor point="TOPLEFT" relativeTo="$(parent)NAHAuctionHouse_HUD" relativePoint="TOPLEFT"  offsetX="15"offsetY="130" />
+					<Dimensions x="60" y="60" />
+					<OnInitialized>
+						self:SetText("")
+							
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_GETFROMBANK))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+					</OnInitialized>
+					<OnClicked>
+					NirnAuctionHouse_GetFromBank()
+					</OnClicked>
+					
+					<Textures pressed="NirnAuctionHouse\media\FindItem.dds"  normal="NirnAuctionHouse\media\FindItem.dds" />
+					</Button>
+					
+				<Button name="$(parent)GuildBankWithdraw" inherits="ZO_DefaultButton" text="Withdraw From Guild Bank" hidden="true" endCapWidth="0">
+				
+					<Anchor point="TOPLEFT" relativeTo="$(parent)NAHAuctionHouse_HUD" relativePoint="TOPLEFT"  offsetX="15"offsetY="130" />
+					<Dimensions x="60" y="60" />
+					<OnInitialized>
+						self:SetText("")
+							
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_GETFROMGUILDBANK))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+					</OnInitialized>
+					<OnClicked>
+					NirnAuctionHouse_GetFromGuildBank()
+					</OnClicked>
+					
+					<Textures pressed="NirnAuctionHouse\media\FindItem.dds"  normal="NirnAuctionHouse\media\FindItem.dds" />
+					</Button>
+				<Button name="$(parent)MailAction" inherits="ZO_DefaultButton" text="MailAction" hidden="true" endCapWidth="0">
+				
+					<Anchor point="TOPLEFT" relativeTo="$(parent)NAHAuctionHouse_HUD" relativePoint="TOPLEFT"  offsetX="15"offsetY="130" />
+					<Dimensions x="60" y="60" />
+					<OnInitialized>
+						self:SetText("")
+						
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_SUPPORT))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+						
+						
+					</OnInitialized>
+					<OnClicked>
+					NirnAuctionHouse_ShowContactSupport()
+					</OnClicked>
+					
+					<Textures pressed="NirnAuctionHouse\media\Support.dds"  normal="NirnAuctionHouse\media\Support.dds" />
+					</Button>
+					
+				<Button name="$(parent)Sync" inherits="ZO_DefaultButton" text="Sync" hidden="true" endCapWidth="0">
+				
+					<Anchor point="TOPLEFT" relativeTo="$(parent)NAHAuctionHouse_HUD" relativePoint="TOPLEFT"  offsetX="15"offsetY="130" />
+					<Dimensions x="60" y="60" />
+					<OnInitialized>
+						self:SetText("")
+						
+						
+						self:SetHandler("OnMouseEnter", function(self)
+						ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(SI_NAH_SYNC))
+						end)
+						self:SetHandler("OnMouseExit", function(self)
+						ZO_Tooltips_HideTextTooltip()
+						end)
+						
+						
+					</OnInitialized>
+					<OnClicked>
+					NirnAuctionHouse_RefreshAH()
+					</OnClicked>
+					
+					<Textures pressed="NirnAuctionHouse\media\Sync.dds"  normal="NirnAuctionHouse\media\Sync.dds" />
+					</Button>
+				
+						
+				
+				
+				
+			</Controls>
+		      <OnMoveStop>
+			NirnAuctionHouse:OnHUDUIPosUpdate(self)
+		      </OnMoveStop>
+			<Anchor point="CENTER" relativePoint="CENTER" offsetX="-15" offsetY="0" />
+			<Dimensions x="85" y="200" />
 		</TopLevelControl>
 		
 		

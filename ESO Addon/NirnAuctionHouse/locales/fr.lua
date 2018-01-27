@@ -58,6 +58,21 @@ ZO_CreateStringId("SI_NAH_POSTORDER"   , "Envoyer l'ordre");--new
 ZO_CreateStringId("SI_NAH_PURCHASEPRICE"   , "Prix ​​d'achat");--new
 
 
+
+
+ZO_CreateStringId("SI_NAH_SELLITEM"   , "Vendre l'article");--new
+ZO_CreateStringId("SI_NAH_CONTACT"   , "Contact");--new
+ZO_CreateStringId("SI_NAH_RATING"   , "Évaluation");--new
+ZO_CreateStringId("SI_NAH_SUPPORT"   , "Soutien");--new
+ZO_CreateStringId("SI_NAH_INMAIL"   , "Dans Mail");--new
+ZO_CreateStringId("SI_NAH_GETFROMBANK"   , "Obtenir de la banque");--new
+ZO_CreateStringId("SI_NAH_GETFROMGUILDBANK"   , "Obtenir de la banque de guilde");--new
+ZO_CreateStringId("SI_NAH_CLEARFILTERS"   , "Effacer les filtres de recherche");--new
+ZO_CreateStringId("SI_NAH_ADVANCEDSEARCH"   , "Recherche Avancée");--new
+
+
+ZO_CreateStringId("SI_NAH_RESULTS"   , "résultats");--new
+
 ZO_CreateStringId("SI_NAH_AUCTION"   , "Enchères");
 ZO_CreateStringId("SI_NAH_SOLDITEMS"   , "Articles vendus");
 ZO_CreateStringId("SI_NAH_SOLDITEMS_NEW"   , "Articles vendus (nouveau)");
@@ -105,11 +120,11 @@ ZO_CreateStringId("SI_NAH_UNKNOWNDROP2"     , "Inconnu seulement");
 
 
 ZO_CreateStringId("SI_NAH_QUALITYDROP1"     , "Toute qualité");
-ZO_CreateStringId("SI_NAH_QUALITYDROP2"     , "Normal");
-ZO_CreateStringId("SI_NAH_QUALITYDROP3"     , "Bien");
-ZO_CreateStringId("SI_NAH_QUALITYDROP4"     , "Supérieur");
-ZO_CreateStringId("SI_NAH_QUALITYDROP5"     , "Épique");
-ZO_CreateStringId("SI_NAH_QUALITYDROP6"     , "Légendaire");
+ZO_CreateStringId("SI_NAH_QUALITYDROP2"     , "|cf9f9f9Normal|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP3"     , "|c2DC50EBien|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP4"     , "|c3A92FFSupérieur|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP5"     , "|cA02EF7Épique|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP6"     , "|cCCAA1ALégendaire|r");
 
 ZO_CreateStringId("SI_NAH_FILTERDROP1"     , "toutes catégories");
 ZO_CreateStringId("SI_NAH_FILTERDROP2"     , "Vêtements");

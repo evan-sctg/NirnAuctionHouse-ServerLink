@@ -30,7 +30,7 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 		name = "Nirn Auction House",
 		displayName = NirnAuctionHouse.colors.title .. "Nirn Auction House|r",
 		author = "Elo",
-		version = "0.0.19",
+		version = "0.0.24",
 		slashCommand = "/ahsetup",
 		registerForRefresh = true
 	}
@@ -89,6 +89,16 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 			NAH.settings.HideInterface=false
 			NirnAuctionHouse_ShowBtns( );
 			 end
+			end,
+			default = false
+		},
+		{
+			type = "checkbox",
+			name = "Always show NAH HUD",
+			tooltip = "Shows Nirn Auction House heads up display even when not in bank or mail",
+			getFunc = function() return NAH.settings.AlwaysNAH_HUD end,
+			setFunc = function(IsAlwaysNAH_HUD) 
+			NAH.settings.AlwaysNAH_HUD=IsAlwaysNAH_HUD 
 			end,
 			default = false
 		},

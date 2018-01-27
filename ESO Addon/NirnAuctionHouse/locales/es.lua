@@ -59,6 +59,22 @@ ZO_CreateStringId("SI_NAH_POSTORDER"   , "Orden de publicación");--new
 ZO_CreateStringId("SI_NAH_PURCHASEPRICE"   , "Precio de compra");--new
 
 
+
+
+
+ZO_CreateStringId("SI_NAH_SELLITEM"   , "Vender artículo");--new
+ZO_CreateStringId("SI_NAH_CONTACT"   , "Contacto");--new
+ZO_CreateStringId("SI_NAH_RATING"   , "Clasificación");--new
+ZO_CreateStringId("SI_NAH_SUPPORT"   , "Apoyo");--new
+ZO_CreateStringId("SI_NAH_INMAIL"   , "En el correo");--new
+ZO_CreateStringId("SI_NAH_GETFROMBANK"   , "Obtener del Banco");--new
+ZO_CreateStringId("SI_NAH_GETFROMGUILDBANK"   , "Obtener de Banco del gremio");--new
+ZO_CreateStringId("SI_NAH_CLEARFILTERS"   , "Borrar filtros de búsqueda");--new
+ZO_CreateStringId("SI_NAH_ADVANCEDSEARCH"   , "Búsqueda Avanzada");--new
+
+
+ZO_CreateStringId("SI_NAH_RESULTS"   , "resultados");--new
+
 ZO_CreateStringId("SI_NAH_AUCTION"   , "Subasta");
 ZO_CreateStringId("SI_NAH_SOLDITEMS"   , "Artículos vendidos");
 ZO_CreateStringId("SI_NAH_SOLDITEMS_NEW"   , "Artículos vendidos (nuevo)");
@@ -105,11 +121,11 @@ ZO_CreateStringId("SI_NAH_UNKNOWNDROP2"     , "Solo Desconocido");
 
 
 ZO_CreateStringId("SI_NAH_QUALITYDROP1"     , "Cualquier cualidad");
-ZO_CreateStringId("SI_NAH_QUALITYDROP2"     , "Normal");
-ZO_CreateStringId("SI_NAH_QUALITYDROP3"     , "Multa");
-ZO_CreateStringId("SI_NAH_QUALITYDROP4"     , "Superior");
-ZO_CreateStringId("SI_NAH_QUALITYDROP5"     , "Épico");
-ZO_CreateStringId("SI_NAH_QUALITYDROP6"     , "Legendario");
+ZO_CreateStringId("SI_NAH_QUALITYDROP2"     , "|cf9f9f9Normal|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP3"     , "|c2DC50EMulta|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP4"     , "|c3A92FFSuperior|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP5"     , "|cA02EF7Épico|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP6"     , "|cCCAA1ALegendario|r");
 
 ZO_CreateStringId("SI_NAH_FILTERDROP1"     , "todas las categorias");
 ZO_CreateStringId("SI_NAH_FILTERDROP2"     , "Vestir");

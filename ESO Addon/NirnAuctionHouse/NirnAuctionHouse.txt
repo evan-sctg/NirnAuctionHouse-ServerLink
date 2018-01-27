@@ -1,6 +1,6 @@
-## Title: Nirn Auction House |c9988770.0.19|r
+## Title: Nirn Auction House |c9988770.0.24|r
 ## Author: Elo
-## Version: 0.0.19
+## Version: 0.0.24
 ## Description: addon that allows you to buy and sell items using the in-game mail COD system
 ## APIVersion: 100021
 ## SavedVariables: NirnAuctionHouseData NirnAuctionHouseSearchData NirnAuctionHouseSearchResults
@@ -28,6 +28,7 @@ Libs\LibAddonMenu-2.0\controls\header.lua
 Libs\LibAddonMenu-2.0\controls\slider.lua
 Libs\LibAddonMenu-2.0\controls\texture.lua
 Libs\LibAddonMenu-2.0\controls\iconpicker.lua
+
 
 #locales/en.lua
 locales/$(language).lua

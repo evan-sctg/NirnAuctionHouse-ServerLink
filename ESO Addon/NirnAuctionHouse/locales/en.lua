@@ -62,6 +62,20 @@ ZO_CreateStringId("SI_NAH_POSTORDER"   , "Post Order");--new
 ZO_CreateStringId("SI_NAH_PURCHASEPRICE"   , "Purchase Price");--new
 
 
+
+ZO_CreateStringId("SI_NAH_SELLITEM"   , "Sell Item");--new
+ZO_CreateStringId("SI_NAH_CONTACT"   , "Contact");--new
+ZO_CreateStringId("SI_NAH_RATING"   , "Rating");--new
+ZO_CreateStringId("SI_NAH_SUPPORT"   , "Support");--new
+ZO_CreateStringId("SI_NAH_INMAIL"   , "In Mail");--new
+ZO_CreateStringId("SI_NAH_GETFROMBANK"   , "Get From Bank");--new
+ZO_CreateStringId("SI_NAH_GETFROMGUILDBANK"   , "Get From Guild Bank");--new
+ZO_CreateStringId("SI_NAH_CLEARFILTERS"   , "Clear Search Filters");--new
+ZO_CreateStringId("SI_NAH_ADVANCEDSEARCH"   , "Advanced Search");--new
+
+ZO_CreateStringId("SI_NAH_RESULTS"   , "results");--new
+
+
 				
 
 ZO_CreateStringId("SI_NAH_AUCTION"   , "Auction");
@@ -111,11 +125,11 @@ ZO_CreateStringId("SI_NAH_UNKNOWNDROP1"     , "Known and Unknown");
 ZO_CreateStringId("SI_NAH_UNKNOWNDROP2"     , "Only Unknown");
 
 ZO_CreateStringId("SI_NAH_QUALITYDROP1"     , "Any Quality");
-ZO_CreateStringId("SI_NAH_QUALITYDROP2"     , "Normal");
-ZO_CreateStringId("SI_NAH_QUALITYDROP3"     , "Fine");
-ZO_CreateStringId("SI_NAH_QUALITYDROP4"     , "Superior");
-ZO_CreateStringId("SI_NAH_QUALITYDROP5"     , "Epic");
-ZO_CreateStringId("SI_NAH_QUALITYDROP6"     , "Legendary");
+ZO_CreateStringId("SI_NAH_QUALITYDROP2"     , "|cf9f9f9Normal|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP3"     , "|c2DC50EFine|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP4"     , "|c3A92FFSuperior|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP5"     , "|cA02EF7Epic|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP6"     , "|cCCAA1ALegendary|r");
 
 ZO_CreateStringId("SI_NAH_FILTERDROP1"     , "All Categories");
 ZO_CreateStringId("SI_NAH_FILTERDROP2"     , "Apparel");

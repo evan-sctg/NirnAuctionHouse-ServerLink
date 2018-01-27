@@ -3,6 +3,16 @@ Latest Version: https://nirnah.com/NirnAuctionHouse(beta).zip
 Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 Latest App: https://nirnah.com/NirnAuctionHouse.app.zip
 
+v0.0.24 "beta" @Elo
+ - Added Contact Support Button
+ - Added must have space in mailbox to buy an item 
+ - Optimizations and improvements
+ - Colored quality selector
+ - Complete rework of UI
+ - Added HUD with quick actions to mail / bank / guild bank (toggle in settings)
+ - bugfix after sync on browse nothing populated
+
+
 v0.0.23 "beta" @Elo
  - Added setting to hide nirn auction house for sale badges (inventory, bank, guild bank, craft bag)
  - Added setting to hide main nirn auction house button and serverlink warning

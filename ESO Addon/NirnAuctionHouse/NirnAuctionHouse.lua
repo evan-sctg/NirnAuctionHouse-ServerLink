@@ -86,6 +86,7 @@ local NirnAuctionHouse = NirnAuctionHouse
 		HideCraftBagBadges=false,
 		HideBankBadges=false,
 		HideGuildBankBadges=false,
+		AlwaysNAH_HUD=false,
 		
 	data = {
 		FilledWTBOrders = {},
@@ -145,6 +146,10 @@ function NAHTrackedItemList:BuildMasterList( )
 	
 	if NirnAuctionHouse.TrackedBids~= nil then
 	for i,GlobalBid in ipairs(NirnAuctionHouse.TrackedBids) do
+	d("GlobalBid.BuyoutPrice: "  .. tostring(GlobalBid.Item.BuyoutPrice))
+	if NirnAuctionHouse.TrackedBidCost~= nil then 
+		if GlobalBid.Item.BuyoutPrice~= nil then NirnAuctionHouse.TrackedBidCost=NirnAuctionHouse.TrackedBidCost + tonumber(GlobalBid.Item.BuyoutPrice); end 
+	end 
 	table.insert(self.masterList, NirnAuctionHouse.CreateEntryFromRaw(GlobalBid));
 	end
 	end
@@ -162,6 +167,7 @@ function NAHTrackedItemList:FilterScrollList( )
 	if (#scrollData ~= #self.masterList) then
 		self.frame:GetNamedChild("Counter"):SetText(string.format("%d / %d", #scrollData, #self.masterList));
 	else		
+	
 		self.frame:GetNamedChild("Counter"):SetText("");
 	end
 end
@@ -194,9 +200,9 @@ function NAHTrackedItemList:Setup( )
 	
 
 	NirnAuctionHouse.scene = ZO_Scene:New("NAHSceneTrackedOrders", SCENE_MANAGER);
-	NirnAuctionHouse.scene:AddFragment(ZO_SetTitleFragment:New(""));
+--~ 	NirnAuctionHouse.scene:AddFragment(ZO_SetTitleFragment:New(""));
 	NirnAuctionHouse.scene:AddFragment(ZO_FadeSceneFragment:New(NAHAuctionHouseTrackingPanel));
-	NirnAuctionHouse.scene:AddFragment(TITLE_FRAGMENT);
+--~ 	NirnAuctionHouse.scene:AddFragment(TITLE_FRAGMENT);
 --~ 	NirnAuctionHouse.scene:AddFragment(RIGHT_BG_FRAGMENT);
 	NirnAuctionHouse.scene:AddFragment(FRAME_EMOTE_FRAGMENT_JOURNAL);
 	NirnAuctionHouse.scene:AddFragment(CODEX_WINDOW_SOUNDS);
@@ -345,9 +351,9 @@ function NAHSoldItemList:Setup( )
 	
 
 	NirnAuctionHouse.scene = ZO_Scene:New("NAHSceneOrders", SCENE_MANAGER);
-	NirnAuctionHouse.scene:AddFragment(ZO_SetTitleFragment:New(""));
+--~ 	NirnAuctionHouse.scene:AddFragment(ZO_SetTitleFragment:New(""));
 	NirnAuctionHouse.scene:AddFragment(ZO_FadeSceneFragment:New(NAHAuctionHouseOrdersPanel));
-	NirnAuctionHouse.scene:AddFragment(TITLE_FRAGMENT);
+--~ 	NirnAuctionHouse.scene:AddFragment(TITLE_FRAGMENT);
 --~ 	NirnAuctionHouse.scene:AddFragment(RIGHT_BG_FRAGMENT);
 	NirnAuctionHouse.scene:AddFragment(FRAME_EMOTE_FRAGMENT_JOURNAL);
 	NirnAuctionHouse.scene:AddFragment(CODEX_WINDOW_SOUNDS);
@@ -473,6 +479,8 @@ function NAHAuctionList:Setup( )
 		["itemType"] = { caseInsensitive = true, tiebreaker = "name" },
 	};
 
+	local ctrl_advancedSearchSettings=self.frame:GetNamedChild("advancedSearchSettings");
+	
 	self.currentSortKey = "name";
 	self.currentSortOrder = ZO_SORT_ORDER_UP;
 	self.sortHeaderGroup:SelectAndResetSortForKey(self.currentSortKey);
@@ -482,30 +490,30 @@ function NAHAuctionList:Setup( )
 	self.masterListSortFunction = function( listEntry1, listEntry2 )
 		return(ZO_TableOrderingFunction(listEntry1, listEntry2, self.currentSortKey, sortKeys, self.currentSortOrder));
 	end
-	self.filterDrop = ZO_ComboBox_ObjectFromContainer(self.frame:GetNamedChild("FilterDrop"));	
+	self.filterDrop = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("FilterDrop"));	
 	self:InitializeComboBox(self.filterDrop, "SI_NAH_FILTERDROP", 20);
 	
 
 	self.searchDrop = ZO_ComboBox_ObjectFromContainer(self.frame:GetNamedChild("SearchDrop"));
 	self:InitializeComboBox(self.searchDrop, "SI_NAH_SEARCHDROP", 3);
 
-	self.filterDropSub = ZO_ComboBox_ObjectFromContainer(self.frame:GetNamedChild("FilterDropSub"));	
+	self.filterDropSub = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("FilterDropSub"));	
 	self:InitializeComboBox(self.filterDropSub, "SI_NAH_FILTERDROPSUB_1_", 15);
 	
 	
-	self.filterDropSlot = ZO_ComboBox_ObjectFromContainer(self.frame:GetNamedChild("FilterDropSlot"));	
+	self.filterDropSlot = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("FilterDropSlot"));	
 	self:InitializeComboBox(self.filterDropSlot, "SI_NAH_FILTERDROPSUB_1_", 15);
 	
 	
-	self.filterDropEnch = ZO_ComboBox_ObjectFromContainer(self.frame:GetNamedChild("FilterDropEnch"));	
+	self.filterDropEnch = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("FilterDropEnch"));	
 	self:InitializeComboBox(self.filterDropEnch, "SI_NAH_FILTERDROPSUB_1_", 15);
 	
 	
-	self.filterDropTrait = ZO_ComboBox_ObjectFromContainer(self.frame:GetNamedChild("FilterDropTrait"));	
+	self.filterDropTrait = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("FilterDropTrait"));	
 	self:InitializeComboBox(self.filterDropTrait, "SI_NAH_FILTERDROPSUB_1_", 15);
 	
 	
-	self.filterDropCrafting = ZO_ComboBox_ObjectFromContainer(self.frame:GetNamedChild("FilterDropCrafting"));	
+	self.filterDropCrafting = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("FilterDropCrafting"));	
 	self:InitializeComboBox(self.filterDropCrafting, "SI_NAH_FILTERDROPSUB_1_", 15);
 	
 	
@@ -513,36 +521,36 @@ function NAHAuctionList:Setup( )
 	
 	
 
-	self.PriceMinBox = self.frame:GetNamedChild("PriceMinBox");
+	self.PriceMinBox = ctrl_advancedSearchSettings:GetNamedChild("PriceMinBox");
 	self.PriceMinBox:SetHandler("OnTextChanged", function() self:RefreshFilters() end);
 	
 	
 
-	self.PriceMaxBox = self.frame:GetNamedChild("PriceMaxBox");
+	self.PriceMaxBox = ctrl_advancedSearchSettings:GetNamedChild("PriceMaxBox");
 	self.PriceMaxBox:SetHandler("OnTextChanged", function() self:RefreshFilters() end);
 	
 	
 
-	self.LevelMinBox = self.frame:GetNamedChild("LevelMinBox");
+	self.LevelMinBox = ctrl_advancedSearchSettings:GetNamedChild("LevelMinBox");
 	self.LevelMinBox:SetHandler("OnTextChanged", function() self:RefreshFilters() end);
 	
 	
 	
-	self.LevelMaxBox = self.frame:GetNamedChild("LevelMaxBox");
+	self.LevelMaxBox = ctrl_advancedSearchSettings:GetNamedChild("LevelMaxBox");
 	self.LevelMaxBox:SetHandler("OnTextChanged", function() self:RefreshFilters() end);
 	
 	
 	
-	self.QualityDrop = ZO_ComboBox_ObjectFromContainer(self.frame:GetNamedChild("QualityDrop"));
+	self.QualityDrop = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("QualityDrop"));
 	self:InitializeComboBox(self.QualityDrop, "SI_NAH_QUALITYDROP", 6);
 	
-	self.UnknownDrop = ZO_ComboBox_ObjectFromContainer(self.frame:GetNamedChild("UnknownDrop"));
+	self.UnknownDrop = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("UnknownDrop"));
 	self:InitializeComboBox(self.UnknownDrop, "SI_NAH_UNKNOWNDROP", 2);
 	
 	
 	
 
-	self.LevelRangeType = ZO_ComboBox_ObjectFromContainer(self.frame:GetNamedChild("LevelRangeType"));
+	self.LevelRangeType = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("LevelRangeType"));
 	self:InitializeComboBox(self.LevelRangeType, "SI_NAH_LEVELDROP", 3);
 	
 
@@ -554,9 +562,9 @@ function NAHAuctionList:Setup( )
 	self.search:AddProcessor(NirnAuctionHouse.sortType, function(stringSearch, data, searchTerm, cache) return(self:ProcessItemEntry(stringSearch, data, searchTerm, cache)) end);
 
 	NirnAuctionHouse.scene = ZO_Scene:New("NAHScene", SCENE_MANAGER);
-	NirnAuctionHouse.scene:AddFragment(ZO_SetTitleFragment:New(""));
+--~ 	NirnAuctionHouse.scene:AddFragment(ZO_SetTitleFragment:New(""));
 	NirnAuctionHouse.scene:AddFragment(ZO_FadeSceneFragment:New(NirnAuctionHousePanel));
-	NirnAuctionHouse.scene:AddFragment(TITLE_FRAGMENT);
+--~ 	NirnAuctionHouse.scene:AddFragment(TITLE_FRAGMENT);
 	NirnAuctionHouse.scene:AddFragment(CODEX_WINDOW_SOUNDS);
 	NirnAuctionHouse.scene:AddFragmentGroup(FRAGMENT_GROUP.MOUSE_DRIVEN_UI_WINDOW);
 	NirnAuctionHouse.scene:AddFragmentGroup(FRAGMENT_GROUP.FRAME_TARGET_STANDARD_RIGHT_PANEL);
@@ -656,6 +664,9 @@ end
 
 function NAHAuctionList:FilterScrollList( )
 	local scrollData = ZO_ScrollList_GetDataList(self.list);
+	
+	
+	local ctrl_advancedSearchSettings=self.frame:GetNamedChild("advancedSearchSettings");
 	ZO_ClearNumericallyIndexedTable(scrollData);
 	
 	if NAH.settings.data.SearchSettings.PageChange ~=true then 
@@ -732,9 +743,9 @@ function NAHAuctionList:FilterScrollList( )
 		if filterId==5 then--crafting
 		filterCraftingId=1	
 		self:UpdateChoicesComboBox(self.filterDropCrafting, "SI_NAH_FILTERDROP_CRAFTING_" .. filterSubId .. "_", 15);
-		self.frame:GetNamedChild("FilterDropCrafting"):SetHidden(false);
+		ctrl_advancedSearchSettings:GetNamedChild("FilterDropCrafting"):SetHidden(false);
 		else
-		self.frame:GetNamedChild("FilterDropCrafting"):SetHidden(true);		
+		ctrl_advancedSearchSettings:GetNamedChild("FilterDropCrafting"):SetHidden(true);		
 		end
 		
 		--update slot dropdown with weapon types if a weapon otherwise check slot lists
@@ -750,13 +761,13 @@ function NAHAuctionList:FilterScrollList( )
 		TrackedPriceHistory_delay=3
 		--if set to show all items then hide all other filters
 		if (filterId ==1) then		
-		self.frame:GetNamedChild("FilterDropSub"):SetHidden(true);
-		self.frame:GetNamedChild("FilterDropEnch"):SetHidden(true);
-		self.frame:GetNamedChild("FilterDropTrait"):SetHidden(true);
-		self.frame:GetNamedChild("FilterDropSlot"):SetHidden(true);
-		self.frame:GetNamedChild("FilterDropCrafting"):SetHidden(true);
+		ctrl_advancedSearchSettings:GetNamedChild("FilterDropSub"):SetHidden(true);
+		ctrl_advancedSearchSettings:GetNamedChild("FilterDropEnch"):SetHidden(true);
+		ctrl_advancedSearchSettings:GetNamedChild("FilterDropTrait"):SetHidden(true);
+		ctrl_advancedSearchSettings:GetNamedChild("FilterDropSlot"):SetHidden(true);
+		ctrl_advancedSearchSettings:GetNamedChild("FilterDropCrafting"):SetHidden(true);
 		else
-		self.frame:GetNamedChild("FilterDropSub"):SetHidden(false);
+		ctrl_advancedSearchSettings:GetNamedChild("FilterDropSub"):SetHidden(false);
 		end
 	
 		--check if we defined that this category could have sub categories b4 we check them
@@ -783,22 +794,22 @@ function NAHAuctionList:FilterScrollList( )
 			else
 			self:UpdateChoicesComboBox(self.filterDropSlot, "SI_NAH_FILTERDROP_SLOT_" .. filterId .. "_", 15);
 			end
-		self.frame:GetNamedChild("FilterDropEnch"):SetHidden(false);
-		self.frame:GetNamedChild("FilterDropTrait"):SetHidden(false);
-		self.frame:GetNamedChild("FilterDropSlot"):SetHidden(false);
+		ctrl_advancedSearchSettings:GetNamedChild("FilterDropEnch"):SetHidden(false);
+		ctrl_advancedSearchSettings:GetNamedChild("FilterDropTrait"):SetHidden(false);
+		ctrl_advancedSearchSettings:GetNamedChild("FilterDropSlot"):SetHidden(false);
 		else
-		self.frame:GetNamedChild("FilterDropEnch"):SetHidden(true);
-		self.frame:GetNamedChild("FilterDropTrait"):SetHidden(true);
-		self.frame:GetNamedChild("FilterDropSlot"):SetHidden(true);
+		ctrl_advancedSearchSettings:GetNamedChild("FilterDropEnch"):SetHidden(true);
+		ctrl_advancedSearchSettings:GetNamedChild("FilterDropTrait"):SetHidden(true);
+		ctrl_advancedSearchSettings:GetNamedChild("FilterDropSlot"):SetHidden(true);
 		
 		end
 		
 		
 		--show the crafting sub filter if crafting is selected
 		if filterId==5 then	--crafting
-		self.frame:GetNamedChild("FilterDropCrafting"):SetHidden(false);
+		ctrl_advancedSearchSettings:GetNamedChild("FilterDropCrafting"):SetHidden(false);
 		else
-		self.frame:GetNamedChild("FilterDropCrafting"):SetHidden(true);		
+		ctrl_advancedSearchSettings:GetNamedChild("FilterDropCrafting"):SetHidden(true);		
 		end
 	
 	end
@@ -1264,15 +1275,22 @@ end
 			else
 			self.frame:GetNamedChild("AuctionHouse_NextPage"):SetHidden(true);
 			end 
-		self.frame:GetNamedChild("Counter"):SetText(string.format("%s %d - %d  (%s %d)   %s %d / %d", GetString(SI_NAH_STRING_SHOWING),numResultMin,numResultMax, GetString(SI_NAH_STRING_TOTAL),NAH.settings.data.SearchSettings.NumResults,GetString(SI_NAH_STRING_PAGE),NAH.settings.data.SearchSettings.Page,NAH.settings.data.SearchSettings.NumPages));
+		self.frame:GetNamedChild("resultnum"):SetText(string.format("%d %s", NAH.settings.data.SearchSettings.NumResults,GetString(SI_NAH_RESULTS)));
+--~ 		self.frame:GetNamedChild("Counter"):SetText(string.format("%s %d - %d  (%s %d)   %s %d / %d", GetString(SI_NAH_STRING_SHOWING),numResultMin,numResultMax, GetString(SI_NAH_STRING_TOTAL),NAH.settings.data.SearchSettings.NumResults,GetString(SI_NAH_STRING_PAGE),NAH.settings.data.SearchSettings.Page,NAH.settings.data.SearchSettings.NumPages));
+		self.frame:GetNamedChild("Counter"):SetText(string.format("%d / %d", NAH.settings.data.SearchSettings.Page,NAH.settings.data.SearchSettings.NumPages));
 		
 if NAH.settings.ActiveTab=="MyListings" then 
-self.frame:GetNamedChild("Counter"):SetText(string.format("%s %d - %d  (%s %d)   %s %d / %d  (%s %d / %d)", GetString(SI_NAH_STRING_SHOWING),numResultMin,numResultMax, GetString(SI_NAH_STRING_TOTAL),NAH.settings.data.SearchSettings.NumResults,GetString(SI_NAH_STRING_PAGE),NAH.settings.data.SearchSettings.Page,NAH.settings.data.SearchSettings.NumPages,GetString(SI_NAH_MYLISTINGS),NirnAuctionHouse.myListingsNum,NirnAuctionHouse.myListingsMax));
+		self.frame:GetNamedChild("resultnum"):SetText(string.format("%d %s (%s %d / %d)",NAH.settings.data.SearchSettings.NumResults , GetString(SI_NAH_RESULTS),GetString(SI_NAH_MYLISTINGS),NirnAuctionHouse.myListingsNum,NirnAuctionHouse.myListingsMax));
+--~ self.frame:GetNamedChild("Counter"):SetText(string.format("%s %d - %d  (%s %d)   %s %d / %d  (%s %d / %d)", GetString(SI_NAH_STRING_SHOWING),numResultMin,numResultMax, GetString(SI_NAH_STRING_TOTAL),NAH.settings.data.SearchSettings.NumResults,GetString(SI_NAH_STRING_PAGE),NAH.settings.data.SearchSettings.Page,NAH.settings.data.SearchSettings.NumPages,GetString(SI_NAH_MYLISTINGS),NirnAuctionHouse.myListingsNum,NirnAuctionHouse.myListingsMax));
+self.frame:GetNamedChild("Counter"):SetText(string.format("%d / %d ", NAH.settings.data.SearchSettings.Page,NAH.settings.data.SearchSettings.NumPages));
 end		
 	else
-		self.frame:GetNamedChild("Counter"):SetText("");		
+		self.frame:GetNamedChild("Counter"):SetText("");	
+
+		self.frame:GetNamedChild("resultnum"):SetText("");		
 		if NAH.settings.ActiveTab=="MyListings" then 
-		self.frame:GetNamedChild("Counter"):SetText(string.format("(%s %d / %d)", GetString(SI_NAH_MYLISTINGS),NirnAuctionHouse.myListingsNum,NirnAuctionHouse.myListingsMax));
+		self.frame:GetNamedChild("resultnum"):SetText(string.format("(%s %d / %d)", GetString(SI_NAH_MYLISTINGS),NirnAuctionHouse.myListingsNum,NirnAuctionHouse.myListingsMax));		
+		self.frame:GetNamedChild("Counter"):SetText("");
 		end
 		self.frame:GetNamedChild("AuctionHouse_LastPage"):SetHidden(true);
 		self.frame:GetNamedChild("AuctionHouse_NextPage"):SetHidden(true);
@@ -1440,7 +1458,52 @@ zo_callLater(function()
 	control:GetNamedChild("TimeLeft").normalColor = ZO_DEFAULT_TEXT;
 	control:GetNamedChild("TimeLeft"):SetText(data.TimeLeft);
 
+	local TimeLeftIcon=control:GetNamedChild("TimeLeftIcon");
+	
+	local splitTime=split(data.TimeLeft, ":");
 
+	if splitTime ~= nil and splitTime[1] ~= nil and splitTime[2] ~= nil then
+	splitTime[1] = tonumber((splitTime[1]:gsub("d", "")))
+	if splitTime[1] > 1 then
+	
+	if splitTime[1] == 6 then	
+	TimeLeftIcon:SetTexture([[NirnAuctionHouse\media\Timeleft_08.dds]])
+	end
+	if splitTime[1] == 5 then	
+	TimeLeftIcon:SetTexture([[NirnAuctionHouse\media\Timeleft_07.dds]])
+	end
+	if splitTime[1] == 4 then	
+	TimeLeftIcon:SetTexture([[NirnAuctionHouse\media\Timeleft_06.dds]])
+	end
+	if splitTime[1] == 3 then	
+	TimeLeftIcon:SetTexture([[NirnAuctionHouse\media\Timeleft_05.dds]])
+	end
+	if splitTime[1] == 2 then	
+	TimeLeftIcon:SetTexture([[NirnAuctionHouse\media\Timeleft_04.dds]])
+	end
+	if splitTime[1] == 1 then	
+	TimeLeftIcon:SetTexture([[NirnAuctionHouse\media\Timeleft_03.dds]])
+	end
+	
+	else
+	
+	splitTime[2] = tonumber((splitTime[2]:gsub("h", "")))
+	if splitTime[2] > 2 then	
+	TimeLeftIcon:SetTexture([[NirnAuctionHouse\media\Timeleft_02.dds]])
+	else
+	TimeLeftIcon:SetTexture([[NirnAuctionHouse\media\Timeleft_01.dds]])
+	end
+	
+	
+	end
+	end
+	
+	TimeLeftIcon:SetHandler("OnMouseEnter", function(self)
+	ZO_Tooltips_ShowTextTooltip(self, TOP, data.TimeLeft)
+	end)
+	TimeLeftIcon:SetHandler("OnMouseExit", function(self)
+	ZO_Tooltips_HideTextTooltip()
+	end)
 	
 	control:GetNamedChild("Buy")
 	
@@ -1458,6 +1521,14 @@ zo_callLater(function()
 --~ 			end
 end
 
+
+function split(s, delimiter)
+    result = {};
+    for match in (s..delimiter):gmatch("(.-)"..delimiter) do
+        table.insert(result, match);
+    end
+    return result;
+end
 
 function NAHAuctionList:CheckForMatch( data, searchInput )
 		return(self.search:IsMatch(searchInput, data));
@@ -1851,6 +1922,8 @@ end
 	d("Queued Buyout ".. NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.ItemLink .."x".. NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.stackCount.." for ".. NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.Price.."(g)  sync to buyout now")
 	NirnAuctionHouse_CloseGoldCostBuyout()
 	end
+	if NirnAuctionHouse.TrackedBidCost== nil then NirnAuctionHouse.TrackedBidCost=0; end
+	NirnAuctionHouse.TrackedBidCost = NirnAuctionHouse.TrackedBidCost + tonumber(NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.Price);
 	end
 	
 	
@@ -1897,9 +1970,16 @@ end
 
 
  function NirnAuctionHouse_BuyItem(control )
+ local total_banked=(GetCurrentMoney() +GetBankedMoney());
+ local total_promised=(NirnAuctionHouse.TrackedBidCost + tonumber(control.data.BuyoutPrice));
+ if total_banked < tonumber(control.data.BuyoutPrice) or total_banked < total_promised then  d("You do Not Have Enough Gold In your Inventory For this Purchase") return; end	
+ if IsLocalMailboxFull() then  d("Your mailbox is full, you must make space before buying items") return; end
  
- if (GetCurrentMoney() +GetBankedMoney()) < tonumber(control.data.BuyoutPrice) then  d("You do Not Have Enough Gold In your Inventory For this Purchase") return; end
-	
+ 
+ if NirnAuctionHouse.TrackedBids~= nil then
+ if #NirnAuctionHouse.TrackedBids >= 30 then  d("Your Tracked Orders list is full, you must allow for some of your orders to be completed before buying more items") return; end
+ end
+ 
 	NirnAuctionHouse.ActiveBidListingId=control.data.TradeID
 	
 	
@@ -1948,13 +2028,13 @@ end
  function NirnAuctionHouse_ToggleAHButtons( )
  if(NirnAuctionHouse.ServerLink_INITIATED)then
  --need to set a variable here to make this persistant
- if NAHAuctionHouseBtn:IsHidden() then
- NAH.settings.HideInterface=false
-NirnAuctionHouse_ShowBtns( );
- else
- NAH.settings.HideInterface=true
-NirnAuctionHouse_HideBtns();
- end
+	 if NAHAuctionHouseBtn:IsHidden() then
+		 NAH.settings.HideInterface=false
+		NirnAuctionHouse_ShowBtns( );
+	else
+		 NAH.settings.HideInterface=true
+		NirnAuctionHouse_HideBtns();
+	 end
  
  
   else
@@ -1983,74 +2063,69 @@ NirnAuctionHouse_HideBtns();
 
  function NirnAuctionHouse_ToggleNAH( )
  if(NirnAuctionHouse.ServerLink_INITIATED)then
- if NAH.settings.ActiveTab=="" then 
-NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_BROWSE))
---~ NirnAuctionHousePanel:GetNamedChild("AuctionHouse"):SetHidden(true);
---~ NirnAuctionHousePanel:GetNamedChild("MyListings"):SetHidden(false);
- NAH.settings.ActiveTab="Auction";
- NirnAuctionHouse.list:RefreshFilters()
- SCENE_MANAGER:Show("NAHScene");
- else
+	 if NAH.settings.ActiveTab=="" then 
+		NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_BROWSE))
+		 NAH.settings.ActiveTab="Auction";
+		 NirnAuctionHouse.list:RefreshFilters()
+		 SCENE_MANAGER:Show("NAHScene");
+	 else
 
-	SCENE_MANAGER:Hide("NAHScene");
-	SCENE_MANAGER:Hide("NAHSceneOrders");
-	SCENE_MANAGER:Hide("NAHSceneTrackedOrders");
-	NAHAuctionHouseTrackingPanel:SetHidden(true)   
-	NAHAuctionHouseOrdersPanel:SetHidden(true)   
-	NirnAuctionHousePanel:SetHidden(true)   
-	NAH.settings.ActiveTab="";
- end
+		SCENE_MANAGER:Hide("NAHScene");
+		SCENE_MANAGER:Hide("NAHSceneOrders");
+		SCENE_MANAGER:Hide("NAHSceneTrackedOrders");
+		NAHAuctionHouseTrackingPanel:SetHidden(true)   
+		NAHAuctionHouseOrdersPanel:SetHidden(true)   
+		NirnAuctionHousePanel:SetHidden(true)   
+		NAH.settings.ActiveTab="";
+	 end
  end
 
  end	
  
 
  function NirnAuctionHouse_ToggleAH( )
- if(NirnAuctionHouse.ServerLink_INITIATED)then
- if NirnAuctionHousePanel:IsHidden() then 
-NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_BROWSE))
---~ NirnAuctionHousePanel:GetNamedChild("AuctionHouse"):SetHidden(true);
---~ NirnAuctionHousePanel:GetNamedChild("MyListings"):SetHidden(false);
- NAH.settings.ActiveTab="Auction";
- NirnAuctionHouse.list:RefreshFilters()
- SCENE_MANAGER:Show("NAHScene");
- else
- NirnAuctionHousePanel:SetHidden(true);  
-SCENE_MANAGER:Hide("NAHScene");
-NAH.settings.ActiveTab="";
- end
- end
+	 if(NirnAuctionHouse.ServerLink_INITIATED)then
+		 if NirnAuctionHousePanel:IsHidden() then 
+		NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_BROWSE))
+		 NAH.settings.ActiveTab="Auction";
+		 NirnAuctionHouse.list:RefreshFilters()
+		 SCENE_MANAGER:Show("NAHScene");
+		 else
+		 NirnAuctionHousePanel:SetHidden(true);  
+		SCENE_MANAGER:Hide("NAHScene");
+		NAH.settings.ActiveTab="";
+		 end
+	 end
 
  end	
  
  function NirnAuctionHouse_ServerLink_Recheck( )
-NAH.settings.ReloadTradeData=true
-NirnAuctionHouse:forceWriteSavedVars()
+	NAH.settings.ReloadTradeData=true
+	NirnAuctionHouse:forceWriteSavedVars()
  end	
  
  
  function NirnAuctionHouse_ServerLink_INITIATED( versionnum)
-if(not NAH.settings.ServerLink_INITIATED or not NirnAuctionHouse.ServerLink_INITIATED)then
-if ( NAH.ServerLinkVersionRequired==versionnum ) then
+	if(not NAH.settings.ServerLink_INITIATED or not NirnAuctionHouse.ServerLink_INITIATED)then
+		if ( NAH.ServerLinkVersionRequired==versionnum ) then
 
-NirnAuctionHouse.ServerLink_VersionConflict=false;
-NirnAuctionHouse.ServerLink_INITIATED=true;
-NAH.settings.ServerLink_INITIATED=true;
---~   d("Nirn Auction House ServerLink INITIATED")
-NirnAuctionHouse_HideServerLink( );
-NirnAuctionHouse_HideServerLinkVersion( );
-if(NAH.settings.HideInterface==nil or NAH.settings.HideInterface==false)then
-NirnAuctionHouse_ShowBtns( );
-end
-else
-NirnAuctionHouse.ServerLink_VersionConflict=true;
-NirnAuctionHouse_HideServerLink( );
-if(NAH.settings.HideInterface==nil or NAH.settings.HideInterface==false)then
-NirnAuctionHouse_ShowServerLinkVersion( );
-end
+			NirnAuctionHouse.ServerLink_VersionConflict=false;
+			NirnAuctionHouse.ServerLink_INITIATED=true;
+			NAH.settings.ServerLink_INITIATED=true;
+			NirnAuctionHouse_HideServerLink( );
+			NirnAuctionHouse_HideServerLinkVersion( );
+			if(NAH.settings.HideInterface==nil or NAH.settings.HideInterface==false)then
+			NirnAuctionHouse_ShowBtns( );
+			end
+		else
+			NirnAuctionHouse.ServerLink_VersionConflict=true;
+			NirnAuctionHouse_HideServerLink( );
+			if(NAH.settings.HideInterface==nil or NAH.settings.HideInterface==false)then
+			NirnAuctionHouse_ShowServerLinkVersion( );
+			end
 
-end
-end
+		end
+	end
  end	
  
  function NirnAuctionHouse_RefreshAHTrackedBids( )
@@ -2073,7 +2148,6 @@ end
  end	
  
  function NirnAuctionHouse_LoadBids( )	
- 
 	if NirnAuctionHouse.LoadBids ~=nil then	
 	NirnAuctionHouse:LoadBids()
 	end
@@ -2110,24 +2184,16 @@ NirnAuctionHouse_ServerLink_INITIATED( )
  
  function NirnAuctionHouse_HideBtns( )	
  NAHAuctionHouseBtn:SetHidden(true);  
---~  NAHAuctionHouseOrdersBtnNEW:SetHidden(true);  
---~  NAHAuctionHouseOrdersBtn:SetHidden(true); 
---~  NAHAuctionHouseOrdersTRKBtn:SetHidden(true);   
  end	
  
  	
   
  function NirnAuctionHouse_ShowBtns( )	
---~  NAHAuctionHouseOrdersBtnNEW:SetHidden(true);  
  NAHAuctionHouseBtn:SetHidden(false);  
---~  NAHAuctionHouseOrdersBtn:SetHidden(false);  
---~  NAHAuctionHouseOrdersTRKBtn:SetHidden(false);  
  end	
 		
  function NirnAuctionHouse_ShowMyListings( )
 NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYLISTINGS))
---~ NirnAuctionHousePanel:GetNamedChild("AuctionHouse"):SetHidden(false);
---~ NirnAuctionHousePanel:GetNamedChild("MyListings"):SetHidden(true);
 	    NAH.settings.ActiveTab="MyListings";	
 	 NirnAuctionHouse.list:RefreshFilters()
 	if NirnAuctionHousePanel:IsHidden() then
@@ -2136,7 +2202,6 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYLISTINGS
  end	
 		
  function NirnAuctionHouse_ShowWTBListings( )
---~ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_EXPIRED))
 NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_ORDERS))
 	    NAH.settings.ActiveTab="WTB";	
 	 NirnAuctionHouse.list:RefreshFilters()
@@ -2148,7 +2213,6 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_ORDERS))
  
 		
  function NirnAuctionHouse_ShowMyWTBListings( )
---~ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_EXPIRED))
 NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYORDERS))
 	    NAH.settings.ActiveTab="MyWTB";	
 	 NirnAuctionHouse.list:RefreshFilters()
@@ -2159,8 +2223,6 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYORDERS))
  
  function NirnAuctionHouse_ShowExpiredListings( )
 NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_EXPIRED))
---~ NirnAuctionHousePanel:GetNamedChild("AuctionHouse"):SetHidden(false);
---~ NirnAuctionHousePanel:GetNamedChild("MyListings"):SetHidden(true);
 	    NAH.settings.ActiveTab="Expired";	
 	 NirnAuctionHouse.list:RefreshFilters()
 	if NirnAuctionHousePanel:IsHidden() then
@@ -2168,41 +2230,166 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_EXPIRED))
 	end
  end	
 	
+	
+ function NirnAuctionHouse_ClearSearchSettings( )	
+ 	NAH.settings.data.SearchSettings.LastFilterId=NAH.settings.data.SearchSettings.CurrentFilterId;
+	NAH.settings.data.SearchSettings.CurrentFilterId=1;
+	NAH.settings.data.SearchSettings.CurrentSearch="";
+	NAH.settings.data.SearchSettings.CurrentFilterSubId=1;
+	NAH.settings.data.SearchSettings.searchType=1;
+	
+	
+	NAH.settings.data.SearchSettings.CurrentFilterEnchId=1;	
+	NAH.settings.data.SearchSettings.CurrentFilterTraitId=1;	
+	NAH.settings.data.SearchSettings.CurrentFilterSlotId=1;
+	NAH.settings.data.SearchSettings.CurrentFilterCraftingId=1;
+	
+	
+	NAH.settings.data.SearchSettings.PriceMin=0;
+	NAH.settings.data.SearchSettings.PriceMax=0;
+	NAH.settings.data.SearchSettings.LevelMin=0;
+	NAH.settings.data.SearchSettings.LevelMax=0;
+	NAH.settings.data.SearchSettings.LevelRangeTypeId=1;
+	NAH.settings.data.SearchSettings.QualityId=1;
+	
+	NAH.settings.data.SearchSettings.UnknownId=1;
+	
+	
+	
+	if NAH.settings.data.SearchSettings.PriceMin then
+	NirnAuctionHouse.list.PriceMinBox:SetText(0)
+	end
+	
+		
+	if NAH.settings.data.SearchSettings.PriceMax then
+	NirnAuctionHouse.list.PriceMaxBox:SetText(0)
+	end
+	
+		
+	if NAH.settings.data.SearchSettings.LevelMin then
+	NirnAuctionHouse.list.LevelMinBox:SetText(0)
+	end
+	
+	if NAH.settings.data.SearchSettings.QualityId then
+	NirnAuctionHouse.list.QualityDrop:SelectItemByIndex(1,true)
+	end
+	
+	if NAH.settings.data.SearchSettings.UnknownId then
+	NirnAuctionHouse.list.UnknownDrop:SelectItemByIndex(1,true)
+	end
+	
+		
+	if NAH.settings.data.SearchSettings.LevelMax then
+	NirnAuctionHouse.list.LevelMaxBox:SetText(0)
+	end
+	
+		
+	if NAH.settings.data.SearchSettings.LevelRangeTypeId then	
+	NirnAuctionHouse.list.LevelRangeType:SelectItemByIndex(1,true)
+	end
+	
+	
+	
+	if NAH.settings.data.SearchSettings.CurrentFilterEnchId then
+	NirnAuctionHouse.list.filterDropEnch:SelectItemByIndex(1,true)
+	end
+	
+	if NAH.settings.data.SearchSettings.CurrentFilterTraitId then
+	NirnAuctionHouse.list.filterDropTrait:SelectItemByIndex(1,true)
+	end
+	
+	
+	if NAH.settings.data.SearchSettings.CurrentFilterSlotId then
+	NirnAuctionHouse.list.filterDropSlot:SelectItemByIndex(1,true)
+	end
+	
+	
+	
+	if NAH.settings.data.SearchSettings.CurrentFilterSubId then	
+	NirnAuctionHouse.list.filterDropSub:SelectItemByIndex(1,true)
+		
+	if NAH.settings.data.SearchSettings.CurrentFilterCraftingId then
+	NirnAuctionHouse.list:UpdateChoicesComboBox(NirnAuctionHouse.list.filterDropCrafting, "SI_NAH_FILTERDROP_CRAFTING_1_", 1);
+		zo_callLater(function()
+			NirnAuctionHouse.list.filterDropCrafting:SelectItemByIndex(1,true)
+		end, 50)
+	end
+	
+	end
+	
+	if NAH.settings.data.SearchSettings.CurrentFilterCraftingId then
+		if NAH.settings.data.SearchSettings.CurrentFilterSubId then	
+			NirnAuctionHouse.list:UpdateChoicesComboBox(NirnAuctionHouse.list.filterDropCrafting, "SI_NAH_FILTERDROP_CRAFTING_1_", 15);	
+		zo_callLater(function()
+			NirnAuctionHouse.list.filterDropCrafting:SelectItemByIndex(1,true)
+		end, 50)
+		else	
+			NirnAuctionHouse.list.filterDropCrafting:UpdateChoicesComboBox(NirnAuctionHouse.list.filterDropCrafting, "SI_NAH_FILTERDROP_CRAFTING_1_", 1);
+		zo_callLater(function()
+			NirnAuctionHouse.list.filterDropCrafting:SelectItemByIndex(1,true)
+		end, 50)
+		end
+	end
+	
+	if NAH.settings.data.SearchSettings.CurrentFilterId then
+	NirnAuctionHouse.list.filterDrop:SelectItemByIndex(1,true)
+	end
 
 	
+	if NAH.settings.data.SearchSettings.CurrentSearch then
+	NirnAuctionHouse.list.My_searchBox:SetText("")
+	end
+	
+	
+	
+ 
+ end	
+	
+ function NirnAuctionHouse_AdvancedSearchSettings( )	 
+ local panel_advancedSearchSettings = NirnAuctionHousePanel:GetNamedChild("advancedSearchSettings"); 
+	 if panel_advancedSearchSettings ~= nil then
+		 if panel_advancedSearchSettings:IsHidden() then
+		  panel_advancedSearchSettings:SetHidden(false);
+		 else
+		 panel_advancedSearchSettings:SetHidden(true);
+		 end
+	 end
+ end	
+	
+	
  function NirnAuctionHouse_ToggleOrders( )	
- if NAHAuctionHouseOrdersPanel:IsHidden() then
-  if SCENE_MANAGER.currentScene.name ~= "NAHSceneOrders" then
- NAH.settings.ActiveTab="Orders";
- SCENE_MANAGER:Show("NAHSceneOrders"); 
- end
+	 if NAHAuctionHouseOrdersPanel:IsHidden() then
+		  if SCENE_MANAGER.currentScene.name ~= "NAHSceneOrders" then
+		 NAH.settings.ActiveTab="Orders";
+		 SCENE_MANAGER:Show("NAHSceneOrders"); 
+		 end
 
- else
- 
- if SCENE_MANAGER.currentScene.name == "NAHSceneOrders" then
- NAH.settings.ActiveTab="";
- SCENE_MANAGER:Hide("NAHSceneOrders");
- end
- 
- end
+	 else
+	 
+		 if SCENE_MANAGER.currentScene.name == "NAHSceneOrders" then
+		 NAH.settings.ActiveTab="";
+		 SCENE_MANAGER:Hide("NAHSceneOrders");
+		 end
+	 
+	 end
  end	
 	
 	
  function NirnAuctionHouse_ToggleTrackedOrders( )	
- if NAHAuctionHouseTrackingPanel:IsHidden() then
-  if SCENE_MANAGER.currentScene.name ~= "NAHSceneTrackedOrders" then
-  NAH.settings.ActiveTab="TrackedOrders";
- SCENE_MANAGER:Show("NAHSceneTrackedOrders"); 
- end
+	 if NAHAuctionHouseTrackingPanel:IsHidden() then
+		  if SCENE_MANAGER.currentScene.name ~= "NAHSceneTrackedOrders" then
+		  NAH.settings.ActiveTab="TrackedOrders";
+		 SCENE_MANAGER:Show("NAHSceneTrackedOrders"); 
+		 end
 
- else
- 
- if SCENE_MANAGER.currentScene.name == "NAHSceneTrackedOrders" then
- NAH.settings.ActiveTab="";
- SCENE_MANAGER:Hide("NAHSceneTrackedOrders");
- end
- 
- end
+	 else
+	 
+		 if SCENE_MANAGER.currentScene.name == "NAHSceneTrackedOrders" then
+		 NAH.settings.ActiveTab="";
+		 SCENE_MANAGER:Hide("NAHSceneTrackedOrders");
+		 end
+	 
+	 end
  end	
 	
 	
@@ -2396,7 +2583,15 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYLISTINGS
 	NAH.settings.OpenAuctionWindow= false	
 	if(NAH.settings.ActiveTab=="")then NAH.settings.ActiveTab="Auction";	end
 	NirnAuctionHouse.list:RefreshFilters()
-	SCENE_MANAGER:Show("NAHScene");	
+	
+	if NAH.settings.ActiveTab=="Orders" then 
+	SCENE_MANAGER:Show("NAHSceneOrders");
+	elseif NAH.settings.ActiveTab=="TrackedOrders" then
+	SCENE_MANAGER:Show("NAHSceneTrackedOrders");	
+	else
+	SCENE_MANAGER:Show("NAHScene");
+	end
+		
 	end
 	
  NAHAuctionHouseOrdersBtnNEW:SetHidden(true);  
@@ -2422,35 +2617,36 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYLISTINGS
 
 if(NirnAuctionHouse.list~=nil)then 
 		
+	local ctrl_advancedSearchSettings=NirnAuctionHouse.list.frame:GetNamedChild("advancedSearchSettings");
 	NirnAuctionHouse.list.searchDrop = ZO_ComboBox_ObjectFromContainer(NirnAuctionHouse.list.frame:GetNamedChild("SearchDrop"));
-	NirnAuctionHouse.list.filterDrop = ZO_ComboBox_ObjectFromContainer(NirnAuctionHouse.list.frame:GetNamedChild("FilterDrop"));
-	NirnAuctionHouse.list.filterDropSub = ZO_ComboBox_ObjectFromContainer(NirnAuctionHouse.list.frame:GetNamedChild("FilterDropSub"));
+	NirnAuctionHouse.list.filterDrop = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("FilterDrop"));
+	NirnAuctionHouse.list.filterDropSub = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("FilterDropSub"));
 	NirnAuctionHouse.list.My_searchBox = NirnAuctionHousePanel:GetNamedChild("Search"):GetNamedChild("Box");
-	NirnAuctionHouse.list.filterDropEnch = ZO_ComboBox_ObjectFromContainer(NirnAuctionHouse.list.frame:GetNamedChild("FilterDropEnch"));
-	NirnAuctionHouse.list.filterDropTrait = ZO_ComboBox_ObjectFromContainer(NirnAuctionHouse.list.frame:GetNamedChild("FilterDropTrait"));
-	NirnAuctionHouse.list.filterDropCrafting = ZO_ComboBox_ObjectFromContainer(NirnAuctionHouse.list.frame:GetNamedChild("FilterDropCrafting"));
-	NirnAuctionHouse.list.filterDropSlot = ZO_ComboBox_ObjectFromContainer(NirnAuctionHouse.list.frame:GetNamedChild("FilterDropSlot"));
+	NirnAuctionHouse.list.filterDropEnch = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("FilterDropEnch"));
+	NirnAuctionHouse.list.filterDropTrait = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("FilterDropTrait"));
+	NirnAuctionHouse.list.filterDropCrafting = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("FilterDropCrafting"));
+	NirnAuctionHouse.list.filterDropSlot = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("FilterDropSlot"));
 	
-	NirnAuctionHouse.list.PriceMinBox = (NirnAuctionHouse.list.frame:GetNamedChild("PriceMinBox"));
-	NirnAuctionHouse.list.PriceMaxBox = (NirnAuctionHouse.list.frame:GetNamedChild("PriceMaxBox"));
-	NirnAuctionHouse.list.LevelMinBox = (NirnAuctionHouse.list.frame:GetNamedChild("LevelMinBox"));
-	NirnAuctionHouse.list.LevelMaxBox = (NirnAuctionHouse.list.frame:GetNamedChild("LevelMaxBox"));
-	NirnAuctionHouse.list.LevelRangeType = ZO_ComboBox_ObjectFromContainer(NirnAuctionHouse.list.frame:GetNamedChild("LevelRangeType"));
-	
-	
-	
-	NirnAuctionHouse.list.QualityDrop = ZO_ComboBox_ObjectFromContainer(NirnAuctionHouse.list.frame:GetNamedChild("QualityDrop"));
-	NirnAuctionHouse.list.UnknownDrop = ZO_ComboBox_ObjectFromContainer(NirnAuctionHouse.list.frame:GetNamedChild("UnknownDrop"));
+	NirnAuctionHouse.list.PriceMinBox = (ctrl_advancedSearchSettings:GetNamedChild("PriceMinBox"));
+	NirnAuctionHouse.list.PriceMaxBox = (ctrl_advancedSearchSettings:GetNamedChild("PriceMaxBox"));
+	NirnAuctionHouse.list.LevelMinBox = (ctrl_advancedSearchSettings:GetNamedChild("LevelMinBox"));
+	NirnAuctionHouse.list.LevelMaxBox = (ctrl_advancedSearchSettings:GetNamedChild("LevelMaxBox"));
+	NirnAuctionHouse.list.LevelRangeType = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("LevelRangeType"));
 	
 	
 	
+	NirnAuctionHouse.list.QualityDrop = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("QualityDrop"));
+	NirnAuctionHouse.list.UnknownDrop = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("UnknownDrop"));
 	
 	
-	NirnAuctionHouse.list.frame:GetNamedChild("FilterDropSub"):SetHidden(false);
-	NirnAuctionHouse.list.frame:GetNamedChild("FilterDropEnch"):SetHidden(true);
-	NirnAuctionHouse.list.frame:GetNamedChild("FilterDropTrait"):SetHidden(true);
-	NirnAuctionHouse.list.frame:GetNamedChild("FilterDropSlot"):SetHidden(true);
-	NirnAuctionHouse.list.frame:GetNamedChild("FilterDropCrafting"):SetHidden(true);
+	
+	
+	
+	ctrl_advancedSearchSettings:GetNamedChild("FilterDropSub"):SetHidden(false);
+	ctrl_advancedSearchSettings:GetNamedChild("FilterDropEnch"):SetHidden(true);
+	ctrl_advancedSearchSettings:GetNamedChild("FilterDropTrait"):SetHidden(true);
+	ctrl_advancedSearchSettings:GetNamedChild("FilterDropSlot"):SetHidden(true);
+	ctrl_advancedSearchSettings:GetNamedChild("FilterDropCrafting"):SetHidden(true);
 		
 --~ 		zo_callLater(function()
 	if NAH.settings.data.SearchSettings.searchType then
@@ -2462,17 +2658,17 @@ if(NirnAuctionHouse.list~=nil)then
 	NirnAuctionHouse.list.filterDrop:SelectItemByIndex(NAH.settings.data.SearchSettings.CurrentFilterId,true)
 	
 	if (NAH.settings.data.SearchSettings.CurrentFilterId ==1) then		
-	NirnAuctionHouse.list.frame:GetNamedChild("FilterDropSub"):SetHidden(true);
+	ctrl_advancedSearchSettings:GetNamedChild("FilterDropSub"):SetHidden(true);
 	end
 	
 	if (GetString("SI_NAH_FILTERDROP", NAH.settings.data.SearchSettings.CurrentFilterId) =="Weapon") or (GetString("SI_NAH_FILTERDROP", NAH.settings.data.SearchSettings.CurrentFilterId) =="Apparel") then	
-	NirnAuctionHouse.list.frame:GetNamedChild("FilterDropEnch"):SetHidden(false);
-	NirnAuctionHouse.list.frame:GetNamedChild("FilterDropTrait"):SetHidden(false);
-	NirnAuctionHouse.list.frame:GetNamedChild("FilterDropSlot"):SetHidden(false);
+	ctrl_advancedSearchSettings:GetNamedChild("FilterDropEnch"):SetHidden(false);
+	ctrl_advancedSearchSettings:GetNamedChild("FilterDropTrait"):SetHidden(false);
+	ctrl_advancedSearchSettings:GetNamedChild("FilterDropSlot"):SetHidden(false);
 	end
 	
 	if (GetString("SI_NAH_FILTERDROP", NAH.settings.data.SearchSettings.CurrentFilterId) =="Crafting") then	
-	NirnAuctionHouse.list.frame:GetNamedChild("FilterDropCrafting"):SetHidden(false);
+	ctrl_advancedSearchSettings:GetNamedChild("FilterDropCrafting"):SetHidden(false);
 	end
 	
 	
@@ -2499,7 +2695,9 @@ if(NirnAuctionHouse.list~=nil)then
 	
 	
 	
-	
+	if NAH.settings.AlwaysNAH_HUD ~=nil and NAH.settings.AlwaysNAH_HUD==true then
+	NAHAuctionHouse_HUD:SetHidden(false)
+	end
 	
 
 
@@ -2846,7 +3044,7 @@ end
 function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 	if(addOnName ~= "NirnAuctionHouse") then return end
 	
-	
+	NirnAuctionHouse.TrackedBidCost=0;
 	NAH.WroteDataFileYet=false
 	
 	
@@ -3249,7 +3447,7 @@ local locatedbagslot = nil
 	QueueCOD(amount)
 	zo_callLater(function()
 	SendMail(to, "Nirn Auction House Order", "Order for " .. to .. ", Containing: " .. ItemLink .. " x" .. stackCount .. " for " .. amount .. " |t18:18:esoui/art/currency/currency_gold_32.dds|t COD (postage: " .. codcost .. "|t18:18:esoui/art/currency/currency_gold_32.dds|t )")
-			d("Order Filled")
+			d("Filling Order Please wait...")
 		end, 800)
 		end, 200)
 		end, 900)
@@ -3474,12 +3672,23 @@ local ItemQuality=GetItemLinkQuality(itemLink)
 	local requiredLevel=GetItemLinkRequiredLevel(itemLink)
 local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
 
---~ 	d("Searching for Copper: "..qty.." ["..sellPrice.."]["..itemId.."]["..ItemQuality.."]["..itemCharges.."]")
+--~ 	d("Searching for " .. itemLink .. ": "..qty.." ["..sellPrice.."]["..itemId.."]["..ItemQuality.."]["..itemCharges.."]")
+	  	  local GBslotid
 		for slotNum=0, bagItems, 1 do
-				local bagslotdata=self:ProcBagSlot(itemId,bagId, slotNum)
+		
+		
+		if bagId == BAG_GUILDBANK then
+		GBslotid=GetNextGuildBankSlotId(GBslotid)
+		if GBslotid == nil then return nil end
+		SlotIndex=GBslotid
+		else
+		SlotIndex=slotNum		
+		end
+				local bagslotdata=self:ProcBagSlot(itemId,bagId, SlotIndex)				
+--~ 				d("slotNum: " .. SlotIndex)
 				if(bagslotdata~=nil) then	
-				
-				if( tonumber(bagslotdata.itemId) == tonumber(itemId) and 
+			
+				if( tonumber(bagslotdata.itemId) == tonumber(itemId) and 						
 				tonumber(bagslotdata.sellPrice) == tonumber(sellPrice) and
 				tonumber(bagslotdata.itemCharges) == tonumber(itemCharges) and
 				tonumber(bagslotdata.itemQuality) == tonumber(ItemQuality) and
@@ -3489,8 +3698,8 @@ local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
 				bagslotdata._abilityHeader == _abilityHeader and
 				bagslotdata._traitDescription == _traitDescription and
 				((tonumber(bagslotdata.stackCount) == tonumber(qty)) or (moreOK==true and tonumber(bagslotdata.stackCount) >= tonumber(qty))) ) then			
---~ 			d("found Item: ".. itemName .. "x"..bagslotdata.stackCount)				
-					return slotNum	
+--~ 			d("found Item: ".. itemLink .. "x"..bagslotdata.stackCount)				
+					return SlotIndex	
 				
 				end
 				end
@@ -3756,8 +3965,22 @@ NirnAuctionHouse.GoldAmountBid = NirnAuctionHouse.GoldAmountBidcont:GetNamedChil
 NirnAuctionHouse.GoldAmountBidVal = tonumber(NirnAuctionHouse.GoldAmountBid:GetText());
 
  if not NirnAuctionHouse.GoldAmountBidVal or NirnAuctionHouse.GoldAmountBidVal < 1 then  d("Please Enter a Valid Bid") return; end
- if (GetCurrentMoney() +GetBankedMoney()) < NirnAuctionHouse.GoldAmountBidVal then  d("You do Not Have Enough Gold In your Inventory For this Bid") return; end
+--~  if (GetCurrentMoney() +GetBankedMoney()) < NirnAuctionHouse.GoldAmountBidVal then  d("You do Not Have Enough Gold In your Inventory For this Bid") return; end
+ 
+ 
+ local total_banked=(GetCurrentMoney() +GetBankedMoney());
+ local total_promised=(NirnAuctionHouse.TrackedBidCost + NirnAuctionHouse.GoldAmountBidVal);
+ if total_banked < NirnAuctionHouse.GoldAmountBidVal or  total_banked < total_promised then  d("You do Not Have Enough Gold In your Inventory For this Bid") return; end
+ 
+ 
+ 
+	if IsLocalMailboxFull() then  d("Your mailbox is full, you must make space before buying items") return; end
 
+  
+ if NirnAuctionHouse.TrackedBids~= nil then
+ if #NirnAuctionHouse.TrackedBids >= 25 then  d("Your Tracked Orders list is full, you must allow for some of your orders to be completed before buying more items") return; end
+ end
+ 
 	if(not NAH.settings.data.Bids)then
 		NAH.settings.data.Bids = {}
 	end
@@ -3789,7 +4012,8 @@ d("Queued Bid for: " .. NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListing
 	 if NAH.settings.AutoPost and NAH.settings.AutoPost == true then
 	NirnAuctionHouse:forceWriteSavedVars()
 	end
-
+	if NirnAuctionHouse.TrackedBidCost== nil then NirnAuctionHouse.TrackedBidCost=0; end
+	NirnAuctionHouse.TrackedBidCost = total_promised;
 end
 
 
@@ -4686,8 +4910,273 @@ end
 			end
 		
 		end
+		
+		
+		
+		
+	function NirnAuctionHouse_ShowContactSupport()
+--~ 	  StartChatInput(nil, CHAT_CHANNEL_WHISPER, "@Eloheynu")
+	  
+	  if IsInGamepadPreferredMode() then 
+	NirnAuctionHouse.MailScene ="mailManagerGamePad"
+	else
+	NirnAuctionHouse.MailScene ="mailInbox"
+	end
+	SCENE_MANAGER:Show(NirnAuctionHouse.MailScene);
+	  zo_callLater(function() 
+	  MAIL_SEND:ComposeMailTo("@Eloheynu");
+	  end, 200)
+	
+	end
 	
 	
+	
+	function NirnAuctionHouse_GetFromGuildBank()
+--~ 	      d("GetFromGuildBank")
+	
+	NirnAuctionHouse_Withdraw(BAG_GUILDBANK);
+	
+	end
+	
+	function NirnAuctionHouse_GetFromBank()
+--~ 	      d("GetFromBank")
+	
+	NirnAuctionHouse_Withdraw(BAG_BANK);
+	end
+	
+	function NirnAuctionHouse_Withdraw(srcBag)
+	if #NirnAuctionHouse.NewBids < 1 then d("nothing to retrieve") return end
+	    local window
+	if srcBag == BAG_GUILDBANK then
+	window = ZO_GuildBank:GetNamedChild("Backpack")
+	else
+	window = ZO_PlayerBank:GetNamedChild("Backpack")
+	end
+    local delayStep = 300
+    local tempitems = {}
+    local items = {}
+    local lastItem;
+    
+    local delay = delayStep
+      for _,TSI in pairs(NirnAuctionHouse.NewBids) do
+      local locatedbagslot = nil;
+      locatedbagslot = NirnAuctionHouse:SearchBag(srcBag,TSI.Item.ItemLink,tonumber(TSI.Item.stackCount),true)
+	  if(locatedbagslot~=nil)then	
+		d("located " .. TSI.Item.ItemLink .. "x " .. TSI.Item.stackCount .." ")
+		local itemIconFile, itemCount, _, _, _, equipType, _, itemQuality = GetItemInfo(srcBag, locatedbagslot)
+		
+		
+		
+		zo_callLater(function() 
+		NAH_MoveItem(TSI.Item.ItemLink,BAG_BACKPACK, srcBag, locatedbagslot, TSI.Item.stackCount); 
+		
+		if itemCount > tonumber(TSI.Item.stackCount) then --if we took extra put back remaining
+			zo_callLater(function() 
+			NirnAuctionHouse:SplitStack(TSI.Item.ItemLink,TSI.Item.stackCount);
+				zo_callLater(function() 
+				
+				 local locatedbagslotextra = nil;
+				locatedbagslotextra = NirnAuctionHouse:SearchBag(BAG_BACKPACK,TSI.Item.ItemLink,itemCount-tonumber(TSI.Item.stackCount),true)
+				if(locatedbagslotextra~=nil)then	
+				NAH_MoveItem(TSI.Item.ItemLink,srcBag, BAG_BACKPACK, locatedbagslotextra, TSI.Item.stackCount);--move extra back to bank
+				end
+				
+				end, 200)
+			end, 200)
+		
+		end
+		
+		end, delay)
+		delay = delay + delayStep
+		else
+		d("failed to locate " .. TSI.Item.ItemLink .. "x " .. TSI.Item.stackCount .." ")
+		
+	  end
+      end
+    
+	end
+	
+
+
+function NAH_MoveItem(ItemLink,destBag, srcBag, srcSlot, stackCount)
+    local result
+    
+    
+    if DoesBagHaveSpaceFor(destBag, srcBag, srcSlot) then
+    if destBag == BAG_GUILDBANK  then
+        TransferToGuildBank(srcBag, srcSlot)
+    elseif srcBag == BAG_GUILDBANK then
+        TransferFromGuildBank(srcSlot)	
+	if destBag == BAG_BACKPACK then
+	    d("Moving Item  to Inventory: " .. ItemLink .. " x " .. stackCount)
+	    end
+ 
+     else
+        ClearCursor()
+        result = CallSecureProtected("PickupInventoryItem", srcBag, srcSlot, stackCount)
+        if(result == true) then
+            result = CallSecureProtected("PlaceInTransfer")
+	if destBag == BAG_BACKPACK then
+	    d("Moving Item to Inventory: " .. ItemLink .. " x " .. stackCount)
+	    end
+        end
+        ClearCursor()
+    end
+    
+    end
+end
+	
+	
+function NirnAuctionHouse:OnHUDUIPosUpdate()
+    NAHAuctionHouse_HUD:ClearAnchors()
+    local tmpLeft = NAHAuctionHouse_HUD:GetLeft()
+    local tmpTop=NAHAuctionHouse_HUD:GetTop()
+    
+	if NirnAuctionHouse.HUDwin == "guildbank" then
+	    NAH.settings.NAHHUDGUILDBANK_LEFT=tmpLeft
+	    NAH.settings.NAHHUDGUILDBANK_TOP=tmpTop
+	    elseif NirnAuctionHouse.HUDwin == "bank" then
+	    NAH.settings.NAHHUDBANK_LEFT=tmpLeft
+	    NAH.settings.NAHHUDBANK_TOP=tmpTop	    
+	    elseif NirnAuctionHouse.HUDwin == "mail" then
+	    NAH.settings.NAHHUDMAIL_LEFT=tmpLeft
+	    NAH.settings.NAHHUDMAIL_TOP=tmpTop	    
+	    else
+	    NAH.settings.NAHHUD_LEFT=tmpLeft
+	    NAH.settings.NAHHUD_TOP=tmpTop
+	    
+	end
+    
+    
+    NAHAuctionHouse_HUD:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, tmpLeft, tmpTop)
+  
+end
+	
+	
+	function NirnAuctionHouse:bank_opened (eventCode, bankBag)	
+	NirnAuctionHouse.HUDwin = "bank"
+	
+		NAHAuctionHouse_HUD:ClearAnchors()  
+		if  NAH.settings.NAHHUDBANK_LEFT ~= nil and  NAH.settings.NAHHUDBANK_TOP ~= nil then
+		NAHAuctionHouse_HUD:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT,  NAH.settings.NAHHUDBANK_LEFT,  NAH.settings.NAHHUDBANK_TOP)
+		else
+		NAHAuctionHouse_HUD:SetAnchor(CENTER, GuiRoot, CENTER, 330, 0)
+		end
+	    
+	NAHAuctionHouse_HUD:SetHidden(false)
+	NAHAuctionHouse_HUD:GetNamedChild("Sync"):SetHidden(true)	
+	NAHAuctionHouse_HUD:GetNamedChild("label_stat_sold"):SetText(#NirnAuctionHouse.NewBids)	
+	NAHAuctionHouse_HUD:GetNamedChild("label_stat_listings"):SetText(#NirnAuctionHouse.list.MyListedTrades)	
+	NAHAuctionHouse_HUD:GetNamedChild("label_stat_inmail"):SetText(#NAH.settings.data.ReceivedOrders)	
+	NAHAuctionHouse_HUD:GetNamedChild("label_stat_expired"):SetText(#NirnAuctionHouse.ExpiredTrades)	
+--~ 	if #NirnAuctionHouse.NewBids > 0 then
+	NAHAuctionHouse_HUD:GetNamedChild("BankWithdraw"):SetHidden(false)	
+--~ 	end
+	end
+	
+	function NirnAuctionHouse:bank_closed (eventCode)
+	NirnAuctionHouse.HUDwin = ""
+		NAHAuctionHouse_HUD:ClearAnchors()  
+		if  NAH.settings.NAHHUD_LEFT ~=nil and  NAH.settings.NAHHUD_TOP ~=nil then
+		NAHAuctionHouse_HUD:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT,  NAH.settings.NAHHUD_LEFT,  NAH.settings.NAHHUD_TOP)
+		else
+		NAHAuctionHouse_HUD:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, 0, 165)
+		end
+	
+	if NAH.settings.AlwaysNAH_HUD == nil or NAH.settings.AlwaysNAH_HUD == false  then 
+		NAHAuctionHouse_HUD:SetHidden(true)
+		end
+	NAHAuctionHouse_HUD:GetNamedChild("BankWithdraw"):SetHidden(true)	
+	NAHAuctionHouse_HUD:GetNamedChild("Sync"):SetHidden(false)	
+	end
+	
+	
+	
+	
+	function NirnAuctionHouse:guild_bank_opened (eventCode)
+	NirnAuctionHouse.HUDwin="guildbank"
+	
+		NAHAuctionHouse_HUD:ClearAnchors()  
+		if  NAH.settings.NAHHUDGUILDBANK_LEFT ~=nil and  NAH.settings.NAHHUDGUILDBANK_TOP ~=nil then
+		NAHAuctionHouse_HUD:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT,  NAH.settings.NAHHUDGUILDBANK_LEFT,  NAH.settings.NAHHUDGUILDBANK_TOP)
+		else
+		NAHAuctionHouse_HUD:SetAnchor(CENTER, GuiRoot, CENTER, 330, 0)
+		end
+	    
+	NAHAuctionHouse_HUD:SetHidden(false)
+	NAHAuctionHouse_HUD:GetNamedChild("Sync"):SetHidden(true)	
+--~ 	NAHAuctionHouse_HUD:GetNamedChild("Stats"):SetText("Sold Items: " .. #NirnAuctionHouse.NewBids  .. ",\r\n Total Auctions: " .. #NirnAuctionHouse.list.MyListedTrades  .. ",\r\n Orders in Mail: " .. #NAH.settings.data.ReceivedOrders .. ",\r\n Expired Auctions: " .. #NirnAuctionHouse.ExpiredTrades  .. "")	
+	NAHAuctionHouse_HUD:GetNamedChild("label_stat_sold"):SetText(#NirnAuctionHouse.NewBids)	
+	NAHAuctionHouse_HUD:GetNamedChild("label_stat_listings"):SetText(#NirnAuctionHouse.list.MyListedTrades)	
+	NAHAuctionHouse_HUD:GetNamedChild("label_stat_inmail"):SetText(#NAH.settings.data.ReceivedOrders)	
+	NAHAuctionHouse_HUD:GetNamedChild("label_stat_expired"):SetText(#NirnAuctionHouse.ExpiredTrades)	
+--~ 	if #NirnAuctionHouse.NewBids > 0 then
+	NAHAuctionHouse_HUD:GetNamedChild("GuildBankWithdraw"):SetHidden(false)	
+--~ 	end
+	end
+	
+	function NirnAuctionHouse:guild_bank_closed (eventCode)
+	NirnAuctionHouse.HUDwin=""
+		NAHAuctionHouse_HUD:ClearAnchors()  
+		if  NAH.settings.NAHHUD_LEFT ~=nil and  NAH.settings.NAHHUD_TOP ~=nil then
+		NAHAuctionHouse_HUD:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT,  NAH.settings.NAHHUD_LEFT,  NAH.settings.NAHHUD_TOP)
+		else
+		NAHAuctionHouse_HUD:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, 0, 165)
+		end
+	if NAH.settings.AlwaysNAH_HUD == nil or NAH.settings.AlwaysNAH_HUD == false  then 
+		NAHAuctionHouse_HUD:SetHidden(true)
+		end
+	NAHAuctionHouse_HUD:GetNamedChild("GuildBankWithdraw"):SetHidden(true)	
+	NAHAuctionHouse_HUD:GetNamedChild("Sync"):SetHidden(false)	
+	end
+	
+	
+	function NirnAuctionHouse:mail_opened (eventCode)
+	NirnAuctionHouse.HUDwin="mail"
+	
+		NAHAuctionHouse_HUD:ClearAnchors()  
+		if  NAH.settings.NAHHUDMAIL_LEFT ~=nil and  NAH.settings.NAHHUDMAIL_TOP ~=nil then
+		NAHAuctionHouse_HUD:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT,  NAH.settings.NAHHUDMAIL_LEFT,  NAH.settings.NAHHUDMAIL_TOP)
+		else
+		NAHAuctionHouse_HUD:SetAnchor(CENTER, GuiRoot, CENTER, -15, 0)
+		end
+	
+	    
+	NAHAuctionHouse_HUD:SetHidden(false)
+	NAHAuctionHouse_HUD:GetNamedChild("Sync"):SetHidden(true)	
+--~ 	NAHAuctionHouse_HUD:GetNamedChild("Stats"):SetText("Sold Items: " .. #NirnAuctionHouse.NewBids  .. ",\r\n Total Auctions: " .. #NirnAuctionHouse.list.MyListedTrades  .. ",\r\n Orders in Mail: " .. #NAH.settings.data.ReceivedOrders .. ",\r\n Expired Auctions: " .. #NirnAuctionHouse.ExpiredTrades  .. "")	
+	NAHAuctionHouse_HUD:GetNamedChild("label_stat_sold"):SetText(#NirnAuctionHouse.NewBids)	
+	NAHAuctionHouse_HUD:GetNamedChild("label_stat_listings"):SetText(#NirnAuctionHouse.list.MyListedTrades)	
+	NAHAuctionHouse_HUD:GetNamedChild("label_stat_inmail"):SetText(#NAH.settings.data.ReceivedOrders)	
+	NAHAuctionHouse_HUD:GetNamedChild("label_stat_expired"):SetText(#NirnAuctionHouse.ExpiredTrades)	
+	NAHAuctionHouse_HUD:GetNamedChild("MailAction"):SetHidden(false)	
+	end
+	
+	function NirnAuctionHouse:mail_closed (eventCode)
+	NirnAuctionHouse.HUDwin=""
+		NAHAuctionHouse_HUD:ClearAnchors()  
+		if  NAH.settings.NAHHUD_LEFT ~=nil and  NAH.settings.NAHHUD_TOP ~=nil then
+		NAHAuctionHouse_HUD:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT,  NAH.settings.NAHHUD_LEFT,  NAH.settings.NAHHUD_TOP)
+		else
+		NAHAuctionHouse_HUD:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, 0, 165)
+		end
+		if NAH.settings.AlwaysNAH_HUD == nil or NAH.settings.AlwaysNAH_HUD == false  then 
+		NAHAuctionHouse_HUD:SetHidden(true)
+		end
+	NAHAuctionHouse_HUD:GetNamedChild("MailAction"):SetHidden(true)	
+	NAHAuctionHouse_HUD:GetNamedChild("Sync"):SetHidden(false)	
+	end
+	
+	
+EVENT_MANAGER:RegisterForEvent("NirnAuctionHouse_mail_closed",  EVENT_MAIL_CLOSE_MAILBOX   , function(...) NirnAuctionHouse:mail_closed(...) end)
+EVENT_MANAGER:RegisterForEvent("NirnAuctionHouse_mail_opened",  EVENT_MAIL_OPEN_MAILBOX , function(...) NirnAuctionHouse:mail_opened(...) end)
+	
+EVENT_MANAGER:RegisterForEvent("NirnAuctionHouse_guild_bank_closed", EVENT_CLOSE_GUILD_BANK  , function(...) NirnAuctionHouse:guild_bank_closed(...) end)
+EVENT_MANAGER:RegisterForEvent("NirnAuctionHouse_guild_bank_opened", EVENT_OPEN_GUILD_BANK, function(...) NirnAuctionHouse:guild_bank_opened(...) end)
+
+EVENT_MANAGER:RegisterForEvent("NirnAuctionHouse_bank_closed", EVENT_CLOSE_BANK , function(...) NirnAuctionHouse:bank_closed(...) end)
+EVENT_MANAGER:RegisterForEvent("NirnAuctionHouse_bank_opened", EVENT_OPEN_BANK, function(...) NirnAuctionHouse:bank_opened(...) end)
+
 EVENT_MANAGER:RegisterForEvent("NirnAuctionHouseLoaded", EVENT_ADD_ON_LOADED, function(...) NirnAuctionHouse:OnLoad(...) end)
 
 

@@ -59,6 +59,21 @@ ZO_CreateStringId("SI_NAH_POSTORDER"   , "注文を送る");--new
 ZO_CreateStringId("SI_NAH_PURCHASEPRICE"   , "購入金額");--new
 
 
+
+
+ZO_CreateStringId("SI_NAH_SELLITEM"   , "商品を販売する");--new
+ZO_CreateStringId("SI_NAH_CONTACT"   , "接触");--new
+ZO_CreateStringId("SI_NAH_RATING"   , "評価");--new
+ZO_CreateStringId("SI_NAH_SUPPORT"   , "サポート");--new
+ZO_CreateStringId("SI_NAH_INMAIL"   , "メールで");--new
+ZO_CreateStringId("SI_NAH_GETFROMBANK"   , "銀行から手に入れよう");--new
+ZO_CreateStringId("SI_NAH_GETFROMGUILDBANK"   , "ギルド・バンクから手に入れよう");--new
+ZO_CreateStringId("SI_NAH_CLEARFILTERS"   , "検索フィルターをクリアする");--new
+ZO_CreateStringId("SI_NAH_ADVANCEDSEARCH"   , "高度な検索");--new
+
+ZO_CreateStringId("SI_NAH_RESULTS"   , "結果");--new
+
+
 ZO_CreateStringId("SI_NAH_AUCTION"   , "オークション");
 ZO_CreateStringId("SI_NAH_SOLDITEMS"   , "販売アイテム");
 ZO_CreateStringId("SI_NAH_SOLDITEMS_NEW"   , "販売アイテム（新規）");
@@ -106,11 +121,11 @@ ZO_CreateStringId("SI_NAH_UNKNOWNDROP2"     , "不明なもののみ");
 
 
 ZO_CreateStringId("SI_NAH_QUALITYDROP1"     , "任意の品質");
-ZO_CreateStringId("SI_NAH_QUALITYDROP2"     , "ノーマル");
-ZO_CreateStringId("SI_NAH_QUALITYDROP3"     , "ファイン");
-ZO_CreateStringId("SI_NAH_QUALITYDROP4"     , "優れました");
-ZO_CreateStringId("SI_NAH_QUALITYDROP5"     , "エピック");
-ZO_CreateStringId("SI_NAH_QUALITYDROP6"     , "伝説の");
+ZO_CreateStringId("SI_NAH_QUALITYDROP2"     , "|cf9f9f9ノーマル|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP3"     , "|c2DC50Eファイン|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP4"     , "|c3A92FF優れました|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP5"     , "|cA02EF7エピック|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP6"     , "|cCCAA1A伝説の|r");
 
 ZO_CreateStringId("SI_NAH_FILTERDROP1"     , "すべてのカテゴリ");
 ZO_CreateStringId("SI_NAH_FILTERDROP2"     , "衣服");

@@ -39,7 +39,7 @@ ZO_CreateStringId("SI_NAH_HEADER_STATUS"   , "Положение дел");
 ZO_CreateStringId("SI_NAH_HEADER_TIMELEFT"   , "Время вышло");
 ZO_CreateStringId("SI_NAH_HEADER_BUYOUT"   , "выкуп");
 ZO_CreateStringId("SI_NAH_HEADER_BID"   , "предложение");
-ZO_CreateStringId("SI_NAH_HEADER_UNIT"   , "Unit");--New
+ZO_CreateStringId("SI_NAH_HEADER_UNIT"   , "Ед. изм");--New
 
 
 ZO_CreateStringId("SI_NAH_LAST_PAGE"   , "Предыдущая страница");
@@ -57,6 +57,22 @@ ZO_CreateStringId("SI_NAH_MYORDERS"   , "мои заказы");--new
 ZO_CreateStringId("SI_NAH_TRACKING"   , "отслеживание");--new
 ZO_CreateStringId("SI_NAH_POSTORDER"   , "Отправить заказ");--new
 ZO_CreateStringId("SI_NAH_PURCHASEPRICE"   , "Цена");--new
+
+
+
+
+ZO_CreateStringId("SI_NAH_SELLITEM"   , "Продать товар");--new
+ZO_CreateStringId("SI_NAH_CONTACT"   , "контакт");--new
+ZO_CreateStringId("SI_NAH_RATING"   , "Рейтинг");--new
+ZO_CreateStringId("SI_NAH_SUPPORT"   , "Поддержка");--new
+ZO_CreateStringId("SI_NAH_INMAIL"   , "в почте");--new
+ZO_CreateStringId("SI_NAH_GETFROMBANK"   , "Получить от банка");--new
+ZO_CreateStringId("SI_NAH_GETFROMGUILDBANK"   , "Получить от Гильдии банка");--new
+
+ZO_CreateStringId("SI_NAH_CLEARFILTERS"   , "Фильтры поиска");--new
+ZO_CreateStringId("SI_NAH_ADVANCEDSEARCH"   , "Расширенный поиск");--new
+
+ZO_CreateStringId("SI_NAH_RESULTS"   , "Результаты");--new
 
 
 ZO_CreateStringId("SI_NAH_AUCTION"   , "Аукцион");
@@ -106,11 +122,11 @@ ZO_CreateStringId("SI_NAH_UNKNOWNDROP2"     , "Неизвестно только
 
 
 ZO_CreateStringId("SI_NAH_QUALITYDROP1"     , "Любое качество");
-ZO_CreateStringId("SI_NAH_QUALITYDROP2"     , "Нормальный");
-ZO_CreateStringId("SI_NAH_QUALITYDROP3"     , "хорошо");
-ZO_CreateStringId("SI_NAH_QUALITYDROP4"     , "превосходящий");
-ZO_CreateStringId("SI_NAH_QUALITYDROP5"     , "эпический");
-ZO_CreateStringId("SI_NAH_QUALITYDROP6"     , "легендарный");
+ZO_CreateStringId("SI_NAH_QUALITYDROP2"     , "|cf9f9f9Нормальный|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP3"     , "|c2DC50Eхорошо|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP4"     , "|c3A92FFпревосходящий|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP5"     , "|cA02EF7эпический|r");
+ZO_CreateStringId("SI_NAH_QUALITYDROP6"     , "|cCCAA1Aлегендарный|r");
 
 ZO_CreateStringId("SI_NAH_FILTERDROP1"     , "все категории");
 ZO_CreateStringId("SI_NAH_FILTERDROP2"     , "одежда");
