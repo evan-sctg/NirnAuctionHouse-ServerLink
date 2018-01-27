@@ -24,7 +24,7 @@ Option to get notified by email when you sell an item.
 
 ### Auction Buying and Selling Functionality 
 
-- Ability to post an auction with only starting bid, no buyout price. (Auction Length: 24 hours)
+- Ability to post an auction with only starting bid, no buyout price. (Auction Length: 7 days)
 - Ability to post an auction with starting bid and buyout price. (Auction Length: 7 days)
 - Ability to post auction with only a buyout price. (Auction Length: 7 days)
 - Ability to post buy orders 
@@ -83,8 +83,7 @@ Option to get notified by email when you sell an item.
 
 ### General Information 
 
-- Listings with a buyout price will last 7 days
-- Listings with no buyout price will last 24 hours
+- Listings will last 7 days
 - Listing limit 100 - you can only have 100 auctions at a time
 - Setting to Only show active trades (Hide trades where the seller does not have Server Link active)
 - Buy Orders WTB (right click menu)
