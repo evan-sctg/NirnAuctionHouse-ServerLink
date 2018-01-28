@@ -62,6 +62,7 @@ local NirnAuctionHouse = NirnAuctionHouse
 		PostPaidOrders = false,
 		AddListingsToMasterMerchant = false,
 		ShowMasterMerchantPrice = true,
+		ShowTTCPrice = false,
 		AutoPost = false,
 		AutoPostPaid = true,
 		AutoPostFilled = true,
@@ -1638,11 +1639,20 @@ function NAHRow_OnMouseEnter( control )
     
 ----------------------------------MasterMerchant Integration-----------------------------------------
 	if(MasterMerchant)then
-	if(NAH.settings.ShowMasterMerchantPrice)then
-	MasterMerchant:addStatsAndGraph(NAHTooltip, control.data.itemLink)	
-	end
+		if(NAH.settings.ShowMasterMerchantPrice)then
+		MasterMerchant:addStatsAndGraph(NAHTooltip, control.data.itemLink)	
+		end
 	end
 ----------------------------------MasterMerchant Integration-----------------------------------------
+
+-----------------------------------TTC Integration----------------------------------------
+	if(TamrielTradeCentrePrice)then
+	if NAH.settings.ShowTTCPrice== nil then NAH.settings.ShowTTCPrice = false; end
+		if(NAH.settings.ShowTTCPrice)then
+			TamrielTradeCentrePrice:AppendPriceInfo(NAHTooltip, control.data.itemLink)
+		end
+	end
+-----------------------------------TTC Integration----------------------------------------
 end
 
 
@@ -1693,19 +1703,21 @@ function NAHRow_OnMouseExit( control )
 ----------------------------------MasterMerchant Integration-----------------------------------------
 		---MasterMerchant:remStatsItemTooltip()
 		if(MasterMerchant)then
-  if NAHTooltip.graphPool then
-    NAHTooltip.graphPool:ReleaseAllObjects()
-  end
-  NAHTooltip.mmGraph = nil
-  if NAHTooltip.textPool then
-    NAHTooltip.textPool:ReleaseAllObjects()
-  end
-  NAHTooltip.mmText = nil  
-  NAHTooltip.mmCraftText = nil
-  NAHTooltip.mmTextDebug = nil
-  NAHTooltip.mmQualityDown = nil
+		  if NAHTooltip.graphPool then
+		    NAHTooltip.graphPool:ReleaseAllObjects()
+		  end
+		  NAHTooltip.mmGraph = nil
+		  if NAHTooltip.textPool then
+		    NAHTooltip.textPool:ReleaseAllObjects()
+		  end
+		  NAHTooltip.mmText = nil  
+		  NAHTooltip.mmCraftText = nil
+		  NAHTooltip.mmTextDebug = nil
+		  NAHTooltip.mmQualityDown = nil
 		end
 -----------------------------------MasterMerchant Integration----------------------------------------
+
+
 NAHTooltip.PCYet=nil
 	ClearTooltip(NAHTooltip);
 end
@@ -1752,14 +1764,21 @@ end
 end	
 
  function NirnAuctionHouse_FillOrder(control )
+  local CashOnHand=GetCurrentMoney();
   
- 
  local codcost=10+math.floor(control.data.BuyoutPrice/20)
+ 
+  if CashOnHand < codcost then 
+  d("You do not have enough Gold in your inventory to mail this item") 
+  return false;
+  end
+  
 --~  local codcost=10+control.data.BuyoutPrice
  d( "Filling order for " ..control.data.buyer .. " sending " .. control.data.itemLink .. " x" .. control.data.stackCount .. " for " .. control.data.BuyoutPrice .. " COD (postage: " .. codcost .. ")");
  
 			NirnAuctionHouse.FillingOrderID=control.data.TradeID
 			NirnAuctionHouse.FillingOrderBidID=control.data.BidID
+--~ 			codcost
  NirnAuctionHouse:COD(control.data.buyer,control.data.itemLink,control.data.stackCount,control.data.BuyoutPrice)
  ---------------------
 --~  cod costs a base cost of 10 with 1g for every 20g of your cod cost
@@ -1972,7 +1991,7 @@ end
  function NirnAuctionHouse_BuyItem(control )
  local total_banked=(GetCurrentMoney() +GetBankedMoney());
  local total_promised=(NirnAuctionHouse.TrackedBidCost + tonumber(control.data.BuyoutPrice));
- if total_banked < tonumber(control.data.BuyoutPrice) or total_banked < total_promised then  d("You do Not Have Enough Gold In your Inventory For this Purchase") return; end	
+ if total_banked < tonumber(control.data.BuyoutPrice) or total_banked < total_promised then  d("You do not have enough Gold in your inventory for this purchase") return; end	
  if IsLocalMailboxFull() then  d("Your mailbox is full, you must make space before buying items") return; end
  
  
@@ -2440,11 +2459,16 @@ end
 
 
 function NirnAuctionHouse:MailFailed()
+
+	if(NirnAuctionHouse.FillingOrderID ~= nil and NAH.settings.data.FilledOrders ~= nil and NAH.settings.data.FilledOrders[NirnAuctionHouse.FillingOrderID] ~= nil)then
+		NAH.settings.data.FilledOrders[NirnAuctionHouse.FillingOrderID] = nil
+	end
+
 NirnAuctionHouse.FillingOrderID=nil
 NirnAuctionHouse.FillingOrderBidID=nil
-NAH.settings.data.FilledOrders = {}
 NAH.settings.PostFilledOrders=false;
-d("EVENT_MAIL_SEND_FAILED")
+--~ d("EVENT_MAIL_SEND_FAILED")
+d("Failed to send mail")
 end
 	
 
@@ -5166,6 +5190,7 @@ end
 	NAHAuctionHouse_HUD:GetNamedChild("MailAction"):SetHidden(true)	
 	NAHAuctionHouse_HUD:GetNamedChild("Sync"):SetHidden(false)	
 	end
+	
 	
 	
 EVENT_MANAGER:RegisterForEvent("NirnAuctionHouse_mail_closed",  EVENT_MAIL_CLOSE_MAILBOX   , function(...) NirnAuctionHouse:mail_closed(...) end)

@@ -3,6 +3,15 @@ Latest Version: https://nirnah.com/NirnAuctionHouse(beta).zip
 Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 Latest App: https://nirnah.com/NirnAuctionHouse.app.zip
 
+
+
+
+v0.0.25 "beta" @Elo
+- Added setting to display to ttc price
+- Added verify you can pay postage
+- bugfix failing a fulfillment
+
+
 v0.0.24 "beta" @Elo
  - Added Contact Support Button
  - Added must have space in mailbox to buy an item 

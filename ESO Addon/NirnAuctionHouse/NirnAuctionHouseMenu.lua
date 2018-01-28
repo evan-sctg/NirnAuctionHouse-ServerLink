@@ -30,7 +30,7 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 		name = "Nirn Auction House",
 		displayName = NirnAuctionHouse.colors.title .. "Nirn Auction House|r",
 		author = "Elo",
-		version = "0.0.24",
+		version = "0.0.25",
 		slashCommand = "/ahsetup",
 		registerForRefresh = true
 	}
@@ -237,10 +237,10 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 		},
 		{
 			type = "dropdown",
-			name = "Add Listings To Master Merchant",
+			name = "Show TTC price In auction window",
 			choices = self.EnabledTable,
-			getFunc = function() if NAH.settings.AddListingsToMasterMerchant ==true then return "Enabled" else return "Disabled" end end,
-			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.AddListingsToMasterMerchant = true else NAH.settings.AddListingsToMasterMerchant = false end  end,
+			getFunc = function() if NAH.settings.ShowTTCPrice ==true then return "Enabled" else return "Disabled" end end,
+			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.ShowTTCPrice = true else NAH.settings.ShowTTCPrice = false end  end,
 			default = self.EnabledTable[2]
 		},
 		{
