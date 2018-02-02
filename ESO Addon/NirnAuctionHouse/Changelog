@@ -5,6 +5,11 @@ Latest App: https://nirnah.com/NirnAuctionHouse.app.zip
 
 
 
+v0.0.26 "beta" @Elo
+- bugfix failing sync
+- bugfix split stack
+- bugfix guild bank withdraw
+
 
 v0.0.25 "beta" @Elo
 - Added setting to display to ttc price

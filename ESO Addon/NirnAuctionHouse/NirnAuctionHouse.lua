@@ -147,7 +147,6 @@ function NAHTrackedItemList:BuildMasterList( )
 	
 	if NirnAuctionHouse.TrackedBids~= nil then
 	for i,GlobalBid in ipairs(NirnAuctionHouse.TrackedBids) do
-	d("GlobalBid.BuyoutPrice: "  .. tostring(GlobalBid.Item.BuyoutPrice))
 	if NirnAuctionHouse.TrackedBidCost~= nil then 
 		if GlobalBid.Item.BuyoutPrice~= nil then NirnAuctionHouse.TrackedBidCost=NirnAuctionHouse.TrackedBidCost + tonumber(GlobalBid.Item.BuyoutPrice); end 
 	end 
@@ -2466,7 +2465,7 @@ function NirnAuctionHouse:MailFailed()
 
 NirnAuctionHouse.FillingOrderID=nil
 NirnAuctionHouse.FillingOrderBidID=nil
-NAH.settings.PostFilledOrders=false;
+--~ NAH.settings.PostFilledOrders=false;
 --~ d("EVENT_MAIL_SEND_FAILED")
 d("Failed to send mail")
 end
@@ -3076,7 +3075,7 @@ function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 	NAH.settings = ZO_SavedVars:NewAccountWide("NirnAuctionHouseData", 1, nil, defaultSettings)
 	NAH.SearchResults = ZO_SavedVars:NewAccountWide("NirnAuctionHouseSearchResults", 1, nil, {})
 	
-	d("loaded settigns")
+--~ 	d("loaded settigns")
 	
 	
 	if NirnAuctionHouse.LoadTrades ~=nil then	
@@ -3373,12 +3372,11 @@ end
 
 
 
-function NirnAuctionHouse:SplitStack(ItemLink,stackCount)
-if ItemLink==nil or ItemLink=="" or stackCount==nil or tonumber(stackCount) < 1 or tonumber(stackCount) > 200 then return nil end
+function NirnAuctionHouse:SplitStack(ItemLink,stackCount) 
+if ItemLink==nil or ItemLink=="" or stackCount==nil or tonumber(stackCount) < 1 or tonumber(stackCount) > 200 then d("here") return nil end
 local locatedbagslot = nil;
 	  locatedbagslot = NirnAuctionHouse:SearchBag(1,ItemLink,stackCount,true)	
 	  if(locatedbagslot~=nil)then	  
-	  
 		local itemIconFile, itemCount, _, _, _, equipType, _, itemQuality = GetItemInfo(1, locatedbagslot)
 		if itemCount>tonumber(stackCount) then
 
@@ -3387,8 +3385,8 @@ local locatedbagslot = nil;
 			else
 				PickupInventoryItem(1, locatedbagslot, tonumber(stackCount))
 			end			
-			
 			 local emptySlotIndex = FindFirstEmptySlotInBag(1)
+			 
 			 if emptySlotIndex ~= nil then
 			if IsProtectedFunction("PlaceInInventory") then
 				CallSecureProtected("PlaceInInventory", 1,emptySlotIndex)
@@ -3396,6 +3394,8 @@ local locatedbagslot = nil;
 				PlaceInInventory(1,emptySlotIndex)
 			end
 			end
+			
+			
 
 		end
 		
@@ -3410,16 +3410,23 @@ local locatedbagslot = nil
   local bagCount, bankCount, CraftbagCount = GetItemLinkStacks(ItemLink)
 
 
-			if bagCount >= tonumber(stackCount) then  		
-				
+			if bagCount >= tonumber(stackCount) then  
 			locatedbagslot = NirnAuctionHouse:SearchBag(1,ItemLink,stackCount,false)	
 
 			if(locatedbagslot==nil)then  --if item not found attempt to split a bigger stack and use that
-			NirnAuctionHouse:SplitStack(ItemLink,stackCount); 			
+			NirnAuctionHouse:SplitStack(ItemLink,stackCount); 	
+	
 			zo_callLater(function()
-			    NirnAuctionHouse:COD(to,ItemLink,stackCount,amount);			  
-			end, (500))			
-			 return	  
+			locatedbagslot = NirnAuctionHouse:SearchBag(1,ItemLink,stackCount,false)	
+
+			if(locatedbagslot~=nil)then 	
+			    NirnAuctionHouse:COD(to,ItemLink,stackCount,amount);				
+			 return
+			else			 
+			d("Failed to split stack to " ..ItemLink .." x " .. stackCount)
+			return;
+			 end
+			 	end, (500))	
 			 end
 			
 			else				
@@ -4971,18 +4978,45 @@ end
 	function NirnAuctionHouse_Withdraw(srcBag)
 	if #NirnAuctionHouse.NewBids < 1 then d("nothing to retrieve") return end
 	    local window
+	    
+    local delayStep = 3800
+    local delay = 1500
+    local delay_split = 950
+    local delay_move = 800
 	if srcBag == BAG_GUILDBANK then
 	window = ZO_GuildBank:GetNamedChild("Backpack")
 	else
 	window = ZO_PlayerBank:GetNamedChild("Backpack")
+		delayStep = 1500
+		delay_split = 300
+		delay_move = 500
+		delay = 600
 	end
-    local delayStep = 300
+     
     local tempitems = {}
     local items = {}
     local lastItem;
     
-    local delay = delayStep
       for _,TSI in pairs(NirnAuctionHouse.NewBids) do
+      
+	if srcBag == BAG_GUILDBANK then
+	if IsGuildBankOpen() ~= true then return false; end
+	else
+--~ 	if IsBankOpen() ~= true then return false; end
+	if SCENE_MANAGER.currentScene.name ~= "bank" and SCENE_MANAGER.currentScene.name ~= "gamepad_banking" then return false; end
+	end
+	
+	
+	
+	
+	zo_callLater(function() 
+		if srcBag == BAG_GUILDBANK then
+	if IsGuildBankOpen() ~= true then return false; end
+	else
+--~ 	if IsBankOpen() ~= true then return false; end
+	if SCENE_MANAGER.currentScene.name ~= "bank" and SCENE_MANAGER.currentScene.name ~= "gamepad_banking" then return false; end
+	end
+	
       local locatedbagslot = nil;
       locatedbagslot = NirnAuctionHouse:SearchBag(srcBag,TSI.Item.ItemLink,tonumber(TSI.Item.stackCount),true)
 	  if(locatedbagslot~=nil)then	
@@ -4991,32 +5025,54 @@ end
 		
 		
 		
-		zo_callLater(function() 
+		
+--~ 	d("taking " .. TSI.Item.stackCount )
 		NAH_MoveItem(TSI.Item.ItemLink,BAG_BACKPACK, srcBag, locatedbagslot, TSI.Item.stackCount); 
 		
 		if itemCount > tonumber(TSI.Item.stackCount) then --if we took extra put back remaining
+		
+		local numextra = itemCount - tonumber(TSI.Item.stackCount);
+--~ 		d("took " .. numextra .. " extra")
 			zo_callLater(function() 
+			if srcBag == BAG_GUILDBANK then
+			if IsGuildBankOpen() ~= true then return false; end
+			else
+--~ 			if IsBankOpen() ~= true then return false; end
+			if SCENE_MANAGER.currentScene.name ~= "bank" and SCENE_MANAGER.currentScene.name ~= "gamepad_banking" then return false; end
+			end
 			NirnAuctionHouse:SplitStack(TSI.Item.ItemLink,TSI.Item.stackCount);
-				zo_callLater(function() 
-				
+				zo_callLater(function()
 				 local locatedbagslotextra = nil;
-				locatedbagslotextra = NirnAuctionHouse:SearchBag(BAG_BACKPACK,TSI.Item.ItemLink,itemCount-tonumber(TSI.Item.stackCount),true)
+				locatedbagslotextra = NirnAuctionHouse:SearchBag(BAG_BACKPACK,TSI.Item.ItemLink,numextra,true)
 				if(locatedbagslotextra~=nil)then	
-				NAH_MoveItem(TSI.Item.ItemLink,srcBag, BAG_BACKPACK, locatedbagslotextra, TSI.Item.stackCount);--move extra back to bank
+--~ 				d("returning " .. numextra .. " extra")
+				NAH_MoveItem(TSI.Item.ItemLink,srcBag, BAG_BACKPACK, locatedbagslotextra, numextra);--move extra back to bank
 				end
 				
-				end, 200)
-			end, 200)
+				end, delay_move)
+			end, delay_split)
 		
 		end
 		
-		end, delay)
-		delay = delay + delayStep
 		else
 		d("failed to locate " .. TSI.Item.ItemLink .. "x " .. TSI.Item.stackCount .." ")
 		
 	  end
+	  
+		end, delay)
+	  
+				
+		delay = delay + delayStep
+	  
       end
+      
+     local numbids= #NirnAuctionHouse.NewBids;
+     if numbids > 0 then 
+      zo_callLater(function() 
+      d("Withdraw Complete")
+		end, delayStep * (numbids+1))
+		
+		end
     
 	end
 	
