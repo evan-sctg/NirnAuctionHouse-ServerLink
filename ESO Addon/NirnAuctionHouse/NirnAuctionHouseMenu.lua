@@ -30,7 +30,7 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 		name = "Nirn Auction House",
 		displayName = NirnAuctionHouse.colors.title .. "Nirn Auction House|r",
 		author = "Elo",
-		version = "0.0.26",
+		version = "0.0.27",
 		slashCommand = "/ahsetup",
 		registerForRefresh = true
 	}

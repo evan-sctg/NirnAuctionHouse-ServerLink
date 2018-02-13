@@ -1776,9 +1776,13 @@ end
  d( "Filling order for " ..control.data.buyer .. " sending " .. control.data.itemLink .. " x" .. control.data.stackCount .. " for " .. control.data.BuyoutPrice .. " COD (postage: " .. codcost .. ")");
  
 			NirnAuctionHouse.FillingOrderID=control.data.TradeID
-			NirnAuctionHouse.FillingOrderBidID=control.data.BidID
+			NirnAuctionHouse.FillingOrderBidID=control.data.BidID	
 --~ 			codcost
- NirnAuctionHouse:COD(control.data.buyer,control.data.itemLink,control.data.stackCount,control.data.BuyoutPrice)
+	if (NirnAuctionHouse.FillingOrderID ~= nil) then 
+	NirnAuctionHouse:COD(control.data.buyer,control.data.itemLink,control.data.stackCount,control.data.BuyoutPrice)
+	else	
+	d("Filling Order failed Please retry...")			
+	end
  ---------------------
 --~  cod costs a base cost of 10 with 1g for every 20g of your cod cost
 -----------------
@@ -3373,7 +3377,7 @@ end
 
 
 function NirnAuctionHouse:SplitStack(ItemLink,stackCount) 
-if ItemLink==nil or ItemLink=="" or stackCount==nil or tonumber(stackCount) < 1 or tonumber(stackCount) > 200 then d("here") return nil end
+if ItemLink==nil or ItemLink=="" or stackCount==nil or tonumber(stackCount) < 1 or tonumber(stackCount) > 200 then return nil end
 local locatedbagslot = nil;
 	  locatedbagslot = NirnAuctionHouse:SearchBag(1,ItemLink,stackCount,true)	
 	  if(locatedbagslot~=nil)then	  
@@ -3421,10 +3425,10 @@ local locatedbagslot = nil
 
 			if(locatedbagslot~=nil)then 	
 			    NirnAuctionHouse:COD(to,ItemLink,stackCount,amount);				
-			 return
+			 return false;
 			else			 
 			d("Failed to split stack to " ..ItemLink .." x " .. stackCount)
-			return;
+			return false;
 			 end
 			 	end, (500))	
 			 end
@@ -3453,8 +3457,8 @@ local locatedbagslot = nil
 			d("Failed to find "..stackCount.."x "..ItemLink)	
 			
 			NirnAuctionHouse.FillingOrderID=nil
-			NirnAuctionHouse.FillingOrderBidID=nil
-			return;
+			NirnAuctionHouse.FillingOrderBidID=nil	
+			return false;
 					 end
 			
 					end	
@@ -3464,24 +3468,44 @@ local locatedbagslot = nil
 			
 			
 			if locatedbagslot~=nil then
+			
+	if (NirnAuctionHouse.FillingOrderID ~= nil) then 
 			if CanItemBePlayerLocked(1, locatedbagslot) then
 			SetItemIsPlayerLocked(1, locatedbagslot, false)
 			end
+			
  local codcost=10+math.floor(amount/20)
  SCENE_MANAGER:Hide("mailSend");
  SCENE_MANAGER:Show("mailSend");
  
 	zo_callLater(function()
+	
+	if (NirnAuctionHouse.FillingOrderID ~= nil) then 
 			QueueItemAttachment(1, locatedbagslot, 1)
 	d("Queued Attachment")
 	zo_callLater(function()
 	QueueCOD(amount)
 	zo_callLater(function()
+	if (NirnAuctionHouse.FillingOrderID ~= nil) then 
 	SendMail(to, "Nirn Auction House Order", "Order for " .. to .. ", Containing: " .. ItemLink .. " x" .. stackCount .. " for " .. amount .. " |t18:18:esoui/art/currency/currency_gold_32.dds|t COD (postage: " .. codcost .. "|t18:18:esoui/art/currency/currency_gold_32.dds|t )")
 			d("Filling Order Please wait...")
+			else	
+		d("Filling Order failed Please retry...")	
+		NAH.settings.ActiveTab="Orders";
+		SCENE_MANAGER:Show("NAHSceneOrders"); 
+			end
 		end, 800)
 		end, 200)
+		else	
+	d("Filling Order failed Please retry...")	
+	NAH.settings.ActiveTab="Orders";
+	SCENE_MANAGER:Show("NAHSceneOrders"); 
+		end
 		end, 900)
+		
+	else	
+	d("Filling Order failed Please retry...")			
+	end
 	
 			else
 	d("Failed to find "..stackCount.."x "..ItemLink)	
