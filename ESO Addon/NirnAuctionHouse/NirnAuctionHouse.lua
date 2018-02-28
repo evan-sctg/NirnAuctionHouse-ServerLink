@@ -3415,23 +3415,23 @@ local locatedbagslot = nil
 
 
 			if bagCount >= tonumber(stackCount) then  
+--~ 			d("search bag")
 			locatedbagslot = NirnAuctionHouse:SearchBag(1,ItemLink,stackCount,false)	
+				if(locatedbagslot==nil)then  --if item not found attempt to split a bigger stack and use that
+				NirnAuctionHouse:SplitStack(ItemLink,stackCount); 	
+--~ 				d("not found attempt splitting stack")
+					zo_callLater(function()
+--~ 					d("re search bag")
+					locatedbagslot = NirnAuctionHouse:SearchBag(1,ItemLink,stackCount,false)	
 
-			if(locatedbagslot==nil)then  --if item not found attempt to split a bigger stack and use that
-			NirnAuctionHouse:SplitStack(ItemLink,stackCount); 	
-	
-			zo_callLater(function()
-			locatedbagslot = NirnAuctionHouse:SearchBag(1,ItemLink,stackCount,false)	
-
-			if(locatedbagslot~=nil)then 	
-			    NirnAuctionHouse:COD(to,ItemLink,stackCount,amount);				
-			 return false;
-			else			 
-			d("Failed to split stack to " ..ItemLink .." x " .. stackCount)
-			return false;
-			 end
-			 	end, (500))	
-			 end
+					if(locatedbagslot==nil)then 	 
+					d("Failed to split stack to " ..ItemLink .." x " .. stackCount)
+					return false;	
+--~ 					else		
+--~ 					d("located")
+					 end
+						end, (400))	
+				 end
 			
 			else				
 				if CraftbagCount >= tonumber(stackCount) then  
@@ -3453,12 +3453,14 @@ local locatedbagslot = nil
 			if bankCount > 0 then  
 			d("Found "..bankCount.."x "..ItemLink.." in your Bank")				
 			end						 
-					 else					 
-			d("Failed to find "..stackCount.."x "..ItemLink)	
+					 else			
+					 
+					d("Failed to find "..stackCount.."x "..ItemLink)					
+					NirnAuctionHouse.FillingOrderID=nil
+					NirnAuctionHouse.FillingOrderBidID=nil	
+					return false;
+					 
 			
-			NirnAuctionHouse.FillingOrderID=nil
-			NirnAuctionHouse.FillingOrderBidID=nil	
-			return false;
 					 end
 			
 					end	
@@ -3467,6 +3469,7 @@ local locatedbagslot = nil
 			end
 			
 			
+					zo_callLater(function()	
 			if locatedbagslot~=nil then
 			
 	if (NirnAuctionHouse.FillingOrderID ~= nil) then 
@@ -3513,6 +3516,7 @@ local locatedbagslot = nil
 	NirnAuctionHouse.FillingOrderID=nil
 	NirnAuctionHouse.FillingOrderBidID=nil
 			end
+			end, (600))	
 	--end
 	end
 
