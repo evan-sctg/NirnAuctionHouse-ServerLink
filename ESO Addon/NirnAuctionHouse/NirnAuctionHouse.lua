@@ -67,6 +67,7 @@ local NirnAuctionHouse = NirnAuctionHouse
 		AutoPostPaid = true,
 		AutoPostFilled = true,
 		AutoPostBuyouts = true,
+		AutoRetrieveCraftBag = true,
 		AddCODCost = true,
 		ServerSideListingLimits = false,
 		ServerLink_INITIATED = false,
@@ -3412,7 +3413,7 @@ function NirnAuctionHouse:COD(to,ItemLink,stackCount,amount)
 to=string.gsub(to, "1sSsS1QqQq1", "'")--put sigle quotes back as single quotes
 local locatedbagslot = nil
   local bagCount, bankCount, CraftbagCount = GetItemLinkStacks(ItemLink)
-
+local extraWaitTime = 0 
 
 			if bagCount >= tonumber(stackCount) then  
 --~ 			d("search bag")
@@ -3435,7 +3436,35 @@ local locatedbagslot = nil
 			
 			else				
 				if CraftbagCount >= tonumber(stackCount) then  
-					d("Found "..CraftbagCount.."x "..ItemLink.." in your Craft Bag")	
+					d("Found "..CraftbagCount.."x "..ItemLink.." in your Craft Bag")
+					
+					if NAH.settings.AutoRetrieveCraftBag and NAH.settings.AutoRetrieveCraftBag == true then
+					extraWaitTime = 400 
+					locatedbagslotCB = NirnAuctionHouse:SearchBag(BAG_VIRTUAL,ItemLink,stackCount,true)	
+
+					if(locatedbagslotCB ~= nil) then 
+--~ 					d("located bag slot "..stackCount.."x "..ItemLink.." in your Craft Bag")
+					NAH_MoveItem(ItemLink,BAG_BACKPACK, BAG_VIRTUAL, locatedbagslotCB, stackCount); 
+					
+						zo_callLater(function()
+						locatedbagslot = NirnAuctionHouse:SearchBag(1,ItemLink,stackCount,false)	
+							if(locatedbagslot==nil)then 	 
+							d("Failed to retrieve " ..ItemLink .." x " .. stackCount .." from your Craft Bag")
+							return false;	
+--~ 							else		
+--~ 							d("located")
+							 end
+						end, (700))	
+					
+					else
+					d("Failed to locate bag slot for "..stackCount.."x "..ItemLink.." in your Craft Bag")
+					
+					end
+					else
+					return;
+					end
+					
+					
 				else
 					if bankCount >= tonumber(stackCount) then  
 						d("Found "..bankCount.."x "..ItemLink.." in your Bank")	
@@ -3464,14 +3493,13 @@ local locatedbagslot = nil
 					 end
 			
 					end	
+					return;
 				end	
-			return;
 			end
 			
-			
 					zo_callLater(function()	
+					
 			if locatedbagslot~=nil then
-			
 	if (NirnAuctionHouse.FillingOrderID ~= nil) then 
 			if CanItemBePlayerLocked(1, locatedbagslot) then
 			SetItemIsPlayerLocked(1, locatedbagslot, false)
@@ -3516,7 +3544,7 @@ local locatedbagslot = nil
 	NirnAuctionHouse.FillingOrderID=nil
 	NirnAuctionHouse.FillingOrderBidID=nil
 			end
-			end, (600))	
+			end, (750 + extraWaitTime))	
 	--end
 	end
 
@@ -3718,7 +3746,13 @@ end
 
 
 function NirnAuctionHouse:SearchBag(bagId,itemLink,qty,moreOK)
+
+if bagId == BAG_VIRTUAL then
+bagItems = 500
+else
 bagItems = GetBagSize and GetBagSize(bagId)
+end
+
 local itemCharges=GetItemLinkNumEnchantCharges(itemLink)
 local sellPrice=GetItemLinkValue(itemLink,true)
 local itemId=NirnAuctionHouse:GetItemID(itemLink)
@@ -3736,8 +3770,13 @@ local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
 		for slotNum=0, bagItems, 1 do
 		
 		
+		if bagId == BAG_GUILDBANK or bagId == BAG_VIRTUAL  then
 		if bagId == BAG_GUILDBANK then
 		GBslotid=GetNextGuildBankSlotId(GBslotid)
+		else
+		GBslotid=GetNextVirtualBagSlotId(GBslotid)
+--~ 		d("next virtual bag slot: " .. GBslotid)
+		end
 		if GBslotid == nil then return nil end
 		SlotIndex=GBslotid
 		else
@@ -3773,7 +3812,10 @@ function NirnAuctionHouse:ProcBagSlot(SearchItemId,bagId, slotNum)
 	if itemName > '' then
 		itemLink = GetItemLink(bagId, slotNum, LINK_STYLE_BRACKETS)
 		local itemId=NirnAuctionHouse:GetItemID(itemLink)
+--~ 	d("virtual item: " .. slotNum .. " - " .. itemId .. " - ".. itemName)
+--~ 	d("virtual item: " .. itemId .. " - ".. itemName)
 		if itemId==SearchItemId then
+--~ 	d("virtual itemid match: " .. SearchItemId .. " - ".. itemId)
 		local Charges,_ =GetChargeInfoForItem(bagId, slotNum)
 		local itemIconFile, itemCount, _, _, _, equipType, _, itemQuality = GetItemInfo(bagId, slotNum)
 		
@@ -5120,15 +5162,33 @@ function NAH_MoveItem(ItemLink,destBag, srcBag, srcSlot, stackCount)
 	    end
  
      else
-        ClearCursor()
-        result = CallSecureProtected("PickupInventoryItem", srcBag, srcSlot, stackCount)
-        if(result == true) then
-            result = CallSecureProtected("PlaceInTransfer")
-	if destBag == BAG_BACKPACK then
-	    d("Moving Item to Inventory: " .. ItemLink .. " x " .. stackCount)
-	    end
-        end
-        ClearCursor()
+     
+     if(srcBag == BAG_VIRTUAL) then
+     
+--~      local openslot = CallSecureProtected("FindFirstEmptySlotInBag", destBag)
+     local openslot = FindFirstEmptySlotInBag(destBag)
+        if(openslot ~= nil) then
+--~ 	d("open slot: " .. openslot)
+        result = CallSecureProtected("RequestMoveItem", srcBag, srcSlot, destBag,openslot, stackCount)
+   
+     end-- end open slot
+     
+     else
+     
+		ClearCursor()
+		result = CallSecureProtected("PickupInventoryItem", srcBag, srcSlot, stackCount)
+		if(result == true) then
+		    result = CallSecureProtected("PlaceInTransfer")
+		if destBag == BAG_BACKPACK then
+		    d("Moving Item to Inventory: " .. ItemLink .. " x " .. stackCount)
+		    end
+		end
+		ClearCursor()
+	
+	
+	end
+	
+	
     end
     
     end

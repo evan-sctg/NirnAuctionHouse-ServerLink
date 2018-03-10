@@ -4,6 +4,10 @@ Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 Latest App: https://nirnah.com/NirnAuctionHouse.app.zip
 
 
+v0.0.29 "beta" @Elo
+- Added Option to automatically retrieve items from craft bag for filling orders ( Auto Retrieve from Craft Bag ) [default: Enabled]
+- rating improvements
+
 v0.0.28 "beta" @Elo
 - bugfix filling order
 - bugfix locating item after split

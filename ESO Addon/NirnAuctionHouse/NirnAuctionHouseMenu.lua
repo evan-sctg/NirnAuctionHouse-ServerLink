@@ -30,7 +30,7 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 		name = "Nirn Auction House",
 		displayName = NirnAuctionHouse.colors.title .. "Nirn Auction House|r",
 		author = "Elo",
-		version = "0.0.28",
+		version = "0.0.29",
 		slashCommand = "/ahsetup",
 		registerForRefresh = true
 	}
@@ -198,6 +198,15 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 			choices = self.EnabledTable,
 			getFunc = function() if NAH.settings.ShowMyCharName ==true then return "Enabled" else return "Disabled" end end,
 			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.ShowMyCharName = true else NAH.settings.ShowMyCharName = false end  end,
+			default = self.EnabledTable[2]
+		},
+		{
+			type = "dropdown",
+			name = "Auto Retrieve from Craft Bag",
+			tooltip = "automatically retrieve items from craft bag for filling orders",
+			choices = self.EnabledTable,
+			getFunc = function() if NAH.settings.AutoRetrieveCraftBag ==true then return "Enabled" else return "Disabled" end end,
+			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.AutoRetrieveCraftBag = true else NAH.settings.AutoRetrieveCraftBag = false end  end,
 			default = self.EnabledTable[2]
 		},
 		{

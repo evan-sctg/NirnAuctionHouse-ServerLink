@@ -1,6 +1,6 @@
-## Title: Nirn Auction House |c9988770.0.28|r
+## Title: Nirn Auction House |c9988770.0.29|r
 ## Author: Elo
-## Version: 0.0.28
+## Version: 0.0.29
 ## Description: addon that allows you to buy and sell items using the in-game mail COD system
 ## APIVersion: 100022
 ## SavedVariables: NirnAuctionHouseData NirnAuctionHouseSearchData NirnAuctionHouseSearchResults
