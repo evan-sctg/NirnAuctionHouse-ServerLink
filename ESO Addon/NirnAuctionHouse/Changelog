@@ -4,6 +4,12 @@ Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 Latest App: https://nirnah.com/NirnAuctionHouse.app.zip
 
 
+
+v0.0.30 "beta" @Elo
+- Added starting bid unit pricing to create auction window
+- Added buyout unit pricing to create auction window
+- Formatted create auction window postage cost for large orders
+
 v0.0.29 "beta" @Elo
 - Added Option to automatically retrieve items from craft bag for filling orders ( Auto Retrieve from Craft Bag ) [default: Enabled]
 - rating improvements

@@ -4118,19 +4118,72 @@ d("Queued Bid for: " .. NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListing
 end
 
 
+
+
+
+
+
+
+
+
+function NirnAuctionHouse:UpdateAuctionListingUnit()
+
+
+NirnAuctionHouse.GoldAmountStarting = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmountStarting"):GetNamedChild("GoldAmountBoxStarting");
+NirnAuctionHouse.GoldAmountStartingVal = tonumber(NirnAuctionHouse.GoldAmountStarting:GetText());
+
+NirnAuctionHouse.GoldAmountBuyout = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmountBuyout"):GetNamedChild("GoldAmountBoxBuyout");
+NirnAuctionHouse.GoldAmountBuyoutVal = tonumber(NirnAuctionHouse.GoldAmountBuyout:GetText());
+
+NirnAuctionHouse.GoldAmountQtyVal = tonumber(NirnAuctionHouse.GoldAmountQty:GetText());
+NirnAuctionHouse.GoldBuyoutUnit = NAHAuctionHouseGoldCost:GetNamedChild("buyoutunit");
+NirnAuctionHouse.GoldStartingUnit = NAHAuctionHouseGoldCost:GetNamedChild("startingunit");
+
+
+
+
+	 if (NirnAuctionHouse.GoldAmountQtyVal ==nil or NirnAuctionHouse.GoldAmountQtyVal > 1000 or NirnAuctionHouse.GoldAmountQtyVal < 1 ) then 
+	 NirnAuctionHouse.GoldBuyoutUnit:SetText("");
+	 NirnAuctionHouse.GoldStartingUnit:SetText("");
+	 else
+	 
+		  if (NirnAuctionHouse.GoldAmountBuyoutVal ==nil or NirnAuctionHouse.GoldAmountBuyoutVal > 2100000000 or NirnAuctionHouse.GoldAmountBuyoutVal < 1 ) then 
+		--NirnAuctionHouse.GoldPostage:SetText("Buyout Postage: NA");
+		 NirnAuctionHouse.GoldBuyoutUnit:SetText("");
+		else
+	local buyoutunit=NirnAuctionHouse:formattedNum(string.format("%.2f", NirnAuctionHouse.GoldAmountBuyoutVal/NirnAuctionHouse.GoldAmountQtyVal))
+	NirnAuctionHouse.GoldBuyoutUnit:SetText("UnitPrice: "..buyoutunit.."(g)"); 
+		end
+		
+		  if (NirnAuctionHouse.GoldAmountStartingVal ==nil or NirnAuctionHouse.GoldAmountStartingVal > 2099999999 or NirnAuctionHouse.GoldAmountStartingVal < 1 ) then 
+		 NirnAuctionHouse.GoldStartingUnit:SetText("");
+		else
+	local startingunit=NirnAuctionHouse:formattedNum(string.format("%.2f", NirnAuctionHouse.GoldAmountStartingVal/NirnAuctionHouse.GoldAmountQtyVal))
+	NirnAuctionHouse.GoldStartingUnit:SetText("UnitPrice: "..startingunit.."(g)"); 
+		end
+		
+	 end
+
+
+
+
+end
+
 function NirnAuctionHouse:UpdateAuctionCODCost()
+
 
 NirnAuctionHouse.GoldAmountBuyout = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmountBuyout"):GetNamedChild("GoldAmountBoxBuyout");
 NirnAuctionHouse.GoldAmountBuyoutVal = tonumber(NirnAuctionHouse.GoldAmountBuyout:GetText());
 NirnAuctionHouse.GoldPostage = NAHAuctionHouseGoldCost:GetNamedChild("Postage");
+
  if (NirnAuctionHouse.GoldAmountBuyoutVal ==nil or NirnAuctionHouse.GoldAmountBuyoutVal > 2100000000 or NirnAuctionHouse.GoldAmountBuyoutVal < 1 ) then 
 NirnAuctionHouse.GoldPostage:SetText("Buyout Postage: NA");
 else
 local codcost=10+math.floor(NirnAuctionHouse.GoldAmountBuyoutVal/20)
 if(codcost>=NirnAuctionHouse.GoldAmountBuyoutVal)then
-NirnAuctionHouse.GoldPostage:SetText("Buyout Postage: |cFF0000"..codcost.."(g)|r");
+NirnAuctionHouse.GoldPostage:SetText("Buyout Postage: |cFF0000"..NirnAuctionHouse:formattedNum(codcost).."(g)|r");
 else
-NirnAuctionHouse.GoldPostage:SetText("Buyout Postage: |c008000"..codcost.."(g)|r");
+NirnAuctionHouse.GoldPostage:SetText("Buyout Postage: |c008000"..NirnAuctionHouse:formattedNum(codcost).."(g)|r");
 end
 
  end 
@@ -4562,7 +4615,10 @@ end
 	
 	
 
-	NirnAuctionHouse.GoldAmountBuyout:SetHandler("OnTextChanged", function() NirnAuctionHouse:UpdateAuctionCODCost() end);
+	NirnAuctionHouse.GoldAmountQty:SetHandler("OnTextChanged", function() NirnAuctionHouse:UpdateAuctionListingUnit();  end);
+	NirnAuctionHouse.GoldAmountStarting:SetHandler("OnTextChanged", function() NirnAuctionHouse:UpdateAuctionListingUnit();  end);
+	
+	NirnAuctionHouse.GoldAmountBuyout:SetHandler("OnTextChanged", function() NirnAuctionHouse:UpdateAuctionCODCost(); NirnAuctionHouse:UpdateAuctionListingUnit();  end);
 	
 	
 	NirnAuctionHouse.GoldAmountQty:SetText(stackCount) --set max qty	

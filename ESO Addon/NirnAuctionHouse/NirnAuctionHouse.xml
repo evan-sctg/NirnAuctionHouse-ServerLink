@@ -1775,7 +1775,7 @@
 		
 		
 			<Backdrop name="$(parent)GoldAmountQty" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">					
-					<Anchor point="CENTER" relativePoint="CENTER" offsetX="0" offsetY="-95" />
+					<Anchor point="CENTER" relativePoint="CENTER" offsetX="0" offsetY="-125" />
 					<Dimensions x="250" />
 					<Controls>
 						<EditBox name="$(parent)GoldAmountBoxQty" inherits="ZO_DefaultEditForBackdrop ZO_EditDefaultText" />
@@ -1801,9 +1801,15 @@
 						self:SetText(GetString(SI_NAH_STARTINGPRICE))
 					</OnInitialized>
 				</Label>
+				<Label name="$(parent)startingunit" font="ZoFontGameSmall" horizontalAlignment="LEFT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Buyout UnitPrice: (g)">
+					<Anchor point="BOTTOMLEFT" relativeTo="$(parent)startinglabel" relativePoint="BOTTOMLEFT" offsetX="0" offsetY="65" />
+					<OnInitialized>
+					</OnInitialized>
+				</Label>
+				
 		
 			<Backdrop name="$(parent)GoldAmountBuyout" tier="HIGH" inherits="ZO_SingleLineEditBackdrop_Keyboard">					
-					<Anchor point="CENTER" relativePoint="CENTER" relativeTo="$(parent)GoldAmountStarting" offsetX="0" offsetY="70" />
+					<Anchor point="CENTER" relativePoint="CENTER" relativeTo="$(parent)GoldAmountStarting" offsetX="0" offsetY="90" />
 					<Dimensions x="250" />
 					<Controls>
 						<EditBox name="$(parent)GoldAmountBoxBuyout" inherits="ZO_DefaultEditForBackdrop ZO_EditDefaultText" />
@@ -1816,6 +1822,11 @@
 					</OnInitialized>
 				</Label>
 				
+				<Label name="$(parent)buyoutunit" font="ZoFontGameSmall" horizontalAlignment="LEFT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Buyout UnitPrice: (g)">
+					<Anchor point="BOTTOMLEFT" relativeTo="$(parent)buyoutlabel" relativePoint="BOTTOMLEFT" offsetX="0" offsetY="65" />
+					<OnInitialized>
+					</OnInitialized>
+				</Label>
 				
 				
 				
@@ -1856,6 +1867,7 @@
 					<OnInitialized>
 					</OnInitialized>
 				</Label>
+				
 				
 			</Controls>
 			<Anchor point="CENTER" relativePoint="CENTER" offsetX="0" offsetY="0" />
