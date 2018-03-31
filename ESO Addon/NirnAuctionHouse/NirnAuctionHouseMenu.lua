@@ -30,7 +30,7 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 		name = "Nirn Auction House",
 		displayName = NirnAuctionHouse.colors.title .. "Nirn Auction House|r",
 		author = "Elo",
-		version = "0.0.30",
+		version = "0.0.31",
 		slashCommand = "/ahsetup",
 		registerForRefresh = true
 	}
@@ -207,6 +207,42 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 			choices = self.EnabledTable,
 			getFunc = function() if NAH.settings.AutoRetrieveCraftBag ==true then return "Enabled" else return "Disabled" end end,
 			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.AutoRetrieveCraftBag = true else NAH.settings.AutoRetrieveCraftBag = false end  end,
+			default = self.EnabledTable[2]
+		},
+		{
+			type = "dropdown",
+			name = "Auto Post new auctions",
+			tooltip = "Disable to manually sync new auctions(queue multiple)",
+			choices = self.EnabledTable,
+			getFunc = function() if NAH.settings.AutoPostNewAuctions ==true then return "Enabled" else return "Disabled" end end,
+			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.AutoPostNewAuctions = true else NAH.settings.AutoPostNewAuctions = false end  end,
+			default = self.EnabledTable[2]
+		},
+		{
+			type = "dropdown",
+			name = "Auto Post bids",
+			tooltip = "Disable to manually sync bids(queue multiple)",
+			choices = self.EnabledTable,
+			getFunc = function() if NAH.settings.AutoPostBids ==true then return "Enabled" else return "Disabled" end end,
+			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.AutoPostBids = true else NAH.settings.AutoPostBids = false end  end,
+			default = self.EnabledTable[2]
+		},
+		{
+			type = "dropdown",
+			name = "Auto Post new wtb orders",
+			tooltip = "Disable to manually sync new wtb orders(queue multiple)",
+			choices = self.EnabledTable,
+			getFunc = function() if NAH.settings.AutoPostNewWTB ==true then return "Enabled" else return "Disabled" end end,
+			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.AutoPostNewWTB = true else NAH.settings.AutoPostNewWTB = false end  end,
+			default = self.EnabledTable[2]
+		},
+		{
+			type = "dropdown",
+			name = "Auto Post Canceled orders",
+			tooltip = "Disable to manually sync Canceled orders(queue multiple)",
+			choices = self.EnabledTable,
+			getFunc = function() if NAH.settings.AutoPostCanceled ==true then return "Enabled" else return "Disabled" end end,
+			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.AutoPostCanceled = true else NAH.settings.AutoPostCanceled = false end  end,
 			default = self.EnabledTable[2]
 		},
 		{

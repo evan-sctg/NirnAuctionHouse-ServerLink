@@ -64,6 +64,10 @@ local NirnAuctionHouse = NirnAuctionHouse
 		ShowMasterMerchantPrice = true,
 		ShowTTCPrice = false,
 		AutoPost = false,
+		AutoPostNewAuctions = false,
+		AutoPostBids = false,
+		AutoPostNewWTB = false,
+		AutoPostCanceled = false,
 		AutoPostPaid = true,
 		AutoPostFilled = true,
 		AutoPostBuyouts = true,
@@ -1864,6 +1868,10 @@ local itemLink=control.data.itemLink
 	NAH.settings.PostFilledWTBOrders=true;
 	
 d("Queued Purchase Order for: " .. itemLink .. " For Removal sync to Remove now")
+
+ if NAH.settings.AutoPostCanceled and NAH.settings.AutoPostCanceled == true then
+	NirnAuctionHouse:forceWriteSavedVars()	
+	end
 	
 end	
  
@@ -1889,6 +1897,11 @@ end
 	NAH.settings.PostFilledOrders=true;
 	
 d("Queued Trade for: " .. itemLink .. " For Removal sync to Remove now")
+
+
+ if NAH.settings.AutoPostCanceled and NAH.settings.AutoPostCanceled == true then
+	NirnAuctionHouse:forceWriteSavedVars()	
+	end
 	
 end	
 
@@ -1993,14 +2006,24 @@ end
 
 
  function NirnAuctionHouse_BuyItem(control )
+ 
+  if NAH.settings.AutoPostBuyouts and NAH.settings.AutoPostBuyouts == true then
+  d("You can queue multiple purchases by disabling ( Auto Post Buyouts ) in settings ( ESC->Settings->Addons->Nirn Auction House )")
+  end
+ 
  local total_banked=(GetCurrentMoney() +GetBankedMoney());
  local total_promised=(NirnAuctionHouse.TrackedBidCost + tonumber(control.data.BuyoutPrice));
  if total_banked < tonumber(control.data.BuyoutPrice) or total_banked < total_promised then  d("You do not have enough Gold in your inventory for this purchase") return; end	
  if IsLocalMailboxFull() then  d("Your mailbox is full, you must make space before buying items") return; end
- 
+  
+
  
  if NirnAuctionHouse.TrackedBids~= nil then
  if #NirnAuctionHouse.TrackedBids >= 30 then  d("Your Tracked Orders list is full, you must allow for some of your orders to be completed before buying more items") return; end
+ end
+ 
+ if NAH.settings.data.Bids~= nil then
+ if #NAH.settings.data.Bids >= 30 then  d("Your Purchase Order Queue is full, you must sync before buying more items") return; end
  end
  
 	NirnAuctionHouse.ActiveBidListingId=control.data.TradeID
@@ -2514,6 +2537,24 @@ local function NAH_SetAccountCharData()
 	NAH.settings.data.Listings = {}
 	NAH.settings.data.Bids = {}
 	
+		
+	
+ 	if( NAH.settings.AutoPostNewAuctions==nil and defaultSettings.AutoPostNewAuctions ~= nil)then
+	NAH.settings.AutoPostNewAuctions = defaultSettings.AutoPostNewAuctions
+	end
+	
+ 	if( NAH.settings.AutoPostBids==nil  and defaultSettings.AutoPostBids ~= nil)then
+	NAH.settings.AutoPostBids = defaultSettings.AutoPostBids
+	end
+	
+ 	if( NAH.settings.AutoPostNewWTB==nil  and defaultSettings.AutoPostNewWTB ~= nil)then
+	NAH.settings.AutoPostNewWTB = defaultSettings.AutoPostNewWTB
+	end
+	
+		
+ 	if( NAH.settings.AutoPostCanceled==nil  and defaultSettings.AutoPostCanceled ~= nil)then
+	NAH.settings.AutoPostCanceled = defaultSettings.AutoPostCanceled
+	end
 	
 		
 	
@@ -4016,7 +4057,7 @@ d("Queued WTB Order for: "..NirnAuctionHouse.GoldAmountQtyVal.." x " .. NAH.sett
 	NAH.settings.PostWTBOrders=true;-- tell the server link to post WTBs 
 	NirnAuctionHouse_CloseGoldCostWTB();
 	
-	 if NAH.settings.AutoPost and NAH.settings.AutoPost == true then
+	 if NAH.settings.AutoPostNewWTB and NAH.settings.AutoPostNewWTB == true then
 	NirnAuctionHouse:forceWriteSavedVars()
 	end
 
@@ -4079,7 +4120,11 @@ NirnAuctionHouse.GoldAmountBidVal = tonumber(NirnAuctionHouse.GoldAmountBid:GetT
 
   
  if NirnAuctionHouse.TrackedBids~= nil then
- if #NirnAuctionHouse.TrackedBids >= 25 then  d("Your Tracked Orders list is full, you must allow for some of your orders to be completed before buying more items") return; end
+ if #NirnAuctionHouse.TrackedBids >= 30 then  d("Your Tracked Orders list is full, you must allow for some of your orders to be completed before buying more items") return; end
+ end
+ 
+ if NAH.settings.data.Bids~= nil then
+ if #NAH.settings.data.Bids >= 30 then  d("Your Purchase Order Queue is full, you must sync before buying more items") return; end
  end
  
 	if(not NAH.settings.data.Bids)then
@@ -4110,7 +4155,7 @@ d("Queued Bid for: " .. NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListing
 	NAH.settings.PostBids=true;-- tell the server link to post Bids 
 	NirnAuctionHouse_CloseGoldCostBid();
 	
-	 if NAH.settings.AutoPost and NAH.settings.AutoPost == true then
+	 if NAH.settings.AutoPostBids and NAH.settings.AutoPostBids == true then
 	NirnAuctionHouse:forceWriteSavedVars()
 	end
 	if NirnAuctionHouse.TrackedBidCost== nil then NirnAuctionHouse.TrackedBidCost=0; end
@@ -4253,7 +4298,7 @@ d("Queued Listing for: "..NirnAuctionHouse.GoldAmountQtyVal.." x " .. NAH.settin
 --~ 	RequestOpenUnsafeURL("https://nirnah.com/debug/")
 	NirnAuctionHouse_CloseGoldCost();
 	
-	 if NAH.settings.AutoPost and NAH.settings.AutoPost == true then
+	 if NAH.settings.AutoPostNewAuctions and NAH.settings.AutoPostNewAuctions == true then
 	NirnAuctionHouse:forceWriteSavedVars()
 	end
 

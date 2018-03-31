@@ -5,6 +5,14 @@ Latest App: https://nirnah.com/NirnAuctionHouse.app.zip
 
 
 
+v0.0.31 "beta" @Elo
+- Added Limit of 30 purchases per sync (While Autopost buyout Is Disabled)
+- Added notice while Autopost buyout is enabled: You can queue multiple purchases by disabling ( Auto Post Buyouts ) in settings ( ESC->Settings->Addons->Nirn Auction House )
+- Added option to auto sync new auctions  ( Auto Post new auctions ) in settings ( ESC->Settings->Addons->Nirn Auction House ) [default: disabled]
+- Added option to auto sync bids  ( Auto Post bids ) in settings ( ESC->Settings->Addons->Nirn Auction House ) [default: disabled]
+- Added option to auto sync new wtb orders  ( Auto Post new wtb orders ) in settings ( ESC->Settings->Addons->Nirn Auction House ) [default: disabled]
+- Added option to auto sync canceled orders  ( Auto Post Canceled orders ) in settings ( ESC->Settings->Addons->Nirn Auction House ) [default: disabled]
+
 v0.0.30 "beta" @Elo
 - Added starting bid unit pricing to create auction window
 - Added buyout unit pricing to create auction window
