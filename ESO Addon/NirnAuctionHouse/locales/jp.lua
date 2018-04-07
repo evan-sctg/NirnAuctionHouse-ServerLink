@@ -12,6 +12,83 @@ ZO_CreateStringId("SI_NAH_STRING_CANCELAUCTION"     , "オークションをキ�
 
 ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "価格チェック");--new
 
+
+
+
+
+
+
+
+
+ZO_CreateStringId("SI_NAH_STRING_ATTACHMENT_QUEUED"     ,"キューに入れられた添付ファイル");--new
+ZO_CreateStringId("SI_NAH_STRING_PAID_ORDER_QUEUED"     ,"購入者のクレジットを受け取るために注文同期に支払い済み");--new
+ZO_CreateStringId("SI_NAH_STRING_RECIEVED_IN_MAIL"     ,"オークション注文書をメールで受け取った");--new
+ZO_CreateStringId("SI_NAH_STRING_SETTINGS_RESET"     ,"Nirn Auction Houseの設定がリセットされました");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_SEND_MAIL"     ,"メールの送信に失敗しました");--new
+ZO_CreateStringId("SI_NAH_STRING_MARKED_AS_FILLED"     ,"売り手のクレジットを受け取るために充填された同期として取引をマーク");--new
+ZO_CreateStringId("SI_NAH_STRING_CONTACTING_WTB"     ,"WTBプレーヤーに連絡する");--new
+ZO_CreateStringId("SI_NAH_STRING_BUYOUT_QUEUED"     ,"買い注文を待つ %s x %s ために %s(g)  バイアウトに今すぐ同期");--new
+ZO_CreateStringId("SI_NAH_STRING_FOR"     ,"ために");--new
+ZO_CreateStringId("SI_NAH_STRING_HIGH_BID"     ,"高い入札価格");--new
+ZO_CreateStringId("SI_NAH_STRING_COMPLETE"     ,"コンプリート");--new
+ZO_CreateStringId("SI_NAH_STRING_HIGHEST_BIDDER"     ,"最高入札者");--new
+ZO_CreateStringId("SI_NAH_STRING_OUTBID"     ,"アウトビッド");--new
+ZO_CreateStringId("SI_NAH_STRING_WAITING_ON_SELLER"     ,"売り手で待っている");--new
+ZO_CreateStringId("SI_NAH_STRING_MOVING_ITEM_TO_INV"     ,"アイテムを在庫に移動する");--new
+ZO_CreateStringId("SI_NAH_STRING_WITHDRAW_COMPLETE"     ,"引退完了");--new
+ZO_CreateStringId("SI_NAH_STRING_LOCATED"     ,"所在地");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_TO_LOCATE"     ,"見つけられなかった");--new
+ZO_CreateStringId("SI_NAH_STRING_NOTHING_TO_RETRIEVE"     ,"検索するものは何もない");--new
+ZO_CreateStringId("SI_NAH_STRING_REACHED_AUCTION_LIMIT"     ,"オークションの上限に達しました: ");--new
+ZO_CreateStringId("SI_NAH_STRING_SELLS_FOR"     ,"売る");--new
+ZO_CreateStringId("SI_NAH_STRING_NO_PRICE_DATA"     ,"価格データはありません  ");--new
+ZO_CreateStringId("SI_NAH_STRING_LISTING_QUEUED"     ,"キューに登録されている: %s x %s 今すぐ投稿する");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID_AND_BUYOUT"     ,"少なくとも有効な開始入札または有効な購入入札を入力してください");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID_LISTING"     ,"少なくとも有効な開始入札を入力してください (2,099,999,999 最大)");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BUYOUT_LISTING"     ,"少なくとも有効なバイアウト単価を入力してください (2,100,000,000 最大)");--new
+ZO_CreateStringId("SI_NAH_STRING_NOT_APPLICABLE"     ,"N / A");--new
+ZO_CreateStringId("SI_NAH_STRING_BUYOUT_POSTAGE"     ,"バイアウト郵便料金");--new
+ZO_CreateStringId("SI_NAH_STRING_UNITPRICE"     ,"単価");--new
+ZO_CreateStringId("SI_NAH_STRING_BID_QUEUED"     ,"の入札単価: %s 今すぐ投稿する");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID_MIN"     ,"少なくとも入札を入力してください: ");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID_MAX"     ,"少なくとも有効な入札を入力してください (2,100,000,000 最大)");--new
+ZO_CreateStringId("SI_NAH_STRING_GOLD_NOT_ENOUGH_BID"     ,"あなたはこの入札のために十分な金を持っていない");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID"     ,"有効な入札を入力してください");--new
+ZO_CreateStringId("SI_NAH_STRING_QUEUED_WTB"     ,"WTBの注文待ち: %s x %s 今すぐ投稿する");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_PRICE_MAX"     ,"少なくとも有効な価格を入力してください (2,100,000,000 最大)");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_PRICE"     ,"有効な価格を入力してください");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_QUANTITY"     ,"有効な数量を入力してください ( 1 - %s )");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_ITEMLINK"     ,"のアイテムリンクを取得できませんでした %s");--new
+ZO_CreateStringId("SI_NAH_STRING_MAIL_SENT"     ,"メールが送信されました");--new
+ZO_CreateStringId("SI_NAH_STRING_FILLING_ORDER"     ,"ご注文をお待ちしております...");--new
+ZO_CreateStringId("SI_NAH_STRING_UNLOCK_BEFORE_FILLING"     ,"%s 注文が完了する前にアイテムのロックを解除してください");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_FIND_ITEM"     ,"見つけられませんでした %s x %s");--new
+ZO_CreateStringId("SI_NAH_STRING_FOUND_ITEM_INV"     ,"見つかった %s x %s あなたの在庫に");--new
+ZO_CreateStringId("SI_NAH_STRING_FOUND_ITEM_BANK"     ,"見つかった %s x %s あなたの銀行で");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_FIND_CRAFT_BAG"     ,"のバッグスロットを見つけることができませんでした %s x %s あなたのクラフトバッグに");--new
+ZO_CreateStringId("SI_NAH_STRING_FOUND_ITEM_CRAFT_BAG"     ,"見つかった %s x %s あなたのクラフトバッグに");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_STACK_SPLIT"     ,"スタックを分割できませんでした %s x %s");--new
+ZO_CreateStringId("SI_NAH_STRING_GOLD_NOT_ENOUGH_MAIL"     ,"あなたはこのアイテムを郵送するのに十分な金があなたの在庫にない");--new
+ZO_CreateStringId("SI_NAH_STRING_FILLING_ORDER_DETAILS"     ,"注文書の記入 %s 送信 %s x%s ために %s COD (送料: %s)");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_FILLING_ORDER"     , "記入順が失敗しました再試行してください...");--new
+ZO_CreateStringId("SI_NAH_STRING_RELIST_QUEUED"     , "待ち行列貿易: %s relistへのrelistの同期のために今すぐ");--new
+ZO_CreateStringId("SI_NAH_STRING_REMOVAL_QUEUED"     , "待ち行列貿易: %s 削除のために今すぐ削除する");--new
+ZO_CreateStringId("SI_NAH_STRING_PURCHASE_QUEUE_FULL"     ,"購入注文キューがいっぱいです。アイテムをさらに購入する前に同期する必要があります");--new
+ZO_CreateStringId("SI_NAH_STRING_TRACKED_LIST_FULL"     ,"あなたの追跡された注文リストがいっぱいです、より多くの商品を購入する前にあなたの注文のいくつかが完了することを許可しなければなりません");--new
+ZO_CreateStringId("SI_NAH_STRING_GOLD_NOT_ENOUGH"     ,"この購入のためにあなたの在庫に金が足りません");--new
+ZO_CreateStringId("SI_NAH_STRING_MAIL_FULL"     ,"あなたは買い手にしたいのですか？");--new
+ZO_CreateStringId("SI_NAH_STRING_VERIFY_BUYOUT"     ,"あなたは買い手にしたいのですか？ \n%s (x%s) ために %s ゴールド?");--new
+ZO_CreateStringId("SI_NAH_STRING_VERIFY_SELL"     , "あなたは売りたいと思っていますか？ \n%s (x%s) ために %s ゴールド?");--new
+ZO_CreateStringId("SI_NAH_STRING_NOT_IN_INV_BANK"     , "あなたが持っていない %s あなたのインベントリまたは銀行で");--new
+ZO_CreateStringId("SI_NAH_STRING_NOTICE_QUEUE_MULTIPLE_BUYOUTS"     , "設定で（自動投稿バイアウト）を無効にすることで、複数の購入をキューに入れることができます ( ESC->Settings->Addons->Nirn Auction House )");--new
+
+
+
+
+
+
+
+
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_LISTING"     , "売り上げに成功した商品 - 処理には最大60秒かかる場合があります");--new
 ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING"     , "販売アイテムを一覧表示できませんでした");--new
 ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING_TRADELIMIT"     , "販売アイテムの一覧表示に失敗しました：取引限度額に達しました");--new

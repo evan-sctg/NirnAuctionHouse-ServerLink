@@ -30,7 +30,7 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 		name = "Nirn Auction House",
 		displayName = NirnAuctionHouse.colors.title .. "Nirn Auction House|r",
 		author = "Elo",
-		version = "0.0.31",
+		version = "0.0.32",
 		slashCommand = "/ahsetup",
 		registerForRefresh = true
 	}
@@ -207,6 +207,24 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 			choices = self.EnabledTable,
 			getFunc = function() if NAH.settings.AutoRetrieveCraftBag ==true then return "Enabled" else return "Disabled" end end,
 			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.AutoRetrieveCraftBag = true else NAH.settings.AutoRetrieveCraftBag = false end  end,
+			default = self.EnabledTable[2]
+		},
+		{
+			type = "dropdown",
+			name = "Auto Lock Item when listing",
+			tooltip = "Locks items that are lockable (prevents vendoring, trading and deconstruction)",
+			choices = self.EnabledTable,
+			getFunc = function() if NAH.settings.AutoLockItems ==true then return "Enabled" else return "Disabled" end end,
+			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.AutoLockItems = true else NAH.settings.AutoLockItems = false end  end,
+			default = self.EnabledTable[2]
+		},
+		{
+			type = "dropdown",
+			name = "Auto Unlock Item when filling order",
+			tooltip = "Unocks items that are locked when filling orders",
+			choices = self.EnabledTable,
+			getFunc = function() if NAH.settings.AutoUnLockItems ==true then return "Enabled" else return "Disabled" end end,
+			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.AutoUnLockItems = true else NAH.settings.AutoUnLockItems = false end  end,
 			default = self.EnabledTable[2]
 		},
 		{

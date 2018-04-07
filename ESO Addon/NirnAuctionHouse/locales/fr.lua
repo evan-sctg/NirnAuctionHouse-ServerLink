@@ -5,11 +5,87 @@ ZO_CreateStringId("SI_NAH_STRING_TOTAL"     , "total");
 ZO_CreateStringId("SI_NAH_STRING_PAGE"     , "page");
 
 
-ZO_CreateStringId("SI_NAH_STRING_AUCTIONITEM"     , "Enchères");--new
-ZO_CreateStringId("SI_NAH_STRING_FULFILLORDER"     , "Envoyer l'ordre");--new
-ZO_CreateStringId("SI_NAH_STRING_CANCELAUCTION"     , "Annuler l'enchère");--new
+ZO_CreateStringId("SI_NAH_STRING_AUCTIONITEM"     , "Enchères");
+ZO_CreateStringId("SI_NAH_STRING_FULFILLORDER"     , "Envoyer l'ordre");
+ZO_CreateStringId("SI_NAH_STRING_CANCELAUCTION"     , "Annuler l'enchère");
 
-ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "Vérification du prix");--new
+ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "Vérification du prix");
+
+
+
+
+
+
+
+
+
+ZO_CreateStringId("SI_NAH_STRING_ATTACHMENT_QUEUED"     ,"Pièce jointe en file d'attente");--new
+ZO_CreateStringId("SI_NAH_STRING_PAID_ORDER_QUEUED"     ,"En attente de paiement pour la synchronisation de la commande afin de recevoir un crédit acheteur");--new
+ZO_CreateStringId("SI_NAH_STRING_RECIEVED_IN_MAIL"     ,"Commande d'enchères reçue par courrier");--new
+ZO_CreateStringId("SI_NAH_STRING_SETTINGS_RESET"     ,"vos paramètres pour Nirn Auction House ont été réinitialisés");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_SEND_MAIL"     ,"Échec de l'envoi du courrier");--new
+ZO_CreateStringId("SI_NAH_STRING_MARKED_AS_FILLED"     ,"Marqué comme synchro complète pour recevoir des crédits vendeur");--new
+ZO_CreateStringId("SI_NAH_STRING_CONTACTING_WTB"     ,"Contacter le lecteur WTB");--new
+ZO_CreateStringId("SI_NAH_STRING_BUYOUT_QUEUED"     ,"Rachat en file d'attente %s x %s pour %s(g)  synchroniser pour acheter maintenant");--new
+ZO_CreateStringId("SI_NAH_STRING_FOR"     ,"pour");--new
+ZO_CreateStringId("SI_NAH_STRING_HIGH_BID"     ,"HAUT BID");--new
+ZO_CreateStringId("SI_NAH_STRING_COMPLETE"     ,"Achevée");--new
+ZO_CreateStringId("SI_NAH_STRING_HIGHEST_BIDDER"     ,"LE PLUS HAUT SOUMISSIONNAIRE");--new
+ZO_CreateStringId("SI_NAH_STRING_OUTBID"     ,"SURENCHÉRIR");--new
+ZO_CreateStringId("SI_NAH_STRING_WAITING_ON_SELLER"     ,"En attente sur le vendeur");--new
+ZO_CreateStringId("SI_NAH_STRING_MOVING_ITEM_TO_INV"     ,"Déplacement d'un élément vers l'inventaire");--new
+ZO_CreateStringId("SI_NAH_STRING_WITHDRAW_COMPLETE"     ,"Retirer complet");--new
+ZO_CreateStringId("SI_NAH_STRING_LOCATED"     ,"situé");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_TO_LOCATE"     ,"n'a pas réussi à localiser");--new
+ZO_CreateStringId("SI_NAH_STRING_NOTHING_TO_RETRIEVE"     ,"rien à récupérer");--new
+ZO_CreateStringId("SI_NAH_STRING_REACHED_AUCTION_LIMIT"     ,"Limite d'enchères atteinte: ");--new
+ZO_CreateStringId("SI_NAH_STRING_SELLS_FOR"     ,"vend pour");--new
+ZO_CreateStringId("SI_NAH_STRING_NO_PRICE_DATA"     ,"Aucune donnée de prix pour  ");--new
+ZO_CreateStringId("SI_NAH_STRING_LISTING_QUEUED"     ,"Liste en attente pour: %s x %s synchroniser pour publier maintenant");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID_AND_BUYOUT"     ,"Veuillez entrer au moins une enchère de départ valide ou une enchère d'achat valide");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID_LISTING"     ,"Veuillez entrer au moins une enchère de départ valide (2,099,999,999 Max)");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BUYOUT_LISTING"     ,"Veuillez entrer au moins une offre d'achat valide (2,100,000,000 Max)");--new
+ZO_CreateStringId("SI_NAH_STRING_NOT_APPLICABLE"     ,"N / A");--new
+ZO_CreateStringId("SI_NAH_STRING_BUYOUT_POSTAGE"     ,"Frais d'expédition");--new
+ZO_CreateStringId("SI_NAH_STRING_UNITPRICE"     ,"Prix ​​unitaire");--new
+ZO_CreateStringId("SI_NAH_STRING_BID_QUEUED"     ,"Enchère en attente pour: %s synchroniser pour publier maintenant");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID_MIN"     ,"S'il vous plaît entrer une offre d'au moins: ");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID_MAX"     ,"Veuillez entrer au moins une enchère valide (2,100,000,000 Max)");--new
+ZO_CreateStringId("SI_NAH_STRING_GOLD_NOT_ENOUGH_BID"     ,"Vous n'avez pas assez d'or pour cette enchère");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID"     ,"Veuillez entrer une offre valide");--new
+ZO_CreateStringId("SI_NAH_STRING_QUEUED_WTB"     ,"Commande WTB en file d'attente pour: %s x %s synchroniser pour publier maintenant");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_PRICE_MAX"     ,"Veuillez entrer au moins un prix valide (2,100,000,000 Max)");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_PRICE"     ,"Veuillez entrer un prix valide");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_QUANTITY"     ,"Veuillez entrer une quantité valide ( 1 - %s )");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_ITEMLINK"     ,"Impossible d'obtenir le lien d'article pour %s");--new
+ZO_CreateStringId("SI_NAH_STRING_MAIL_SENT"     ,"courrier envoyé");--new
+ZO_CreateStringId("SI_NAH_STRING_FILLING_ORDER"     ,"Ordre de remplissage Veuillez patienter...");--new
+ZO_CreateStringId("SI_NAH_STRING_UNLOCK_BEFORE_FILLING"     ,"%s est verrouillé s'il vous plaît débloquer l'objet avant de remplir la commande");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_FIND_ITEM"     ,"Impossible de trouver %s x %s");--new
+ZO_CreateStringId("SI_NAH_STRING_FOUND_ITEM_INV"     ,"A trouvé %s x %s dans votre inventaire");--new
+ZO_CreateStringId("SI_NAH_STRING_FOUND_ITEM_BANK"     ,"A trouvé %s x %s dans votre banque");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_FIND_CRAFT_BAG"     ,"Impossible de localiser l'emplacement du sac pour %s x %s dans votre sac de bricolage");--new
+ZO_CreateStringId("SI_NAH_STRING_FOUND_ITEM_CRAFT_BAG"     ,"A trouvé %s x %s dans votre sac de bricolage");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_STACK_SPLIT"     ,"Impossible de diviser la pile en %s x %s");--new
+ZO_CreateStringId("SI_NAH_STRING_GOLD_NOT_ENOUGH_MAIL"     ,"Vous n'avez pas assez d'or dans votre inventaire pour envoyer cet article");--new
+ZO_CreateStringId("SI_NAH_STRING_FILLING_ORDER_DETAILS"     ,"Ordre de remplissage pour %s envoi %s x%s pour %s COD (affranchissement: %s)");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_FILLING_ORDER"     , "La commande de remplissage a échoué Veuillez réessayer....");--new
+ZO_CreateStringId("SI_NAH_STRING_RELIST_QUEUED"     , "Commerce en attente pour: %s Pour relist synchroniser pour réapparaître maintenant");--new
+ZO_CreateStringId("SI_NAH_STRING_REMOVAL_QUEUED"     , "Commerce en attente pour: %s Pour la synchronisation de suppression à supprimer maintenant");--new
+ZO_CreateStringId("SI_NAH_STRING_PURCHASE_QUEUE_FULL"     ,"Votre file d'attente de commande est pleine, vous devez la synchroniser avant d'acheter plus d'articles");--new
+ZO_CreateStringId("SI_NAH_STRING_TRACKED_LIST_FULL"     ,"Votre liste de commandes suivies est pleine, vous devez permettre que certaines de vos commandes soient complétées avant d'acheter plus d'articles");--new
+ZO_CreateStringId("SI_NAH_STRING_GOLD_NOT_ENOUGH"     ,"Vous n'avez pas assez d'or dans votre inventaire pour cet achat");--new
+ZO_CreateStringId("SI_NAH_STRING_MAIL_FULL"     ,"Votre boîte aux lettres est pleine, vous devez faire de la place avant d'acheter des articles");--new
+ZO_CreateStringId("SI_NAH_STRING_VERIFY_BUYOUT"     ,"Êtes-vous sûr que vous voulez acheter \n%s (x%s) pour %s Gold?");--new
+ZO_CreateStringId("SI_NAH_STRING_VERIFY_SELL"     , "Êtes-vous sûr de vouloir vendre? \n%s (x%s) pour %s Gold?");--new
+ZO_CreateStringId("SI_NAH_STRING_NOT_IN_INV_BANK"     , "Tu n'as pas %s dans votre inventaire ou votre banque");--new
+ZO_CreateStringId("SI_NAH_STRING_NOTICE_QUEUE_MULTIPLE_BUYOUTS"     , "Vous pouvez mettre en file d'attente plusieurs achats en désactivant (Auto Post Buyouts) dans les paramètres ( ESC->Settings->Addons->Nirn Auction House )");--new
+
+
+
+
+
+
 
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_LISTING"     , "Éléments listés avec succès pour la vente - le traitement peut prendre jusqu'à 60 secondes");
 ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING"     , "Échec de la liste des articles à vendre");
@@ -38,7 +114,7 @@ ZO_CreateStringId("SI_NAH_HEADER_STATUS"   , "Statut");
 ZO_CreateStringId("SI_NAH_HEADER_TIMELEFT"   , "Temps restant");
 ZO_CreateStringId("SI_NAH_HEADER_BUYOUT"   , "Acheter");
 ZO_CreateStringId("SI_NAH_HEADER_BID"   , "Offre");
-ZO_CreateStringId("SI_NAH_HEADER_UNIT"   , "Unit");--New
+ZO_CreateStringId("SI_NAH_HEADER_UNIT"   , "Unit");
 
 
 ZO_CreateStringId("SI_NAH_LAST_PAGE"   , "Page précédente");
@@ -48,30 +124,30 @@ ZO_CreateStringId("SI_NAH_BID"   , "Offre");
 ZO_CreateStringId("SI_NAH_BUYOUT"   , "Acheter");
 ZO_CreateStringId("SI_NAH_CANCEL"   , "Annuler");
 ZO_CreateStringId("SI_NAH_CONFIRM"   , "Confirmer");
-ZO_CreateStringId("SI_NAH_RELIST"   , "Relist");--new
-ZO_CreateStringId("SI_NAH_BROWSE"   , "Feuilleter");--new
-ZO_CreateStringId("SI_NAH_EXPIRED"   , "Expiré");--new
-ZO_CreateStringId("SI_NAH_ORDERS"   , "Ordres");--new
-ZO_CreateStringId("SI_NAH_MYORDERS"   , "Mes Ordres");--new
-ZO_CreateStringId("SI_NAH_TRACKING"   , "Suivi");--new
-ZO_CreateStringId("SI_NAH_POSTORDER"   , "Envoyer l'ordre");--new
-ZO_CreateStringId("SI_NAH_PURCHASEPRICE"   , "Prix ​​d'achat");--new
+ZO_CreateStringId("SI_NAH_RELIST"   , "Relist");
+ZO_CreateStringId("SI_NAH_BROWSE"   , "Feuilleter");
+ZO_CreateStringId("SI_NAH_EXPIRED"   , "Expiré");
+ZO_CreateStringId("SI_NAH_ORDERS"   , "Ordres");
+ZO_CreateStringId("SI_NAH_MYORDERS"   , "Mes Ordres");
+ZO_CreateStringId("SI_NAH_TRACKING"   , "Suivi");
+ZO_CreateStringId("SI_NAH_POSTORDER"   , "Envoyer l'ordre");
+ZO_CreateStringId("SI_NAH_PURCHASEPRICE"   , "Prix ​​d'achat");
 
 
 
 
-ZO_CreateStringId("SI_NAH_SELLITEM"   , "Vendre l'article");--new
-ZO_CreateStringId("SI_NAH_CONTACT"   , "Contact");--new
-ZO_CreateStringId("SI_NAH_RATING"   , "Évaluation");--new
-ZO_CreateStringId("SI_NAH_SUPPORT"   , "Soutien");--new
-ZO_CreateStringId("SI_NAH_INMAIL"   , "Dans Mail");--new
-ZO_CreateStringId("SI_NAH_GETFROMBANK"   , "Obtenir de la banque");--new
-ZO_CreateStringId("SI_NAH_GETFROMGUILDBANK"   , "Obtenir de la banque de guilde");--new
-ZO_CreateStringId("SI_NAH_CLEARFILTERS"   , "Effacer les filtres de recherche");--new
-ZO_CreateStringId("SI_NAH_ADVANCEDSEARCH"   , "Recherche Avancée");--new
+ZO_CreateStringId("SI_NAH_SELLITEM"   , "Vendre l'article");
+ZO_CreateStringId("SI_NAH_CONTACT"   , "Contact");
+ZO_CreateStringId("SI_NAH_RATING"   , "Évaluation");
+ZO_CreateStringId("SI_NAH_SUPPORT"   , "Soutien");
+ZO_CreateStringId("SI_NAH_INMAIL"   , "Dans Mail");
+ZO_CreateStringId("SI_NAH_GETFROMBANK"   , "Obtenir de la banque");
+ZO_CreateStringId("SI_NAH_GETFROMGUILDBANK"   , "Obtenir de la banque de guilde");
+ZO_CreateStringId("SI_NAH_CLEARFILTERS"   , "Effacer les filtres de recherche");
+ZO_CreateStringId("SI_NAH_ADVANCEDSEARCH"   , "Recherche Avancée");
 
 
-ZO_CreateStringId("SI_NAH_RESULTS"   , "résultats");--new
+ZO_CreateStringId("SI_NAH_RESULTS"   , "résultats");
 
 ZO_CreateStringId("SI_NAH_AUCTION"   , "Enchères");
 ZO_CreateStringId("SI_NAH_SOLDITEMS"   , "Articles vendus");

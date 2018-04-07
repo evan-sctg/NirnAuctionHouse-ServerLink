@@ -63,6 +63,8 @@ local NirnAuctionHouse = NirnAuctionHouse
 		AddListingsToMasterMerchant = false,
 		ShowMasterMerchantPrice = true,
 		ShowTTCPrice = false,
+		AutoLockItems = true,
+		AutoUnLockItems = true,
 		AutoPost = false,
 		AutoPostNewAuctions = false,
 		AutoPostBids = false,
@@ -234,24 +236,24 @@ function NAHTrackedItemList:SetupItemRow( control, data )
 	control:GetNamedChild("Name").mouseOverColor = itemqualColor;
 	if data.TradeIsBidder=="true"  then
 		if data.TradeIsHighestBid=="true" then
-		control:GetNamedChild("IsBuyout"):SetText("HIGHEST BIDDER" );	 
+		control:GetNamedChild("IsBuyout"):SetText( GetString(SI_NAH_STRING_HIGHEST_BIDDER) );	 
 		else
-		control:GetNamedChild("IsBuyout"):SetText("OUTBID" );		
+		control:GetNamedChild("IsBuyout"):SetText( GetString(SI_NAH_STRING_OUTBID) );		
 		end
 		
 	
 	control:GetNamedChild("TimeLeft").normalColor = ZO_DEFAULT_TEXT;
 	control:GetNamedChild("TimeLeft"):SetText(data.TimeLeft);	
 	if data.TimeLeft == "Complete" then
-		control:GetNamedChild("IsBuyout"):SetText("Waiting on Seller");	
+		control:GetNamedChild("IsBuyout"):SetText(GetString(SI_NAH_STRING_WAITING_ON_SELLER));	
 	end
 	
 	else
-		control:GetNamedChild("IsBuyout"):SetText("Waiting on Seller");	
+		control:GetNamedChild("IsBuyout"):SetText(GetString(SI_NAH_STRING_WAITING_ON_SELLER));	
 		
 	
 	control:GetNamedChild("TimeLeft").normalColor = ZO_DEFAULT_TEXT;
-	control:GetNamedChild("TimeLeft"):SetText("Complete");
+	control:GetNamedChild("TimeLeft"):SetText(GetString(SI_NAH_STRING_COMPLETE));
 	end
 	control:GetNamedChild("Name"):SetText(data.name);	
 
@@ -384,7 +386,7 @@ function NAHSoldItemList:SetupItemRow( control, data )
 	control:GetNamedChild("Name").mouseOverColor = itemqualColor;
 --~ 	d("TradeIsBidder: " ..data.TradeIsBidder);
 	if data.TradeIsBidder=="true" then
-	control:GetNamedChild("IsBuyout"):SetText("HIGH BID" );		
+	control:GetNamedChild("IsBuyout"):SetText( GetString(SI_NAH_STRING_HIGH_BID) );		
 	control:GetNamedChild("TimeLeft").normalColor = ZO_DEFAULT_TEXT;
 	control:GetNamedChild("TimeLeft"):SetText(data.TimeLeft); 
 	else
@@ -1730,12 +1732,12 @@ function NAHRow_OnMouseUp( control )
 
 	if(NAH~=nil and NAH.settings~=nil and NAH.settings.ActiveTab~=nil)then
 	if( NAH.settings.ActiveTab=="MyWTB")then
-	NirnAuctionHouse.AddToChat("WTB "..control.data.itemLink.." x"..control.data.stackCount.." for "..control.data.BuyoutPrice.." (g)  ");
+	NirnAuctionHouse.AddToChat("WTB "..control.data.itemLink.." x"..control.data.stackCount.." ".. GetString(SI_NAH_STRING_FOR).." "..control.data.BuyoutPrice.." (g)  ");
 
 	else
 	
 	if( NAH.settings.ActiveTab=="MyListings" and control.data.BuyoutPrice ~=nil and control.data.BuyoutPrice>1)then
-	NirnAuctionHouse.AddToChat("WTS "..control.data.itemLink.." x"..control.data.stackCount.." for "..control.data.BuyoutPrice.." (g)  ");
+	NirnAuctionHouse.AddToChat("WTS "..control.data.itemLink.." x"..control.data.stackCount.." ".. GetString(SI_NAH_STRING_FOR).." "..control.data.BuyoutPrice.." (g)  ");
 	else
 	NirnAuctionHouse.AddToChat(control.data.itemLink);
 	end
@@ -1773,12 +1775,12 @@ end
  local codcost=10+math.floor(control.data.BuyoutPrice/20)
  
   if CashOnHand < codcost then 
-  d("You do not have enough Gold in your inventory to mail this item") 
+  d(GetString(SI_NAH_STRING_GOLD_NOT_ENOUGH_MAIL)) 
   return false;
   end
   
 --~  local codcost=10+control.data.BuyoutPrice
- d( "Filling order for " ..control.data.buyer .. " sending " .. control.data.itemLink .. " x" .. control.data.stackCount .. " for " .. control.data.BuyoutPrice .. " COD (postage: " .. codcost .. ")");
+ d( string.format(GetString(SI_NAH_STRING_FILLING_ORDER_DETAILS),control.data.buyer,control.data.itemLink, control.data.stackCount , control.data.BuyoutPrice,codcost ));
  
 			NirnAuctionHouse.FillingOrderID=control.data.TradeID
 			NirnAuctionHouse.FillingOrderBidID=control.data.BidID	
@@ -1786,7 +1788,7 @@ end
 	if (NirnAuctionHouse.FillingOrderID ~= nil) then 
 	NirnAuctionHouse:COD(control.data.buyer,control.data.itemLink,control.data.stackCount,control.data.BuyoutPrice)
 	else	
-	d("Filling Order failed Please retry...")			
+d(GetString(SI_NAH_STRING_FAILED_FILLING_ORDER) )			
 	end
  ---------------------
 --~  cod costs a base cost of 10 with 1g for every 20g of your cod cost
@@ -1843,7 +1845,7 @@ local itemLink=control.data.itemLink
 		
 	NAH.settings.PostRelistOrders=true;
 	
-d("Queued Trade for: " .. itemLink .. " For relist sync to Relist now")
+d(string.format(GetString(SI_NAH_STRING_RELIST_QUEUED),itemLink ))
 	
 end	
 
@@ -1867,7 +1869,7 @@ local itemLink=control.data.itemLink
 		
 	NAH.settings.PostFilledWTBOrders=true;
 	
-d("Queued Purchase Order for: " .. itemLink .. " For Removal sync to Remove now")
+d(string.format(GetString(SI_NAH_STRING_WTB_REMOVAL_QUEUED),itemLink ))
 
  if NAH.settings.AutoPostCanceled and NAH.settings.AutoPostCanceled == true then
 	NirnAuctionHouse:forceWriteSavedVars()	
@@ -1896,7 +1898,7 @@ end
 		
 	NAH.settings.PostFilledOrders=true;
 	
-d("Queued Trade for: " .. itemLink .. " For Removal sync to Remove now")
+d(string.format(GetString(SI_NAH_STRING_REMOVAL_QUEUED),itemLink ))
 
 
  if NAH.settings.AutoPostCanceled and NAH.settings.AutoPostCanceled == true then
@@ -1955,7 +1957,7 @@ end
 	NirnAuctionHouse:forceWriteSavedVars()
 	else	
 	if(NirnAuctionHouse.ActiveBidListingId~=nil and NAH.settings.data.Bids~=nil and NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId] ~=nil)then
-	d("Queued Buyout ".. NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.ItemLink .."x".. NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.stackCount.." for ".. NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.Price.."(g)  sync to buyout now")
+	d(string.format(GetString(SI_NAH_STRING_BUYOUT_QUEUED),NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.ItemLink , NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.stackCount , NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.Price ))
 	NirnAuctionHouse_CloseGoldCostBuyout()
 	end
 	if NirnAuctionHouse.TrackedBidCost== nil then NirnAuctionHouse.TrackedBidCost=0; end
@@ -1968,7 +1970,7 @@ end
 
  function NirnAuctionHouse_ContactWTB(control )
 if(control ==nil or control.data ==nil or control.data.stackCount ==nil or control.data.itemLink ==nil or control.data.itemLink==""or control.data.source ==nil or control.data.source=="")then return; end 
-		d("Contacting WTB Player: "..control.data.source)	
+		d(GetString(SI_NAH_STRING_CONTACTING_WTB)..": "..control.data.source)	
 			NAH.settings.ActiveTab="";			
 			NirnAuctionHouse:SendMail(control.data.source, "Nirn Auction House WTB Contact", "WTB Contact for : " .. control.data.itemLink .. " x" .. control.data.stackCount .. ", Contact me with details")
  
@@ -1980,7 +1982,7 @@ if(control ==nil or control.data ==nil or control.data.stackCount ==nil or contr
 if(control ==nil or control.data ==nil or control.data.itemLink ==nil or control.data.itemLink=="")then return; end
 	  local bagCount, bankCount, CraftbagCount = GetItemLinkStacks(control.data.itemLink)
 	
- if ((bagCount+bankCount+CraftbagCount) <1) then  d("You do Not have "..control.data.itemLink.." in your Inventory or Bank") return; end
+ if ((bagCount+bankCount+CraftbagCount) <1) then  d(string.format(GetString(SI_NAH_STRING_NOT_IN_INV_BANK),control.data.itemLink )) return; end
 	
 	NirnAuctionHouse.ActiveWTBListingId=control.data.TradeID
 	
@@ -1997,7 +1999,7 @@ NAH.settings.data.FilledWTBOrders[NirnAuctionHouse.ActiveWTBListingId].WTBID=con
 NAH.settings.data.FilledWTBOrders[NirnAuctionHouse.ActiveWTBListingId].Player=GetUnitName("player")--not the account but the player 
 
 
-NAHAuctionHouseGoldCostFilledwtb:GetNamedChild("buyoutlabel"):SetText("Are You Sure Your Want to Sell \n".. control.data.name .." (x".. control.data.stackCount ..") for ".. control.data.BuyoutPrice .." Gold?");
+NAHAuctionHouseGoldCostFilledwtb:GetNamedChild("buyoutlabel"):SetText(string.format(GetString(SI_NAH_STRING_VERIFY_SELL),control.data.name, control.data.stackCount , control.data.BuyoutPrice ));
 NirnAuctionHouse_OpenGoldCostFilledwtb()
 
 
@@ -2008,22 +2010,22 @@ end
  function NirnAuctionHouse_BuyItem(control )
  
   if NAH.settings.AutoPostBuyouts and NAH.settings.AutoPostBuyouts == true then
-  d("You can queue multiple purchases by disabling ( Auto Post Buyouts ) in settings ( ESC->Settings->Addons->Nirn Auction House )")
+  d(GetString(SI_NAH_STRING_NOTICE_QUEUE_MULTIPLE_BUYOUTS))
   end
  
  local total_banked=(GetCurrentMoney() +GetBankedMoney());
  local total_promised=(NirnAuctionHouse.TrackedBidCost + tonumber(control.data.BuyoutPrice));
- if total_banked < tonumber(control.data.BuyoutPrice) or total_banked < total_promised then  d("You do not have enough Gold in your inventory for this purchase") return; end	
- if IsLocalMailboxFull() then  d("Your mailbox is full, you must make space before buying items") return; end
+ if total_banked < tonumber(control.data.BuyoutPrice) or total_banked < total_promised then  d(GetString(SI_NAH_STRING_GOLD_NOT_ENOUGH)) return; end	
+ if IsLocalMailboxFull() then  d(GetString(SI_NAH_STRING_MAIL_FULL)) return; end
   
 
  
  if NirnAuctionHouse.TrackedBids~= nil then
- if #NirnAuctionHouse.TrackedBids >= 30 then  d("Your Tracked Orders list is full, you must allow for some of your orders to be completed before buying more items") return; end
+ if #NirnAuctionHouse.TrackedBids >= 30 then  d(GetString(SI_NAH_STRING_TRACKED_LIST_FULL)) return; end
  end
  
  if NAH.settings.data.Bids~= nil then
- if #NAH.settings.data.Bids >= 30 then  d("Your Purchase Order Queue is full, you must sync before buying more items") return; end
+ if #NAH.settings.data.Bids >= 30 then  d(GetString(SI_NAH_STRING_PURCHASE_QUEUE_FULL)) return; end
  end
  
 	NirnAuctionHouse.ActiveBidListingId=control.data.TradeID
@@ -2045,7 +2047,7 @@ NAH.settings.data.Bids[control.data.TradeID].Bid.seller=control.data.source;
 NAH.settings.data.Bids[control.data.TradeID].Bid.TradeID=control.data.TradeID;
 
 
-NAHAuctionHouseGoldCostBuyout:GetNamedChild("buyoutlabel"):SetText("Are You Sure Your Want to Buyout \n".. control.data.name .." (x".. control.data.stackCount ..") for ".. control.data.BuyoutPrice .." Gold?");
+NAHAuctionHouseGoldCostBuyout:GetNamedChild("buyoutlabel"):SetText(string.format(GetString(SI_NAH_STRING_VERIFY_BUYOUT),control.data.name, control.data.stackCount , control.data.BuyoutPrice ));
 NirnAuctionHouse_OpenGoldCostBuyout()
 	
 end	
@@ -2245,6 +2247,7 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYLISTINGS
 	if NirnAuctionHousePanel:IsHidden() then
 	 SCENE_MANAGER:Show("NAHScene"); 
 	end
+	NirnAuctionHouse:NAHWindow_updateGold();
  end	
 		
  function NirnAuctionHouse_ShowWTBListings( )
@@ -2254,6 +2257,7 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_ORDERS))
 	if NirnAuctionHousePanel:IsHidden() then
 	 SCENE_MANAGER:Show("NAHScene"); 
 	end
+	NirnAuctionHouse:NAHWindow_updateGold();
  end	
  
  
@@ -2265,6 +2269,7 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYORDERS))
 	if NirnAuctionHousePanel:IsHidden() then
 	 SCENE_MANAGER:Show("NAHScene"); 
 	end
+	NirnAuctionHouse:NAHWindow_updateGold();
  end	
  
  function NirnAuctionHouse_ShowExpiredListings( )
@@ -2473,7 +2478,7 @@ NirnAuctionHouse.FillingOrderBidID=nil
 	if(NAH.settings.AutoPostFilled)then
 	NirnAuctionHouse:NAHWindowOrders_Open()
 	else
-	d("Marked trade as filled sync to recieve seller credits")
+	d(GetString(SI_NAH_STRING_MARKED_AS_FILLED))
 	if(NirnAuctionHouse.SoldItemList~=nil) then 
 	NirnAuctionHouse.SoldItemList:RefreshFilters()
 	end
@@ -2487,15 +2492,18 @@ end
 
 function NirnAuctionHouse:MailFailed()
 
-	if(NirnAuctionHouse.FillingOrderID ~= nil and NAH.settings.data.FilledOrders ~= nil and NAH.settings.data.FilledOrders[NirnAuctionHouse.FillingOrderID] ~= nil)then
+	if(NirnAuctionHouse.FillingOrderID ~= nil )then
+	if(NAH.settings.data.FilledOrders ~= nil and NAH.settings.data.FilledOrders[NirnAuctionHouse.FillingOrderID] ~= nil)then
 		NAH.settings.data.FilledOrders[NirnAuctionHouse.FillingOrderID] = nil
+	end
+		 RemoveQueuedItemAttachment(1);--unslots item if fail fails to send --only if we are filling a order
 	end
 
 NirnAuctionHouse.FillingOrderID=nil
 NirnAuctionHouse.FillingOrderBidID=nil
 --~ NAH.settings.PostFilledOrders=false;
 --~ d("EVENT_MAIL_SEND_FAILED")
-d("Failed to send mail")
+d(GetString(SI_NAH_STRING_FAILED_SEND_MAIL))
 end
 	
 
@@ -2539,6 +2547,13 @@ local function NAH_SetAccountCharData()
 	
 		
 	
+ 	if( NAH.settings.AutoLockItems==nil and defaultSettings.AutoLockItems ~= nil)then
+	NAH.settings.AutoLockItems = defaultSettings.AutoLockItems
+	end
+ 	if( NAH.settings.AutoUnLockItems==nil and defaultSettings.AutoUnLockItems ~= nil)then
+	NAH.settings.AutoUnLockItems = defaultSettings.AutoUnLockItems
+	end
+	
  	if( NAH.settings.AutoPostNewAuctions==nil and defaultSettings.AutoPostNewAuctions ~= nil)then
 	NAH.settings.AutoPostNewAuctions = defaultSettings.AutoPostNewAuctions
 	end
@@ -2575,7 +2590,7 @@ local function NAH_SetAccountCharData()
 	end
 	
 	if( NAH.settings.settingsVersion==nil or NAH.settings.settingsVersion~=NAH.ServerLinkVersionRequired)then
-	d("(your settigns for Nirn Auction House have been reset)")
+	d("(".. GetString(SI_NAH_STRING_SETTINGS_RESET)..")")
 
 	NAH.settings.settingsVersion=NAH.ServerLinkVersionRequired;
 	
@@ -2632,6 +2647,9 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYLISTINGS
 	if (NAH.settings.ActiveTab=="MyWTB") then  
 	NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYORDERS))
 	end
+	
+	
+	NirnAuctionHouse:NAHWindow_updateGold();
 	
 	if NAH.settings.OpenTrackedOrdersWindow == false then
 	else
@@ -3048,7 +3066,7 @@ zo_callLater(function()
 		NAH.settings.data.ReceivedOrders = {}
 		end
 		if(not NAH.settings.data.ReceivedOrders[mailId])then		
-		d("Auction Order Recieved in mail: "..itemLink)
+		d(GetString(SI_NAH_STRING_RECIEVED_IN_MAIL)..": "..itemLink)
 		NAH.settings.data.ReceivedOrders[mailId] = {}			
 		end
 
@@ -3097,7 +3115,7 @@ zo_callLater(function()
 		 if NAH.settings.AutoPostPaid and NAH.settings.AutoPostPaid == true then
 		NirnAuctionHouse:forceWriteSavedVars()
 		else		
-		d("Queued Paid for order sync to recieve buyer credit")
+		d(GetString(SI_NAH_STRING_PAID_ORDER_QUEUED))
 		end
 		
 		end
@@ -3467,17 +3485,17 @@ local extraWaitTime = 0
 					locatedbagslot = NirnAuctionHouse:SearchBag(1,ItemLink,stackCount,false)	
 
 					if(locatedbagslot==nil)then 	 
-					d("Failed to split stack to " ..ItemLink .." x " .. stackCount)
+					d(string.format(GetString(SI_NAH_STRING_FAILED_STACK_SPLIT),ItemLink , stackCount ))
 					return false;	
 --~ 					else		
 --~ 					d("located")
 					 end
-						end, (400))	
+						end, (550))	
 				 end
 			
 			else				
 				if CraftbagCount >= tonumber(stackCount) then  
-					d("Found "..CraftbagCount.."x "..ItemLink.." in your Craft Bag")
+					d(string.format(GetString(SI_NAH_STRING_FOUND_ITEM_CRAFT_BAG),CraftbagCount , ItemLink ))
 					
 					if NAH.settings.AutoRetrieveCraftBag and NAH.settings.AutoRetrieveCraftBag == true then
 					extraWaitTime = 400 
@@ -3490,7 +3508,7 @@ local extraWaitTime = 0
 						zo_callLater(function()
 						locatedbagslot = NirnAuctionHouse:SearchBag(1,ItemLink,stackCount,false)	
 							if(locatedbagslot==nil)then 	 
-							d("Failed to retrieve " ..ItemLink .." x " .. stackCount .." from your Craft Bag")
+					d(string.format(GetString(SI_NAH_STRING_FAILED_RETRIEVE_CRAFT_BAG),ItemLink , stackCount ))
 							return false;	
 --~ 							else		
 --~ 							d("located")
@@ -3498,7 +3516,7 @@ local extraWaitTime = 0
 						end, (700))	
 					
 					else
-					d("Failed to locate bag slot for "..stackCount.."x "..ItemLink.." in your Craft Bag")
+					d(string.format(GetString(SI_NAH_STRING_FAILED_FIND_CRAFT_BAG),stackCount , ItemLink ))
 					
 					end
 					else
@@ -3508,24 +3526,24 @@ local extraWaitTime = 0
 					
 				else
 					if bankCount >= tonumber(stackCount) then  
-						d("Found "..bankCount.."x "..ItemLink.." in your Bank")	
+					d(string.format(GetString(SI_NAH_STRING_FOUND_ITEM_BANK),bankCount , ItemLink ))
 
 
 					else						
 
 					 if (bagCount+bankCount+CraftbagCount) >= tonumber(stackCount) then 
 			if bagCount > 0 then  			
-			d("Found "..bagCount.."x "..ItemLink.." in your inventory")		
+					d(string.format(GetString(SI_NAH_STRING_FOUND_ITEM_INV),bagCount , ItemLink ))	
 			end
 			if CraftbagCount > 0 then  
-			d("Found "..CraftbagCount.."x "..ItemLink.." in your Craft Bag")	
+					d(string.format(GetString(SI_NAH_STRING_FOUND_ITEM_CRAFT_BAG),CraftbagCount , ItemLink ))
 			end
 			if bankCount > 0 then  
-			d("Found "..bankCount.."x "..ItemLink.." in your Bank")				
+					d(string.format(GetString(SI_NAH_STRING_FOUND_ITEM_BANK),bankCount , ItemLink ))			
 			end						 
 					 else			
-					 
-					d("Failed to find "..stackCount.."x "..ItemLink)					
+					 	
+					d(string.format(GetString(SI_NAH_STRING_FAILED_FIND_ITEM),stackCount , ItemLink ))					
 					NirnAuctionHouse.FillingOrderID=nil
 					NirnAuctionHouse.FillingOrderBidID=nil	
 					return false;
@@ -3542,10 +3560,14 @@ local extraWaitTime = 0
 					
 			if locatedbagslot~=nil then
 	if (NirnAuctionHouse.FillingOrderID ~= nil) then 
-			if CanItemBePlayerLocked(1, locatedbagslot) then
+	if CanItemBePlayerLocked(1, locatedbagslot) then
+			if NAH.settings.AutoUnLockItems and NAH.settings.AutoUnLockItems == true then
 			SetItemIsPlayerLocked(1, locatedbagslot, false)
-			end
 			
+			end
+	end
+		
+
  local codcost=10+math.floor(amount/20)
  SCENE_MANAGER:Hide("mailSend");
  SCENE_MANAGER:Show("mailSend");
@@ -3553,39 +3575,53 @@ local extraWaitTime = 0
 	zo_callLater(function()
 	
 	if (NirnAuctionHouse.FillingOrderID ~= nil) then 
+	
+	if  CanItemBePlayerLocked(1, locatedbagslot) and IsItemPlayerLocked(1, locatedbagslot) then 
+		d(string.format(GetString(SI_NAH_STRING_UNLOCK_BEFORE_FILLING),ItemLink ))
+	
+		else	
 			QueueItemAttachment(1, locatedbagslot, 1)
-	d("Queued Attachment")
+	d( GetString(SI_NAH_STRING_ATTACHMENT_QUEUED) )
 	zo_callLater(function()
 	QueueCOD(amount)
 	zo_callLater(function()
 	if (NirnAuctionHouse.FillingOrderID ~= nil) then 
 	SendMail(to, "Nirn Auction House Order", "Order for " .. to .. ", Containing: " .. ItemLink .. " x" .. stackCount .. " for " .. amount .. " |t18:18:esoui/art/currency/currency_gold_32.dds|t COD (postage: " .. codcost .. "|t18:18:esoui/art/currency/currency_gold_32.dds|t )")
-			d("Filling Order Please wait...")
+			d(GetString(SI_NAH_STRING_FILLING_ORDER))
 			else	
-		d("Filling Order failed Please retry...")	
+		d(GetString(SI_NAH_STRING_FAILED_FILLING_ORDER))	
 		NAH.settings.ActiveTab="Orders";
 		SCENE_MANAGER:Show("NAHSceneOrders"); 
 			end
 		end, 800)
 		end, 200)
+		
+		end
+		
+		
 		else	
-	d("Filling Order failed Please retry...")	
+	d(GetString(SI_NAH_STRING_FAILED_FILLING_ORDER))	
 	NAH.settings.ActiveTab="Orders";
 	SCENE_MANAGER:Show("NAHSceneOrders"); 
 		end
+		
+		
+		
 		end, 900)
 		
+
+		
 	else	
-	d("Filling Order failed Please retry...")			
+	d(GetString(SI_NAH_STRING_FAILED_FILLING_ORDER))			
 	end
 	
 			else
-	d("Failed to find "..stackCount.."x "..ItemLink)	
+	d(string.format(GetString(SI_NAH_STRING_FAILED_FIND_ITEM),stackCount , ItemLink ))
 
 	NirnAuctionHouse.FillingOrderID=nil
 	NirnAuctionHouse.FillingOrderBidID=nil
 			end
-			end, (750 + extraWaitTime))	
+			end, (850 + extraWaitTime))	
 	--end
 	end
 
@@ -3596,12 +3632,12 @@ function NirnAuctionHouse:SendMail(to,subject,message)
 
 	SendMail(to, subject, message)
 	
-	d("mail sent")
+	d(GetString(SI_NAH_STRING_MAIL_SENT))
 	else
 	RequestOpenMailbox()	
 	zo_callLater(function()
 			SendMail(to, subject, message)
-			d("mail sent")
+			d(GetString(SI_NAH_STRING_MAIL_SENT))
 	zo_callLater(function()
 			CloseMailbox()
 		end, 1000)
@@ -3686,7 +3722,7 @@ function NirnAuctionHouse:GetItemLink(item)
 		return GetItemLink(item.dataEntry.data.bagId, item.dataEntry.data.slotIndex, LINK_STYLE_DEFAULT)
 	end
 
-	d("Could not get item link for " .. parentName)
+	d(string.format(GetString(SI_NAH_STRING_FAILED_ITEMLINK),parentName ))
 	return nil
 end
 
@@ -4043,9 +4079,9 @@ NirnAuctionHouse.GoldAmountBuyoutVal = tonumber(NirnAuctionHouse.GoldAmountBuyou
 local maxstack=200
 if(itemstacks==false)then maxstack=1 end
 
- if (not NirnAuctionHouse.GoldAmountQtyVal or NirnAuctionHouse.GoldAmountQtyVal < 1 or (itemstacks==false and NirnAuctionHouse.GoldAmountQtyVal > 1) ) then   d("Please Enter at Valid Quantity ( 1 - "..maxstack.." )") return;  end
-if (NirnAuctionHouse.GoldAmountBuyout:GetText()~="" and NirnAuctionHouse.GoldAmountBuyout:GetText()~="0" and (not NirnAuctionHouse.GoldAmountBuyoutVal or NirnAuctionHouse.GoldAmountBuyoutVal < 1)) then  d("Please Enter at a Valid Price") return; end 
- if (NirnAuctionHouse.GoldAmountBuyoutVal ~=nil and NirnAuctionHouse.GoldAmountBuyoutVal > 2100000000) then d("Please Enter at least Valid Price (2,100,000,000 Max)") return; end 
+ if (not NirnAuctionHouse.GoldAmountQtyVal or NirnAuctionHouse.GoldAmountQtyVal < 1 or (itemstacks==false and NirnAuctionHouse.GoldAmountQtyVal > 1)  or (itemstacks==true and NirnAuctionHouse.GoldAmountQtyVal > maxstack) ) then   d(string.format(GetString(SI_NAH_STRING_INVALID_QUANTITY),maxstack )) return;  end
+if (NirnAuctionHouse.GoldAmountBuyout:GetText()~="" and NirnAuctionHouse.GoldAmountBuyout:GetText()~="0" and (not NirnAuctionHouse.GoldAmountBuyoutVal or NirnAuctionHouse.GoldAmountBuyoutVal < 1)) then  d(GetString(SI_NAH_STRING_INVALID_PRICE)) return; end 
+ if (NirnAuctionHouse.GoldAmountBuyoutVal ~=nil and NirnAuctionHouse.GoldAmountBuyoutVal > 2100000000) then d(GetString(SI_NAH_STRING_INVALID_PRICE_MAX)) return; end 
 
 
 NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId].WTBOrder.BuyoutPrice=NirnAuctionHouse.GoldAmountBuyout:GetText();
@@ -4053,7 +4089,7 @@ NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId].WTBOrder.BuyoutPri
 NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId].WTBOrder.stackCount=NirnAuctionHouse.GoldAmountQtyVal;
 
 
-d("Queued WTB Order for: "..NirnAuctionHouse.GoldAmountQtyVal.." x " .. NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId].WTBOrder.ItemLink .. " sync to post now")
+		d(string.format(GetString(SI_NAH_STRING_QUEUED_WTB),NirnAuctionHouse.GoldAmountQtyVal , NAH.settings.data.WTBOrders[NirnAuctionHouse.ActivePostWTBId].WTBOrder.ItemLink  ))
 	NAH.settings.PostWTBOrders=true;-- tell the server link to post WTBs 
 	NirnAuctionHouse_CloseGoldCostWTB();
 	
@@ -4106,25 +4142,25 @@ NirnAuctionHouse.GoldAmountBidcont = NAHAuctionHouseGoldCostBid:GetNamedChild("G
 NirnAuctionHouse.GoldAmountBid = NirnAuctionHouse.GoldAmountBidcont:GetNamedChild("GoldAmountBoxBid");
 NirnAuctionHouse.GoldAmountBidVal = tonumber(NirnAuctionHouse.GoldAmountBid:GetText());
 
- if not NirnAuctionHouse.GoldAmountBidVal or NirnAuctionHouse.GoldAmountBidVal < 1 then  d("Please Enter a Valid Bid") return; end
+ if not NirnAuctionHouse.GoldAmountBidVal or NirnAuctionHouse.GoldAmountBidVal < 1 then  d(GetString(SI_NAH_STRING_INVALID_BID)) return; end
 --~  if (GetCurrentMoney() +GetBankedMoney()) < NirnAuctionHouse.GoldAmountBidVal then  d("You do Not Have Enough Gold In your Inventory For this Bid") return; end
  
  
  local total_banked=(GetCurrentMoney() +GetBankedMoney());
  local total_promised=(NirnAuctionHouse.TrackedBidCost + NirnAuctionHouse.GoldAmountBidVal);
- if total_banked < NirnAuctionHouse.GoldAmountBidVal or  total_banked < total_promised then  d("You do Not Have Enough Gold In your Inventory For this Bid") return; end
+ if total_banked < NirnAuctionHouse.GoldAmountBidVal or  total_banked < total_promised then  d(GetString(SI_NAH_STRING_GOLD_NOT_ENOUGH_BID)) return; end
  
+  
  
- 
-	if IsLocalMailboxFull() then  d("Your mailbox is full, you must make space before buying items") return; end
+	if IsLocalMailboxFull() then  d(GetString(SI_NAH_STRING_MAIL_FULL)) return; end
 
   
  if NirnAuctionHouse.TrackedBids~= nil then
- if #NirnAuctionHouse.TrackedBids >= 30 then  d("Your Tracked Orders list is full, you must allow for some of your orders to be completed before buying more items") return; end
+ if #NirnAuctionHouse.TrackedBids >= 30 then  d(GetString(SI_NAH_STRING_TRACKED_LIST_FULL)) return; end
  end
  
  if NAH.settings.data.Bids~= nil then
- if #NAH.settings.data.Bids >= 30 then  d("Your Purchase Order Queue is full, you must sync before buying more items") return; end
+ if #NAH.settings.data.Bids >= 30 then  d(GetString(SI_NAH_STRING_PURCHASE_QUEUE_FULL)) return; end
  end
  
 	if(not NAH.settings.data.Bids)then
@@ -4143,14 +4179,14 @@ NirnAuctionHouse.GoldAmountBidVal = tonumber(NirnAuctionHouse.GoldAmountBid:GetT
 			NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.Price =1
 	end
 	
-	 if NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.Price >= NirnAuctionHouse.GoldAmountBidVal then  d("Please Enter a Bid of at least: " .. tonumber(NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.Price)+1) return; end
+	 if NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.Price >= NirnAuctionHouse.GoldAmountBidVal then  d(GetString(SI_NAH_STRING_INVALID_BID_MIN) .. tonumber(NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.Price)+1) return; end
  
- if (NirnAuctionHouse.GoldAmountBidVal ~=nil and NirnAuctionHouse.GoldAmountBidVal > 2100000000) then d("Please Enter at least Valid Bid (2,100,000,000 Max)") return; end 
+ if (NirnAuctionHouse.GoldAmountBidVal ~=nil and NirnAuctionHouse.GoldAmountBidVal > 2100000000) then d(GetString(SI_NAH_STRING_INVALID_BID_MAX)) return; end 
 	
 NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.Price=NirnAuctionHouse.GoldAmountBidVal;
 
 
-d("Queued Bid for: " .. NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.ItemLink .. " sync to post now")
+d(string.format(GetString(SI_NAH_STRING_BID_QUEUED),NAH.settings.data.Bids[NirnAuctionHouse.ActiveBidListingId].Bid.ItemLink ))
  
 	NAH.settings.PostBids=true;-- tell the server link to post Bids 
 	NirnAuctionHouse_CloseGoldCostBid();
@@ -4197,14 +4233,14 @@ NirnAuctionHouse.GoldStartingUnit = NAHAuctionHouseGoldCost:GetNamedChild("start
 		 NirnAuctionHouse.GoldBuyoutUnit:SetText("");
 		else
 	local buyoutunit=NirnAuctionHouse:formattedNum(string.format("%.2f", NirnAuctionHouse.GoldAmountBuyoutVal/NirnAuctionHouse.GoldAmountQtyVal))
-	NirnAuctionHouse.GoldBuyoutUnit:SetText("UnitPrice: "..buyoutunit.."(g)"); 
+	NirnAuctionHouse.GoldBuyoutUnit:SetText(GetString(SI_NAH_STRING_UNITPRICE)..": "..buyoutunit.."(g)"); 
 		end
 		
 		  if (NirnAuctionHouse.GoldAmountStartingVal ==nil or NirnAuctionHouse.GoldAmountStartingVal > 2099999999 or NirnAuctionHouse.GoldAmountStartingVal < 1 ) then 
 		 NirnAuctionHouse.GoldStartingUnit:SetText("");
 		else
 	local startingunit=NirnAuctionHouse:formattedNum(string.format("%.2f", NirnAuctionHouse.GoldAmountStartingVal/NirnAuctionHouse.GoldAmountQtyVal))
-	NirnAuctionHouse.GoldStartingUnit:SetText("UnitPrice: "..startingunit.."(g)"); 
+	NirnAuctionHouse.GoldStartingUnit:SetText(GetString(SI_NAH_STRING_UNITPRICE)..": "..startingunit.."(g)"); 
 		end
 		
 	 end
@@ -4222,13 +4258,13 @@ NirnAuctionHouse.GoldAmountBuyoutVal = tonumber(NirnAuctionHouse.GoldAmountBuyou
 NirnAuctionHouse.GoldPostage = NAHAuctionHouseGoldCost:GetNamedChild("Postage");
 
  if (NirnAuctionHouse.GoldAmountBuyoutVal ==nil or NirnAuctionHouse.GoldAmountBuyoutVal > 2100000000 or NirnAuctionHouse.GoldAmountBuyoutVal < 1 ) then 
-NirnAuctionHouse.GoldPostage:SetText("Buyout Postage: NA");
+NirnAuctionHouse.GoldPostage:SetText(GetString(SI_NAH_STRING_BUYOUT_POSTAGE)..": "..GetString(SI_NAH_STRING_NOT_APPLICABLE));
 else
 local codcost=10+math.floor(NirnAuctionHouse.GoldAmountBuyoutVal/20)
 if(codcost>=NirnAuctionHouse.GoldAmountBuyoutVal)then
-NirnAuctionHouse.GoldPostage:SetText("Buyout Postage: |cFF0000"..NirnAuctionHouse:formattedNum(codcost).."(g)|r");
+NirnAuctionHouse.GoldPostage:SetText(GetString(SI_NAH_STRING_BUYOUT_POSTAGE)..": |cFF0000"..NirnAuctionHouse:formattedNum(codcost).."(g)|r");
 else
-NirnAuctionHouse.GoldPostage:SetText("Buyout Postage: |c008000"..NirnAuctionHouse:formattedNum(codcost).."(g)|r");
+NirnAuctionHouse.GoldPostage:SetText(GetString(SI_NAH_STRING_BUYOUT_POSTAGE)..": |c008000"..NirnAuctionHouse:formattedNum(codcost).."(g)|r");
 end
 
  end 
@@ -4266,14 +4302,14 @@ NirnAuctionHouse.GoldAmountQty = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmou
 NirnAuctionHouse.GoldAmountStarting = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmountStarting"):GetNamedChild("GoldAmountBoxStarting");
 NirnAuctionHouse.GoldAmountBuyout = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmountBuyout"):GetNamedChild("GoldAmountBoxBuyout");
 
-
+ 
 NirnAuctionHouse.GoldAmountQtyVal = tonumber(NirnAuctionHouse.GoldAmountQty:GetText());
 NirnAuctionHouse.GoldAmountStartingVal = tonumber(NirnAuctionHouse.GoldAmountStarting:GetText());
 NirnAuctionHouse.GoldAmountBuyoutVal = tonumber(NirnAuctionHouse.GoldAmountBuyout:GetText());
- if (not NirnAuctionHouse.GoldAmountQtyVal or NirnAuctionHouse.GoldAmountQtyVal < 1 or NirnAuctionHouse.GoldAmountQtyVal > NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.stackCount ) then   d("Please Enter at Valid Quantity ( 1 - "..NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.stackCount.." )") return;  end
- if (not NirnAuctionHouse.GoldAmountStartingVal or NirnAuctionHouse.GoldAmountStartingVal < 1 ) then   if not NirnAuctionHouse.GoldAmountBuyoutVal or NirnAuctionHouse.GoldAmountBuyoutVal < 1 then  d("Please Enter at least Valid Starting Bid or a Valid Buyout Bid") return; end end
- if (NirnAuctionHouse.GoldAmountStartingVal ~=nil and NirnAuctionHouse.GoldAmountStartingVal > 2099999999) then d("Please Enter at least Valid Starting Bid (2,099,999,999 Max)") return; end 
- if (NirnAuctionHouse.GoldAmountBuyoutVal ~=nil and NirnAuctionHouse.GoldAmountBuyoutVal > 2100000000) then d("Please Enter at least Valid Buyout Bid (2,100,000,000 Max)") return; end 
+ if (not NirnAuctionHouse.GoldAmountQtyVal or NirnAuctionHouse.GoldAmountQtyVal < 1 or NirnAuctionHouse.GoldAmountQtyVal > NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.stackCount ) then   d(string.format(GetString(SI_NAH_STRING_INVALID_QUANTITY),NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.stackCount )) return;  end
+ if (not NirnAuctionHouse.GoldAmountStartingVal or NirnAuctionHouse.GoldAmountStartingVal < 1 ) then   if not NirnAuctionHouse.GoldAmountBuyoutVal or NirnAuctionHouse.GoldAmountBuyoutVal < 1 then  d(GetString(SI_NAH_STRING_INVALID_BID_AND_BUYOUT)) return; end end
+ if (NirnAuctionHouse.GoldAmountStartingVal ~=nil and NirnAuctionHouse.GoldAmountStartingVal > 2099999999) then d(GetString(SI_NAH_STRING_INVALID_BID_LISTING)) return; end 
+ if (NirnAuctionHouse.GoldAmountBuyoutVal ~=nil and NirnAuctionHouse.GoldAmountBuyoutVal > 2100000000) then d(GetString(SI_NAH_STRING_INVALID_BUYOUT_LISTING)) return; end 
 
 
 NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].Listing.StartingPrice=NirnAuctionHouse.GoldAmountStarting:GetText();
@@ -4288,12 +4324,14 @@ end
 
 
 	
-	if NirnAuctionHouse.ActivePostListingBag~=nil and NirnAuctionHouse.ActivePostListingSlot~=nil then
-	if CanItemBePlayerLocked(NirnAuctionHouse.ActivePostListingBag, NirnAuctionHouse.ActivePostListingSlot) then
-	SetItemIsPlayerLocked(NirnAuctionHouse.ActivePostListingBag, NirnAuctionHouse.ActivePostListingSlot, true)
+	if NirnAuctionHouse.ActivePostListingBag~=nil and NirnAuctionHouse.ActivePostListingSlot~=nil then	
+		if NAH.settings.AutoLockItems and NAH.settings.AutoLockItems == true then
+			if CanItemBePlayerLocked(NirnAuctionHouse.ActivePostListingBag, NirnAuctionHouse.ActivePostListingSlot) then
+			SetItemIsPlayerLocked(NirnAuctionHouse.ActivePostListingBag, NirnAuctionHouse.ActivePostListingSlot, true)
+			end
+		end
 	end
-	end
-d("Queued Listing for: "..NirnAuctionHouse.GoldAmountQtyVal.." x " .. NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.ItemLink .. " sync to post now")
+d(string.format(GetString(SI_NAH_STRING_LISTING_QUEUED),NirnAuctionHouse.GoldAmountQtyVal , NAH.settings.data.Listings[NirnAuctionHouse.ActivePostListingId].attributes.ItemLink  ))
 	NAH.settings.PostListings=true;-- tell the server link to post listings 
 --~ 	RequestOpenUnsafeURL("https://nirnah.com/debug/")
 	NirnAuctionHouse_CloseGoldCost();
@@ -4472,14 +4510,14 @@ local Priceuid=itemId..":"..ItemQuality..":"..statval..":"..requiredLevel..":"..
 	if NirnAuctionHouse.PriceTable[Priceuid] ~= nil then
 	if NirnAuctionHouse.PriceTable[Priceuid].price ~= nil then
 	if(tochat)then
-	NirnAuctionHouse.AddToChat("(Nirn Auction House) Price Check: "..itemLink.." sells for "..NirnAuctionHouse:formattedNum(NirnAuctionHouse.PriceTable[Priceuid].price).."(g)");	
+	NirnAuctionHouse.AddToChat("(Nirn Auction House) ".. GetString(SI_NAH_STRING_PRICECHECK) ..": "..itemLink.." "..GetString(SI_NAH_STRING_SELLS_FOR).." "..NirnAuctionHouse:formattedNum(NirnAuctionHouse.PriceTable[Priceuid].price).."(g)");	
 	else
-	d(GetString(SI_NAH_STRING_PRICECHECK)..": "..itemLink.." sells for "..NirnAuctionHouse:formattedNum(NirnAuctionHouse.PriceTable[Priceuid].price).."|t18:18:esoui/art/currency/currency_gold_32.dds|t" );
+	d(GetString(SI_NAH_STRING_PRICECHECK)..": "..itemLink.." "..GetString(SI_NAH_STRING_SELLS_FOR).." "..NirnAuctionHouse:formattedNum(NirnAuctionHouse.PriceTable[Priceuid].price).."|t18:18:esoui/art/currency/currency_gold_32.dds|t" );
 	end
 	end
 	
 	else
-	d("No Price Data For  "..itemLink.."")	
+	d(GetString(SI_NAH_STRING_NO_PRICE_DATA)..itemLink.."")	
 	end
 --~ 	d("Price check complete")
 	
@@ -4531,7 +4569,7 @@ end
 function NirnAuctionHouse:AuctionOffItem(control)
 	if NirnAuctionHouse.myListingsNum >= NirnAuctionHouse.myListingsMax then
 	if (NAH.settings.ServerSideListingLimits==nil or NAH.settings.ServerSideListingLimits==false) then
-	d("Auction Limit Reached: " .. NirnAuctionHouse.myListingsMax)	
+	d(GetString(SI_NAH_STRING_REACHED_AUCTION_LIMIT) .. NirnAuctionHouse.myListingsMax)	
 	return
 	end
 end
@@ -4544,6 +4582,10 @@ end
 	local bagId = control.bagId	
 	local slotIndex = control.slotIndex
 	local stackCount = control.stackCount
+	
+	if( stackCount > 200 )then
+	stackCount=200;
+	end
 	
 	itemLink = GetItemLink(bagId, slotIndex, LINK_STYLE_BRACKETS)
 	itemName = LocalizeString("<<t:1>>", GetItemLinkName(itemLink));
@@ -4760,6 +4802,13 @@ end
 	
 	
 	
+	function NirnAuctionHouse:NAHWindow_updateGold()
+	
+	NirnAuctionHousePanel:GetNamedChild("LabelPlayerGold"):SetText(NirnAuctionHouse:formattedNum(GetCurrentMoney()) .. " || " .. NirnAuctionHouse:formattedNum(GetBankedMoney()));
+--~ 	NirnAuctionHousePanel:GetNamedChild("LabelBankedGold"):SetText(NirnAuctionHouse:formattedNum(GetBankedMoney()));
+	end
+	
+	
 	function NirnAuctionHouse:NAHWindow_show()
 		 if(NirnAuctionHouse.ServerLink_INITIATED)then
 			NAH.settings.ActiveTab="Auction";
@@ -4768,6 +4817,7 @@ end
 			 if NirnAuctionHousePanel:IsHidden() then
 			 SCENE_MANAGER:Show("NAHScene");
 			 end
+				 NirnAuctionHouse:NAHWindow_updateGold();
 		 end	
 	end
 
@@ -4781,6 +4831,7 @@ end
 	    NAHAuctionHouseOrdersPanel:SetHidden(false)   
 	    NAH.settings.ActiveTab="Orders";
 	 SCENE_MANAGER:Show("NAHSceneOrders");
+	 NirnAuctionHouse:NAHWindow_updateGold();
 	end
 
 	function NirnAuctionHouse:NAHWindow_orders_hide()
@@ -5147,7 +5198,7 @@ end
 	end
 	
 	function NirnAuctionHouse_Withdraw(srcBag)
-	if #NirnAuctionHouse.NewBids < 1 then d("nothing to retrieve") return end
+	if #NirnAuctionHouse.NewBids < 1 then d(GetString(SI_NAH_STRING_NOTHING_TO_RETRIEVE)) return end
 	    local window
 	    
     local delayStep = 3800
@@ -5191,7 +5242,7 @@ end
       local locatedbagslot = nil;
       locatedbagslot = NirnAuctionHouse:SearchBag(srcBag,TSI.Item.ItemLink,tonumber(TSI.Item.stackCount),true)
 	  if(locatedbagslot~=nil)then	
-		d("located " .. TSI.Item.ItemLink .. "x " .. TSI.Item.stackCount .." ")
+		d(GetString(SI_NAH_STRING_LOCATED).." " .. TSI.Item.ItemLink .. "x " .. TSI.Item.stackCount .." ")
 		local itemIconFile, itemCount, _, _, _, equipType, _, itemQuality = GetItemInfo(srcBag, locatedbagslot)
 		
 		
@@ -5226,7 +5277,7 @@ end
 		end
 		
 		else
-		d("failed to locate " .. TSI.Item.ItemLink .. "x " .. TSI.Item.stackCount .." ")
+		d(GetString(SI_NAH_STRING_FAILED_TO_LOCATE).." " .. TSI.Item.ItemLink .. "x " .. TSI.Item.stackCount .." ")
 		
 	  end
 	  
@@ -5240,7 +5291,7 @@ end
      local numbids= #NirnAuctionHouse.NewBids;
      if numbids > 0 then 
       zo_callLater(function() 
-      d("Withdraw Complete")
+      d(GetString(SI_NAH_STRING_WITHDRAW_COMPLETE))
 		end, delayStep * (numbids+1))
 		
 		end
@@ -5259,7 +5310,7 @@ function NAH_MoveItem(ItemLink,destBag, srcBag, srcSlot, stackCount)
     elseif srcBag == BAG_GUILDBANK then
         TransferFromGuildBank(srcSlot)	
 	if destBag == BAG_BACKPACK then
-	    d("Moving Item  to Inventory: " .. ItemLink .. " x " .. stackCount)
+	    d(GetString(SI_NAH_STRING_MOVING_ITEM_TO_INV)..": " .. ItemLink .. " x " .. stackCount)
 	    end
  
      else
@@ -5281,7 +5332,7 @@ function NAH_MoveItem(ItemLink,destBag, srcBag, srcSlot, stackCount)
 		if(result == true) then
 		    result = CallSecureProtected("PlaceInTransfer")
 		if destBag == BAG_BACKPACK then
-		    d("Moving Item to Inventory: " .. ItemLink .. " x " .. stackCount)
+		    d(GetString(SI_NAH_STRING_MOVING_ITEM_TO_INV)..": " .. ItemLink .. " x " .. stackCount)
 		    end
 		end
 		ClearCursor()

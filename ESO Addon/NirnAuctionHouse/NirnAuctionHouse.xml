@@ -598,7 +598,15 @@
 				<Label name="$(parent)resultnum" font="ZoFontGameMedium" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL">
 					<Anchor point="TOPLEFT" relativeTo="$(parent)Search" relativePoint="TOPRIGHT" offsetX="100" />
 				</Label>
+				<Label name="$(parent)LabelPlayerGold" text="" font="ZoFontGameMedium" horizontalAlignment="RIGHT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL">
+					<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" offsetX="50" offsetY="-15" />
+				</Label>
 
+					<Texture name="$(parent)goldsym" inherits="ZO_InsetTexture" textureFile="esoui/art/currency/currency_gold_32.dds">
+					<Dimensions x="15" y="15" />
+					<Anchor point="LEFT"  offsetX="-18" offsetY="-10" relativePoint="BOTTOMLEFT" relativeTo="$(parent)LabelPlayerGold"    />
+				</Texture>
+					
 
 		<Control name="$(parent)advancedSearchSettings" tier="HIGH"  mouseEnabled="true" movable="true" clampedToScreen="true" hidden="true">
 					<Anchor point="LEFT" relativeTo="$(parent)Search" relativePoint="LEFT" offsetX="-600" offsetY="60" />
@@ -1801,7 +1809,7 @@
 						self:SetText(GetString(SI_NAH_STARTINGPRICE))
 					</OnInitialized>
 				</Label>
-				<Label name="$(parent)startingunit" font="ZoFontGameSmall" horizontalAlignment="LEFT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Buyout UnitPrice: (g)">
+				<Label name="$(parent)startingunit" font="ZoFontGameSmall" horizontalAlignment="LEFT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="UnitPrice: (g)">
 					<Anchor point="BOTTOMLEFT" relativeTo="$(parent)startinglabel" relativePoint="BOTTOMLEFT" offsetX="0" offsetY="65" />
 					<OnInitialized>
 					</OnInitialized>
@@ -1822,7 +1830,7 @@
 					</OnInitialized>
 				</Label>
 				
-				<Label name="$(parent)buyoutunit" font="ZoFontGameSmall" horizontalAlignment="LEFT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="Buyout UnitPrice: (g)">
+				<Label name="$(parent)buyoutunit" font="ZoFontGameSmall" horizontalAlignment="LEFT" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text="UnitPrice: (g)">
 					<Anchor point="BOTTOMLEFT" relativeTo="$(parent)buyoutlabel" relativePoint="BOTTOMLEFT" offsetX="0" offsetY="65" />
 					<OnInitialized>
 					</OnInitialized>
@@ -1972,6 +1980,9 @@
 				
 					<Anchor point="TOPLEFT" relativeTo="$(parent)GoldAmount" relativePoint="LEFT"  offsetX="150"offsetY="40" />
 					<Dimensions x="150" y="30" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_SELLITEM))
+					</OnInitialized>
 			<OnClicked>
 				NirnAuctionHouse_DoPost_FilledwtbOrder(self:GetParent())
 			</OnClicked>

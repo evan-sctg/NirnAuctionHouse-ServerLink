@@ -4,11 +4,78 @@ ZO_CreateStringId("SI_NAH_STRING_SHOWING"     , "showing");
 ZO_CreateStringId("SI_NAH_STRING_TOTAL"     , "total");
 ZO_CreateStringId("SI_NAH_STRING_PAGE"     , "page");
 
-ZO_CreateStringId("SI_NAH_STRING_AUCTIONITEM"     , "Auction Item");--new
-ZO_CreateStringId("SI_NAH_STRING_FULFILLORDER"     , "Fulfill Order");--new
-ZO_CreateStringId("SI_NAH_STRING_CANCELAUCTION"     , "Cancel Auction");--new
+ZO_CreateStringId("SI_NAH_STRING_AUCTIONITEM"     , "Auction Item");
+ZO_CreateStringId("SI_NAH_STRING_FULFILLORDER"     , "Fulfill Order");
+ZO_CreateStringId("SI_NAH_STRING_CANCELAUCTION"     , "Cancel Auction");
 
-ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "Price Check");--new
+ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "Price Check");
+
+
+
+
+
+
+ZO_CreateStringId("SI_NAH_STRING_ATTACHMENT_QUEUED"     ,"Queued Attachment");--new
+ZO_CreateStringId("SI_NAH_STRING_PAID_ORDER_QUEUED"     ,"Queued Paid for order sync to receive buyer credit");--new
+ZO_CreateStringId("SI_NAH_STRING_RECIEVED_IN_MAIL"     ,"Auction Order Received in mail");--new
+ZO_CreateStringId("SI_NAH_STRING_SETTINGS_RESET"     ,"your settings for Nirn Auction House have been reset");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_SEND_MAIL"     ,"Failed to send mail");--new
+ZO_CreateStringId("SI_NAH_STRING_MARKED_AS_FILLED"     ,"Marked trade as filled sync to receive seller credits");--new
+ZO_CreateStringId("SI_NAH_STRING_CONTACTING_WTB"     ,"Contacting WTB Player");--new
+ZO_CreateStringId("SI_NAH_STRING_BUYOUT_QUEUED"     ,"Queued Buyout %s x %s for %s(g)  sync to buyout now");--new
+ZO_CreateStringId("SI_NAH_STRING_FOR"     ,"for");--new
+ZO_CreateStringId("SI_NAH_STRING_HIGH_BID"     ,"HIGH BID");--new
+ZO_CreateStringId("SI_NAH_STRING_COMPLETE"     ,"Complete");--new
+ZO_CreateStringId("SI_NAH_STRING_HIGHEST_BIDDER"     ,"HIGHEST BIDDER");--new
+ZO_CreateStringId("SI_NAH_STRING_OUTBID"     ,"OUTBID");--new
+ZO_CreateStringId("SI_NAH_STRING_WAITING_ON_SELLER"     ,"Waiting on Seller");--new
+ZO_CreateStringId("SI_NAH_STRING_MOVING_ITEM_TO_INV"     ,"Moving Item  to Inventory");--new
+ZO_CreateStringId("SI_NAH_STRING_WITHDRAW_COMPLETE"     ,"Withdraw Complete");--new
+ZO_CreateStringId("SI_NAH_STRING_LOCATED"     ,"located");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_TO_LOCATE"     ,"failed to locate");--new
+ZO_CreateStringId("SI_NAH_STRING_NOTHING_TO_RETRIEVE"     ,"nothing to retrieve");--new
+ZO_CreateStringId("SI_NAH_STRING_REACHED_AUCTION_LIMIT"     ,"Auction Limit Reached: ");--new
+ZO_CreateStringId("SI_NAH_STRING_SELLS_FOR"     ,"sells for");--new
+ZO_CreateStringId("SI_NAH_STRING_NO_PRICE_DATA"     ,"No Price Data For  ");--new
+ZO_CreateStringId("SI_NAH_STRING_LISTING_QUEUED"     ,"Queued Listing for: %s x %s sync to post now");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID_AND_BUYOUT"     ,"Please Enter at least a Valid Starting Bid or a Valid Buyout Bid");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID_LISTING"     ,"Please Enter at least a Valid Starting Bid (2,099,999,999 Max)");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BUYOUT_LISTING"     ,"Please Enter at least a Valid Buyout Bid (2,100,000,000 Max)");--new
+ZO_CreateStringId("SI_NAH_STRING_NOT_APPLICABLE"     ,"NA");--new
+ZO_CreateStringId("SI_NAH_STRING_BUYOUT_POSTAGE"     ,"Buyout Postage");--new
+ZO_CreateStringId("SI_NAH_STRING_UNITPRICE"     ,"UnitPrice");--new
+ZO_CreateStringId("SI_NAH_STRING_BID_QUEUED"     ,"Queued Bid for: %s sync to post now");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID_MIN"     ,"Please Enter a Bid of at least: ");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID_MAX"     ,"Please Enter at least a Valid Bid (2,100,000,000 Max)");--new
+ZO_CreateStringId("SI_NAH_STRING_GOLD_NOT_ENOUGH_BID"     ,"You do Not Have Enough Gold For this Bid");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID"     ,"Please Enter a Valid Bid");--new
+ZO_CreateStringId("SI_NAH_STRING_QUEUED_WTB"     ,"Queued WTB Order for: %s x %s sync to post now");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_PRICE_MAX"     ,"Please Enter at least a Valid Price (2,100,000,000 Max)");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_PRICE"     ,"Please Enter a Valid Price");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_QUANTITY"     ,"Please Enter a Valid Quantity ( 1 - %s )");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_ITEMLINK"     ,"Could not get item link for %s");--new
+ZO_CreateStringId("SI_NAH_STRING_MAIL_SENT"     ,"mail sent");--new
+ZO_CreateStringId("SI_NAH_STRING_FILLING_ORDER"     ,"Filling Order Please wait...");--new
+ZO_CreateStringId("SI_NAH_STRING_UNLOCK_BEFORE_FILLING"     ,"%s is Locked please unlock item before filling order");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_FIND_ITEM"     ,"Failed to find %s x %s");--new
+ZO_CreateStringId("SI_NAH_STRING_FOUND_ITEM_INV"     ,"Found %s x %s in your inventory");--new
+ZO_CreateStringId("SI_NAH_STRING_FOUND_ITEM_BANK"     ,"Found %s x %s in your Bank");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_FIND_CRAFT_BAG"     ,"Failed to locate bag slot for %s x %s in your Craft Bag");--new
+ZO_CreateStringId("SI_NAH_STRING_FOUND_ITEM_CRAFT_BAG"     ,"Found %s x %s in your Craft Bag");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_STACK_SPLIT"     ,"Failed to split stack to %s x %s");--new
+ZO_CreateStringId("SI_NAH_STRING_GOLD_NOT_ENOUGH_MAIL"     ,"You do not have enough Gold in your inventory to mail this item");--new
+ZO_CreateStringId("SI_NAH_STRING_FILLING_ORDER_DETAILS"     ,"Filling order for %s sending %s x%s for %s COD (postage: %s)");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_FILLING_ORDER"     , "Filling Order failed Please retry...");--new
+ZO_CreateStringId("SI_NAH_STRING_RELIST_QUEUED"     , "Queued Trade for: %s For relist sync to Relist now");--new
+ZO_CreateStringId("SI_NAH_STRING_REMOVAL_QUEUED"     , "Queued Trade for: %s For Removal sync to Remove now");--new
+ZO_CreateStringId("SI_NAH_STRING_PURCHASE_QUEUE_FULL"     ,"Your Purchase Order Queue is full, you must sync before buying more items");--new
+ZO_CreateStringId("SI_NAH_STRING_TRACKED_LIST_FULL"     ,"Your Tracked Orders list is full, you must allow for some of your orders to be completed before buying more items");--new
+ZO_CreateStringId("SI_NAH_STRING_GOLD_NOT_ENOUGH"     ,"You do not have enough Gold in your inventory for this purchase");--new
+ZO_CreateStringId("SI_NAH_STRING_MAIL_FULL"     ,"Your mailbox is full, you must make space before buying items");--new
+ZO_CreateStringId("SI_NAH_STRING_VERIFY_BUYOUT"     ,"Are You Sure Your Want to Buyout \n%s (x%s) for %s Gold?");--new
+ZO_CreateStringId("SI_NAH_STRING_VERIFY_SELL"     , "Are You Sure Your Want to Sell \n%s (x%s) for %s Gold?");--new
+ZO_CreateStringId("SI_NAH_STRING_NOT_IN_INV_BANK"     , "You do Not have %s in your Inventory or Bank");--new
+ZO_CreateStringId("SI_NAH_STRING_NOTICE_QUEUE_MULTIPLE_BUYOUTS"     , "You can queue multiple purchases by disabling ( Auto Post Buyouts ) in settings ( ESC->Settings->Addons->Nirn Auction House )");--new
 
 
 
@@ -41,7 +108,7 @@ ZO_CreateStringId("SI_NAH_HEADER_STATUS"   , "Status");
 ZO_CreateStringId("SI_NAH_HEADER_TIMELEFT"   , "TimeLeft");
 ZO_CreateStringId("SI_NAH_HEADER_BUYOUT"   , "Buyout");
 ZO_CreateStringId("SI_NAH_HEADER_BID"   , "Bid");
-ZO_CreateStringId("SI_NAH_HEADER_UNIT"   , "Unit");--New
+ZO_CreateStringId("SI_NAH_HEADER_UNIT"   , "Unit");
 
 
 
@@ -52,28 +119,28 @@ ZO_CreateStringId("SI_NAH_BID"   , "Bid");
 ZO_CreateStringId("SI_NAH_BUYOUT"   , "Buyout");
 ZO_CreateStringId("SI_NAH_CANCEL"   , "Cancel");
 ZO_CreateStringId("SI_NAH_CONFIRM"   , "Confirm");
-ZO_CreateStringId("SI_NAH_RELIST"   , "Relist");--new
-ZO_CreateStringId("SI_NAH_BROWSE"   , "Browse");--new
-ZO_CreateStringId("SI_NAH_EXPIRED"   , "Expired");--new
-ZO_CreateStringId("SI_NAH_ORDERS"   , "Orders");--new
-ZO_CreateStringId("SI_NAH_MYORDERS"   , "My Orders");--new
-ZO_CreateStringId("SI_NAH_TRACKING"   , "Tracking");--new
-ZO_CreateStringId("SI_NAH_POSTORDER"   , "Post Order");--new
-ZO_CreateStringId("SI_NAH_PURCHASEPRICE"   , "Purchase Price");--new
+ZO_CreateStringId("SI_NAH_RELIST"   , "Relist");
+ZO_CreateStringId("SI_NAH_BROWSE"   , "Browse");
+ZO_CreateStringId("SI_NAH_EXPIRED"   , "Expired");
+ZO_CreateStringId("SI_NAH_ORDERS"   , "Orders");
+ZO_CreateStringId("SI_NAH_MYORDERS"   , "My Orders");
+ZO_CreateStringId("SI_NAH_TRACKING"   , "Tracking");
+ZO_CreateStringId("SI_NAH_POSTORDER"   , "Post Order");
+ZO_CreateStringId("SI_NAH_PURCHASEPRICE"   , "Purchase Price");
 
 
 
-ZO_CreateStringId("SI_NAH_SELLITEM"   , "Sell Item");--new
-ZO_CreateStringId("SI_NAH_CONTACT"   , "Contact");--new
-ZO_CreateStringId("SI_NAH_RATING"   , "Rating");--new
-ZO_CreateStringId("SI_NAH_SUPPORT"   , "Support");--new
-ZO_CreateStringId("SI_NAH_INMAIL"   , "In Mail");--new
-ZO_CreateStringId("SI_NAH_GETFROMBANK"   , "Get From Bank");--new
-ZO_CreateStringId("SI_NAH_GETFROMGUILDBANK"   , "Get From Guild Bank");--new
-ZO_CreateStringId("SI_NAH_CLEARFILTERS"   , "Clear Search Filters");--new
-ZO_CreateStringId("SI_NAH_ADVANCEDSEARCH"   , "Advanced Search");--new
+ZO_CreateStringId("SI_NAH_SELLITEM"   , "Sell Item");
+ZO_CreateStringId("SI_NAH_CONTACT"   , "Contact");
+ZO_CreateStringId("SI_NAH_RATING"   , "Rating");
+ZO_CreateStringId("SI_NAH_SUPPORT"   , "Support");
+ZO_CreateStringId("SI_NAH_INMAIL"   , "In Mail");
+ZO_CreateStringId("SI_NAH_GETFROMBANK"   , "Get From Bank");
+ZO_CreateStringId("SI_NAH_GETFROMGUILDBANK"   , "Get From Guild Bank");
+ZO_CreateStringId("SI_NAH_CLEARFILTERS"   , "Clear Search Filters");
+ZO_CreateStringId("SI_NAH_ADVANCEDSEARCH"   , "Advanced Search");
 
-ZO_CreateStringId("SI_NAH_RESULTS"   , "results");--new
+ZO_CreateStringId("SI_NAH_RESULTS"   , "results");
 
 
 				

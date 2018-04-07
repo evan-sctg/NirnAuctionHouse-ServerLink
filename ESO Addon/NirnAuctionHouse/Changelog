@@ -4,6 +4,21 @@ Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 Latest App: https://nirnah.com/NirnAuctionHouse.app.zip
 
 
+v0.0.32 "beta" @Elo
+- Added option to disable auto locking of items when listing for sale  ( Auto Lock ) in settings ( ESC->Settings->Addons->Nirn Auction House ) [default: enabled]
+- Added option to disable auto unlocking of items when fulfilling orders ( Auto Unlock ) in settings ( ESC->Settings->Addons->Nirn Auction House ) [default: enabled]
+- Added display player gold to auction window
+- Added display banked gold to auction window
+- Optimizations and improvements
+- Added better support for high ping users
+- Added Polish translation  (thanks to tomkolp)
+- Translated missing strings (all languages)
+- bugfix WTB order quantity
+- bugfix buyout orders
+- bugfix Auction order quantity - when listing from craft bag
+- Added unslot attachment if mail fails to send
+
+
 
 v0.0.31 "beta" @Elo
 - Added Limit of 30 purchases per sync (While Autopost buyout Is Disabled)
@@ -12,6 +27,7 @@ v0.0.31 "beta" @Elo
 - Added option to auto sync bids  ( Auto Post bids ) in settings ( ESC->Settings->Addons->Nirn Auction House ) [default: disabled]
 - Added option to auto sync new wtb orders  ( Auto Post new wtb orders ) in settings ( ESC->Settings->Addons->Nirn Auction House ) [default: disabled]
 - Added option to auto sync canceled orders  ( Auto Post Canceled orders ) in settings ( ESC->Settings->Addons->Nirn Auction House ) [default: disabled]
+- bugfix unexpected sad trombone sound
 
 v0.0.30 "beta" @Elo
 - Added starting bid unit pricing to create auction window

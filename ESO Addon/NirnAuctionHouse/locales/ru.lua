@@ -12,6 +12,78 @@ ZO_CreateStringId("SI_NAH_STRING_CANCELAUCTION"     , "Отменить аукц
 
 ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "Проверка цены");--new
 
+
+
+
+
+
+ZO_CreateStringId("SI_NAH_STRING_ATTACHMENT_QUEUED"     ,"Очередное приложение");--new
+ZO_CreateStringId("SI_NAH_STRING_PAID_ORDER_QUEUED"     ,"Очередь Платная для синхронизации заказа для получения кредита покупателя");--new
+ZO_CreateStringId("SI_NAH_STRING_RECIEVED_IN_MAIL"     ,"Заказ аукциона, полученный по почте");--new
+ZO_CreateStringId("SI_NAH_STRING_SETTINGS_RESET"     ,"ваши настройки для аукционного дома Nirn были сброшены");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_SEND_MAIL"     ,"Не удалось отправить почту");--new
+ZO_CreateStringId("SI_NAH_STRING_MARKED_AS_FILLED"     ,"Отмеченная торговля как заполненная синхронизация для получения кредитов продавца");--new
+ZO_CreateStringId("SI_NAH_STRING_CONTACTING_WTB"     ,"Обращение в WTB Player");--new
+ZO_CreateStringId("SI_NAH_STRING_BUYOUT_QUEUED"     ,"Очередь выкупа %s x %s для %s(g)  синхронизация с выкупом сейчас");--new
+ZO_CreateStringId("SI_NAH_STRING_FOR"     ,"для");--new
+ZO_CreateStringId("SI_NAH_STRING_HIGH_BID"     ,"ВЫСОКАЯ ЦЕНА");--new
+ZO_CreateStringId("SI_NAH_STRING_COMPLETE"     ,"полный");--new
+ZO_CreateStringId("SI_NAH_STRING_HIGHEST_BIDDER"     ,"ВЫСШЕЕ ПРЕДЛОЖЕНИЕ");--new
+ZO_CreateStringId("SI_NAH_STRING_OUTBID"     ,"перекупать");--new
+ZO_CreateStringId("SI_NAH_STRING_WAITING_ON_SELLER"     ,"Ожидание продавца");--new
+ZO_CreateStringId("SI_NAH_STRING_MOVING_ITEM_TO_INV"     ,"Перемещение элемента в инвентарь");--new
+ZO_CreateStringId("SI_NAH_STRING_WITHDRAW_COMPLETE"     ,"Выйти");--new
+ZO_CreateStringId("SI_NAH_STRING_LOCATED"     ,"располагается");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_TO_LOCATE"     ,"не удалось найти");--new
+ZO_CreateStringId("SI_NAH_STRING_NOTHING_TO_RETRIEVE"     ,"ничего не получить");--new
+ZO_CreateStringId("SI_NAH_STRING_REACHED_AUCTION_LIMIT"     ,"Достигнут предел аукциона: ");--new
+ZO_CreateStringId("SI_NAH_STRING_SELLS_FOR"     ,"продает за");--new
+ZO_CreateStringId("SI_NAH_STRING_NO_PRICE_DATA"     ,"Нет данных о ценах для  ");--new
+ZO_CreateStringId("SI_NAH_STRING_LISTING_QUEUED"     ,"Очередь в списке для: %s x %s синхронизация для отправки сейчас");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID_AND_BUYOUT"     ,"Введите, по крайней мере, действующую стартовую ставку или Действительную заявку на покупку");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID_LISTING"     ,"Введите, по крайней мере, действующую стартовую ставку (2,099,999,999 максимальная)");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BUYOUT_LISTING"     ,"Введите, по крайней мере, действующую заявку на покупку (2,100,000,000 максимальная)");--new
+ZO_CreateStringId("SI_NAH_STRING_NOT_APPLICABLE"     ,"Не Доступно");--new
+ZO_CreateStringId("SI_NAH_STRING_BUYOUT_POSTAGE"     ,"есть стоимость доставки");--new
+ZO_CreateStringId("SI_NAH_STRING_UNITPRICE"     ,"Цена за единицу");--new
+ZO_CreateStringId("SI_NAH_STRING_BID_QUEUED"     ,"Заявка в очереди для: %s синхронизация для отправки сейчас");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID_MIN"     ,"Пожалуйста, введите заявку не менее: ");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID_MAX"     ,"Введите, по крайней мере, действующую ставку (2,100,000,000 максимальная)");--new
+ZO_CreateStringId("SI_NAH_STRING_GOLD_NOT_ENOUGH_BID"     ,"У вас недостаточно золота для этой заявки");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_BID"     ,"Введите действующую ставку");--new
+ZO_CreateStringId("SI_NAH_STRING_QUEUED_WTB"     ,"Очередь заказа WTB для: %s x %s синхронизация для отправки сейчас");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_PRICE_MAX"     ,"Введите, по крайней мере, действительную цену (2,100,000,000 максимальная)");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_PRICE"     ,"Введите действительную цену");--new
+ZO_CreateStringId("SI_NAH_STRING_INVALID_QUANTITY"     ,"Введите действительное количество ( 1 - %s )");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_ITEMLINK"     ,"Не удалось получить ссылку на элемент для %s");--new
+ZO_CreateStringId("SI_NAH_STRING_MAIL_SENT"     ,"отправлено письмо");--new
+ZO_CreateStringId("SI_NAH_STRING_FILLING_ORDER"     ,"Заказ на заполнение Пожалуйста, подождите...");--new
+ZO_CreateStringId("SI_NAH_STRING_UNLOCK_BEFORE_FILLING"     ,"%s заблокирован, пожалуйста, разблокируйте элемент перед заполнением заказа");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_FIND_ITEM"     ,"Не удалось найти %s x %s");--new
+ZO_CreateStringId("SI_NAH_STRING_FOUND_ITEM_INV"     ,"Найденный %s x %s в вашем инвентаре");--new
+ZO_CreateStringId("SI_NAH_STRING_FOUND_ITEM_BANK"     ,"Найденный %s x %s в вашем банке");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_FIND_CRAFT_BAG"     ,"Не удалось найти слот для %s x %s в твоем магазине Сумка");--new
+ZO_CreateStringId("SI_NAH_STRING_FOUND_ITEM_CRAFT_BAG"     ,"Найденный %s x %s в твоем магазине Сумка");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_STACK_SPLIT"     ,"Не удалось разделить стек на %s x %s");--new
+ZO_CreateStringId("SI_NAH_STRING_GOLD_NOT_ENOUGH_MAIL"     ,"У вас недостаточно золота в вашем инвентаре, чтобы отправить этот товар");--new
+ZO_CreateStringId("SI_NAH_STRING_FILLING_ORDER_DETAILS"     ,"Заказ на заполнение для %s отправка %s x%s для %s COD (почтовые расходы: %s)");--new
+ZO_CreateStringId("SI_NAH_STRING_FAILED_FILLING_ORDER"     , "Ошибка заполнения заказа. Повторите попытку....");--new
+ZO_CreateStringId("SI_NAH_STRING_RELIST_QUEUED"     , "Очередь торговли для: %s Для повторной синхронизации с Relist now");--new
+ZO_CreateStringId("SI_NAH_STRING_REMOVAL_QUEUED"     , "Очередь торговли для: %s Синхронизация удаления для удаления сейчас.");--new
+ZO_CreateStringId("SI_NAH_STRING_PURCHASE_QUEUE_FULL"     ,"Ваша очередь заказа на поставку заполнена, вы должны синхронизировать, прежде чем покупать больше предметов");--new
+ZO_CreateStringId("SI_NAH_STRING_TRACKED_LIST_FULL"     ,"Список отслеживаемых заказов заполнен, вы должны разрешить выполнение некоторых ваших заказов, прежде чем покупать больше предметов");--new
+ZO_CreateStringId("SI_NAH_STRING_GOLD_NOT_ENOUGH"     ,"У вас недостаточно золота в инвентаре для этой покупки");--new
+ZO_CreateStringId("SI_NAH_STRING_MAIL_FULL"     ,"Ваш почтовый ящик заполнен, вы должны освободить место перед покупкой товаров");--new
+ZO_CreateStringId("SI_NAH_STRING_VERIFY_BUYOUT"     ,"Вы уверены, что хотите купить \n%s (x%s) for %s Золото?");--new
+ZO_CreateStringId("SI_NAH_STRING_VERIFY_SELL"     , "Вы уверены, что хотите продать \n%s (x%s) for %s Золото?");--new
+ZO_CreateStringId("SI_NAH_STRING_NOT_IN_INV_BANK"     , "У тебя нет %s в вашем инвентаре или банке");--new
+ZO_CreateStringId("SI_NAH_STRING_NOTICE_QUEUE_MULTIPLE_BUYOUTS"     , "Вы можете ставить в очередь несколько покупок, отключив (Auto Post Buyouts) в настройках ( ESC->Settings->Addons->Nirn Auction House )");--new
+
+
+
+
+
+
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_LISTING"     , "Успешно перечисленные товары для продажи - обработка может занять до 60 секунд");--new
 ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING"     , "Не удалось просмотреть список товаров для продажи");--new
 ZO_CreateStringId("SI_NAH_STRING_FAILED_LISTING_TRADELIMIT"     , "Не удалось выполнить список товаров для продажи: достигнут торговый предел");--new
