@@ -4,6 +4,12 @@ Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 Latest App: https://nirnah.com/NirnAuctionHouse.app.zip
 
 
+v0.0.33 "beta" @Elo
+- Summerset
+- bugfix - fill order time restriction (seller has 3 days to fill order)
+
+
+
 v0.0.32 "beta" @Elo
 - Added option to disable auto locking of items when listing for sale  ( Auto Lock ) in settings ( ESC->Settings->Addons->Nirn Auction House ) [default: enabled]
 - Added option to disable auto unlocking of items when fulfilling orders ( Auto Unlock ) in settings ( ESC->Settings->Addons->Nirn Auction House ) [default: enabled]
