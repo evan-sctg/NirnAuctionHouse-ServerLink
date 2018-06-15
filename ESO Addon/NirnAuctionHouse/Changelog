@@ -4,6 +4,13 @@ Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 Latest App: https://nirnah.com/NirnAuctionHouse.app.zip
 
 
+v0.0.34 "beta" @Elo
+- added option to hide NAH HUD for mail
+- added option to hide NAH HUD for bank
+- added option to hide NAH HUD for guild bank
+
+
+
 v0.0.33 "beta" @Elo
 - Summerset
 - bugfix - fill order time restriction (seller has 3 days to fill order)

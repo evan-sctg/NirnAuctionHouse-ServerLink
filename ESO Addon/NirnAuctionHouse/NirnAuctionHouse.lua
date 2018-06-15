@@ -95,6 +95,9 @@ local NirnAuctionHouse = NirnAuctionHouse
 		HideBankBadges=false,
 		HideGuildBankBadges=false,
 		AlwaysNAH_HUD=false,
+		DisableNAH_HUD_Mail=false,
+		DisableNAH_HUD_Bank=false,
+		DisableNAH_HUD_GuildBank=false,
 		
 	data = {
 		FilledWTBOrders = {},
@@ -1814,6 +1817,7 @@ NAH.settings.data.Bids[control.data.TradeID].Bid.ItemLink=control.data.itemLink;
 NAH.settings.data.Bids[control.data.TradeID].Bid.ItemID=control.data.ItemID;
 NAH.settings.data.Bids[control.data.TradeID].Bid.seller=control.data.source;
 NAH.settings.data.Bids[control.data.TradeID].Bid.TradeID=control.data.TradeID;
+NAH.settings.data.Bids[control.data.TradeID].Bid.Player=GetUnitName("player")--not the acount but the player 
 	
 	
 NAHAuctionHouseGoldCostBid:GetNamedChild("BidName"):SetText(control.data.name);
@@ -2045,6 +2049,7 @@ NAH.settings.data.Bids[control.data.TradeID].Bid.ItemLink=control.data.itemLink;
 NAH.settings.data.Bids[control.data.TradeID].Bid.ItemID=control.data.ItemID;
 NAH.settings.data.Bids[control.data.TradeID].Bid.seller=control.data.source;
 NAH.settings.data.Bids[control.data.TradeID].Bid.TradeID=control.data.TradeID;
+NAH.settings.data.Bids[control.data.TradeID].Bid.Player=GetUnitName("player")--not the acount but the player 
 
 
 NAHAuctionHouseGoldCostBuyout:GetNamedChild("buyoutlabel"):SetText(string.format(GetString(SI_NAH_STRING_VERIFY_BUYOUT),control.data.name, control.data.stackCount , control.data.BuyoutPrice ));
@@ -5383,7 +5388,12 @@ end
 		NAHAuctionHouse_HUD:SetAnchor(CENTER, GuiRoot, CENTER, 330, 0)
 		end
 	    
+		
+		
+	if NAH.settings.DisableNAH_HUD_Bank == nil or NAH.settings.DisableNAH_HUD_Bank == false  then 
 	NAHAuctionHouse_HUD:SetHidden(false)
+	end
+	
 	NAHAuctionHouse_HUD:GetNamedChild("Sync"):SetHidden(true)	
 	NAHAuctionHouse_HUD:GetNamedChild("label_stat_sold"):SetText(#NirnAuctionHouse.NewBids)	
 	NAHAuctionHouse_HUD:GetNamedChild("label_stat_listings"):SetText(#NirnAuctionHouse.list.MyListedTrades)	
@@ -5422,8 +5432,11 @@ end
 		else
 		NAHAuctionHouse_HUD:SetAnchor(CENTER, GuiRoot, CENTER, 330, 0)
 		end
-	    
+		
+		
+	if NAH.settings.DisableNAH_HUD_GuildBank == nil or NAH.settings.DisableNAH_HUD_GuildBank == false  then 
 	NAHAuctionHouse_HUD:SetHidden(false)
+	end
 	NAHAuctionHouse_HUD:GetNamedChild("Sync"):SetHidden(true)	
 --~ 	NAHAuctionHouse_HUD:GetNamedChild("Stats"):SetText("Sold Items: " .. #NirnAuctionHouse.NewBids  .. ",\r\n Total Auctions: " .. #NirnAuctionHouse.list.MyListedTrades  .. ",\r\n Orders in Mail: " .. #NAH.settings.data.ReceivedOrders .. ",\r\n Expired Auctions: " .. #NirnAuctionHouse.ExpiredTrades  .. "")	
 	NAHAuctionHouse_HUD:GetNamedChild("label_stat_sold"):SetText(#NirnAuctionHouse.NewBids)	
@@ -5461,8 +5474,9 @@ end
 		NAHAuctionHouse_HUD:SetAnchor(CENTER, GuiRoot, CENTER, -15, 0)
 		end
 	
-	    
+	if NAH.settings.DisableNAH_HUD_Mail == nil or NAH.settings.DisableNAH_HUD_Mail == false  then 
 	NAHAuctionHouse_HUD:SetHidden(false)
+	end
 	NAHAuctionHouse_HUD:GetNamedChild("Sync"):SetHidden(true)	
 --~ 	NAHAuctionHouse_HUD:GetNamedChild("Stats"):SetText("Sold Items: " .. #NirnAuctionHouse.NewBids  .. ",\r\n Total Auctions: " .. #NirnAuctionHouse.list.MyListedTrades  .. ",\r\n Orders in Mail: " .. #NAH.settings.data.ReceivedOrders .. ",\r\n Expired Auctions: " .. #NirnAuctionHouse.ExpiredTrades  .. "")	
 	NAHAuctionHouse_HUD:GetNamedChild("label_stat_sold"):SetText(#NirnAuctionHouse.NewBids)	

@@ -30,7 +30,7 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 		name = "Nirn Auction House",
 		displayName = NirnAuctionHouse.colors.title .. "Nirn Auction House|r",
 		author = "Elo",
-		version = "0.0.33",
+		version = "0.0.34",
 		slashCommand = "/ahsetup",
 		registerForRefresh = true
 	}
@@ -99,6 +99,36 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 			getFunc = function() return NAH.settings.AlwaysNAH_HUD end,
 			setFunc = function(IsAlwaysNAH_HUD) 
 			NAH.settings.AlwaysNAH_HUD=IsAlwaysNAH_HUD 
+			end,
+			default = false
+		},
+		{
+			type = "checkbox",
+			name = "Disable Mail NAH HUD",
+			tooltip = "Disables Nirn Auction House heads up display when in mail",
+			getFunc = function() return NAH.settings.DisableNAH_HUD_Mail end,
+			setFunc = function(IsDisableNAH_HUD_Mail) 
+			NAH.settings.DisableNAH_HUD_Mail=IsDisableNAH_HUD_Mail 
+			end,
+			default = false
+		},
+		{
+			type = "checkbox",
+			name = "Disable Bank NAH HUD",
+			tooltip = "Disables Nirn Auction House heads up display when in bank",
+			getFunc = function() return NAH.settings.DisableNAH_HUD_Bank end,
+			setFunc = function(IsDisableNAH_HUD_Bank) 
+			NAH.settings.DisableNAH_HUD_Bank=IsDisableNAH_HUD_Bank 
+			end,
+			default = false
+		},
+		{
+			type = "checkbox",
+			name = "Disable Guild Bank NAH HUD",
+			tooltip = "Disables Nirn Auction House heads up display when in guild bank",
+			getFunc = function() return NAH.settings.DisableNAH_HUD_GuildBank end,
+			setFunc = function(IsDisableNAH_HUD_GuildBank) 
+			NAH.settings.DisableNAH_HUD_GuildBank=IsDisableNAH_HUD_GuildBank 
 			end,
 			default = false
 		},
