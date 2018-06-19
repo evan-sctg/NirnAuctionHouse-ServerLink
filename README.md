@@ -1,8 +1,8 @@
-# --BETA VERSION-- Current Version:0.0.35 (See the full patch note list here: https://nirnah.com/Changelog)
+# --BETA VERSION-- Current Version:0.0.35 (See the full patch note list here: https://nirnah.com/changes)
 *NOW for PC and MAC
 
 
-Hosted Download Link: [MD5:9719b00af2c9ce39412028847898a731]
+Hosted Download Link: [MD5:7ad3ddaac216bca65fe5eeb6564a7898]
 
 https://nirnah.com/NirnAuctionHouse(beta).zip
 
