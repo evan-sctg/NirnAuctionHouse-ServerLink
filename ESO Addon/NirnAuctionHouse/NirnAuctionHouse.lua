@@ -996,7 +996,7 @@ end
 
 
 
-
+ 
 if filterId==5 then--crafting
 if(data.TypeID==8)then isCrafting=true; end--motif
 if(data.TypeID==10)then isCrafting=true; end--ingredient
@@ -1022,6 +1022,7 @@ if(data.TypeID==54)then isCrafting=true; end--fish
 if(data.TypeID==58)then isCrafting=true; end--poison solvent
 if(data.TypeID==60)then isCrafting=true; end--master writ
 if(data.TypeID==62)then isCrafting=true; end--furnishing material
+if(data.TypeID==29)then isCrafting=true; end--Recipie
 
 
 
@@ -1040,9 +1041,17 @@ if(data.TypeID==62)then isCrafting=true; end--furnishing material
 		if filterCraftingId==1
 		or (GetString("SI_NAH_FILTERDROP_CRAFTING_" .. filterSubId .. "_" , filterCraftingId) == typename)
 		or (filterSubId==2 and filterCraftingId==4 and (data.TypeID==31 or typename=="Herb" or typename=="Fungus" or typename=="Animal Parts" ) )--Reagent
-		or (filterSubId==6 and filterCraftingId==2 and (data.itemFlavor=="An ingredient for crafting food." ) )--Food Ingredients
-		or (filterSubId==6 and filterCraftingId==3 and (data.itemFlavor=="An ingredient for crafting beverages." ) )--Drink Ingredients
-		or (filterSubId==6 and filterCraftingId==4 and (data.itemFlavor=="Used in crafting decorative food or finishing touches." ) )--Rare Ingredients
+		or (filterSubId==6 and filterCraftingId==2 and (data.SpecializedItemType==40 or data.SpecializedItemType==41 or data.SpecializedItemType==42 or data.SpecializedItemType==43 or data.itemFlavor=="An ingredient for crafting food." ) )--Food Ingredients
+		or (filterSubId==6 and filterCraftingId==3 and (data.SpecializedItemType==44 or data.SpecializedItemType==45 or data.SpecializedItemType==46 or data.SpecializedItemType==47 or data.itemFlavor=="An ingredient for crafting beverages." ) )--Drink Ingredients
+		or (filterSubId==6 and filterCraftingId==4 and (data.SpecializedItemType==48 ) )--Rare Ingredients
+		or (filterSubId==6 and filterCraftingId==5 and (data.SpecializedItemType==170 ) )--food recipie
+		or (filterSubId==6 and filterCraftingId==6 and (data.SpecializedItemType==171) )--drink recipie
+		or (filterSubId==2 and filterCraftingId==5 and (data.IsFurnitureRecipe== true ) )--furniture recipie
+		or (filterSubId==3 and filterCraftingId==9 and (data.IsFurnitureRecipe== true ) )--furniture recipie
+		or (filterSubId==4 and filterCraftingId==8 and (data.IsFurnitureRecipe== true ) )--furniture recipie
+		or (filterSubId==5 and filterCraftingId==5 and (data.IsFurnitureRecipe== true ) )--furniture recipie
+		or (filterSubId==6 and filterCraftingId==7 and (data.IsFurnitureRecipe== true ) )--furniture recipie
+		or (filterSubId==7 and filterCraftingId==9 and (data.IsFurnitureRecipe== true ) )--furniture recipie
 		then
 		
 			if (  (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyWTB") or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab=="WTB") or  (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="Expired")  or (data.source==NAH.currentAccount and NAH.settings.ActiveTab=="MyListings")  or (data.source~=NAH.currentAccount and NAH.settings.ActiveTab=="Auction")) and
@@ -1136,6 +1145,7 @@ if(data.TypeID==54)then isOther=false; end--fish
 if(data.TypeID==58)then isOther=false; end--poison solvent
 if(data.TypeID==60)then isOther=false; end--master writ
 if(data.TypeID==62)then isOther=false; end--furnishing material
+if(data.TypeID==29)then isOther=false; end--Recipie
 
 --Consumable
 
@@ -1544,30 +1554,62 @@ function NAHAuctionList:CheckForMatch( data, searchInput )
 		return(self.search:IsMatch(searchInput, data));
 end
 
+
+
+function NAHAuctionList:LowerSpaceSpecial(text)
+	-- remove spaces, non-alphanumeric characters, and change to lower case for case-sensitive search text matching.
+	-- for non-English, remove hidden ^<Gender> marks so extra letters aren't generated in the name string.
+
+	if GetCVar('Language.2') == 'en' then --check if client language is English
+		return tostring(text):gsub("%s",''):gsub("%W",''):lower()
+	else
+		return zo_strlower(zo_strformat("<<t:1>>",text)):gsub("%s",''):gsub("%W",'')
+	end
+end
+
+
+
+
+
+
 function NAHAuctionList:ProcessItemEntry( stringSearch, data, searchTerm, cache )
+Tmpdata ={} ;
+TmpsearchTerm=NAHAuctionList:LowerSpaceSpecial(searchTerm);
+
+Tmpdata.name=NAHAuctionList:LowerSpaceSpecial(data.name);
+Tmpdata.itemType=NAHAuctionList:LowerSpaceSpecial(data.itemType);
+
+if (self.searchType == 2) then
+Tmpdata.abilityHeader=NAHAuctionList:LowerSpaceSpecial(data.abilityHeader);
+Tmpdata.abilityDescription=NAHAuctionList:LowerSpaceSpecial(data.abilityDescription);
+Tmpdata.traitDescription=NAHAuctionList:LowerSpaceSpecial(data.traitDescription);
+Tmpdata.itemFlavor=NAHAuctionList:LowerSpaceSpecial(data.itemFlavor);
+Tmpdata.traitType=NAHAuctionList:LowerSpaceSpecial(NirnAuctionHouse_ReadableTraitType(data.traitType));
+end
+
 if (self.searchType == 1) then
-	if ( zo_plainstrfind(data.name:lower(), searchTerm) or
-	     zo_plainstrfind(data.itemType:lower(), searchTerm) ) then
+	if ( zo_plainstrfind(Tmpdata.name, TmpsearchTerm) or
+	     zo_plainstrfind(Tmpdata.itemType, TmpsearchTerm) ) then
 		return(true);
 	end
 	
 	elseif (self.searchType == 2) then
-	if ( zo_plainstrfind(data.name:lower(), searchTerm) or
-		zo_plainstrfind(data.abilityHeader:lower(), searchTerm) or
-		zo_plainstrfind(data.abilityDescription:lower(), searchTerm) or
-		zo_plainstrfind(data.enchantHeader:lower(), searchTerm) or
-		zo_plainstrfind(data.traitDescription:lower(), searchTerm) or
-		zo_plainstrfind(data.itemFlavor:lower(), searchTerm) or
-		zo_plainstrfind(NirnAuctionHouse_ReadableTraitType(data.traitType):lower(), searchTerm) or
-		zo_plainstrfind(NirnAuctionHouse_ReadableTraitType(data.traitSubtype):lower(), searchTerm) or
-	     zo_plainstrfind(data.itemType:lower(), searchTerm) ) then
+	if ( zo_plainstrfind(Tmpdata.name, TmpsearchTerm) or
+		zo_plainstrfind(Tmpdata.abilityHeader, TmpsearchTerm) or
+		zo_plainstrfind(Tmpdata.abilityDescription, TmpsearchTerm) or
+		zo_plainstrfind(Tmpdata.enchantHeader, TmpsearchTerm) or
+		zo_plainstrfind(Tmpdata.traitDescription, TmpsearchTerm) or
+		zo_plainstrfind(Tmpdata.itemFlavor, TmpsearchTerm) or
+		zo_plainstrfind(Tmpdata.traitType, TmpsearchTerm) or
+		zo_plainstrfind(Tmpdata.traitSubtype, TmpsearchTerm) or
+	     zo_plainstrfind(Tmpdata.itemType, TmpsearchTerm) ) then
 		return(true);
 	end
 	
 	elseif (NAH.settings.ActiveTab=="MyListings") then
 	
-	if ( zo_plainstrfind(data.name:lower(), searchTerm) or
-	     zo_plainstrfind(data.itemType:lower(), searchTerm) ) then
+	if ( zo_plainstrfind(data.name, TmpsearchTerm) or
+	     zo_plainstrfind(data.itemType, TmpsearchTerm) ) then
 		return(true);
 	end
 	
@@ -1576,6 +1618,10 @@ if (self.searchType == 1) then
 
 	return(false);
 end
+
+
+
+
 
 function NAHAuctionList:UpdateChoicesComboBox( control, prefix, max )
 	
@@ -4905,13 +4951,13 @@ end
 		---Returns: string icon, number sellPrice, boolean meetsUsageRequirement, number equipType, number itemStyle
 		icon, sellPrice, meetsUsageRequirement, equipTypeinfo, itemStyle= GetItemLinkInfo(itemLink)
 		
-		local ItemType = GetItemLinkItemType(itemLink)
+		local ItemType,SpecializedItemType = GetItemLinkItemType(itemLink)
 		local ItemWeaponType = GetItemLinkWeaponType(itemLink)
 		local armorType = GetItemLinkArmorType(itemLink)
 		
 		local EquipType = GetItemLinkEquipType(itemLink)
 		local CraftingSkillType = GetItemLinkCraftingSkillType(itemLink)
-		if(CraftingSkillType==nil or CraftingSkillType=="" or CraftingSkillType=="do not translate")then
+		if(CraftingSkillType==nil or CraftingSkillType== 0 or CraftingSkillType=="" or CraftingSkillType=="do not translate")then
 		CraftingSkillType = GetItemLinkRecipeCraftingSkillType(itemLink)
 		end
 		
@@ -4924,6 +4970,7 @@ end
 		local requiredLevel=GetItemLinkRequiredLevel(itemLink)
 		local requiredChampPoints=GetItemLinkRequiredChampionPoints(itemLink)
 		local ItemQuality=GetItemLinkQuality(itemLink)
+		local IsFurnitureRecipe=IsItemLinkFurnitureRecipe(itemLink)
 
 		
 			_, name, bonuses = GetItemLinkSetInfo(itemLink);
@@ -4965,7 +5012,14 @@ end
 			
 			
 			
+--~ 		type =  SpecializedItemType .. " , " .. type
 --~ 		type =  ItemType .. " , " .. type
+--~ 		type =  CraftingSkillType .. " , " .. type
+--~ 		type =  _itemFlavor .. " , " .. type
+--~ 		type =  tostring(IsFurnitureRecipe) .. " , " .. type
+--~ 		type =  _itemFlavor .. " , "..CraftingSkillType .. " , "..ItemType .. " , " .. type
+--~ 		type =  ItemWeaponType .. " , ".. armorType ..  " , ".. EquipType .. " , "..ItemType .. " , " .. type
+--~ 		type =  RuneType .. " , ".. _traitType ..  " , ".. itemStyle .. " , ".. equipTypeinfo .. " , "..ItemType .. " , " .. type
 
 		zoneType[(GetItemLinkBindType(itemLink) == BIND_TYPE_ON_EQUIP) and 5 or 6] = true;
 
@@ -4986,6 +5040,7 @@ end
 			name = name,
 			itemType = type,
 			TypeID = ItemType,
+			SpecializedItemType = SpecializedItemType,
 			WeaponTypeID = ItemWeaponType,
 			armorTypeID = armorType,
 			source = source,
@@ -5009,6 +5064,7 @@ end
 			RuneType = RuneType,
 			ItemQuality = ItemQuality,
 			Rating = Rating,
+			IsFurnitureRecipe = IsFurnitureRecipe,
 			Unknown = _ISUnknown,
 		});
 	end

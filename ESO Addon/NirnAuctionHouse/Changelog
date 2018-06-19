@@ -4,6 +4,13 @@ Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 Latest App: https://nirnah.com/NirnAuctionHouse.app.zip
 
 
+v0.0.35 "beta" @Elo
+- adjustments to search - text matching for item names with numbers and semicolons / non-English  (thanks to Phinix)
+- adjustments to search filters - Recipe types (furniture / food / drink)
+- adjustments to search filters - Crafting filters now work in all languages
+- Server link force tls 1.2
+
+
 v0.0.34 "beta" @Elo
 - added option to hide NAH HUD for mail
 - added option to hide NAH HUD for bank

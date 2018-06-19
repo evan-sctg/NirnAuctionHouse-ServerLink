@@ -11,7 +11,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
-using File=System.IO.File;
+
+
+using File = System.IO.File;
 using System.Media;
 
 namespace GlobalAuctionHouse
@@ -99,6 +101,7 @@ namespace GlobalAuctionHouse
 
         public Form1()
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             InitializeComponent();
             this.LastSyncTime = DateTime.Now;
             this.StatusText = "Ready for Upload";
@@ -3138,7 +3141,9 @@ namespace GlobalAuctionHouse
 
             try
             {
-
+                
+                    //~ this.ToLog("sending Package to: " + Endpoint);
+                    //~ this.ToLog("sending Package: " + Package);
                 string ServerResponse = "";
                 var httpWebRequest = (HttpWebRequest)WebRequest.Create(Endpoint);
                 httpWebRequest.ContentType = "application/json";
@@ -3222,7 +3227,7 @@ namespace GlobalAuctionHouse
             }
         }
 
-
+       
     }
 
 

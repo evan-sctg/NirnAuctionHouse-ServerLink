@@ -891,6 +891,13 @@ namespace GlobalAuctionHouse
             get;
             set;
         }
+	
+        [DataMember]
+        public string Player
+        {
+            get;
+            set;
+        }
 
 
         public AuctionBidEntry()
@@ -904,6 +911,13 @@ namespace GlobalAuctionHouse
 
             this.Buyer = CharName;
             this.Seller = (string)luaObject["seller"];
+		if (luaObject.ContainsKey("Player"))
+            {
+            this.Player = (string)luaObject["Player"];
+	    }else
+            {
+	    this.Player = "";
+            }
             int i;
             if (!int.TryParse((string)luaObject["TradeID"], out i)) i = 0;
             this.TradeID = i;
