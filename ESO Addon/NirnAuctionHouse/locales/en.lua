@@ -15,6 +15,12 @@ ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "Price Check");
 
 
 
+ZO_CreateStringId("SI_NAH_STRING_WTB_FAQ"     ,"Q: How do I place a buy order ( WTB )?\
+Right click on a item link or item and click the WTB option to set the quantity and price.");--new
+
+
+
+
 ZO_CreateStringId("SI_NAH_STRING_ATTACHMENT_QUEUED"     ,"Queued Attachment");--new
 ZO_CreateStringId("SI_NAH_STRING_PAID_ORDER_QUEUED"     ,"Queued Paid for order sync to receive buyer credit");--new
 ZO_CreateStringId("SI_NAH_STRING_RECIEVED_IN_MAIL"     ,"Auction Order Received in mail");--new
@@ -91,7 +97,7 @@ ZO_CreateStringId("SI_NAH_STRING_FAILED_CANCELED"     , "Failed to Cancel Item(s
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_FILLED"     , "Successfully filled order");
 ZO_CreateStringId("SI_NAH_STRING_FAILED_FILLED"     , "Failed to register filled order");
 
-ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "Successfully bid on or bought Item(s)");
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "Successfully bid on or bought Item(s) - Processing may take up to 60 seconds");
 ZO_CreateStringId("SI_NAH_STRING_FAILED_BID"     , "Failed to bid on or buy Item(s), Check the log file for more information");
 
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_PAID"     , "Successfully Purchased Item(s) for sale");
@@ -163,7 +169,7 @@ ZO_CreateStringId("SI_NAH_BIDAMOUNT"   , "Bid Amount");
 
 ZO_CreateStringId("SI_NAH_SELLERPAYSCOD"   , "*Note Seller Pays COD Cost");
 ZO_CreateStringId("SI_NAH_SERVERLINKNOTFOUND"   , "Server Link Not Found");
-ZO_CreateStringId("SI_NAH_SERVERLINKLOC"   , "(Run Documents\Elder Scrolls Online\live\AddOns\NirnAuctionHouse\NirnAuctionHouse.exe)");
+ZO_CreateStringId("SI_NAH_SERVERLINKLOC"   , "(Remember to run Documents\Elder Scrolls Online\live\AddOns\NirnAuctionHouse\NirnAuctionHouse.exe)");
 ZO_CreateStringId("SI_NAH_RECHECKSERVERLINK"   , "Recheck Server Link");
 
 ZO_CreateStringId("SI_NAH_SERVERLINKUPDATE"   , "Server Link Version Mismatch");

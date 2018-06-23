@@ -13,6 +13,9 @@ ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "Sprawdzenie ceny");
 
 
 
+ZO_CreateStringId("SI_NAH_STRING_WTB_FAQ"     ,"Pytanie: Jak złożyć zamówienie zakupu (WTB)? \
+Kliknij prawym przyciskiem myszy link lub element przedmiotu i kliknij opcję WTB, aby ustawić ilość i cenę.");--new
+
 
 
 ZO_CreateStringId("SI_NAH_STRING_ATTACHMENT_QUEUED"     ,"Załącznik dodany do kolejki");--new
@@ -91,7 +94,7 @@ ZO_CreateStringId("SI_NAH_STRING_FAILED_CANCELED"     , "Nie udało się anulowa
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_FILLED"     , "Pomyślnie wypełnione zamówienie");
 ZO_CreateStringId("SI_NAH_STRING_FAILED_FILLED"     , "Nie można zarejestrować wypełnionego zlecenia");
 
-ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "Udało się złożyć ofertę lub kupić przedmiot(y)");
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "Udało się złożyć ofertę lub kupić przedmiot(y) - przetwarzanie może trwać do 60 sekund");
 ZO_CreateStringId("SI_NAH_STRING_FAILED_BID"     , "Nie udało się złożyć oferty lub kupić przedmiotu(ów), sprawdź plik dziennika, aby uzyskać więcej informacji");
 
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_PAID"     , "Pomyślnie dokonano zakupu przedmiotu(ów)");

@@ -16,6 +16,9 @@ ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "Comprobación de precio");--
 
 
 
+ZO_CreateStringId("SI_NAH_STRING_WTB_FAQ"     ,"Pregunta: ¿Cómo coloco una orden de compra (WTB)?\
+Haga clic con el botón derecho en el enlace o elemento del elemento y haga clic en la opción WTB para establecer la cantidad y el precio.");--new
+
 
 
 
@@ -100,7 +103,7 @@ ZO_CreateStringId("SI_NAH_STRING_FAILED_CANCELED"     , "No se pudo cancelar art
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_FILLED"     , "Orden llenado correctamente");
 ZO_CreateStringId("SI_NAH_STRING_FAILED_FILLED"     , "Error al registrar el pedido lleno");
 
-ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "Lance con éxito en o compró artículos");
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "Lance con éxito en o compró artículos - El procesamiento puede tardar hasta 60 segundos");
 ZO_CreateStringId("SI_NAH_STRING_FAILED_BID"     , "Error al pujar o comprar artículos, consultar el archivo de registro para obtener más información");
 
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_PAID"     , "Artículos comprados con éxito para la venta");

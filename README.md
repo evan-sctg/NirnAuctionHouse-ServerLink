@@ -1,14 +1,15 @@
-# --BETA VERSION-- Current Version:0.0.35 (See the full patch note list here: https://nirnah.com/changes)
+# --BETA VERSION-- Current Version:0.0.36 (See the full patch note list here: https://nirnah.com/changes)
 *NOW for PC and MAC
 
 
-Hosted Download Link: [MD5:7ad3ddaac216bca65fe5eeb6564a7898]
+Hosted Download Link: [MD5:317cca26b360a79edcae3f7acecf6ab2]
 
 https://nirnah.com/NirnAuctionHouse(beta).zip
 
 
 
 ### Upcoming Changes/Features 
+-- Linux version
 -- MAC version ( Updates )
 -- Custom gear orders ( Crafting Orders )
 -- More price tracking details and history

@@ -4,6 +4,12 @@ Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 Latest App: https://nirnah.com/NirnAuctionHouse.app.zip
 
 
+v0.0.36 "beta" @Elo
+- adjusted messages bid / buyout for all languages
+- added FAQ notice for all languages to the order tab ( WTB ) - how to place orders
+- added setting to hide FAQ notice in the order tab ( WTB )
+
+
 v0.0.35 "beta" @Elo
 - adjustments to search - text matching for item names with numbers and semicolons / non-English  (thanks to Phinix)
 - adjustments to search filters - Recipe types (furniture / food / drink)

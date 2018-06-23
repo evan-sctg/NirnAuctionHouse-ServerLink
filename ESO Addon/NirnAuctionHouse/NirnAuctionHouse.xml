@@ -262,6 +262,15 @@
 					</OnInitialized>
 				</Label>
 				
+				
+				
+				<Label name="$(parent)WTB_Notice"  horizontalAlignment="RIGHT"  font="ZoFontGameLargeBold" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_NORMAL" text=""  hidden="true">
+					<Anchor point="TOP" relativePoint="TOP" offsetX=""  offsetY="200" />
+					<OnInitialized>
+						self:SetText(GetString(SI_NAH_STRING_WTB_FAQ))
+					</OnInitialized>
+				</Label>
+				
 				<Button name="$(parent)AuctionHouseRefresh" inherits="ZO_DefaultButton" text="Sync" hidden="false" endCapWidth="0">
 				<OnInitialized>
 						self:SetText("")
@@ -1363,8 +1372,6 @@
 						self:SetText(GetString(SI_NAH_SOLDITEMS))
 					</OnInitialized>
 				</Label>
-				
-				
 				
 			
 				<Button name="$(parent)AuctionHouseRefresh" inherits="ZO_DefaultButton" text="Sync" hidden="false" endCapWidth="0">

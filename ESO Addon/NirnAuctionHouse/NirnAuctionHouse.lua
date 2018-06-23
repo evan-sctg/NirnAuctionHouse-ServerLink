@@ -94,6 +94,7 @@ local NirnAuctionHouse = NirnAuctionHouse
 		HideCraftBagBadges=false,
 		HideBankBadges=false,
 		HideGuildBankBadges=false,
+		HideFAQNoticeWTB=false,
 		AlwaysNAH_HUD=false,
 		DisableNAH_HUD_Mail=false,
 		DisableNAH_HUD_Bank=false,
@@ -2166,6 +2167,10 @@ end
 		NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_BROWSE))
 		 NAH.settings.ActiveTab="Auction";
 		 NirnAuctionHouse.list:RefreshFilters()
+	 
+ local panel_WTB_Notice = NirnAuctionHousePanel:GetNamedChild("WTB_Notice"); 
+		 panel_WTB_Notice:SetHidden(true);
+		 
 		 SCENE_MANAGER:Show("NAHScene");
 	 else
 
@@ -2177,6 +2182,7 @@ end
 		NirnAuctionHousePanel:SetHidden(true)   
 		NAH.settings.ActiveTab="";
 	 end
+	 
  end
 
  end	
@@ -2188,6 +2194,10 @@ end
 		NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_BROWSE))
 		 NAH.settings.ActiveTab="Auction";
 		 NirnAuctionHouse.list:RefreshFilters()
+	 
+ local panel_WTB_Notice = NirnAuctionHousePanel:GetNamedChild("WTB_Notice"); 
+		 panel_WTB_Notice:SetHidden(true);
+		 
 		 SCENE_MANAGER:Show("NAHScene");
 		 else
 		 NirnAuctionHousePanel:SetHidden(true);  
@@ -2295,6 +2305,10 @@ NirnAuctionHouse_ServerLink_INITIATED( )
 NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYLISTINGS))
 	    NAH.settings.ActiveTab="MyListings";	
 	 NirnAuctionHouse.list:RefreshFilters()
+	 
+ local panel_WTB_Notice = NirnAuctionHousePanel:GetNamedChild("WTB_Notice"); 
+		 panel_WTB_Notice:SetHidden(true);
+		 
 	if NirnAuctionHousePanel:IsHidden() then
 	 SCENE_MANAGER:Show("NAHScene"); 
 	end
@@ -2305,6 +2319,10 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYLISTINGS
 NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_ORDERS))
 	    NAH.settings.ActiveTab="WTB";	
 	 NirnAuctionHouse.list:RefreshFilters()
+	 
+ local panel_WTB_Notice = NirnAuctionHousePanel:GetNamedChild("WTB_Notice"); 
+		 panel_WTB_Notice:SetHidden(true);
+		 
 	if NirnAuctionHousePanel:IsHidden() then
 	 SCENE_MANAGER:Show("NAHScene"); 
 	end
@@ -2317,6 +2335,14 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_ORDERS))
 NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYORDERS))
 	    NAH.settings.ActiveTab="MyWTB";	
 	 NirnAuctionHouse.list:RefreshFilters()
+	 
+ local panel_WTB_Notice = NirnAuctionHousePanel:GetNamedChild("WTB_Notice"); 
+ if NAH.settings.HideFAQNoticeWTB ~= true then  
+ if NirnAuctionHouse.GlobalWtbs == nil or #NirnAuctionHouse.GlobalWtbs < 1 or NirnAuctionHouse.myListingsNum < 1 then  
+		 panel_WTB_Notice:SetHidden(false);
+ end
+ end
+		 
 	if NirnAuctionHousePanel:IsHidden() then
 	 SCENE_MANAGER:Show("NAHScene"); 
 	end
@@ -2327,6 +2353,10 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYORDERS))
 NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_EXPIRED))
 	    NAH.settings.ActiveTab="Expired";	
 	 NirnAuctionHouse.list:RefreshFilters()
+	 
+ local panel_WTB_Notice = NirnAuctionHousePanel:GetNamedChild("WTB_Notice"); 
+		 panel_WTB_Notice:SetHidden(true);
+ 
 	if NirnAuctionHousePanel:IsHidden() then
 	 SCENE_MANAGER:Show("NAHScene"); 
 	end
@@ -2727,6 +2757,19 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYLISTINGS
 	elseif NAH.settings.ActiveTab=="TrackedOrders" then
 	SCENE_MANAGER:Show("NAHSceneTrackedOrders");	
 	else
+	
+	
+	
+	if (NAH.settings.ActiveTab=="MyWTB") then  	 
+ local panel_WTB_Notice = NirnAuctionHousePanel:GetNamedChild("WTB_Notice"); 
+		
+ if NAH.settings.HideFAQNoticeWTB ~= true then   
+ if NirnAuctionHouse.GlobalWtbs == nil or #NirnAuctionHouse.GlobalWtbs < 1 or NirnAuctionHouse.myListingsNum < 1 then  
+		 panel_WTB_Notice:SetHidden(false);
+ end
+ end
+		 end
+	
 	SCENE_MANAGER:Show("NAHScene");
 	end
 		
@@ -4834,6 +4877,8 @@ end
 	    NAHAuctionHouseTrackingPanel:SetHidden(false)    
 	    NAH.settings.ActiveTab="TrackedOrders";
 	    NirnAuctionHouse.list:RefreshFilters()
+ local panel_WTB_Notice = NirnAuctionHousePanel:GetNamedChild("WTB_Notice"); 
+		 panel_WTB_Notice:SetHidden(true);
 	 SCENE_MANAGER:Show("NAHScene");
 	end
 
@@ -4865,6 +4910,8 @@ end
 			NAH.settings.ActiveTab="Auction";
 			NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_BROWSE))
 			 NirnAuctionHouse.list:RefreshFilters()
+ local panel_WTB_Notice = NirnAuctionHousePanel:GetNamedChild("WTB_Notice"); 
+		 panel_WTB_Notice:SetHidden(true);
 			 if NirnAuctionHousePanel:IsHidden() then
 			 SCENE_MANAGER:Show("NAHScene");
 			 end

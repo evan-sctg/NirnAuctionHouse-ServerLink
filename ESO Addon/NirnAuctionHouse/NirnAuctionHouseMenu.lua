@@ -30,7 +30,7 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 		name = "Nirn Auction House",
 		displayName = NirnAuctionHouse.colors.title .. "Nirn Auction House|r",
 		author = "Elo",
-		version = "0.0.35",
+		version = "0.0.36",
 		slashCommand = "/ahsetup",
 		registerForRefresh = true
 	}
@@ -169,6 +169,16 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 			getFunc = function() return NAH.settings.HideGuildBankBadges end,
 			setFunc = function(IsHideGuildBankBadges) 
 			NAH.settings.HideGuildBankBadges=IsHideGuildBankBadges 
+			end,
+			default = false
+		},
+		{
+			type = "checkbox",
+			name = "Hide FAQ notice in the order tab ( WTB )",
+			tooltip = "Hides FAQ notice in the order tab ( WTB ) - how to place orders",
+			getFunc = function() return NAH.settings.HideFAQNoticeWTB end,
+			setFunc = function(IsHideFAQNoticeWTB) 
+			NAH.settings.HideFAQNoticeWTB=IsHideFAQNoticeWTB
 			end,
 			default = false
 		},

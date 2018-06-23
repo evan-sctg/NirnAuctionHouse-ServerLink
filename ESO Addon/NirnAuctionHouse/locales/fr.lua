@@ -15,6 +15,9 @@ ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "Vérification du prix");
 
 
 
+ZO_CreateStringId("SI_NAH_STRING_WTB_FAQ"     ,"Question: Comment placer une commande d'achat (WTB)?\
+Faites un clic droit sur un lien ou un élément et cliquez sur l'option WTB pour définir la quantité et le prix.");--new
+
 
 
 
@@ -98,7 +101,7 @@ ZO_CreateStringId("SI_NAH_STRING_FAILED_CANCELED"     , "Échec de l'annulation 
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_FILLED"     , "Ordre rempli avec succès");
 ZO_CreateStringId("SI_NAH_STRING_FAILED_FILLED"     , "Échec de l'enregistrement de la commande remplie");
 
-ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "Faire une offre réussie sur les articles achetés ou achetés");
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "Faire une offre réussie sur les articles achetés ou achetés - Le traitement peut prendre jusqu'à 60 secondes");
 ZO_CreateStringId("SI_NAH_STRING_FAILED_BID"     , "Échec de l'enchère ou de l'achat d'éléments, vérifiez le fichier journal pour plus d'informations");
 
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_PAID"     , "Objets achetés avec succès à vendre");

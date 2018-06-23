@@ -17,6 +17,9 @@ ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "Preischeck");
 
 
 
+ZO_CreateStringId("SI_NAH_STRING_WTB_FAQ"     ,"Frage: Wie stelle ich einen Kaufauftrag (WTB)?\
+Klicken Sie mit der rechten Maustaste auf eine Artikelverknüpfung oder einen Artikel und klicken Sie auf die WTB-Option, um die Menge und den Preis festzulegen.");--new
+
 
 
 
@@ -101,7 +104,7 @@ ZO_CreateStringId("SI_NAH_STRING_FAILED_CANCELED"     , "Fehler beim Abbrechen d
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_FILLED"     , "Erfolgreich erstellter Auftrag");
 ZO_CreateStringId("SI_NAH_STRING_FAILED_FILLED"     , "Fehler beim Registrieren des Auftrags");
 
-ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "Erfolgreich gesetzte Gebote und Käufe");
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "Erfolgreich gesetzte Gebote und Käufe - Die Bearbeitung kann bis zu 60 Sekunden dauern");
 ZO_CreateStringId("SI_NAH_STRING_FAILED_BID"     , "Fehler beim Bieten oder Kaufen von Artikeln. Überprüfen Sie die Protokolldatei für weitere Informationen");
 
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_PAID"     , "Erfolgreich erworbene Artikel");

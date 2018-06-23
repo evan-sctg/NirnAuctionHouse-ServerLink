@@ -17,6 +17,9 @@ ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "価格チェック");--new
 
 
 
+ZO_CreateStringId("SI_NAH_STRING_WTB_FAQ"     ,"質問：買い注文（WTB）をどのように配置するのですか？\
+アイテムリンクまたはアイテムを右クリックし、WTBオプションをクリックして数量と価格を設定します。");--new
+
 
 
 
@@ -100,7 +103,7 @@ ZO_CreateStringId("SI_NAH_STRING_FAILED_CANCELED"     , "販売アイテムの�
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_FILLED"     , "注文を完了しました");--new
 ZO_CreateStringId("SI_NAH_STRING_FAILED_FILLED"     , "記入済み注文の登録に失敗しました");--new
 
-ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "成功した入札または購入した商品");--new
+ZO_CreateStringId("SI_NAH_STRING_SUCCESS_BID"     , "成功した入札または購入した商品 - 処理には最大60秒かかる場合があります");--new
 ZO_CreateStringId("SI_NAH_STRING_FAILED_BID"     , "入札またはアイテムの購入に失敗しました。詳細についてはログファイルを確認してください");--new
 
 ZO_CreateStringId("SI_NAH_STRING_SUCCESS_PAID"     , "販売アイテムを購入しました");--new
