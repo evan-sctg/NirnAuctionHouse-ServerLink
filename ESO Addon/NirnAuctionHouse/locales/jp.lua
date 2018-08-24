@@ -15,6 +15,7 @@ ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "価格チェック");--new
 
 
 
+ZO_CreateStringId("SI_NAH_POPULAR"   , "人気");
 
 
 ZO_CreateStringId("SI_NAH_STRING_WTB_FAQ"     ,"質問：買い注文（WTB）をどのように配置するのですか？\

@@ -4,6 +4,15 @@ Latest EXE: https://nirnah.com/NirnAuctionHouse.exe
 Latest App: https://nirnah.com/NirnAuctionHouse.app.zip
 
 
+
+v0.0.37 "beta" @Elo
+- rating system improvements
+- added popular tab (displays the most popular items sold over the last 30 days: avg unitprice / avg stack)
+- Translation fixes for russian
+- API version update
+
+
+
 v0.0.36 "beta" @Elo
 - adjusted messages bid / buyout for all languages
 - added FAQ notice for all languages to the order tab ( WTB ) - how to place orders

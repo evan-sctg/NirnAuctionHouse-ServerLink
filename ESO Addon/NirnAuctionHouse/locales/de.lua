@@ -15,6 +15,7 @@ ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "Preischeck");
 
 
 
+ZO_CreateStringId("SI_NAH_POPULAR"   , "Beliebt");
 
 
 ZO_CreateStringId("SI_NAH_STRING_WTB_FAQ"     ,"Frage: Wie stelle ich einen Kaufauftrag (WTB)?\

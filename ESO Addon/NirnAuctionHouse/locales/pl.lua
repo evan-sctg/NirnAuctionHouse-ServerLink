@@ -12,6 +12,7 @@ ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "Sprawdzenie ceny");
 
 
 
+ZO_CreateStringId("SI_NAH_POPULAR"   , "Popularny");
 
 ZO_CreateStringId("SI_NAH_STRING_WTB_FAQ"     ,"Pytanie: Jak złożyć zamówienie zakupu (WTB)? \
 Kliknij prawym przyciskiem myszy link lub element przedmiotu i kliknij opcję WTB, aby ustawić ilość i cenę.");--new

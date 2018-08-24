@@ -13,6 +13,7 @@ ZO_CreateStringId("SI_NAH_STRING_PRICECHECK"     , "Price Check");
 
 
 
+ZO_CreateStringId("SI_NAH_POPULAR"   , "Popular");
 
 
 ZO_CreateStringId("SI_NAH_STRING_WTB_FAQ"     ,"Q: How do I place a buy order ( WTB )?\

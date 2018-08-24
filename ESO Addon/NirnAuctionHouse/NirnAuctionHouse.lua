@@ -137,12 +137,141 @@ local NirnAuctionHouse = NirnAuctionHouse
 
 	
 	
+
+	
 	
 
 
 NAHAuctionList = ZO_SortFilterList:Subclass();
 NAHSoldItemList = ZO_SortFilterList:Subclass();
 NAHTrackedItemList = ZO_SortFilterList:Subclass();
+NAHPopularItemList = ZO_SortFilterList:Subclass();
+
+
+function NAHPopularItemList:New( control )
+	local list = ZO_SortFilterList.New(self, control);
+	list.frame = control;
+	list:Setup();
+--~ 	return(list);
+	return(self);
+end
+function NAHPopularItemList:BuildMasterList( )
+	self.masterList = { };
+	
+	if NirnAuctionHouse.TopItemsTable~= nil then
+	for i,GlobalTop in ipairs(NirnAuctionHouse.TopItemsTable) do
+	table.insert(self.masterList, NirnAuctionHouse.CreateEntryFromRaw(GlobalTop));
+	end
+	end
+end
+
+
+function NAHPopularItemList:FilterScrollList( )
+	local scrollData = ZO_ScrollList_GetDataList(self.list);
+	ZO_ClearNumericallyIndexedTable(scrollData);
+	for i = 1, #self.masterList do
+		local data = self.masterList[i];
+	table.insert(scrollData, ZO_ScrollList_CreateDataEntry(1, data));		
+	end
+
+	if (#scrollData ~= #self.masterList) then
+		self.frame:GetNamedChild("Counter"):SetText(string.format("%d / %d", #scrollData, #self.masterList));
+	else		
+	
+		self.frame:GetNamedChild("Counter"):SetText("");
+	end
+end
+
+
+
+function NAHPopularItemList:Setup( )
+	ZO_ScrollList_AddDataType(self.list, 1, "NAHPOPULARRow", 60, function(control, data) self:SetupItemRow(control, data) end);
+	ZO_ScrollList_EnableHighlight(self.list, "ZO_ThinListHighlight");
+	self:SetAlternateRowBackgrounds(true);
+
+	self.masterList = { };
+
+	local sortKeys = {
+		["name"]     = { caseInsensitive = true },
+		["BuyoutPrice"] = { caseInsensitive = true, tiebreaker = "name" },
+		["TimeLeft"] = { caseInsensitive = true, tiebreaker = "name" },
+		["stackCount"] = { caseInsensitive = true, tiebreaker = "name" },
+		["ItemID"] = { caseInsensitive = true, tiebreaker = "name" },
+	};
+
+	self.currentSortKey = "ItemID";
+	self.currentSortOrder = ZO_SORT_ORDER_UP;
+	self.sortHeaderGroup:SelectAndResetSortForKey(self.currentSortKey);
+	self.sortFunction = function( listEntry1, listEntry2 )
+if sortKeys[self.currentSortKey] ~= nil then
+		return(ZO_TableOrderingFunction(listEntry1.data, listEntry2.data, self.currentSortKey, sortKeys, self.currentSortOrder));
+	else
+		return(ZO_TableOrderingFunction(listEntry1.data, listEntry2.data, "ItemID", sortKeys, self.currentSortOrder));
+	
+	end
+	end
+	
+
+	NirnAuctionHouse.scene = ZO_Scene:New("NAHScenePopular", SCENE_MANAGER);
+--~ 	NirnAuctionHouse.scene:AddFragment(ZO_SetTitleFragment:New(""));
+	NirnAuctionHouse.scene:AddFragment(ZO_FadeSceneFragment:New(NAHAuctionHousePopularPanel));
+--~ 	NirnAuctionHouse.scene:AddFragment(TITLE_FRAGMENT);
+--~ 	NirnAuctionHouse.scene:AddFragment(RIGHT_BG_FRAGMENT);
+	NirnAuctionHouse.scene:AddFragment(FRAME_EMOTE_FRAGMENT_JOURNAL);
+	NirnAuctionHouse.scene:AddFragment(CODEX_WINDOW_SOUNDS);
+	NirnAuctionHouse.scene:AddFragmentGroup(FRAGMENT_GROUP.MOUSE_DRIVEN_UI_WINDOW);
+	NirnAuctionHouse.scene:AddFragmentGroup(FRAGMENT_GROUP.FRAME_TARGET_STANDARD_RIGHT_PANEL);
+	
+	---adds top menu  buttons
+	NirnAuctionHouse.scene:AddFragment(MAIN_MENU_KEYBOARD.categoryBarFragment)
+	NirnAuctionHouse.scene:AddFragment(TOP_BAR_FRAGMENT)
+
+	self:RefreshData();
+end
+	
+
+function NAHPopularItemList:SetupItemRow( control, data )
+	control.data = data;
+
+	control:GetNamedChild("Icon"):SetTexture(data.Icon)
+	control:GetNamedChild("Price").normalColor = ZO_DEFAULT_TEXT;
+	control:GetNamedChild("Price"):SetText(NirnAuctionHouse:formattedNum(data.BuyoutPrice));
+
+	local itemqualColor=GetItemQualityColor(data.ItemQuality);
+	control:GetNamedChild("Name").normalColor = itemqualColor;
+	control:GetNamedChild("Name").mouseOverColor = itemqualColor;
+	
+--~ 		control:GetNamedChild("IsBuyout"):SetText(GetString(SI_NAH_STRING_WAITING_ON_SELLER));	
+		control:GetNamedChild("IsBuyout"):SetText(data.ItemID);	
+		
+	
+	control:GetNamedChild("Name"):SetText(data.name);	
+
+	control:GetNamedChild("Qty").normalColor = ZO_DEFAULT_TEXT;
+	control:GetNamedChild("Qty"):SetText(data.stackCount);
+		
+
+	ZO_SortFilterList.SetupRow(self, control, data);
+end
+
+
+function NAHPopularItemList:SortScrollList( )
+	if self.initiatedAlready then
+	NAH.settings.data.SearchSettings.currentSortKey_sold=self.currentSortKey;
+	NAH.settings.data.SearchSettings.currentSortOrder=self.currentSortOrder;
+	else
+	self.initiatedAlready=true
+	end
+
+	if (self.currentSortKey ~= nil and self.currentSortOrder ~= nil) then
+		local scrollData = ZO_ScrollList_GetDataList(self.list);
+--~ 		if (scrollData~=nil) then
+		table.sort(scrollData, self.sortFunction);
+--~ 		end
+	end
+
+	self:RefreshVisible();
+end
 
 
 
@@ -204,9 +333,12 @@ function NAHTrackedItemList:Setup( )
 	self.currentSortOrder = ZO_SORT_ORDER_UP;
 	self.sortHeaderGroup:SelectAndResetSortForKey(self.currentSortKey);
 	self.sortFunction = function( listEntry1, listEntry2 )
-
+	if sortKeys[self.currentSortKey] ~= nil then
 		return(ZO_TableOrderingFunction(listEntry1.data, listEntry2.data, self.currentSortKey, sortKeys, self.currentSortOrder));
-	
+	else
+		return(ZO_TableOrderingFunction(listEntry1.data, listEntry2.data, "name", sortKeys, self.currentSortOrder));
+
+	end 
 	end
 	
 
@@ -357,7 +489,11 @@ function NAHSoldItemList:Setup( )
 	self.currentSortOrder = ZO_SORT_ORDER_UP;
 	self.sortHeaderGroup:SelectAndResetSortForKey(self.currentSortKey);
 	self.sortFunction = function( listEntry1, listEntry2 )
+	if sortKeys[self.currentSortKey] ~= nil then	
 		return(ZO_TableOrderingFunction(listEntry1.data, listEntry2.data, self.currentSortKey, sortKeys, self.currentSortOrder));
+		else
+		return(ZO_TableOrderingFunction(listEntry1.data, listEntry2.data, "name", sortKeys, self.currentSortOrder));
+		end
 	end
 	
 
@@ -426,7 +562,9 @@ function NAHSoldItemList:SortScrollList( )
 
 	if (self.currentSortKey ~= nil and self.currentSortOrder ~= nil) then
 		local scrollData = ZO_ScrollList_GetDataList(self.list);
+		if scrollData ~= nil then
 		table.sort(scrollData, self.sortFunction);
+		end
 	end
 
 	self:RefreshVisible();
@@ -496,10 +634,18 @@ function NAHAuctionList:Setup( )
 	self.currentSortOrder = ZO_SORT_ORDER_UP;
 	self.sortHeaderGroup:SelectAndResetSortForKey(self.currentSortKey);
 	self.sortFunction = function( listEntry1, listEntry2 )
+	if sortKeys[self.currentSortKey] ~= nil then	
 		return(ZO_TableOrderingFunction(listEntry1.data, listEntry2.data, self.currentSortKey, sortKeys, self.currentSortOrder));
+		else
+		return(ZO_TableOrderingFunction(listEntry1.data, listEntry2.data, "name", sortKeys, self.currentSortOrder));
+		end
 	end
 	self.masterListSortFunction = function( listEntry1, listEntry2 )
+	if sortKeys[self.currentSortKey] ~= nil then
 		return(ZO_TableOrderingFunction(listEntry1, listEntry2, self.currentSortKey, sortKeys, self.currentSortOrder));
+		else
+		return(ZO_TableOrderingFunction(listEntry1, listEntry2, "name", sortKeys, self.currentSortOrder));
+		end
 	end
 	self.filterDrop = ZO_ComboBox_ObjectFromContainer(ctrl_advancedSearchSettings:GetNamedChild("FilterDrop"));	
 	self:InitializeComboBox(self.filterDrop, "SI_NAH_FILTERDROP", 20);
@@ -2177,6 +2323,7 @@ end
 		SCENE_MANAGER:Hide("NAHScene");
 		SCENE_MANAGER:Hide("NAHSceneOrders");
 		SCENE_MANAGER:Hide("NAHSceneTrackedOrders");
+		NAHAuctionHousePopularPanel:SetHidden(true)   
 		NAHAuctionHouseTrackingPanel:SetHidden(true)   
 		NAHAuctionHouseOrdersPanel:SetHidden(true)   
 		NirnAuctionHousePanel:SetHidden(true)   
@@ -2361,6 +2508,27 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_EXPIRED))
 	 SCENE_MANAGER:Show("NAHScene"); 
 	end
  end	
+ 
+ 
+ 
+ function NirnAuctionHouse_ShowPopular( )	
+	 if NAHAuctionHousePopularPanel:IsHidden() then
+		  if SCENE_MANAGER.currentScene.name ~= "NAHScenePopular" then
+		  NAH.settings.ActiveTab="Popular";
+		 SCENE_MANAGER:Show("NAHScenePopular"); 
+		 end
+
+	 else
+		 if SCENE_MANAGER.currentScene.name == "NAHScenePopular" then
+		 NAH.settings.ActiveTab="";
+		 SCENE_MANAGER:Hide("NAHScenePopular");
+		 end
+	 
+	 end
+	
+	
+ end	
+	
 	
 	
  function NirnAuctionHouse_ClearSearchSettings( )	
@@ -2617,6 +2785,7 @@ local function NAH_SetAccountCharData()
 	SCENE_MANAGER:Hide("NAHScene");
 	SCENE_MANAGER:Hide("NAHSceneOrders");
 	SCENE_MANAGER:Hide("NAHSceneTrackedOrders");
+	NAHAuctionHousePopularPanel:SetHidden(true)   
 	NAHAuctionHouseTrackingPanel:SetHidden(true)   
 	NAHAuctionHouseOrdersPanel:SetHidden(true)   
 	NirnAuctionHousePanel:SetHidden(true)   
@@ -2756,6 +2925,8 @@ NirnAuctionHousePanel:GetNamedChild("title"):SetText(GetString(SI_NAH_MYLISTINGS
 	SCENE_MANAGER:Show("NAHSceneOrders");
 	elseif NAH.settings.ActiveTab=="TrackedOrders" then
 	SCENE_MANAGER:Show("NAHSceneTrackedOrders");	
+	elseif NAH.settings.ActiveTab=="Popular" then
+	SCENE_MANAGER:Show("NAHScenePopular");	
 	else
 	
 	
@@ -3254,6 +3425,10 @@ function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 	NirnAuctionHouse:LoadTrackedBids();
 	end
 	
+	if NirnAuctionHouse.LoadTopItems ~=nil then	
+	NirnAuctionHouse:LoadTopItems();
+	end
+	
 	
 	
 	NirnAuctionHouse_CloseGoldCost()
@@ -3264,6 +3439,7 @@ function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 	NirnAuctionHouse.list = NAHAuctionList:New(NirnAuctionHousePanel);	
 		NirnAuctionHouse.SoldItemList = NAHSoldItemList:New(NAHAuctionHouseOrdersPanel);
 	NirnAuctionHouse.TrackingItemList = NAHTrackedItemList:New(NAHAuctionHouseTrackingPanel);
+	NirnAuctionHouse.PopularItemList = NAHPopularItemList:New(NAHAuctionHousePopularPanel);
 	NirnAuctionHouse.GoldCostPanel = NAHAuctionHouseGoldCost:GetNamedChild("GoldAmount");
 	
 
