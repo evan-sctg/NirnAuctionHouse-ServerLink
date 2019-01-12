@@ -354,6 +354,14 @@ function NirnAuctionHouseMenu:InitAddonMenu()
 			getFunc = function() if NAH.settings.ServerSideListingLimits ==true then return "Enabled" else return "Disabled" end end,
 			setFunc = function(isEnabled) if isEnabled =="Enabled" then NAH.settings.ServerSideListingLimits = true else NAH.settings.ServerSideListingLimits = false end  end,
 			default = self.EnabledTable[2]
+		},
+		{
+			type = "checkbox",
+			name = "Enable Hot Key Labels on Keybind Strip",
+			tooltip = "Displays the Nirn Aucion House Hot keys on Keybind Strip ( bottom of screen ) [resync to apply]",
+			getFunc = function() return NAH.settings.EnableHotKeyStrip end,
+			setFunc = function(DoEnableHotKeyStrip) NAH.settings.EnableHotKeyStrip = DoEnableHotKeyStrip end,
+			default = false
 		}
 		
 	}

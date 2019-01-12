@@ -5,11 +5,17 @@ Latest App: https://nirnah.com/NirnAuctionHouse.app.zip
 
 
 
+v0.0.38 "beta" @Elo
+- Added option to hide Hot Key Labels From Hotkey Strip ( bottom of screen )
+- bugfixs (popular tab, pricing)
+- API version update (Murkmire)
+
+
 v0.0.37 "beta" @Elo
 - rating system improvements
 - added popular tab (displays the most popular items sold over the last 30 days: avg unitprice / avg stack)
 - Translation fixes for russian
-- API version update
+- API version update (Wolfhunter)
 
 
 

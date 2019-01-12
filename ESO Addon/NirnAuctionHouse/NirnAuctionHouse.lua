@@ -99,6 +99,7 @@ local NirnAuctionHouse = NirnAuctionHouse
 		DisableNAH_HUD_Mail=false,
 		DisableNAH_HUD_Bank=false,
 		DisableNAH_HUD_GuildBank=false,
+		EnableHotKeyStrip = false,
 		
 	data = {
 		FilledWTBOrders = {},
@@ -2857,6 +2858,7 @@ local function NAH_SetAccountCharData()
 	NAH.settings.PlaySounds_success_listing = defaultSettings.PlaySounds_success_listing
 	NAH.settings.PlaySounds_success_buy = defaultSettings.PlaySounds_success_buy
 	NAH.settings.PlaySounds_success_cancel = defaultSettings.PlaySounds_success_cancel
+	NAH.settings.EnableHotKeyStrip = defaultSettings.EnableHotKeyStrip
 	NAH.settings.NAHBTN_TOP = defaultSettings.NAHBTN_TOP
 	NAH.settings.NAHBTN_LEFT = defaultSettings.NAHBTN_LEFT
 	NAH.settings.ActiveTab = ""
@@ -3471,7 +3473,8 @@ function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 		name = "Show/Hide Auction Window",
 		keybind = "NAH_TOGGLE_AUCTION_HOUSE",
 	}
-	if (not KEYBIND_STRIP:HasKeybindButton(NAHButton)) then
+	
+	if NAH.settings.EnableHotKeyStrip ~=nil and NAH.settings.EnableHotKeyStrip == true and (not KEYBIND_STRIP:HasKeybindButton(NAHButton)) then
 		KEYBIND_STRIP:AddKeybindButton(NAHButton)	
 	end
 	---
@@ -3480,7 +3483,8 @@ function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 		name = "Refresh Auction House Data",
 		keybind = "NAH_REFRESH_AUCTION_HOUSE",
 	}
-	if (not KEYBIND_STRIP:HasKeybindButton(NAHButton)) then
+	
+	if NAH.settings.EnableHotKeyStrip ~=nil and NAH.settings.EnableHotKeyStrip == true and (not KEYBIND_STRIP:HasKeybindButton(NAHButton)) then
 		KEYBIND_STRIP:AddKeybindButton(NAHButton)	
 	end
 	---
@@ -3488,7 +3492,7 @@ function NirnAuctionHouse:OnLoad(eventCode, addOnName)
 		name = "Show/Hide Auction Buttons",
 		keybind = "NAH_TOGGLE_AUCTION_BUTTONS",
 	}
-	if (not KEYBIND_STRIP:HasKeybindButton(NAHButton)) then
+	if NAH.settings.EnableHotKeyStrip ~=nil and NAH.settings.EnableHotKeyStrip == true and (not KEYBIND_STRIP:HasKeybindButton(NAHButton)) then
 		KEYBIND_STRIP:AddKeybindButton(NAHButton)	
 	end
 	---
@@ -3516,7 +3520,7 @@ NAH.MenuButton = ZO_MenuBar_AddButton(MAIN_MENU_KEYBOARD.categoryBar, NAH.MenuCo
 	SLASH_COMMANDS["/NirnAuctionHouse"] = function(...) self:CommandHandler(...) end
 
 	
-	if KEYBIND_STRIP:HasKeybindButtonGroup(keybindDescriptor) then
+		if KEYBIND_STRIP:HasKeybindButtonGroup(keybindDescriptor) then
 			KEYBIND_STRIP:RemoveKeybindButtonGroup(keybindDescriptor) 
 		end
 	
